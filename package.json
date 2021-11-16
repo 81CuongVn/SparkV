@@ -67,6 +67,7 @@
     "serve-favicon": "^2.5.0",
     "socket.io-client": "^4.3.2",
     "statcord.js": "^3.3.0",
+    "to-zalgo": "^1.0.1",
     "urban": "^0.3.4",
     "utf-8-validate": "^5.0.7",
     "weather-js": "^2.0.0",
