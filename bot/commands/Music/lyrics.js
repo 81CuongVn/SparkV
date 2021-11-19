@@ -1,9 +1,7 @@
 const Discord = require(`discord.js`);
 const EasyPages = require("discordeasypages");
 
-const cmd = require("../../templates/musicCommand");
-
-const LyrcisFinder = require(`lyrics-finder`);
+const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
 	if (!args) {
@@ -13,17 +11,16 @@ async function execute(bot, message, args, command, data) {
 
 	args = args.join(" ");
 
-	const Lyrics = LyrcisFinder(args);
+	const Lyrics = await require(`lyrics-finder`)(args);
 
 	if (!Lyrics) {
 		return await message.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${args}**!`);
 	}
 
-	if (Lyrics.lyrics.length <= 2000) {
+	if (Lyrics.length <= 2000) {
 		const SongEmbed = new Discord.MessageEmbed()
-			.setTitle(Lyrics.title)
-			.setDescription(Lyrics.lyrics)
-			.setThumbnail(Lyrics.thumbnail.genius)
+			.setTitle(args)
+			.setDescription(Lyrics)
 			.setFooter(bot.config.embed.footer)
 			.setAuthor(`Song by ${Lyrics.author}`, null, Lyrics.links.genius)
 			.setColor(bot.config.embed.color)
@@ -34,7 +31,7 @@ async function execute(bot, message, args, command, data) {
 		});
 	}
 
-	const LyricsArray = Lyrics.lyrics.split(`\n`);
+	const LyricsArray = Lyrics.split(`\n`);
 	const LyricsSubArray = [];
 	const pages = [];
 	let e = 0;
@@ -50,9 +47,8 @@ async function execute(bot, message, args, command, data) {
 
 	const CreatePage = (bot, Message, x) => {
 		const SongEmbed = new Discord.MessageEmbed()
-			.setTitle(Lyrics.title)
+			.setTitle(args)
 			.setDescription(x)
-			.setThumbnail(Lyrics.thumbnail.genius)
 			.setFooter(bot.config.embed.footer)
 			.setAuthor(`Song by ${Lyrics.author}`, null, Lyrics.links.genius)
 			.setColor(bot.config.embed.color)
