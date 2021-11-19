@@ -10,7 +10,7 @@ async function execute(bot, message, args, command, data) {
 
 	args = args.join(` `).slice(22);
 
-	const User = (await bot.functions.fetchUser(args[0])) || message.author;
+	const User = await bot.functions.fetchUser(args[0]) || message.author;
 	const Image = await canvacord.Canvas.youtube({
 		username: User.username,
 		avatar: User.displayAvatarURL({ format: "png" }),

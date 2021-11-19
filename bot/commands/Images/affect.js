@@ -4,7 +4,7 @@ const canvacord = require("canvacord");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args) {
-	const User = (await bot.functions.fetchUser(args[0])) || message.author;
+	const User = await bot.functions.fetchUser(args[0]) || message.author;
 
 	const Image = await canvacord.Canvas.affect(User.displayAvatarURL({ format: "png" }));
 
