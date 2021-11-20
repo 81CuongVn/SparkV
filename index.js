@@ -33,10 +33,12 @@ async function Start() {
 		tracesSampler: samplingContext => {}
 	});
 
-	await mongoose.connect(process.env.MONGOOSEURL, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	});
+	if (process.env.MONGOOSEURL) {
+		await mongoose.connect(process.env.MONGOOSEURL, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		});
+	}
 
 	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
 	mongoose.connection.on("open", () => Logger("DATABASE - ONLINE"));
