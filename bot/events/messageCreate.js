@@ -446,11 +446,6 @@ module.exports = {
 			return await message.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
 		}
 
-		// Do to recent events, *cough* Message Content: Privileged Intent for Verified Bots *cough*, commands with slash enabled being run not with slash will be notified that soon, those commands will be disabled.
-		if (commandfile.settings.slash === true) {
-			await message.replyT(`${bot.config.emojis.error} | This command has a dedicated slash command! Due to Discord wanting EVERY command being slash command supported (and Discord soon disabling SparkV to see messages and check if they have the prefix), on <t:1639861200:R> this command will be FORCED to be slash only.`);
-		}
-
 		try {
 			await commandfile.run(bot, message, args, command, data).then(async () => {
 				if (data.guild.autoRemoveCommands === true) {
@@ -500,7 +495,7 @@ async function chatbot(message, wasMentioned) {
 			)}`,
 		)
 			.then(async response => {
-				if (response.data.cnt) {
+				if (response?.data?.cnt) {
 					if (message.deleted) {
 						return;
 					}
