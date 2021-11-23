@@ -12,7 +12,7 @@ async function execute(bot, message, args, command, data) {
 	await data.user.save();
 
 	await message.replyT(
-		`${bot.config.emojis.success} | You've just earned ⏣${bot.functions.formatNumber(data.user.money.balance)}!${data.user.money.multiplier >= 2 ? ` Oh, it seems you also have a **${data.user.money.multiplier}**x coin multiplier! (+⏣${bot.functions.formatNumber(25000 * data.user.money.multiplier)} gained in total).` : ""}`,
+		`${bot.config.emojis.success} | You've just earned ⏣${bot.functions.formatNumber(15000)}!${data.user.money.multiplier >= 2 ? ` Oh, it seems you also have a **${data.user.money.multiplier}**x coin multiplier! (+⏣${bot.functions.formatNumber(15000 * data.user.money.multiplier)} gained in total).` : ""}`,
 	);
 }
 
