@@ -17,7 +17,7 @@ async function execute(bot, message, args, command, data) {
 		.setTitle(`**${User.tag}'s Balance**`)
 		.setDescription(
 			`
-			🪙 Wallet: ⏣${bot.functions.formatNumber(UserData.money.balance)}\n
+			🪙 Wallet: ⏣${bot.functions.formatNumber(UserData.money.balance)}
 			🏦 Bank: ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}
 		`,
 		)

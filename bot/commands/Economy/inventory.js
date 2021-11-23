@@ -29,7 +29,6 @@ module.exports = new cmd(
 		const pages = [];
 		inventory.forEach(item => {
 			const itemData = bot.shop.filter(i => i.name === item).first();
-			console.log(UserData.inventory[item]);
 
 			const itemEmbed = new Discord.MessageEmbed()
 				.setTitle(`Inventory - ${item}`)

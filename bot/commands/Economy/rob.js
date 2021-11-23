@@ -12,8 +12,6 @@ async function execute(bot, message, args, command, data) {
 
 	const UserBalance = await bot.database.getUser(User.id);
 
-	console.log(data.user.money.balance);
-
 	if (data.user.money.balance < 500) {
 		return await message.replyT(
 			`${bot.config.emojis.error} | Bruh you cannot rob someone unless you have over ⏣500 coins.`,
