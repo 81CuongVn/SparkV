@@ -36,11 +36,11 @@ async function execute(bot, message, args, command, data) {
 
 	data.user.markModified("money.balance");
 	UserMoney.markModified("money.balance");
-	UserMoney.save();
+	await UserMoney.save();
 	await data.user.save();
 
 	await message.replyT(
-		`${bot.config.emojis.success} | You gave ${User} ⏣${bot.functions.formatNumber(args[1])} data.user.money.balance!`,
+		`${bot.config.emojis.success} | You gave ${User} ⏣${bot.functions.formatNumber(args[1])} coins!`,
 	);
 }
 
