@@ -42,6 +42,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
+			console.log(BotMessage)
 		return await BotMessage.edit({
 			content: "Loading complete!",
 			embeds: [StatsEmbed],
