@@ -17,8 +17,5 @@ app.use(
 	),
 );
 
-app.use("*", (req, res) => {
-	res.status(200).send({ status: "online", message: "SparkV is online." });
-});
-
+app.use("*", (req, res) => res.status(200).send({ status: 200, message: "SparkV is online." }));
 app.listen(process.env.PORT || 3000, () => console.log("💻 | Server listening to port 3000."));
