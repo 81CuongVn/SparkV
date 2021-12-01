@@ -2,19 +2,13 @@
 const { Message, Interaction } = require("discord.js");
 const translate = require("@vitalets/google-translate-api");
 
-Interaction.prototype.translate = translateContent;
-Message.prototype.translate = translateContent;
-
-Interaction.prototype.replyT = replyTranslate;
-Message.prototype.replyT = replyTranslate;
-
-async function translateContent(content) {
-	if (!this?.guild?.data?.language) return content;
-
+async function translateContent(bot, message, content) {
 	// Native languge
-	if (this.guild.data.language === "en") return content;
+	const data = await bot.database.getGuild(message.guild.id);
 
-	const cache = await this.client.redis.getAsync(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
+	if (data?.language === "en") return content;
+
+	const cache = await bot.redis.getAsync(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
 	let translation;
 
 	if (cache) { translation = cache; } else {
@@ -35,7 +29,10 @@ async function translateContent(content) {
 	return await translation;
 }
 
-async function replyTranslate(options) {
+Interaction.prototype.translate = translateContent;
+Message.prototype.translate = translateContent;
+
+Interaction.prototype.replyT = async options => {
 	if (typeof options === "string") {
 		const newOptions = {
 			content: options,
@@ -50,11 +47,36 @@ async function replyTranslate(options) {
 	if (options.content) {
 		const translation = await translateContent(options.content);
 
-		this.reply({
+		return this.reply({
 			content: translation,
 			allowedMentions: {
 				repliedUser: false
 			}
 		});
-	} else { this.reply(options); }
-}
+	} else { return this.reply(options); }
+};
+
+Message.prototype.replyT = async options => {
+	if (typeof options === "string") {
+		const newOptions = {
+			content: options,
+			allowedMentions: {
+				repliedUser: false
+			}
+		};
+
+		options = newOptions;
+	}
+
+	if (options.content) {
+		const translation = await translateContent(options.content);
+
+		return this.reply({
+			content: translation,
+			allowedMentions: {
+				repliedUser: false
+			}
+		});
+	} else { return this.reply(options); }
+};
+
