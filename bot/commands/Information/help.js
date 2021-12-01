@@ -23,17 +23,17 @@ async function execute(bot, message, args, command, data) {
 
 	if (!args[0]) {
 		const NewEmbed = new MessageEmbed()
-			.setTitle(await message.translate("Select a Category!"))
-			.setDescription(await message.translate("Select a category from tapping the selection box below."))
-			.setAuthor(await message.translate("SparkV Help"), bot.user.displayAvatarURL({ dynamic: true }))
+			.setTitle(await message.translate(bot, message, "Select a Category!"))
+			.setDescription(await message.translate(bot, message, "Select a category from tapping the selection box below."))
+			.setAuthor(await message.translate(bot, message, "SparkV Help"), bot.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true }) : message.user.displayAvatarURL({ dynamic: true }))
-			.setFooter(await message.translate("SparkV - Making your Discord life easier!"), bot.user.displayAvatarURL({ dynamic: true }))
+			.setFooter(await message.translate(bot, message, "SparkV - Making your Discord life easier!"), bot.user.displayAvatarURL({ dynamic: true }))
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
 		const CatSelect = new MessageSelectMenu()
 			.setCustomId("SelectHelpMenu")
-			.setPlaceholder(await message.translate("Select a category to view it's cmds."))
+			.setPlaceholder(await message.translate(bot, message, "Select a category to view it's cmds."))
 			.addOptions(Selections);
 
 		const InviteButton = new MessageButton().setURL(bot.config.bot_invite).setLabel("Bot Invite")
@@ -41,12 +41,12 @@ async function execute(bot, message, args, command, data) {
 
 		const SupportButton = new MessageButton()
 			.setURL(bot.config.support.invite)
-			.setLabel(await message.translate("Support Invite"))
+			.setLabel(await message.translate(bot, message, "Support Invite"))
 			.setStyle("LINK");
 
 		const VoteButton = new MessageButton()
 			.setURL("https://top.gg/bot/884525761694933073")
-			.setLabel(await message.translate("Vote for me!"))
+			.setLabel(await message.translate(bot, message, "Vote for me!"))
 			.setStyle("LINK");
 
 		const row = new MessageActionRow().addComponents(CatSelect);
@@ -63,19 +63,19 @@ async function execute(bot, message, args, command, data) {
 
 		if (!cmd) {
 			return await message.reply({
-				content: await message.translate("The cmd you requested could not be found."),
+				content: await message.translate(bot, message, "The cmd you requested could not be found."),
 				ephemeral: true
 			});
 		}
 
 		const cmdHelpEmbed = new MessageEmbed()
 			.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
-			.setDescription(await message.translate(cmd.settings.description))
+			.setDescription(await message.translate(bot, message, cmd.settings.description))
 			.setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true }) : message.user.displayAvatarURL({ dynamic: true }))
-			.addField(await message.translate(`**ALIASES**`), await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``), true)
-			.addField(await message.translate(`**CATEGORY**`), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
-			.addField(await message.translate(`**COOLDOWN**`), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
-			.setFooter(await message.translate(`${prefix}Help to get a list of all cmds • ${bot.config.embed.footer}`), bot.user.displayAvatarURL())
+			.addField(await message.translate(bot, message, `**ALIASES**`), await message.translate(bot, message, `\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``), true)
+			.addField(await message.translate(bot, message, `**CATEGORY**`), await message.translate(bot, message, `\`\`\`${cmd.category}\`\`\``), true)
+			.addField(await message.translate(bot, message, `**COOLDOWN**`), await message.translate(bot, message, `\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
+			.setFooter(await message.translate(bot, message, `${prefix}Help to get a list of all cmds • ${bot.config.embed.footer}`), bot.user.displayAvatarURL())
 			.setColor(bot.config.embed.color);
 
 		return await message.reply({
