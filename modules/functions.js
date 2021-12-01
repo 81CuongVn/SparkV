@@ -99,26 +99,20 @@ module.exports = {
    * @returns {Object} User if found.
    */
 	async fetchUser(key) {
-		if (!key || typeof key !== "string") {
-			return;
-		}
+		if (!key || typeof key !== "string") return;
 
 		if (key.match(/^<@!?(\d+)>$/)) {
 			const user = bot.users.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => {});
 
-			if (user) {
-				return user;
-			}
+			if (user) return user;
 		}
 
 		if (key.match(/^!?(\w+)#(\d+)$/)) {
-			const user = bot.users.find(
+			const user = bot.users.cache.find(
 				u => u.username === key.match(/^!?(\w+)#(\d+)$/)[0] && u.discriminator === key.match(/^!?(\w+)#(\d+)$/)[1],
 			);
 
-			if (user) {
-				return user;
-			}
+			if (user) return user;
 		}
 
 		return await bot.users.fetch(key).catch(() => {});
