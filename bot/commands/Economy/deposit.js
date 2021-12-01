@@ -3,11 +3,7 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (!args) {
-		return await message.replyT(
-			`${bot.config.emojis.error} | You need to tell me how much you want me to deposit. You can say all if you want all of your Ch1ll Bucks in your bank.`,
-		);
-	}
+	if (!args) return await message.replyT(`${bot.config.emojis.error} | You need to tell me how much you want me to deposit. You can say all if you want all of your Ch1ll Bucks in your bank.`);
 
 	if (args[0].toLowerCase() === `all`) {
 		if (data.user.money.balance === 0 || data.user.money.balance === null) {
