@@ -18,8 +18,8 @@ const Credits = [
 module.exports = new cmd(
 	async (bot, message) => {
 		const NewEmbed = new Discord.MessageEmbed()
-			.setTitle(await message.translate(bot, message, "Credits"))
-			.setDescription(await message.translate(bot, message, `Here's the list of people who've helped SparkV on his path to success!`))
+			.setTitle(await message.translate("Credits"))
+			.setDescription(await message.translate(`Here's the list of people who've helped SparkV on his path to success!`))
 			.setColor(bot.config.embed.color)
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 			.addFields(Credits);

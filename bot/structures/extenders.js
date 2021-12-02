@@ -2,13 +2,19 @@
 const { Message, Interaction } = require("discord.js");
 const translate = require("@vitalets/google-translate-api");
 
-async function translateContent(bot, message, content) {
+Interaction.prototype.translate = translateContent;
+Message.prototype.translate = translateContent;
+
+Interaction.prototype.replyT = replyTranslate;
+Message.prototype.replyT = replyTranslate;
+
+async function translateContent(content) {
+	if (!this?.guild?.data?.language) return content;
+
 	// Native languge
-	const data = await bot.database.getGuild(message.guild.id);
+	if (this.guild.data.language === "en") return content;
 
-	if (data?.language === "en") return content;
-
-	const cache = await bot.redis.getAsync(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
+	const cache = await this.client.redis.getAsync(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
 	let translation;
 
 	if (cache) { translation = cache; } else {
@@ -29,10 +35,7 @@ async function translateContent(bot, message, content) {
 	return await translation;
 }
 
-Interaction.prototype.translate = translateContent;
-Message.prototype.translate = translateContent;
-
-Interaction.prototype.replyT = async options => {
+async function replyTranslate(options) {
 	if (typeof options === "string") {
 		const newOptions = {
 			content: options,
@@ -47,36 +50,11 @@ Interaction.prototype.replyT = async options => {
 	if (options.content) {
 		const translation = await translateContent(options.content);
 
-		return this.reply({
+		this.reply({
 			content: translation,
 			allowedMentions: {
 				repliedUser: false
 			}
 		});
-	} else { return this.reply(options); }
-};
-
-Message.prototype.replyT = async options => {
-	if (typeof options === "string") {
-		const newOptions = {
-			content: options,
-			allowedMentions: {
-				repliedUser: false
-			}
-		};
-
-		options = newOptions;
-	}
-
-	if (options.content) {
-		const translation = await translateContent(options.content);
-
-		return this.reply({
-			content: translation,
-			allowedMentions: {
-				repliedUser: false
-			}
-		});
-	} else { return this.reply(options); }
-};
-
+	} else { this.reply(options); }
+}
