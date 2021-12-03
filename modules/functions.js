@@ -27,6 +27,7 @@ module.exports = {
    */
 	getPrefix(message, data) {
 		const acceptedPrefixes = [
+			"sv!",
 			process.argv.includes("--dev") === true ? "_" : data.guild.prefix,
 		];
 
