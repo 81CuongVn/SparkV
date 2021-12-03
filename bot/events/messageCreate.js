@@ -279,9 +279,7 @@ module.exports = {
 							msg => msg.authorID === message.author.id && msg.guildID === message.guild.id,
 						);
 
-						if (!foundMatches) {
-							return;
-						}
+						if (!foundMatches) return;
 
 						const matches = foundMatches.filter(msg => msg.sendTimestamp > Date.now() - 5500);
 
@@ -359,13 +357,8 @@ module.exports = {
 				let MaxXP = data.guild.plugins.leveling.max;
 				let MinXP = data.guild.plugins.leveling.min;
 
-				if (isNaN(MaxXP)) {
-					MaxXP = 25;
-				}
-
-				if (isNaN(MinXP)) {
-					MinXP = 5;
-				}
+				if (isNaN(MaxXP)) MaxXP = 25;
+				if (isNaN(MinXP)) MinXP = 5;
 
 				const RandomXP = Math.floor(Math.random() * MaxXP || 25) + MinXP || 5;
 				const HasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, RandomXP);
@@ -405,13 +398,9 @@ module.exports = {
 		const command = args.shift().toLowerCase();
 		const commandfile = bot.commands.get(command) || bot.aliases.get(command);
 
-		if (!commandfile) {
-			return;
-		}
+		if (!commandfile) return;
 
-		if (!cooldowns[message.author.id]) {
-			cooldowns[message.author.id] = [];
-		}
+		if (!cooldowns[message.author.id]) cooldowns[message.author.id] = [];
 
 		const userCooldown = cooldowns[message.author.id];
 
@@ -432,25 +421,13 @@ module.exports = {
 
 		cooldowns[message.author.id][commandfile.settings.name] = Date.now() + commandfile.settings.cooldown;
 
-		if (commandfile.settings.enabled === false) {
-			return await message.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
-		}
-
-		if (commandfile.settings.guildOnly && !message.guild) {
-			return await message.replyT(
-				"This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",
-			);
-		}
-
-		if (commandfile.settings.ownerOnly && message.author.id !== bot.config.ownerID) {
-			return await message.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
-		}
+		if (commandfile.settings.enabled === false) return await message.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
+		if (commandfile.settings.guildOnly && !message.guild) return await message.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
+		if (commandfile.settings.ownerOnly && message.author.id !== bot.config.ownerID) return await message.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
 
 		try {
 			await commandfile.run(bot, message, args, command, data).then(async () => {
-				if (data.guild.autoRemoveCommands === true) {
-					message.delete().catch(() => { });
-				}
+				if (data.guild.autoRemoveCommands === true) message.delete().catch(() => { });
 
 				bot.StatClient.postCommand(command, message.author.id);
 			});
