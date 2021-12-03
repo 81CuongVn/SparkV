@@ -4,7 +4,7 @@
 ## SparkV
 
 Meet SparkV. The most POWERFUL multipurpose bot with NO PAYWALL! Start powering your server without spending a dime. SparkV is also an open sourced Discord bot using Discord.js coded in JavaScript by Ch1ll Studio.
-> SparkV is loved by more than 70,000 Discord users and more than 75 servers.
+> SparkV is loved by more than 110k Discord users and more than 125 servers.
 
 ### Features
 
