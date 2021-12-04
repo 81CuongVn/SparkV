@@ -5,11 +5,10 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	const prefix = data?.guild.prefix || await bot.database.getGuild(message.guild.id).prefix;
 	const Selections = [];
+	const pages = [];
 
 	const CreateSelection = async (message, Category) => {
-		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) {
-			return;
-		}
+		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		Selections.push({
 			label: Category.name,
@@ -19,9 +18,39 @@ async function execute(bot, message, args, command, data) {
 		});
 	};
 
-	bot.categories.map(cat => CreateSelection(message, cat));
+	const CreateCmdPage = async (bot, interaction, Category) => {
+		if (Category.name.toLowerCase().includes("owner") && interaction.user.id !== bot.config.ownerID) return;
+
+		const NewEmbed = new MessageEmbed()
+			.setTitle(Category.name)
+			.setDescription(
+				bot.commands
+					.filter(command => command.settings.enabled && command.category === Category.name)
+					.map(
+						command => `\`^${command.settings.name} ${command.settings.usage}\`\n${command.settings.description}`,
+					)
+					.join(`\n\n`),
+			)
+			.setThumbnail(
+				`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png?size=256`,
+			)
+			.setAuthor(
+				"SparkV Help",
+				`https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`,
+			)
+			.setFooter(
+				"SparkV - Making your Discord life easier!",
+				`https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`,
+			)
+			.setColor(bot.config.embed.color)
+			.setTimestamp();
+
+		pages.push(NewEmbed);
+	};
 
 	if (!args[0]) {
+		bot.categories.map(cat => CreateSelection(message, cat));
+
 		const NewEmbed = new MessageEmbed()
 			.setTitle(await message.translate("Select a Category!"))
 			.setDescription(await message.translate("Select a category from tapping the selection box below."))
@@ -52,10 +81,23 @@ async function execute(bot, message, args, command, data) {
 		const row = new MessageActionRow().addComponents(CatSelect);
 		const row2 = new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton);
 
-		return await message.reply({
+		const helpMessage = await message.reply({
 			embeds: [NewEmbed],
 			components: [row, row2],
 			ephemeral: true
+		});
+
+		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: 300 * 1000 });
+		collector.on("collect", async interaction => {
+			bot.categories.map(cat => CreateCmdPage(bot, interaction, cat));
+
+			await interaction.update({
+				embeds: [pages.filter(p => p.title === interaction.values[0])[0]],
+				components: [
+					new MessageActionRow().addComponents(CatSelect),
+					new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
+				],
+			});
 		});
 	} else {
 		const name = message.author ? args[0].toLowerCase() : args[0][0].toLowerCase();
