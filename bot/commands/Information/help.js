@@ -75,7 +75,7 @@ async function execute(bot, message, args, command, data) {
 
 		const VoteButton = new MessageButton()
 			.setURL("https://top.gg/bot/884525761694933073")
-			.setLabel(await message.translate("Vote for me!"))
+			.setLabel(await message.translate("Vote"))
 			.setStyle("LINK");
 
 		const row = new MessageActionRow().addComponents(CatSelect);
