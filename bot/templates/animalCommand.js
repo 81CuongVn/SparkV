@@ -22,21 +22,10 @@ module.exports = class RedditCommand {
 		const data = await fetch.get(`${this.settings.endpoint}`).then(response => response.data);
 		let body;
 
-		if (data.message) {
-			body = body.message;
-		}
-
-		if (data.file) {
-			body = body.file;
-		}
-
-		if (data.image) {
-			body = body.image;
-		}
-
-		if (data.url) {
-			body = body.url;
-		}
+		if (data?.message) body = data.message;
+		if (data?.file) body = data.file;
+		if (data?.image) body = data.image;
+		if (data?.url) body = data.url;
 
 		const ImageEmbed = new Discord.MessageEmbed()
 			.setTitle("😍 | Awwwww")
