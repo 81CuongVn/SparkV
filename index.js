@@ -27,10 +27,13 @@ if (process.version.slice(1, 3) - 0 < 16) {
 	console.log(require("chalk").grey("----------------------------------------"));
 	require("./modules/logger")("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
 	console.log(require("chalk").grey("----------------------------------------"));
+	return;
 }
 
 // Functions //
 async function Start() {
+	require("dotenv").config();
+
 	Sentry.init({
 		dsn: process.env.SENTRYTOKEN,
 		release: `${PackageInfo.name}@${PackageInfo.version}`,
