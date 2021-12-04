@@ -50,11 +50,11 @@ async function replyTranslate(options) {
 	if (options.content) {
 		const translation = await translateContent(options.content);
 
-		this.reply({
+		return this.reply({
 			content: translation,
 			allowedMentions: {
 				repliedUser: false
 			}
 		});
-	} else { this.reply(options); }
+	} else { return this.reply(options); }
 }

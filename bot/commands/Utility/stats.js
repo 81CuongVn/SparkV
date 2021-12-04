@@ -8,7 +8,7 @@ module.exports = new cmd(
 		const BotMessage = await message.replyT("Fetching Stats...");
 		let footerMessage = `SparkV's Stats • ${bot.config.embed.footer}`;
 
-		if (bot.functions.MSToTime(bot.uptime) === "5 Minutes") footerMessage = "pog you found me lol great job on timing it on exactly 5 minutes"
+		if (bot.functions.MSToTime(bot.uptime) === "5 Minutes") footerMessage = "pog you found me lol great job on timing it on exactly 5 minutes";
 
 		const UsedMemory = os.totalmem() - os.freemem();
 		const TotalMemory = os.totalmem();
@@ -42,7 +42,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
-			console.log(BotMessage)
+		console.log(BotMessage);
 		return await BotMessage.edit({
 			content: "Loading complete!",
 			embeds: [StatsEmbed],
