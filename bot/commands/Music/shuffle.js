@@ -3,15 +3,13 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	if (!message.member.voice.channel) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-	}
+	const queue = client.distube.getQueue(message);
+	if (!queue) return message.channel.send(`${bot.config.emojis.error} | There is nothing in the queue right now!`);
+	if (queue.length < 2) return message.channel.send(`${bot.config.emojis.error} | There is only one song in the queue!`);
 
-	bot.distube
-		.shuffle(message)
-		.then(async () => await message.replyT(`${bot.config.emojis.music} | Okay, I'll shuffle the queue.`))
-		.catch(async err => await message.replyT(`${bot.config.emojis.error} | Uh oh! An error occured.`));
+	queue.shuffle();
+
+	await message.replyT(`${bot.config.emojis.music} | Okay, I'll shuffle the queue.`);
 }
 
 module.exports = new cmd(execute, {

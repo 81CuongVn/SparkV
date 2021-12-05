@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **134 commands**!
+SparkV's Command List! SparkV contains more than **135 commands**!
 
 ## 🤵 Administration
 
@@ -42,20 +42,20 @@ SparkV's Command List! SparkV contains more than **134 commands**!
 
 ## 😃 Fun
 
-| Name                 | Description                                                                                                                                      | Usage             | Cooldown  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | --------- |
-| **8ball**            | Just a little fun.                                                                                                                               | {question}        | 2 seconds |
-| **advice**           | You'll need it.                                                                                                                                  |                   | 2 seconds |
-| **afk**              | This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.          | {optional reason} | 2 seconds |
-| **ascii**            | I will change any text to ascii!                                                                                                                 | {text}            | 2 seconds |
-| **coinflip**         | I have no bias! I swear noob!1!                                                                                                                  |                   | 2 seconds |
-| **levelleaderboard** | Just a little fun.                                                                                                                               |                   | 2 seconds |
-| **rank**             | View a users rank!                                                                                                                               | {optional user}   | 2 seconds |
-| **reverse**          | I will reverse any text you give me lol.                                                                                                         | {optional user}   | 2 seconds |
-| **say**              | I will say whatever you want me to say.                                                                                                          | {message}         | 1 seconds |
-| **showerthought**    | You know that momment where you think/realize something crazy in the shower? Well, there is a wh...                                              |                   | 2 seconds |
-| **urban**            | I will return an urban dictionary definition of a word! Due to recent API failures, this command is disabled to provide you a better experience. | {word}            | 2 seconds |
-| **uselessfact**      | I will get a useless fact! You're better off with the advice command...                                                                          | {word}            | 2 seconds |
+| Name              | Description                                                                                                                                      | Usage             | Cooldown  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | --------- |
+| **8ball**         | Just a little fun.                                                                                                                               | {question}        | 2 seconds |
+| **advice**        | You'll need it.                                                                                                                                  |                   | 2 seconds |
+| **afk**           | This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.          | {optional reason} | 2 seconds |
+| **ascii**         | I will change any text to ascii!                                                                                                                 | {text}            | 2 seconds |
+| **coinflip**      | I have no bias! I swear noob!1!                                                                                                                  |                   | 2 seconds |
+| **levelboard**    | Just a little fun.                                                                                                                               |                   | 2 seconds |
+| **rank**          | View a users rank!                                                                                                                               | {optional user}   | 2 seconds |
+| **reverse**       | I will reverse any text you give me lol.                                                                                                         | {optional user}   | 2 seconds |
+| **say**           | I will say whatever you want me to say.                                                                                                          | {message}         | 1 seconds |
+| **showerthought** | You know that momment where you think/realize something crazy in the shower? Well, there is a wh...                                              |                   | 2 seconds |
+| **urban**         | I will return an urban dictionary definition of a word! Due to recent API failures, this command is disabled to provide you a better experience. | {word}            | 2 seconds |
+| **uselessfact**   | I will get a useless fact! You're better off with the advice command...                                                                          | {word}            | 2 seconds |
 
 ## 🎮 Games
 
@@ -156,7 +156,7 @@ SparkV's Command List! SparkV contains more than **134 commands**!
 | **join**    | Joins your voice channel.                                                                                                       |                                            | 10 seconds |
 | **jump**    | I will jump to a certain song in the queue.                                                                                     | {number}                                   | 10 seconds |
 | **leave**   | Joins your voice channel.                                                                                                       |                                            | 10 seconds |
-| **lyrics**  | Get any song's lyrics!                                                                                                          | {song title or URL}                        | 10 seconds |
+| **lyrics**  | Get any song's lyrics!                                                                                                          | {song title or URL}                        | 2 seconds  |
 | **pause**   | Pauses the current song playing.                                                                                                |                                            | 10 seconds |
 | **play**    | Plays a song with the given name or URL.                                                                                        | {song title or URL}                        | 10 seconds |
 | **queue**   | Shows the songs in queue.                                                                                                       | {number}                                   | 10 seconds |
@@ -200,3 +200,4 @@ SparkV's Command List! SparkV contains more than **134 commands**!
 | **stats**      | SparkV's stats.                                                                               |                            | 2 seconds |
 | **userid**     | Gets the ID of the mentioned user. If you don't mention someone, I will send your ID instead. | (optional: @member)        | 2 seconds |
 | **userinfo**   | See information about a user.                                                                 | {user}                     | 2 seconds |
+| **zalago**     | Generate zalgo text.                                                                          | {text}                     | 2 seconds |

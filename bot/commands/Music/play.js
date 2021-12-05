@@ -3,19 +3,12 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	if (!message.member.voice.channel) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-	}
+	const query = args.join(" ");
 
-	args = args.join(" ");
-
-	if (!args) {
-		return await message.replyT(`${bot.config.emojis.error} | Please enter a song URL or query to search!`);
-	}
+	if (!query) return await message.replyT(`${bot.config.emojis.error} | Please enter a song URL or query to search!`);
 
 	try {
-		bot.distube.play(message, args);
+		bot.distube.play(message, query);
 	} catch (err) {
 		console.error(err);
 

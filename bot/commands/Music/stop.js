@@ -3,33 +3,12 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	if (!message.member.voice.channel) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-	}
-
 	const queue = await bot.distube.getQueue(message);
 
-	if (queue) {
-		bot.distube.stop(message);
+	if (!queue) return message.channel.send(`${client.emotes.error} | There is nothing in the queue right now!`);
 
-		await message.replyT({
-			embed: {
-				title: `${bot.config.emojis.error} | Stopped Song`,
-				description: `Stopped currently playing song.`,
-				color: `#0099ff`,
-
-				thumbnail: {
-					url: `https://www.notebookcheck.net/fileadmin/Notebooks/News/_nc3/YouTube.jpg`,
-				},
-
-				footer: {
-					text: `Stopped song`,
-					icon_url: bot.user.displayAvatarURL(),
-				},
-			},
-		});
-	}
+	queue.stop();
+	await message.replyT(`${bot.config.emojis.error} | Successfully stopped the queue!`);
 }
 
 module.exports = new cmd(execute, {

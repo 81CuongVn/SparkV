@@ -3,17 +3,17 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	if (!message.member.voice.channel) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-	}
+	const queue = await bot.distube.getQueue(message);
 
-	bot.distube
-		.seek(message, parseInt(args[0]))
-		.then(async () => {
-			await message.replyT(`${bot.config.emojis.music} | Okay, I set the track's position to ${args[0]}.`);
-		})
-		.catch(async err => await message.replyT(`${bot.config.emojis.error} | Uh oh! An error occured.`));
+	if (!queue) return await message.replyT(`${bot.config.emojis.error} | No songs was ever/still is paused.`);
+	if (!args[0]) return await message.replyT(`${bot.config.emojis.error} | Please provide a position, in seconds, to seek!`);
+
+	const position = Number(args[0]);
+
+	if (isNaN(position)) return await message.replyT(`${bot.config.emojis.error} | Please provide a **VALID** position, in seconds, to seek!`);
+
+	queue.seek(position);
+	await message.replyT(`${bot.config.emojis.music} | Okay, I set the track's position to ${position}.`);
 }
 
 module.exports = new cmd(execute, {

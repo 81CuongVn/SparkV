@@ -23,8 +23,6 @@ module.exports = async bot => {
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name} by ${song.uploader.name}`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
-				.addField("`👍` Likes", `\`${bot.functions.formatNumber(song.likes)}\``, true)
-				.addField("`👎` Dislikes", `\`${bot.functions.formatNumber(song.dislikes)}\``, true)
 				.addField("`⏳` Duration", `\`${song.formattedDuration}\``, true)
 				.addField("`🔉` Volume", `\`${queue.volume}%\``, true)
 				.addField("`🔁` Loop", `\`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "`❎`"}\``, true)
@@ -37,31 +35,110 @@ module.exports = async bot => {
 					.setFooter(`${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
 			} else {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter(`${bot.functions.progressBar(song.likes || 0, song.dislikes || 0, 10).bar} - Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
 			}
 
-			queue.textChannel.send({
+			const MusicSelect = new Discord.MessageSelectMenu()
+				.setCustomId("SelectMusicMenu")
+				.setPlaceholder("Select a setting to toggle.")
+				.addOptions([
+					{
+						label: "Loop",
+						description: "Toggle the looping of the current song. Assessible also though the loop command.",
+						value: "loop",
+						emoji: "🔁"
+					},
+					{
+						label: "AutoPlay",
+						description: "Toggles autoplay for the whole server. When the song(s) end(s), SparkV will find another song simular to the song that was just played.".slice(0, 100),
+						value: "autoplay",
+						emoji: "🔁"
+					}
+				]);
+
+			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
+				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+			});
+
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 1200 * 1000 });
+			collector.on("collect", async interaction => {
+				const queue = bot.distube.getQueue(interaction);
+
+				if (!queue) return interaction.replyT("There is no music playing.");
+
+				if (interaction.values[0] === "loop") {
+					queue.setRepeatMode(queue.autoplay === true ? 0 : 1);
+
+					interaction.replyT(`Looping is now ${(queue.autoplay === true ? "**DISABLED**" : "**ENABLED**")}.`);
+				} else if (interaction.values[0] === "autoplay") {
+					const autoplay = queue.toggleAutoplay();
+
+					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
+				}
+
+				const MusicMessage = await queue.textChannel.send({
+					embeds: [NowPlayingEmbed],
+					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				});
 			});
 		})
 		.on("addSong", async (queue, song) => {
 			const SongAddedQueue = new Discord.MessageEmbed()
-				.setTitle(`${bot.config.emojis.music} | Added Song To Queue`)
-				.setDescription(song.name)
+				.setTitle(`${bot.config.emojis.music} | Added ${song.name} by ${song.uploader.name} To Queue`)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
-				.addField("`👍` Likes", `\`${bot.functions.formatNumber(song.likes)}\``, true)
-				.addField("`👎` Dislikes", `\`${bot.functions.formatNumber(song.dislikes)}\``, true)
 				.addField("`⏳` Duration", `\`${song.formattedDuration}\``, true)
 				.addField("`🔉` Volume", `\`${queue.volume}%\``, true)
-				.addField("`🔁` Loop", `\`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "`❎`"}\``, true)
-				.addField("`🔂` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
+				.addField("`🔁` Loop", `\`${queue.repeatMode ? (queue.repeatMode === 2 ? "🔁 | Server Queue" : "🔂 | Current Song") : "`❎`"}\``, true)
+				.addField("`🔁` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
 				.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL())
 				.setTimestamp();
 
-			queue.textChannel.send({
-				embeds: [SongAddedQueue]
+			const MusicSelect = new Discord.MessageSelectMenu()
+				.setCustomId("SelectMusicMenu")
+				.setPlaceholder("Select a setting to toggle.")
+				.addOptions([
+					{
+						label: "Loop",
+						description: "Toggle the looping of the current song. Assessible also though the loop command.",
+						value: "loop",
+						emoji: "🔁"
+					},
+					{
+						label: "AutoPlay",
+						description: "Toggles autoplay for the whole server. When the song(s) end(s), SparkV will find another song simular to the song that was just played.".slice(0, 100),
+						value: "autoplay",
+						emoji: "🔁"
+					}
+				]);
+
+			const MusicMessage = await queue.textChannel.send({
+				embeds: [SongAddedQueue],
+				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+			});
+
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 1200 * 1000 });
+			collector.on("collect", async interaction => {
+				const queue = bot.distube.getQueue(interaction);
+
+				if (!queue) return interaction.replyT("There is no music playing.");
+
+				if (interaction.values[0] === "loop") {
+					queue.setRepeatMode(queue.autoplay === true ? 0 : 1);
+
+					interaction.replyT(`Looping is now ${(queue.autoplay === true ? "**DISABLED**" : "**ENABLED**")}.`);
+				} else if (interaction.values[0] === "autoplay") {
+					const autoplay = queue.toggleAutoplay();
+
+					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
+				}
+
+				const MusicMessage = await queue.textChannel.send({
+					embeds: [SongAddedQueue],
+					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				});
 			});
 		})
 		.on("addList", async (queue, playlist) => {
@@ -76,16 +153,14 @@ module.exports = async bot => {
 							song.likes,
 						)}\n👎︱Dislikes: ${bot.functions.formatNumber(
 							song.dislikes,
-						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${
-							song.formattedDuration
+						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration
 						}\`\`\``,
 						inline: true,
 					},
 
 					{
 						name: `🔊︱Audio Settings`,
-						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${
-							queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"
+						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"
 						}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
 						inline: true,
 					},
@@ -126,7 +201,7 @@ module.exports = async bot => {
 				console.error(err);
 			}
 		})
-		.on("searchDone", (message, answer, query) => {})
+		.on("searchDone", (message, answer, query) => { })
 		.on("searchCancel", async message => await message.replyT(`Searching canceled.`))
 		.on("searchInvalidAnswer", async message =>
 			await message.replyT(
