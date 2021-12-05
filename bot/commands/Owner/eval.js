@@ -21,8 +21,6 @@ async function execute(bot, message, args, command, data) {
 				),
 			});
 		}
-
-		result = result.replace(new RegExp(process.env.token, "gi"), "BOTTOKEN");
 	} catch (err) {
 		result = err.message;
 	}
