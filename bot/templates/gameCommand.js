@@ -6,7 +6,7 @@ const NewCommand = require("./command");
 const gameTypes = ["animal", "character", "object"];
 
 // Filter for akinator command.
-const filter = async m => {
+const filter = async (bot, m) => {
 	if (m.author.id === m.client.user.id) {
 		return false;
 	}
