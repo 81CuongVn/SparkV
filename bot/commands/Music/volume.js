@@ -3,20 +3,17 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	if (!message.member.voice.channel) {
-		return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-	}
+	let [volume] = args;
+	volume = parseInt(volume);
 
-	if (isNaN(args[0])) {
-		return await message.replyT(`${bot.config.emojis.error} | That's not a valid number!`);
-	}
+	const queue = bot.distube.getQueue(message);
 
-	if (parseInt(args[0]) > 100) {
-		return message.replyT(`${bot.config.emojis.error} | Due to performance reasons, songs cannot go louder than 100.`);
-	}
+	if (!queue) return message.channel.send(`${client.emotes.error} | There is nothing in the queue right now!`);
+	if (isNaN(volume)) return await message.replyT(`${bot.config.emojis.error} | That's not a valid number!`);
+	if (parseInt(volume > 100)) return message.replyT(`${bot.config.emojis.error} | Due to performance reasons, songs cannot go louder than 100%.`);
 
-	bot.distube.setVolume(message, parseInt(args[0]));
-	return await message.replyT(`${bot.config.emojis.music} | I set the volume to ${args[0]}!`);
+	queue.setVolume(volume);
+	return await message.replyT(`${bot.config.emojis.music} | I successfully set the volume to ${volume}%!`);
 }
 
 module.exports = new cmd(execute, {
