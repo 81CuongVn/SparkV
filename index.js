@@ -8,30 +8,31 @@ const Sentry = require("@sentry/node");
 const { Integrations } = require("@sentry/tracing");
 const { ShardingManager } = require("discord.js");
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 // Varibles //
 const Config = require("./globalconfig.json");
 const Logger = require("./modules/logger");
 const PackageInfo = require("./package.json");
 
-// Loading Splash Screen
-console.log(require("asciiart-logo")(require("./package.json")).render());
-
-if (process.argv.includes("--dev") === true) {
-	console.log(require("chalk").grey("----------------------------------------"));
-	require("./modules/logger")("DEV - ENABLED -> Some features may not work on this mode.");
-	console.log(require("chalk").grey("----------------------------------------"));
-}
-
-if (process.version.slice(1, 3) - 0 < 16) {
-	console.log(require("chalk").grey("----------------------------------------"));
-	require("./modules/logger")("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
-	console.log(require("chalk").grey("----------------------------------------"));
-	return;
-}
-
 // Functions //
-async function Start() {
+async function checkForUpdate() {
+	try {
+		const tag_name = await axios.get("https://api.github.com/repos/Ch1ll-Studio/SparkV/releases/latest").then(response => response.data.tag_name);
+
+		if (Number(tag_name.slice(1)) > Number(PackageInfo.version)) {
+			console.log(require("chalk").grey("----------------------------------------"));
+			await Logger("WARNING - UPDATE_AVAILABLE => PLEASE UPDATE TO THE LATEST VERSION", "warn");
+			console.log(require("chalk").grey("----------------------------------------"));
+		}
+	} catch (err) {
+		console.log(require("chalk").grey("----------------------------------------"));
+		await Logger(`WARNING - UPDATE_CHECK_ERROR => FAILED TO CHECK FOR UPDATE. ${err}`, "warn");
+		console.log(require("chalk").grey("----------------------------------------"));
+	}
+}
+
+async function start() {
 	require("dotenv").config();
 
 	Sentry.init({
@@ -120,4 +121,22 @@ async function Start() {
 	}
 }
 
-Start();
+// Start Bot //
+console.log(require("asciiart-logo")(require("./package.json")).render());
+
+if (process.argv.includes("--dev") === true) {
+	console.log(require("chalk").grey("----------------------------------------"));
+	Logger("DEV - ENABLED -> Some features may not work on this mode.");
+	console.log(require("chalk").grey("----------------------------------------"));
+}
+
+checkForUpdate();
+
+if (process.version.slice(1, 3) - 0 < 16) {
+	console.log(require("chalk").grey("----------------------------------------"));
+	Logger("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
+	console.log(require("chalk").grey("----------------------------------------"));
+	return;
+}
+
+start();
