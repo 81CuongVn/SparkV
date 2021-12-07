@@ -5,7 +5,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: '25 3 * * 1'
+      interval: "daily"
 
     labels:
       - "Github Action Update"
@@ -20,7 +20,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: '25 3 * * 1'
+      interval: "daily"
     labels:
       - "Dependency Update"
     pull-request-branch-name:
