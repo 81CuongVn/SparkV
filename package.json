@@ -1,19 +1,16 @@
 {
   "name": "spark.v",
-  "version": "1.1.0",
+  "version": "1.2",
   "description": "...",
   "main": "index.js",
   "private": true,
   "scripts": {
     "start": "node .",
     "dev": "doppler run -- node . --dev",
+    "lint": "eslint .",
     "update": "git pull && npm install",
-    "checkPacs": "npx npm-check-updates",
-    "checkPacs:u": "npx npm-check-updates -u && npm install",
-    "test": "eslint . --ignore-path .gitignore",
-    "test:fix": "eslint . --ignore-path .gitignore --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "uDepend": "npx npm-check-updates -u",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
