@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node .",
     "dev": "doppler run -- node . --dev",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "update": "git pull && npm install",
     "uDepend": "npx npm-check-updates -u",
     "format": "prettier --write ."
