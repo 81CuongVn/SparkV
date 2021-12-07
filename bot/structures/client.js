@@ -72,7 +72,7 @@ module.exports = class bot extends Client {
 
 		// Update Docs
 		if (process.argv.includes("--dev") === true) {
-			setTimeout(() => updateDocs.update(this, MainDir), 10 * 1000);
+			setTimeout(() => updateDocs.update(this, MainDir), 30 * 1000);
 		}
 
 		// Cache

@@ -35,7 +35,7 @@ module.exports = async bot => {
 					.setFooter(`${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
 			} else {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`${bot.functions.progressBar(song.likes || 0, song.dislikes || 0, 10).bar} - Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
 			}
 
 			const MusicSelect = new Discord.MessageSelectMenu()
@@ -77,7 +77,7 @@ module.exports = async bot => {
 					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
 				}
 
-				const MusicMessage = await queue.textChannel.send({
+				MusicMessage.edit({
 					embeds: [NowPlayingEmbed],
 					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 				});
@@ -135,7 +135,7 @@ module.exports = async bot => {
 					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
 				}
 
-				const MusicMessage = await queue.textChannel.send({
+				await MusicMessage.edit({
 					embeds: [SongAddedQueue],
 					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 				});
