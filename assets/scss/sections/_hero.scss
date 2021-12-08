@@ -6,6 +6,23 @@
     padding-top: 10rem;
     width: 100%;
     height: 100%;
+
+    .banner_container {
+        padding-bottom: 16.5rem !important;
+    }
+}
+
+.video-box {
+    position: relative;
+
+    a {
+        span {
+            i {
+                font-size: 6rem;
+                color: $secondary;
+            }
+        }
+    }
 }
 
 .border-animation {
@@ -18,11 +35,11 @@
     border-radius: 50%;
     animation: pulse 1.5s linear infinite;
 
-    &--boarder-1 {
+    &_boarder-1 {
         animation-delay: 1s;
     }
 
-    &--board-2 {
+    &_boarder-2 {
         animation-delay: 1.5s;
     }
 }
