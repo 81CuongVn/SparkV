@@ -56,46 +56,7 @@ $(document).ready(() => {
     duration: "600",
   });
 
-  $(document).on("click", ".deletebot", async function() {
-    await Swal.fire({
-      title: `Are you sure you want to delete ${$(this).attr("name")}?`,
-      text: "THIS ACTION CANNOT BE UNDONE!",
-      icon: "warning",
-      html: `Type <u>${$(this).attr("name")}</u> to confirm.`,
-      showCancelButton: true,
-      input: "text",
-      confirmButtonText: "Delete",
-      preConfirm: async name => {
-        if (name.toLowerCase() !== $(this).attr("name").toLowerCase()) {
-          Swal.update({
-            title: "Cancelled",
-            html: "",
-          });
-
-          await wait(1);
-        } else {
-          await fetch(`/api/bots/${$(this).attr("id")}`, {
-            method: "DELETE",
-          });
-
-          location.href = "/";
-        }
-      },
-    });
-  });
-
-  $(".counter").each(function() {
-    $(".counter").animate(
-      {
-        Counter: this.text(),
-      },
-      {
-        duration: 2000,
-        easing: "swing",
-        step: function() {
-          this.text(`${Math.ceil(this.Counter)}+`);
-        },
-      },
-    );
-  });
+  console.log("%cWHOA THERE!", "color: #314ef5; font-weight: bold;; font-size: 50px");
+  console.log("%cIf someone told you to paste something here, it's VERY likely you're being scammed.", "color: white; font-size: 20px");
+  console.log("%cPasting something here could give hackers access to your account!", "color: red; font-size: 25px");
 });
