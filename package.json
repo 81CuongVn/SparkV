@@ -28,7 +28,7 @@
     "@discordjs/voice": "^0.7.5",
     "@distube/soundcloud": "^1.0.0",
     "@distube/spotify": "^1.0.0",
-    "@sentry/node": "^6.15.0",
+    "@sentry/node": "^6.16.0",
     "@sentry/tracing": "^6.15.0",
     "@vitalets/google-translate-api": "^7.0.0",
     "asciiart-logo": "^0.2.6",
