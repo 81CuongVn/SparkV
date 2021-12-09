@@ -29,11 +29,11 @@ module.exports = {
 			// Start Posting to Bot Lists
 			poster.post();
 			poster.startInterval();
-
-			// Auto Post Bot Stats
-			bot.StatClient.post();
-			bot.StatClient.autopost();
 		}
+
+		// Auto Post Bot Stats
+		await bot.StatClient.autopost();
+		await bot.StatClient.post();
 
 		console.log("-------- SparkV --------");
 		bot.user.setPresence({

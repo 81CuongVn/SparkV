@@ -37,6 +37,7 @@ const SparkV = new Client({
 		status: "dnd",
 	},
 });
+global.bot = SparkV;
 
 async function Start() {
 	await SparkV.LoadEvents(__dirname);

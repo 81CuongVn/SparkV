@@ -3,10 +3,14 @@ const Discord = require("discord.js");
 
 const cmd = require("../../templates/command");
 
-async function execute(bot, message, args, command, data) {
-	const Game = new TicTacToe({ language: "en" }, bot);
+const Game = new TicTacToe({ language: "en" }, global.bot);
 
-	Game.handleMessage(message);
+async function execute(bot, message, args, command, data) {
+	if (message.inGuild()) {
+		Game.handleInteraction(message, bot);
+	} else {
+		Game.handleMessage(message);
+	}
 }
 
 module.exports = new cmd(execute, {
@@ -14,5 +18,6 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: ["ttt"],
-	perms: ["EMBED_LINKS"],
+	perms: ["ADD_REACTIONS", "MANAGE_MESSAGES", "READ_MESSAGE_HISTORY", "VIEW_CHANNEL", "SEND_MESSAGES"],
+	slash: true
 });
