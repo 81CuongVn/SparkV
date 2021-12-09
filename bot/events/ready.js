@@ -31,9 +31,9 @@ module.exports = {
 			poster.startInterval();
 		}
 
-		// Auto Post Bot Stats
-		await bot.StatClient.autopost();
-		await bot.StatClient.post();
+		// Bot Stats
+		bot.StatClient.post();
+		bot.StatClient.autopost();
 
 		console.log("-------- SparkV --------");
 		bot.user.setPresence({
