@@ -6,7 +6,7 @@ Handle.js
 let scroll = new SmoothScroll('a[href*="#"]');
 let online = true;
 
-$(window).load(async () => {
+$(window).on("load", async () => {
   let Popup = Swal.mixin({
     toast: true,
     position: "top-end",
