@@ -1,3 +1,4 @@
+const config = require("../../../globalconfig.json");
 const fs = require("fs");
 
 const commands = fs
@@ -8,6 +9,6 @@ const commands = fs
 module.exports = {
 	name: "Roblox",
 	description: "Roblox commands!",
-	emoji: "<:roblox:819679702490808340>",
+	emoji: config.emojis.roblox,
 	commands,
 };

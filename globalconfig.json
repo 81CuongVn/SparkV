@@ -18,7 +18,8 @@
   "emojis": {
     "success": "<a:Check:819934065025220668>",
     "error": "<a:Cross:819934065314234418>",
-    "music": "<a:PepeMusic:819933524525449256>"
+    "music": "<a:PepeMusic:819933524525449256>",
+    "roblox": "<:Roblox:918614055151890483>"
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
