@@ -1,9 +1,11 @@
-// Components
+@use "./config" as *;
+
+//-- Components --//
 @use 'components/buttons';
 @use 'components/mixins';
-@use 'components/typography';
+@use 'components/text';
 
-// Sections
+//-- Sections --//
 @use 'sections/navbar';
 @use 'sections/hero';
 @use 'sections/services';
@@ -12,12 +14,13 @@
 
 ::-webkit-scrollbar {
     width: 10px;
+    background: $primary;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #111218;
+    background: $secondary;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #1c1c24;
+    background: $secondary;
 }
