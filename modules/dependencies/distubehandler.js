@@ -61,7 +61,7 @@ module.exports = async bot => {
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 1200 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: Infinity });
 			collector.on("collect", async interaction => {
 				const queue = bot.distube.getQueue(interaction);
 
@@ -119,7 +119,7 @@ module.exports = async bot => {
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 1200 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: Infinity });
 			collector.on("collect", async interaction => {
 				const queue = bot.distube.getQueue(interaction);
 

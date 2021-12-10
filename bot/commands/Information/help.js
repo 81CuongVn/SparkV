@@ -87,7 +87,7 @@ async function execute(bot, message, args, command, data) {
 			ephemeral: true
 		});
 
-		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: 300 * 1000 });
+		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: Infinity });
 		collector.on("collect", async interaction => {
 			bot.categories.map(cat => CreateCmdPage(bot, interaction, cat));
 
