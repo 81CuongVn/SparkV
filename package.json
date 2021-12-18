@@ -50,7 +50,7 @@
     "distube": "^3.0.2",
     "dotenv": "^10.0.0",
     "erlpack": "github:discord/erlpack",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "ffmpeg-static": "^4.4.0",
     "figlet": "^1.5.2",
     "libsodium-wrappers": "^0.7.9",
