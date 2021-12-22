@@ -100,9 +100,15 @@ async function execute(bot, message, args, command, data) {
 			});
 		});
 
-		collector.on("end", async interaction => {
-			await interaction.update({
-				embeds: [pages.filter(p => p.title === interaction.values[0])[0]],
+		collector.on("end", async () => {
+			await helpMessage.edit({
+				embeds: [
+					NewEmbed
+						.setTitle(await message.translate("Time Out!"), bot.user.displayAvatarURL({ dynamic: true }))
+						.setDescription(await message.translate("Please rerun command."))
+				],
+				components: [],
+				ephemeral: true
 			});
 		});
 	} else {

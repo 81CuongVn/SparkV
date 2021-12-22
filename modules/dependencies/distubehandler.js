@@ -147,7 +147,7 @@ module.exports = async bot => {
 				});
 			});
 
-			collector.on("end", async interaction => {
+			collector.on("end", async collected => {
 				MusicMessage.update({
 					embeds: [SongAddedQueue]
 				});
