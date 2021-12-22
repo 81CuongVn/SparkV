@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const dbots = require("dbots");
+const { Client } = require("statcord.js");
 
 module.exports = {
 	once: true,

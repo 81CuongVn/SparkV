@@ -19,6 +19,19 @@ const GuildSchema = require("../../database/schemas/guild");
 const MemberSchema = require("../../database/schemas/member");
 const UserSchema = require("../../database/schemas/user");
 
+const createRedis = async () => new Promise(resolve => {
+	const rClient = require("redis").createClient(process.env.REDIS_URL);
+
+	for (const prop in rClient) {
+		if (typeof rClient[prop] === "function") {
+			rClient[`${prop}Async`] = util.promisify(rClient[prop]).bind(rClient);
+		}
+	}
+
+	rClient.on("error", err => console.error(err));
+	rClient.on("ready", resolve.bind(null, rClient));
+});
+
 module.exports = class bot extends Client {
 	constructor(settings) {
 		super(settings);
@@ -54,29 +67,11 @@ module.exports = class bot extends Client {
 		return this;
 	}
 
-	async LoadModules(settings, MainDir) {
-		// Function
-		const createRedis = () =>
-			new Promise(resolve => {
-				const rClient = require("redis").createClient(process.env.REDIS_URL);
-
-				for (const prop in rClient) {
-					if (typeof rClient[prop] === "function") {
-						rClient[`${prop}Async`] = util.promisify(rClient[prop]).bind(rClient);
-					}
-				}
-
-				rClient.on("error", err => console.error(err));
-				rClient.on("ready", resolve.bind(null, rClient));
-			});
-
+	async LoadModules(settings) {
 		// Update Docs
 		if (process.argv.includes("--dev") === true) {
-			setTimeout(() => updateDocs.update(this, MainDir), 30 * 1000);
+			setTimeout(() => updateDocs.update(this, settings.docsPath), 30 * 1000);
 		}
-
-		// Cache
-		this.redis = await createRedis();
 
 		// Functions
 		this.database.init(this);
@@ -90,8 +85,8 @@ module.exports = class bot extends Client {
 			this.shop.set(shopdata[i].name, shopdata[i]);
 		}
 
-		if (!settings.sharding) {
-			const StatClient = new Statcord.Client({
+		if (settings.sharding === true) {
+			this.StatClient = await new Statcord.ShardingClient({
 				client: this,
 				key: process.env.STATCORDAPIKEY,
 				postCpuStatistics: true,
@@ -99,10 +94,8 @@ module.exports = class bot extends Client {
 				postNetworkStatistics: true,
 				autopost: true,
 			});
-
-			this.StatClient = StatClient;
-		} else if (settings.sharding === true) {
-			const StatClient = new Statcord.ShardingClient({
+		} else {
+			this.StatClient = await new Statcord.Client({
 				client: this,
 				key: process.env.STATCORDAPIKEY,
 				postCpuStatistics: true,
@@ -110,11 +103,10 @@ module.exports = class bot extends Client {
 				postNetworkStatistics: true,
 				autopost: true,
 			});
-
-			this.StatClient = StatClient;
 		}
 
 		this.discordTogether = new DiscordTogether(this);
+		this.redis = await createRedis();
 	}
 
 	async LoadEvents(MainPath) {
@@ -133,44 +125,37 @@ module.exports = class bot extends Client {
 
 	async LoadCommands(MainPath) {
 		fs.readdir(path.join(`${MainPath}/commands`), (err, cats) => {
-			if (err) {
-				return this.logger(`Commands failed to load! ${err}`, "error");
-			}
+			if (err) return this.logger(`Commands failed to load! ${err}`, "error");
 
 			cats.forEach(cat => {
 				const category = require(path.join(`${MainPath}/commands/${cat}`));
 				this.categories.set(category.name, category);
 
 				fs.readdir(path.join(`${MainPath}/commands/${cat}`), (err, files) => {
-					if (err) {
-						return this.logger(`Commands failed to load! ${err}`, "error");
-					}
+					if (err) return this.logger(`Commands failed to load! ${err}`, "error");
 
 					files.forEach(file => {
-						if (!file.endsWith(".js")) {
-							return;
-						}
+						if (!file.endsWith(".js")) return;
 
 						const commandname = file.split(".")[0];
 						const command = require(path.resolve(`${MainPath}/commands/${cat}/${commandname}`));
 
-						if (!command || !command.settings || command.config) {
-							return;
-						}
+						if (!command || !command.settings || command.config) return;
 
 						command.category = category.name;
 						command.description = category.description;
 
-						if (!this.categories.has(command.category)) {
-							this.categories.set(command.category, category);
-						}
+						if (!this.categories.has(command.category)) this.categories.set(command.category, category);
 
 						command.settings.name = commandname;
 
 						if (this.commands.has(commandname)) {
 							const existingCommand = this.commands.get(commandname);
 
-							return this.logger(`You cannot set command ${commandname} because it is already in use by the command ${existingCommand.settings.name}. This is most likely due to a accidental clone of a command with the same name.`, "error");
+							return this.logger(
+								`You cannot set command ${commandname} because it is already in use by the command ${existingCommand.settings.name}. This is most likely due to a accidental clone of a command with the same name.`,
+								"error",
+							);
 						}
 
 						this.commands.set(commandname, command);
@@ -185,23 +170,22 @@ module.exports = class bot extends Client {
 							this.slashCommands.push({
 								name: commandname,
 								description: command.settings.description,
-								options: command.settings.options || []
+								options: command.settings.options || [],
 							});
 						}
 
-						if (!command.settings.aliases) {
-							return;
-						}
+						if (!command.settings.aliases) return;
 
 						for (const alias of command.settings.aliases) {
-							if (!alias) {
-								return;
-							}
+							if (!alias) return;
 
 							if (this.aliases.has(alias)) {
 								const existingCommand = this.aliases.get(alias);
 
-								return this.logger(`You cannot set alias ${alias} to ${command.settings.name} because it is already in use by the command ${existingCommand.settings.name}.`, "error");
+								return this.logger(
+									`You cannot set alias ${alias} to ${command.settings.name} because it is already in use by the command ${existingCommand.settings.name}.`,
+									"error",
+								);
 							}
 
 							this.aliases.set(alias, command);
@@ -214,7 +198,7 @@ module.exports = class bot extends Client {
 
 	async LoadSlashCommands() {
 		const rest = new REST({
-			version: "9"
+			version: "9",
 		}).setToken(process.env.TOKEN);
 
 		try {
@@ -225,9 +209,14 @@ module.exports = class bot extends Client {
 			// 818922579623673867 is my test bot's id. (SparkV Alpha)
 			// 763803059876397056 is Ch1ll Studio's guild ID. (My Bot's Main Server)
 
-			await rest.put(process.argv.includes("--dev") === true ? Routes.applicationGuildCommands("818922579623673867", "763803059876397056") : Routes.applicationCommands(this.config.ID), {
-				body: this.slashCommands
-			});
+			await rest.put(
+				process.argv.includes("--dev") === true
+					? Routes.applicationGuildCommands("818922579623673867", "763803059876397056")
+					: Routes.applicationCommands(this.config.ID),
+				{
+					body: this.slashCommands,
+				},
+			);
 
 			this.logger("Successfully registered slash commands.");
 		} catch (error) {

@@ -35,7 +35,7 @@ const SparkV = new Client({
 			type: "PLAYING",
 		},
 		status: "dnd",
-	},
+	}
 });
 global.bot = SparkV;
 
@@ -43,14 +43,12 @@ async function Start() {
 	await SparkV.LoadEvents(__dirname);
 	await SparkV.LoadCommands(__dirname);
 
-	setTimeout(async () => await SparkV.LoadSlashCommands(), 25 * 1000);
+	await SparkV.LoadModules({
+		sharding: process.execArgv.includes("--sharding"),
+		docsPath: process.env.MainDir
+	});
 
-	await SparkV.LoadModules(
-		{
-			sharding: process.execArgv.includes("--sharding"),
-		},
-		process.env.MainDir,
-	);
+	setTimeout(async () => await SparkV.LoadSlashCommands(), 25 * 1000);
 
 	SparkV.SocketioClient = require("socket.io-client").connect(
 		`https://${process.env.BASEURL}/api/communication?token=8010405464675`,
