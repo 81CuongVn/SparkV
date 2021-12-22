@@ -87,7 +87,7 @@ async function execute(bot, message, args, command, data) {
 			ephemeral: true
 		});
 
-		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: Infinity });
+		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: 300 * 1000 });
 		collector.on("collect", async interaction => {
 			bot.categories.map(cat => CreateCmdPage(bot, interaction, cat));
 
@@ -97,6 +97,12 @@ async function execute(bot, message, args, command, data) {
 					new MessageActionRow().addComponents(CatSelect),
 					new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
 				],
+			});
+		});
+
+		collector.on("end", async interaction => {
+			await interaction.update({
+				embeds: [pages.filter(p => p.title === interaction.values[0])[0]],
 			});
 		});
 	} else {

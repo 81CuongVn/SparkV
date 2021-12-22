@@ -61,7 +61,7 @@ module.exports = async bot => {
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: Infinity });
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
 			collector.on("collect", async interaction => {
 				const queue = bot.distube.getQueue(interaction);
 
@@ -80,6 +80,12 @@ module.exports = async bot => {
 				MusicMessage.edit({
 					embeds: [NowPlayingEmbed],
 					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				});
+			});
+
+			collector.on("end", async interaction => {
+				MusicMessage.update({
+					embeds: [NowPlayingEmbed]
 				});
 			});
 		})
@@ -119,7 +125,7 @@ module.exports = async bot => {
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: Infinity });
+			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
 			collector.on("collect", async interaction => {
 				const queue = bot.distube.getQueue(interaction);
 
@@ -138,6 +144,12 @@ module.exports = async bot => {
 				await MusicMessage.edit({
 					embeds: [SongAddedQueue],
 					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				});
+			});
+
+			collector.on("end", async interaction => {
+				MusicMessage.update({
+					embeds: [SongAddedQueue]
 				});
 			});
 		})
