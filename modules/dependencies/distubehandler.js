@@ -85,7 +85,8 @@ module.exports = async bot => {
 
 			collector.on("end", async interaction => {
 				MusicMessage.update({
-					embeds: [NowPlayingEmbed]
+					embeds: [NowPlayingEmbed],
+					components: []
 				});
 			});
 		})
@@ -149,7 +150,8 @@ module.exports = async bot => {
 
 			collector.on("end", async collected => {
 				MusicMessage.update({
-					embeds: [SongAddedQueue]
+					embeds: [SongAddedQueue],
+					components: []
 				});
 			});
 		})

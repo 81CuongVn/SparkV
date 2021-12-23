@@ -104,7 +104,7 @@ async function execute(bot, message, args, command, data) {
 			await helpMessage.edit({
 				embeds: [
 					NewEmbed
-						.setTitle(await message.translate("Time Out!"), bot.user.displayAvatarURL({ dynamic: true }))
+						.setTitle(await message.translate("Timed Out!"), bot.user.displayAvatarURL({ dynamic: true }))
 						.setDescription(await message.translate("Please rerun command."))
 				],
 				components: [],
