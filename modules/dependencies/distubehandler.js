@@ -84,10 +84,13 @@ module.exports = async bot => {
 			});
 
 			collector.on("end", async interaction => {
-				MusicMessage.update({
-					embeds: [NowPlayingEmbed],
-					components: []
-				});
+				// Checks if not deleted.
+				if (MusicMessage) {
+					MusicMessage.update({
+						embeds: [NowPlayingEmbed],
+						components: []
+					});
+				}
 			});
 		})
 		.on("addSong", async (queue, song) => {
@@ -149,10 +152,12 @@ module.exports = async bot => {
 			});
 
 			collector.on("end", async collected => {
-				MusicMessage.update({
-					embeds: [SongAddedQueue],
-					components: []
-				});
+				if (MusicMessage) {
+					MusicMessage.update({
+						embeds: [SongAddedQueue],
+						components: []
+					});
+				}
 			});
 		})
 		.on("addList", async (queue, playlist) => {
