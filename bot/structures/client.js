@@ -93,7 +93,9 @@ module.exports = class bot extends Client {
 		}
 
 		this.discordTogether = new DiscordTogether(this);
-		this.redis = require("redis").createClient(process.env.REDIS_URL);
+		this.redis = require("redis").createClient({
+			url: process.env.REDIS_URL
+		});
 
 		await this.redis.connect();
 	}
