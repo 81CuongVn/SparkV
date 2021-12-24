@@ -8,7 +8,7 @@ async function execute(bot, message, args, command, data) {
 
 	const queue = bot.distube.getQueue(message);
 
-	if (!queue) return message.channel.send(`${client.emotes.error} | There is nothing in the queue right now!`);
+	if (!queue) return message.channel.send(`${bot.config.emojis.error} | There is nothing in the queue right now!`);
 	if (isNaN(volume)) return await message.replyT(`${bot.config.emojis.error} | That's not a valid number!`);
 	if (parseInt(volume > 100)) return message.replyT(`${bot.config.emojis.error} | Due to performance reasons, songs cannot go louder than 100%.`);
 
