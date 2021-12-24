@@ -15,7 +15,11 @@ async function execute(bot, message, args, command) {
 				.setDescription(response.data.description)
 				.setImage(response.data.image.url)
 				.setThumbnail(response.data.thumbnail.url)
-				.setAuthor(response.data.author.name, response.data.author.icon_url, response.data.author.url)
+				.setAuthor({
+					name: response.data.author.name,
+					iconURL: response.data.author.icon_url,
+					url: response.data.author.url
+				})
 				.addFields(response.data.fields)
 				.setFooter(response.data.footer.text, response.data.footer.icon_url)
 				.setURL(response.data.url)

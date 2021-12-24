@@ -9,12 +9,12 @@ module.exports = new cmd(
 		const member = message.channel.guild.members.cache.get(user.id);
 
 		const InfoEmbed = new Discord.MessageEmbed()
-			.setAuthor(
-				user.user ? user.user.tag : user.tag,
-				user.user
+			.setAuthor({
+				name: user.user ? user.user.tag : user.tag,
+				iconURL: user.user
 					? user.user.displayAvatarURL({ dynamic: true, format: "png" })
 					: user.displayAvatarURL({ dynamic: true, format: "png" }),
-			)
+			})
 			.addFields(
 				{
 					name: "**Account Info**",

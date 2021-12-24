@@ -34,10 +34,10 @@ async function execute(bot, message, args, command, data) {
 			.setThumbnail(
 				`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png?size=256`,
 			)
-			.setAuthor(
-				"SparkV Help",
-				`https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`,
-			)
+			.setAuthor({
+				name: "SparkV Help",
+				iconURL: `https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`,
+			})
 			.setFooter(
 				"SparkV - Making your Discord life easier!",
 				`https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`,
@@ -54,7 +54,10 @@ async function execute(bot, message, args, command, data) {
 		const NewEmbed = new MessageEmbed()
 			.setTitle(await message.translate("Select a Category!"))
 			.setDescription(await message.translate("Select a category from tapping the selection box below."))
-			.setAuthor(await message.translate("SparkV Help"), bot.user.displayAvatarURL({ dynamic: true }))
+			.setAuthor({
+				name: "SparkV Help",
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 			.setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true }) : message.user.displayAvatarURL({ dynamic: true }))
 			.setFooter(await message.translate("SparkV - Making your Discord life easier!"), bot.user.displayAvatarURL({ dynamic: true }))
 			.setColor(bot.config.embed.color)

@@ -22,7 +22,10 @@ async function execute(bot, message, args, command, data) {
 			.setTitle(args)
 			.setDescription(Lyrics)
 			.setFooter(bot.config.embed.footer)
-			.setAuthor(`Song by ${Lyrics.author}`, null, Lyrics.links.genius)
+			.setAuthor({
+				name: `${Lyrics.author}`,
+				url: Lyrics.links.genius
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
@@ -50,7 +53,10 @@ async function execute(bot, message, args, command, data) {
 			.setTitle(args)
 			.setDescription(x)
 			.setFooter(bot.config.embed.footer)
-			.setAuthor(`Song by ${Lyrics.author}`, null, Lyrics.links.genius)
+			.setAuthor({
+				name: `${Lyrics.author}`,
+				url: Lyrics.links.genius
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 

@@ -113,7 +113,6 @@ module.exports = class bot extends Client {
 	}
 
 	async LoadCommands(MainPath) {
-		console.log("loading commands...");
 		await fs.readdir(path.join(`${MainPath}/commands`), async (err, cats) => {
 			if (err) return this.logger(`Commands failed to load! ${err}`, "error");
 
@@ -131,8 +130,6 @@ module.exports = class bot extends Client {
 						const command = require(path.resolve(`${MainPath}/commands/${cat}/${commandname}`));
 
 						if (!command || !command.settings || command.config) return;
-
-						console.log(`Loading ${commandname}!`);
 
 						command.category = category.name;
 						command.description = category.description;
@@ -159,7 +156,7 @@ module.exports = class bot extends Client {
 								command.settings.description = `${sliced}...`;
 							}
 
-							this.slashCommands.push({
+							await this.slashCommands.push({
 								name: commandname,
 								description: command.settings.description,
 								options: command.settings.options || [],
@@ -186,12 +183,13 @@ module.exports = class bot extends Client {
 				});
 			});
 		});
-		console.log("done");
 
-		return true;
+		setTimeout(async () => {
+			await this.LoadSlashCommands(this.slashCommands);
+		}, 30 * 1000);
 	}
 
-	async LoadSlashCommands() {
+	async LoadSlashCommands(slashCommands) {
 		console.log("loading slash commands");
 
 		const rest = new REST({
@@ -212,7 +210,7 @@ module.exports = class bot extends Client {
 					: Routes.applicationCommands(this.config.ID);
 
 			await rest.put(route, {
-				body: this.slashCommands,
+				body: slashCommands,
 			});
 
 			this.logger("Successfully registered slash commands.");
