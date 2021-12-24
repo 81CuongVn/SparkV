@@ -19,19 +19,6 @@ const GuildSchema = require("../../database/schemas/guild");
 const MemberSchema = require("../../database/schemas/member");
 const UserSchema = require("../../database/schemas/user");
 
-const createRedis = async () => new Promise(resolve => {
-	const rClient = require("redis").createClient(process.env.REDIS_URL);
-
-	for (const prop in rClient) {
-		if (typeof rClient[prop] === "function") {
-			rClient[`${prop}Async`] = util.promisify(rClient[prop]).bind(rClient);
-		}
-	}
-
-	rClient.on("error", err => console.error(err));
-	rClient.on("ready", resolve.bind(null, rClient));
-});
-
 module.exports = class bot extends Client {
 	constructor(settings) {
 		super(settings);
@@ -106,7 +93,9 @@ module.exports = class bot extends Client {
 		}
 
 		this.discordTogether = new DiscordTogether(this);
-		this.redis = await createRedis();
+		this.redis = require("redis").createClient(process.env.REDIS_URL);
+
+		await this.redis.connect();
 	}
 
 	async LoadEvents(MainPath) {
@@ -124,23 +113,26 @@ module.exports = class bot extends Client {
 	}
 
 	async LoadCommands(MainPath) {
-		fs.readdir(path.join(`${MainPath}/commands`), (err, cats) => {
+		console.log("loading commands...");
+		await fs.readdir(path.join(`${MainPath}/commands`), async (err, cats) => {
 			if (err) return this.logger(`Commands failed to load! ${err}`, "error");
 
-			cats.forEach(cat => {
+			await cats.forEach(async cat => {
 				const category = require(path.join(`${MainPath}/commands/${cat}`));
 				this.categories.set(category.name, category);
 
-				fs.readdir(path.join(`${MainPath}/commands/${cat}`), (err, files) => {
+				await fs.readdir(path.join(`${MainPath}/commands/${cat}`), async (err, files) => {
 					if (err) return this.logger(`Commands failed to load! ${err}`, "error");
 
-					files.forEach(file => {
+					await files.forEach(async file => {
 						if (!file.endsWith(".js")) return;
 
 						const commandname = file.split(".")[0];
 						const command = require(path.resolve(`${MainPath}/commands/${cat}/${commandname}`));
 
 						if (!command || !command.settings || command.config) return;
+
+						console.log(`Loading ${commandname}!`);
 
 						command.category = category.name;
 						command.description = category.description;
@@ -194,9 +186,14 @@ module.exports = class bot extends Client {
 				});
 			});
 		});
+		console.log("done");
+
+		return true;
 	}
 
 	async LoadSlashCommands() {
+		console.log("loading slash commands");
+
 		const rest = new REST({
 			version: "9",
 		}).setToken(process.env.TOKEN);
@@ -209,14 +206,14 @@ module.exports = class bot extends Client {
 			// 818922579623673867 is my test bot's id. (SparkV Alpha)
 			// 763803059876397056 is Ch1ll Studio's guild ID. (My Bot's Main Server)
 
-			await rest.put(
+			const route =
 				process.argv.includes("--dev") === true
 					? Routes.applicationGuildCommands("818922579623673867", "763803059876397056")
-					: Routes.applicationCommands(this.config.ID),
-				{
-					body: this.slashCommands,
-				},
-			);
+					: Routes.applicationCommands(this.config.ID);
+
+			await rest.put(route, {
+				body: this.slashCommands,
+			});
 
 			this.logger("Successfully registered slash commands.");
 		} catch (error) {

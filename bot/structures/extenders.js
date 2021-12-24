@@ -14,7 +14,7 @@ async function translateContent(content) {
 	// Native languge
 	if (this.guild.data.language === "en") return content;
 
-	const cache = await this.client.redis.getAsync(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
+	const cache = await this.client.redis.get(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
 	let translation;
 
 	if (cache) { translation = cache; } else {
@@ -29,7 +29,7 @@ async function translateContent(content) {
 			to: this.guild.data.language
 		}).then(res => content.includes(" | ") ? translation = `${content1} | ${res.text}` : translation = res.text).catch(err => console.error(err));
 
-		this.client.redis.setAsync(`${content}-${this.guild.data.language}`, JSON.stringify(translation), "EX", 15 * 60);
+		await this.client.redis.set(`${content}-${this.guild.data.language}`, JSON.stringify(translation), "EX", 15 * 60);
 	}
 
 	return await translation;

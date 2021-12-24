@@ -25,7 +25,7 @@ module.exports = class RedditCommand {
 
 	async run(bot, message, args, command) {
 		let res;
-		const cache = await bot.redis.getAsync(this.settings.endpoint).then(res => JSON.parse(res));
+		const cache = await bot.redis.get(this.settings.endpoint).then(res => JSON.parse(res));
 
 		if (cache) {
 			res = cache;
@@ -34,12 +34,10 @@ module.exports = class RedditCommand {
 				.then(res => res.data)
 				.catch(() => null);
 
-			bot.redis.setAsync(this.settings.endpoint, JSON.stringify(res), "EX", 15 * 60);
+			await bot.redis.set(this.settings.endpoint, JSON.stringify(res), "EX", 15 * 60);
 		}
 
-		if (!res) {
-			return;
-		}
+		if (!res) return;
 
 		const posts = res.data.children.filter(filters[this.settings.type]);
 		const selectedPost = posts[Math.floor(Math.random() * Object.keys(posts).length)].data;
