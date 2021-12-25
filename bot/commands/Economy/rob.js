@@ -29,6 +29,8 @@ async function execute(bot, message, args, command, data) {
 
 	if (User.id === bot.config.ownerID) return await message.replyT(`${bot.config.emojis.error} | This user is protected! You can buy a protection shield from being robbed in the shop.`);
 
+	if (User.user.bot) return await message.replyT(`${bot.config.emojis.error} | You cannot rob bots.`);
+
 	if (UserBalance.money.balance < 0) return await message.replyT(`${bot.config.emojis.error} | This user is in **DEBT**! LOL!! HOW ON EARTH DID THAT HAPPEN LMFAOOOOO!!! Anyways, contact support and we'll reset your balance. :)`);
 
 	const odds = Math.floor(Math.random() * 100) + 1;
