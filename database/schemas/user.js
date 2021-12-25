@@ -30,10 +30,10 @@ const Schema = new mongoose.Schema({
 	} },
 	afk: { type: String, default: null },
 	money: {
-		balance: { type: Number, default: 0 },
+		balance: { type: Number, default: 100 },
 		bank: { type: Number, default: 0 },
-		bankMax: { type: Number, default: 0 },
-		multiplier: { type: Number, default: 0 }
+		bankMax: { type: Number, default: 2000 },
+		multiplier: { type: Number, default: 1 }
 	},
 	inventory: {},
 	totalVotes: { type: Number, default: 0 },
