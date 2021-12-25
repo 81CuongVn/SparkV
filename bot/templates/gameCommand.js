@@ -7,9 +7,7 @@ const gameTypes = ["animal", "character", "object"];
 
 // Filter for akinator command.
 const filter = async (bot, m) => {
-	if (m.author.id === m.client.user.id) {
-		return false;
-	}
+	if (m.author.id === bot.user.id) return false;
 
 	if (m.content) {
 		if (m.content.length > 35) {
@@ -39,10 +37,7 @@ module.exports = class ModCommand {
 
 	async run(bot, message, args, command, data) {
 		if (this.settings.type === "together") {
-			if (!message.member.voice.channel) {
-				return message
-					.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-			}
+			if (!message.member.voice.channel) return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
 
 			bot.discordTogether
 				.createTogetherCode(message.member.voice.channel.id, this.settings.gname)
@@ -69,8 +64,6 @@ module.exports = class ModCommand {
 			await message.replyT(`Invalid game type: \`${this.settings.type}\``);
 		}
 
-		if (this.execute) {
-			return this.execute(bot, message, args, command, data);
-		}
+		if (this.execute) return this.execute(bot, message, args, command, data);
 	}
 };

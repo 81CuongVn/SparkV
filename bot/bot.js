@@ -41,7 +41,7 @@ global.bot = SparkV;
 
 async function Start() {
 	await SparkV.LoadEvents(__dirname);
-	await SparkV.LoadCommands(__dirname)
+	await SparkV.LoadCommands(__dirname);
 
 	await SparkV.LoadModules({
 		sharding: process.execArgv.includes("--sharding"),
