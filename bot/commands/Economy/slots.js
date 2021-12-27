@@ -41,7 +41,7 @@ async function execute(bot, message, args, command, data) {
 		await message.replyT(
 			`${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}\n\n${
 				bot.config.emojis.success
-			} | You won ⏣${bot.functions.formatNumber(parseInt(args[0]) * 4)} coins!`,
+			} | You won ⏣${bot.functions.formatNumber(parseInt(args[0]) * 3)} coins!`,
 		);
 
 		data.user.money.balance += args[0] * 4;
