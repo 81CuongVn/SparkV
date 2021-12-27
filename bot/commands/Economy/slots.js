@@ -44,7 +44,7 @@ async function execute(bot, message, args, command, data) {
 			} | You won ⏣${bot.functions.formatNumber(parseInt(args[0]) * 3)} coins!`,
 		);
 
-		data.user.money.balance += args[0] * 4;
+		data.user.money.balance += args[0] * 3;
 		data.user.markModified("money.balance");
 		await data.user.save();
 	} else {
