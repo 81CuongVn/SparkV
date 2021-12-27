@@ -1,41 +1,27 @@
 const Discord = require(`discord.js`);
 
 const SlotItems = [
-	`🍎`,
-	`🍏`,
-	`🍆`,
-	`🥒`,
-	`💸`,
-	`💰`,
-	"💶",
-	"💷",
-	`💵`
+	"🍎",
+	"🥒",
+	"💸",
+	"💰",
+	"💵"
 ];
 
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (!args) {
-		return await message.replyT(`${bot.config.emojis.error} | lol you need to tell me how much to bet.`);
-	}
+	if (!args) return await message.replyT(`${bot.config.emojis.error} | lol you need to tell me how much to bet.`);
 
 	let win = false;
 
-	if (data.user.money.balance === 0 || data.user.money.balance === null) {
-		return await message.replyT(`${bot.config.emojis.error} | You have no money!`);
-	}
+	if (data.user.money.balance === 0 || data.user.money.balance === null) return await message.replyT(`${bot.config.emojis.error} | You have no money!`);
 
-	if (isNaN(args[0])) {
-		return await message.replyT(`${bot.config.emojis.error} | That's not a number!`);
-	}
+	if (isNaN(args[0])) return await message.replyT(`${bot.config.emojis.error} | That's not a number!`);
 
-	if (message.content.includes(`-`)) {
-		return await message.replyT(`${bot.config.emojis.error} | You cannot bet negitive money lol.`);
-	}
+	if (message.content.includes(`-`)) return await message.replyT(`${bot.config.emojis.error} | You cannot bet negitive money lol.`);
 
-	if (args[0] > data.user.money.balance) {
-		return await message.replyT(`${bot.config.emojis.error} | You don't have that much lol.`);
-	}
+	if (args[0] > data.user.money.balance) return await message.replyT(`${bot.config.emojis.error} | You don't have that much lol.`);
 
 	const number = [];
 
