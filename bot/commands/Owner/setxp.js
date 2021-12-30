@@ -10,9 +10,7 @@ async function execute(bot, message, args, command, data) {
 	if (!Leveling === true) return await message.replyT(`${bot.config.emojis.error} | Leveling is not enabled for this server. Please enable it by doing \`(prefix)Leveling on\`!`);
 
 	try {
-		await Levels.setXp(User.id, message.guild.id, args[1]).then(async () => {
-			await message.replyT(`${bot.config.emojis.success} | Successfully set ${User}'s XP to ${bot.functions.formatNumber(args[1])}!`);
-		});
+		await Levels.setXp(User.id, message.guild.id, args[1]).then(async () => await message.replyT(`${bot.config.emojis.success} | Successfully set ${User}'s XP to ${bot.functions.formatNumber(args[1])}!`));
 	} catch (err) {
 		console.error(err);
 

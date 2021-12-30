@@ -15,6 +15,7 @@ module.exports = async bot => {
 		plugins: [new SpotifyPlugin(), new SoundCloudPlugin()],
 		youtubeDL: true,
 		updateYouTubeDL: true,
+		youtubeCookie: process.env.YTCOOKIE 
 	});
 
 	bot.distube

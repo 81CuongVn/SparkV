@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **136 commands**!
+SparkV's Command List! SparkV contains more than **137 commands**!
 
 ## 🤵 Administration
 
@@ -144,6 +144,7 @@ SparkV's Command List! SparkV contains more than **136 commands**!
 | **mute**        | I'll mute someone.                                                                                                                   | {user} {reason}                                                                                | 2 seconds |
 | **nickname**    | I'll change a user's nickname to your choice.                                                                                        | {user} {reason}                                                                                | 2 seconds |
 | **slowmode**    | I will set the channel's slowmode to anything you want.                                                                              | {user} {reason}                                                                                | 2 seconds |
+| **timeout**     | Timeout a user.                                                                                                                      | (user) (optional: reason)                                                                      | 2 seconds |
 | **unlock**      | I'll unlock the current channel.                                                                                                     |                                                                                                | 2 seconds |
 | **unmute**      | I'll unmute someone who was muted previously.                                                                                        | {user} {reason}                                                                                | 2 seconds |
 | **warn**        | I will warn a user                                                                                                                   | {user} {optional reason}                                                                       | 2 seconds |

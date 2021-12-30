@@ -15,12 +15,10 @@ async function execute(bot, message, args, command, data) {
 
 	const BalanceEmbed = new Discord.MessageEmbed()
 		.setTitle(`**${User.tag}'s Balance**`)
-		.setDescription(
-			`
+		.setDescription(`
 			🪙 Wallet: ⏣${bot.functions.formatNumber(UserData.money.balance)}
 			🏦 Bank: ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}
-		`,
-		)
+		`)
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 

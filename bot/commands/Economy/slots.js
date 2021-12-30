@@ -41,10 +41,10 @@ async function execute(bot, message, args, command, data) {
 		await message.replyT(
 			`${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}\n\n${
 				bot.config.emojis.success
-			} | You won ⏣${bot.functions.formatNumber(parseInt(args[0]) * 3)} coins!`,
+			} | You won ⏣${bot.functions.formatNumber(parseInt(args[0]) * 2)} coins!`,
 		);
 
-		data.user.money.balance += args[0] * 3;
+		data.user.money.balance += args[0] * 2;
 		data.user.markModified("money.balance");
 		await data.user.save();
 	} else {

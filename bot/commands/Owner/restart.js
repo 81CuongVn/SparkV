@@ -4,26 +4,20 @@ let restarting = false;
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (restarting === true) {
-		return;
-	}
+	if (restarting === true) return;
 
-	const RestartStatus = await message.replyT(`⚡ | SparkV is now preparing for restart. Time left: ${Timer} seconds.`);
 	let Timer = 5;
+	const RestartStatus = await message.replyT(`⚡ | SparkV is now preparing for restart. Time left: ${Timer} seconds.`);
 
 	setInterval(() => {
 		--Timer;
 
 		if (Timer > 0) {
-			if (restarting === true) {
-				return;
-			}
+			if (restarting === true) return;
 
 			RestartStatus.edit(`⚡ | SparkV is now preparing for restart. Time left: ${Timer} seconds.`);
 		} else {
-			if (restarting === true) {
-				return;
-			}
+			if (restarting === true) return;
 
 			RestartStatus.edit(`⚡ | SparkV is now restarting.`)
 				.then(msg => {
