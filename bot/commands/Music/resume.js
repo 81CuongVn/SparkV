@@ -7,6 +7,12 @@ async function execute(bot, message, args, command, data) {
 
 	if (!queue) return await message.replyT(`${bot.config.emojis.error} | No songs was ever/still is paused.`);
 
+	if (queue.playing) {
+		queue.pause();
+
+		await message.replyT(`${bot.config.emojis.music} | Successfully paused the music!`);
+	}
+
 	queue.resume();
 	await message.replyT(`${bot.config.emojis.music} | Successfully resumed the music. Enjoy!`);
 }
