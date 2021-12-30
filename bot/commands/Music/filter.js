@@ -6,13 +6,13 @@ async function execute(bot, message, args, command, data) {
 	const Queue = bot.distube.getQueue(message);
 
 	if (args[0].toLowerCase() === "off" && Queue.filter) {
-		bot.distube
-			.setFilter(message, Queue.filter)
-			.then(async () => await message.replyT(`${bot.config.emojis.error} | Okay, I turned off the filter.`));
+		bot.distube.setFilter(message, Queue.filter);
+
+		return await message.replyT(`${bot.config.emojis.error} | Okay, I turned off the filter.`);
 	} else if (Object.keys(bot.distube.filters).includes(args[0])) {
-		bot.distube
-			.setFilter(message, args[0])
-			.then(async () => await message.replyT(`${bot.config.emojis.music} | Okay, I turned on filter ${args[0]}.`));
+		bot.distube.setFilter(message, args[0]);
+
+		return await message.replyT(`${bot.config.emojis.music} | Okay, I turned on filter ${args[0]}.`);
 	} else {
 		return await message.replyT(`${bot.config.emojis.error} | That's not a valid filter!`);
 	}
