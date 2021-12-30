@@ -10,7 +10,6 @@ async function execute(bot, interaction, args, command, data) {
 
 	if (user.isCommunicationDisabled()) return interaction.reply("That user is already in timeout!");
 	if (user.id === interaction.member.id) return interaction.replyT(`${bot.config.emojis.error} | You cannot timeout yourself.`);
-	if (!user.moderatable) return interaction.replyT(`${bot.config.emojis.error} | Uh oh... I can't timeout this user! They have a higher role then me, or I don't have the permission to timeout users.`);
 	if (user.user.bot) return await interaction.replyT(`You cannot timeout a bot lmfao.`);
 
 	if (!time) return interaction.reply("The time provided was invalid.");
@@ -25,7 +24,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: `(user) (optional: reason)`,
-	perms: ["MODERATE_MEMBERS"],
+	perms: ["TIMEOUT_MEMBERS"],
 	slash: true,
 	slashOnly: true,
 	options: [
