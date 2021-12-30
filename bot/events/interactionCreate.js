@@ -24,6 +24,9 @@ module.exports = {
 			// User data
 			data.user = await bot.database.getUser(interaction.user.id);
 
+			// Data Old Options
+			data.options = interaction.options;
+
 			if (!data) return;
 
 			// Get the command's args
