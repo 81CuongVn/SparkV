@@ -5,6 +5,8 @@ const cmd = require("../../templates/musicCommand");
 async function execute(bot, message, args, command, data) {
 	const Queue = bot.distube.getQueue(message);
 
+	if (!args[0]) return await message.replyT(`${bot.config.emojis.error} | Please enter a valid filter to use or to disable it (by saying off).`);
+
 	if (args[0].toLowerCase() === "off" && Queue.filter) {
 		bot.distube.setFilter(message, Queue.filter);
 
