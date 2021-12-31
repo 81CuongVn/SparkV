@@ -21,19 +21,16 @@ module.exports = class ModCommand {
 
 	missingPermission(type, permission) {
 		const permissions = {
-			kickMembers: "kick members",
-			banMembers: "ban members",
-			manageChannels: "manage and edit channels",
-			manageGuild: "manage and edit server settings",
-			manageMessages: "manage and remove messages",
-			manageNicknames: "edit other people's nicknames",
-			manageRoles: "manage the roles on this server",
+			KICK_MEMBERS: "kick members",
+			BAN_MEMBERS: "ban members",
+			MANAGE_CHANNELS: "manage and edit channels",
+			MANAGE_GUILD: "manage and edit server settings",
+			MANAGE_MESSAGES: "manage and remove messages",
+			MANAGE_NICKNAMES: "edit other people's nicknames",
+			MANAGE_ROLES: "manage the roles on this server",
+			TIMEOUT_MEMBERS: "timeout members",
 		};
 
-		return `Sorry, ${type === "bot" ? "i'm" : "you're"} missing the \`${(
-			permission.charAt(0).toUpperCase() + permission.slice(1)
-		).replace(/([A-Z])/g, " $1")}\` permission.\nMake sure ${type === "bot" ? "I have" : "you have"} access to **${
-			permissions[permission]
-		}** and try again.`;
+		return `Sorry, ${type === "bot" ? "i'm" : "you're"} missing the \`${permission.toUpperCase()}\` permission.\nMake sure ${type === "bot" ? "I have" : "you have"} access to **${permissions[permission]}** and try again.`;
 	}
 };
