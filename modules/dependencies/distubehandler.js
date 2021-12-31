@@ -7,7 +7,7 @@ module.exports = async bot => {
 	const { SoundCloudPlugin } = require("@distube/soundcloud");
 
 	bot.distube = new DisTube(bot, {
-		searchSongs: 20,
+		searchSongs: 0,
 		searchCooldown: 30,
 		leaveOnFinish: true,
 		leaveOnEmpty: true,
