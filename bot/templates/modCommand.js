@@ -28,7 +28,7 @@ module.exports = class ModCommand {
 			MANAGE_MESSAGES: "manage and remove messages",
 			MANAGE_NICKNAMES: "edit other people's nicknames",
 			MANAGE_ROLES: "manage the roles on this server",
-			TIMEOUT_MEMBERS: "timeout members",
+			MODERATE_MEMBERS: "timeout members",
 		};
 
 		return `Sorry, ${type === "bot" ? "i'm" : "you're"} missing the \`${permission.toUpperCase()}\` permission.\nMake sure ${type === "bot" ? "I have" : "you have"} access to **${permissions[permission]}** and try again.`;
