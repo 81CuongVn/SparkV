@@ -76,7 +76,7 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "eslint": "^8.5.0",
+    "eslint": "^8.6.0",
     "eslint-plugin-import": "^2.25.3",
     "prettier": "2.5.1"
   },
