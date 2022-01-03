@@ -39,7 +39,7 @@
     "canvas": "^2.8.0",
     "chalk": "^4.1.2",
     "dbots": "^10.0.0",
-    "discord-api-types": "^0.26.0",
+    "discord-api-types": "^0.26.1",
     "discord-canvas": "^1.4.1",
     "discord-giveaways": "^5.0.1",
     "discord-tictactoe": "^2.2.0",
