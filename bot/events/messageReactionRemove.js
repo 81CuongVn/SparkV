@@ -14,7 +14,7 @@ module.exports = {
 	async execute(bot, reaction, user) {
 		const message = reaction.message;
 
-		if (message.author.bot) return;
+		if (message.author.id === user.id) return;
 
 		if (reaction.emoji.name === "⭐") {
 			const data = await bot.database.getGuild(message.guild.id);
@@ -31,7 +31,6 @@ module.exports = {
 					const star = /^\⭐\s([0-9]{1,3})\s\|\s([0-9]{17,20})/.exec(stars.embeds[0].footer.text);
 					const foundStar = stars.embeds[0];
 					const image = message.attachments.size > 0 ? await extension(reaction, message.attachments.array()[0].url) : "";
-					const msg = await channel.messages.fetch(stars.id);
 
 					const embed = new MessageEmbed()
 						.setDescription(foundStar.description)
@@ -45,24 +44,9 @@ module.exports = {
 						.setTimestamp();
 
 					const starMsg = await channel.messages.fetch(stars.id);
-					await msg.edit({ embeds: [embed] });
-				} else {
-					const image = message.attachments.size > 0 ? await extension(reaction, message.attachments.array()[0].url) : "";
+					await starMsg.edit({ embeds: [embed] });
 
-					if (image === "" && message.cleanContent.length < 1) return message.replyT(`${user}, You cannot star an empty message.`);
-
-					const embed = new MessageEmbed()
-						.setDescription(message.cleanContent)
-						.setAuthor({
-							name: message.author.tag,
-							iconURL: message.author.displayAvatarURL
-						})
-						.setImage(image)
-						.setFooter(`⭐ 1 | ${message.id}`)
-						.setColor(15844367)
-						.setTimestamp();
-
-					await channel.send({ embeds: [embed] });
+					if (parseInt(star[1]) - 1 === 0) return setTimeout(() => starMsg.delete(), 10000);
 				}
 			}
 		}
