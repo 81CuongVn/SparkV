@@ -87,7 +87,7 @@ module.exports = async bot => {
 			collector.on("end", async interaction => {
 				// Checks if not deleted.
 				if (MusicMessage) {
-					MusicMessage.update({
+					MusicMessage?.update({
 						embeds: [NowPlayingEmbed],
 						components: []
 					});
@@ -154,7 +154,7 @@ module.exports = async bot => {
 
 			collector.on("end", async collected => {
 				if (MusicMessage) {
-					MusicMessage.update({
+					MusicMessage?.update({
 						embeds: [SongAddedQueue],
 						components: []
 					});
