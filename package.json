@@ -52,7 +52,7 @@
     "dotenv": "^10.0.0",
     "erlpack": "github:discord/erlpack",
     "express": "^4.17.2",
-    "ffmpeg-static": "^4.4.0",
+    "ffmpeg-static": "^4.4.1",
     "figlet": "^1.5.2",
     "libsodium-wrappers": "^0.7.9",
     "lyrics-finder": "^21.7.0",
