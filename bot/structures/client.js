@@ -2,10 +2,11 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
-const { DiscordTogether } = require("discord-together");
+const synchronizeSlashCommands = require("discord-sync-commands");
 const { Client, Collection, Intents, Structures } = require("discord.js");
-const { REST } = require("@discordjs/rest");
+const { DiscordTogether } = require("discord-together");
 const { Routes } = require("discord-api-types/v9");
+const { REST } = require("@discordjs/rest");
 const Statcord = require("statcord.js");
 
 const Distube = require("../../modules/dependencies/distubehandler");
@@ -186,38 +187,16 @@ module.exports = class bot extends Client {
 			});
 		});
 
-		setTimeout(async () => {
-			await this.LoadSlashCommands(this.slashCommands);
-		}, 30 * 1000);
+		await this.LoadSlashCommands(this.slashCommands);
 	}
 
 	async LoadSlashCommands(slashCommands) {
-		console.log("loading slash commands");
+		const slashSettings = {
+			debug: process.argv.includes("--dev") === true,
+		};
 
-		const rest = new REST({
-			version: "9",
-		}).setToken(process.env.TOKEN);
+		if (process.argv.includes("--dev") === true) slashSettings.guildId = "763803059876397056";
 
-		try {
-			// For global: applicationCommands(CLIENTID) (takes a while to cache | recommended for full production)
-			// for only one server: applicationGuildCommands(CLIENTID, GUILDID)
-
-			// NOTE:
-			// 818922579623673867 is my test bot's id. (SparkV Alpha)
-			// 763803059876397056 is Ch1ll Studio's guild ID. (My Bot's Main Server)
-
-			const route =
-				process.argv.includes("--dev") === true
-					? Routes.applicationGuildCommands("818922579623673867", "763803059876397056")
-					: Routes.applicationCommands(this.config.ID);
-
-			await rest.put(route, {
-				body: slashCommands,
-			});
-
-			this.logger("Successfully registered slash commands.");
-		} catch (error) {
-			console.error(error);
-		}
+		synchronizeSlashCommands(this, slashCommands, slashSettings);
 	}
 };
