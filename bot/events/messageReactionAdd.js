@@ -8,7 +8,7 @@ module.exports = {
 
 		const message = reaction.message;
 
-		if (reaction.emoji.name !== "⭐") return;
+		if (reaction.emoji.name !== "⭐" || reaction.count < 2) return;
 
 		const data = await bot.database.getGuild(message.guildId);
 
