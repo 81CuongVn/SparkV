@@ -1,70 +1,59 @@
 const Discord = require("discord.js");
 
-async function extension(reaction, attachment) {
-	const imageLink = attachment.split(".");
-	const typeOfImage = imageLink[imageLink.length - 1];
-
-	if (!/(jpg|jpeg|png|gif)/gi.test(typeOfImage)) return "";
-
-	return attachment;
-}
-
 module.exports = {
 	once: false,
 	async execute(bot, reaction, user) {
+		if (reaction.message?.partial) await reaction.message.fetch();
+		if (reaction?.partial) await reaction.fetch();
+
 		const message = reaction.message;
 
-		if (message.author.bot) return;
+		if (reaction.emoji.name !== "⭐") return;
 
-		if (reaction.emoji.name === "⭐") {
-			const data = await bot.database.getGuild(message.guild.id);
+		const data = await bot.database.getGuild(message.guildId);
 
-			if (data.plugins?.starboard) {
-				const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard);
+		if (!data.plugins?.starboard) return;
 
-				if (!channel) return;
+		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard);
 
-				const fetchedMessages = await channel.messages.fetch({ limit: 100 });
-				const stars = fetchedMessages.find(m => m.embeds[0].footer.text.startsWith("⭐") && m.embeds[0].footer.text.endsWith(message.id));
+		if (!channel) return;
 
-				if (stars) {
-					const star = /^\⭐\s([0-9]{1,3})\s\|\s([0-9]{17,20})/.exec(stars.embeds[0].footer.text);
-					const foundStar = stars.embeds[0];
-					const image = message.attachments.size > 0 ? await extension(reaction, message.attachments.array()[0].url) : "";
-					const msg = await channel.messages.fetch(stars.id);
+		const fetchedMessages = await channel.messages.fetch({ limit: 100 });
+		const stars = fetchedMessages.find(m => m.embeds[0].footer.text.startsWith("⭐") && m.embeds[0].footer.text.endsWith(message.id));
 
-					const embed = new MessageEmbed()
-						.setDescription(foundStar.description)
-						.setAuthor({
-							name: message.author.tag,
-							iconURL: message.author.displayAvatarURL
-						})
-						.setImage(image)
-						.setFooter(`⭐ ${parseInt(star[1]) + 1} | ${message.id}`)
-						.setColor(foundStar.color)
-						.setTimestamp();
+		if (stars) {
+			const star = /^\⭐\s([0-9]{1,3})\s\|\s([0-9]{17,20})/.exec(stars.embeds[0].footer.text);
+			const foundStar = stars.embeds[0];
+			const msg = await channel.messages.fetch(stars.id);
 
-					const starMsg = await channel.messages.fetch(stars.id);
-					await msg.edit({ embeds: [embed] });
-				} else {
-					const image = message.attachments.size > 0 ? await extension(reaction, message.attachments.array()[0].url) : "";
+			const embed = new Discord.MessageEmbed()
+				.setDescription(foundStar.description || "No content...")
+				.setAuthor({
+					name: message.author.tag,
+					iconURL: message.author.displayAvatarURL({ dynamic: true })
+				})
+				.setImage(message.attachments.first()?.url || null)
+				.addField("Source", `[Jump to Message!](${message.url})`, true)
+				.setFooter(`⭐ ${parseInt(star[1]) + 1} | ${message.id}`)
+				.setColor(foundStar.color)
+				.setTimestamp();
 
-					if (image === "" && message.cleanContent.length < 1) return message.replyT(`${user}, You cannot star an empty message.`);
+			const starMsg = await channel.messages.fetch(stars.id);
+			await msg.edit({ content: `⭐ ${parseInt(star[1]) + 1} | ${message.channel}`, embeds: [embed] });
+		} else {
+			const embed = new Discord.MessageEmbed()
+				.setDescription(message.cleanContent || "No content...")
+				.setAuthor({
+					name: message.author.tag,
+					iconURL: message.author.displayAvatarURL({ dynamic: true })
+				})
+				.setImage(message.attachments.first()?.url || null)
+				.addField("Source", `[Jump to Message!](${message.url})`, true)
+				.setFooter(`⭐ 1 | ${message.id}`)
+				.setColor("YELLOW")
+				.setTimestamp();
 
-					const embed = new MessageEmbed()
-						.setDescription(message.cleanContent)
-						.setAuthor({
-							name: message.author.tag,
-							iconURL: message.author.displayAvatarURL
-						})
-						.setImage(image)
-						.setFooter(`⭐ 1 | ${message.id}`)
-						.setColor(15844367)
-						.setTimestamp();
-
-					await channel.send({ embeds: [embed] });
-				}
-			}
+			await channel.send({ content: `⭐ 1 | ${message.channel}`, embeds: [embed] });
 		}
-	},
+	}
 };

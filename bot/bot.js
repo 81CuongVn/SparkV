@@ -25,10 +25,7 @@ const SparkV = new Client({
 		Intents.FLAGS.GUILD_MEMBERS,
 		Intents.FLAGS.GUILD_PRESENCES,
 	],
-	allowedMentions: {
-		parse: ["users"],
-		repliedUser: true,
-	},
+	partials: ["MESSAGE", "REACTION"],
 	presence: {
 		activity: {
 			name: `Loading SparkV (99%)`,

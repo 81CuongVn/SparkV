@@ -52,6 +52,7 @@ const Schema = new mongoose.Schema({
 			min: { type: Number, default: 5 },
 		},
 		chatbot: { type: String, default: false },
+		starboard: { type: String, default: null },
 	}
 });
 
