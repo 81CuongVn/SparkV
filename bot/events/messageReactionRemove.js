@@ -3,12 +3,12 @@ const Discord = require("discord.js");
 module.exports = {
 	once: false,
 	async execute(bot, reaction, user) {
-		if (reaction.message?.partial) await reaction.message.fetch();
-		if (reaction?.partial) await reaction.fetch();
+		if (reaction?.partial) await reaction?.fetch();
+		if (reaction.message?.partial) await reaction?.message.fetch();
 
 		const message = reaction.message;
 
-		if (reaction.emoji.name !== "⭐") return;
+		if (reaction.emoji.name !== "⭐" || reaction.count < 2) return;
 
 		const data = await bot.database.getGuild(message.guildId);
 
