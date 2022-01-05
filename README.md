@@ -1,10 +1,9 @@
-
-<img src="https://sparkv.tk/assets/images/SparkV.png" alt="SparkV Logo" style="float: left; margin: 0 10px 0 0;" align="left" height="150" width="150">
+<img src="https://www.sparkv.tk/assets/images/SparkV.png" alt="SparkV Logo" style="float: left; margin: 0 10px 0 0;" align="left" height="150" width="150">
 
 ## SparkV
 
 Meet SparkV. The most POWERFUL multipurpose bot with NO PAYWALL! Start powering your server without spending a dime. SparkV is also an open sourced Discord bot using Discord.js coded in JavaScript by Ch1ll Studio.
-> SparkV is loved by more than 110k Discord users and more than 125 servers.
+> SparkV is loved by more than 110k Discord users and more than 140 servers.
 
 ### Features
 
@@ -22,6 +21,6 @@ SparkV offers over 100+ commands with **13 categories**!
 
 [See the full list by clicking here!](https://docs.sparkv.tk/)
 
-### I need help
+### Help!
 
 If you need help, please join our [community/support server by clicking here](https://discord.gg/PPtzT8Mu3h) and going to the channel named support.
