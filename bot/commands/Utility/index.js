@@ -7,7 +7,7 @@ const commands = fs
 
 module.exports = {
 	name: "Utility",
-	description: "nerd commands lol",
+	description: "Commands mostly used for basic actions, such as getting a server's icon.",
 	emoji: "🧰",
 	commands,
 };
