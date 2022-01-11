@@ -4,7 +4,7 @@ const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
 	const User = message.mentions.members.first();
-	const Reason = args.join(` `).slice(22) || `No reason provided.`;
+	const Reason = args.join(` `).slice(22) || "No reason provided.";
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please mention someone to warn!`);
 	if (User.id === message.author.id) return await message.replyT(`${bot.config.emojis.error} | You cannot warn yourself lmfao.`);
@@ -14,7 +14,7 @@ async function execute(bot, message, args, command, data) {
 
 	if (message.guild.ownerId !== message.author.id && !ModerationPosition > MemberPosition) return await message.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 
-	const memberData = await bot.database.getMember(message.author.id, message.guild.id);
+	const memberData = await bot.database.getMember(User.id, message.guild.id);
 
 	++memberData.infractionsCount;
 	memberData.infractions.push({
@@ -27,9 +27,7 @@ async function execute(bot, message, args, command, data) {
 	await memberData.save();
 
 	User.send(`You were warned in **${message.guild.name}**. Reason: ${Reason}`).catch(async err => {
-		message.replyT(`You were warned in **${message.guild.name}**. Reason: ${Reason}\n\nI would've sent this to you in your DMs, but they were off.`);
-
-		await message.replyT(`The user you mentioned has their DMs off. I pinged him instead.`);
+		await message.channel.send(`${User}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${Reason}.`);
 	});
 
 	const WarnEmbed = new MessageEmbed()
