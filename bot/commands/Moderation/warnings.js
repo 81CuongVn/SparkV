@@ -14,9 +14,9 @@ async function execute(bot, message, args, command, data) {
 	const infractions = data.member.infractions.map(infraction => `**${infraction.type}** - <t:${~~(infraction.date / 1000)}:R>\n`);
 
 	const warningsEmbed = new Discord.MessageEmbed()
-		.setTitle(`${user.user ? user.user.tag : user.tag}'s infractions`)
+		.setTitle(`${User.user ? User.user.tag : User.tag}'s infractions`)
 		.setDescription(`${User} has **${data.member.infractionsCount}** warning${data.member.infractionsCount > 1 ? "s" : ""}.\n\n${infractions}`)
-		.setFooter(bot.config.embed.footer, user.user ? user.user.displayAvatarURL({ dynamic: true, format: "png" }) : user.displayAvatarURL({ dynamic: true, format: "png" }))
+		.setFooter(bot.config.embed.footer, User.user ? User.user.displayAvatarURL({ dynamic: true, format: "png" }) : User.displayAvatarURL({ dynamic: true, format: "png" }))
 		.setColor(bot.config.embed.color);
 
 	await message.replyT({
