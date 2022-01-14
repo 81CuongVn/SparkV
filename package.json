@@ -65,7 +65,7 @@
     "node-opus": "^0.3.3",
     "opusscript": "^0.0.8",
     "os": "^0.1.2",
-    "redis": "^4.0.1",
+    "redis": "^4.0.2",
     "serve-favicon": "^2.5.0",
     "socket.io-client": "^4.4.0",
     "statcord.js": "^3.3.0",
