@@ -50,7 +50,7 @@
     "discord.js-akinator": "^3.3.1",
     "discordeasypages": "^3.0.0",
     "distube": "^3.0.5",
-    "dotenv": "^10.0.0",
+    "dotenv": "^11.0.0",
     "erlpack": "github:discord/erlpack",
     "express": "^4.17.2",
     "ffmpeg-static": "^4.4.1",
