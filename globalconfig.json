@@ -13,7 +13,7 @@
   },
   "embed": {
     "color": "#1fa9ff",
-    "footer": "^Donate | ^Invite"
+    "footer": "SparkV is still a new bot! If you encounter any issues, please join our server: htt"
   },
   "emojis": {
     "success": "<a:Check:819934065025220668>",
@@ -24,11 +24,12 @@
     "player": "<:player:933552618272350249>",
     "clock": "<:uptime:933605688553406514>",
     "memory": "<:memory:933732415153782854>",
-    "stats": "<:stats:933736680924520550>"
+    "stats": "<:stats:933736680924520550>",
+    "tada": "<a:tada:819934065414242344>"
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
-    "LevelUpMessage": "⚡ Congrats {author}, you're now at level **{level}**!",
+    "LevelUpMessage": "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!",
     "AFKMessage": "Hey dude, **{userMentioned}** is currently AFK. Their reason: {reason}",
     "AFKWelcomeMessage": "Hey bud, welcome back! I removed your AFK status.",
     "InvalidPermisions": {
