@@ -46,10 +46,10 @@ module.exports = class RedditCommand {
 			.setTitle(selectedPost.title.length > 256 ? `${selectedPost.title.slice(0, 248)}...` : selectedPost.title)
 			.setImage(this.settings.type === "image" ? selectedPost.url : "")
 			.setURL(`https://www.reddit.com${selectedPost.permalink}`)
-			.setFooter(
-				`👍${selectedPost.ups} | 💬${selectedPost.num_comments} | 😃u/${selectedPost.author} | ⚙️r/${selectedPost.subreddit} • ${bot.config.embed.footer}`,
-				bot.user.displayAvatarURL(),
-			)
+			.setFooter({
+				text: `👍${selectedPost.ups} | 💬${selectedPost.num_comments} | 😃u/${selectedPost.author} | ⚙️r/${selectedPost.subreddit} • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL()
+			})
 			.setColor(bot.config.embed.color);
 
 		if (this.settings.type === "text") {

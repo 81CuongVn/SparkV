@@ -33,7 +33,10 @@ async function execute(bot, message, args, command, data) {
 	const WarnEmbed = new MessageEmbed()
 		.setTitle(`Warn Successful!`)
 		.setDescription(`I successfully warned ${User} (${User.id}).`)
-		.setFooter(bot.config.embed.footer, bot.user.displayAvatarURL())
+		.setFooter({
+			text: bot.config.embed.footer,
+			iconURL: bot.user.displayAvatarURL()
+		})
 		.setColor(bot.config.embed.color);
 
 	await message.replyT({

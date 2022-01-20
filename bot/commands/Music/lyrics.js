@@ -21,7 +21,9 @@ async function execute(bot, message, args, command, data) {
 		const SongEmbed = new Discord.MessageEmbed()
 			.setTitle(args)
 			.setDescription(Lyrics)
-			.setFooter(bot.config.embed.footer)
+			.setFooter({
+				text: bot.config.embed.footer
+			})
 			.setAuthor({
 				name: `${Lyrics.author}`,
 				url: Lyrics.links.genius
@@ -52,7 +54,9 @@ async function execute(bot, message, args, command, data) {
 		const SongEmbed = new Discord.MessageEmbed()
 			.setTitle(args)
 			.setDescription(x)
-			.setFooter(bot.config.embed.footer)
+			.setFooter({
+				text: bot.config.embed.footer
+			})
 			.setAuthor({
 				name: `${Lyrics.author}`,
 				url: Lyrics.links.genius

@@ -412,7 +412,10 @@ module.exports = {
 				.setDescription(`Please wait ${Math.ceil((time - Date.now()) / 1000)} more seconds to use that command again.`)
 				.setThumbnail(message.author.avatarURL)
 				.setColor(`#0099ff`)
-				.setFooter(bot.config.embed.footer, bot.user.displayAvatarURL());
+				.setFooter({
+					text: bot.config.embed.footer,
+					iconURL: bot.user.displayAvatarURL()
+				});
 
 			return await message.reply({
 				embeds: [cooldownEmbed],
@@ -481,10 +484,10 @@ async function chatbot(message, wasMentioned) {
 					const APIEmbed = new Discord.MessageEmbed()
 						.setTitle(`SparkV`)
 						.setDescription(response.data.cnt)
-						.setFooter(
-							`Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
-							message.client.user.displayAvatarURL(),
-						)
+						.setFooter({
+							text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
+							iconURL: message.client.user.displayAvatarURL()
+						})
 						.setColor(message.client.config.embed.color);
 
 					message.client.StatClient.postCommand(`ChatBot`, message.author.id);

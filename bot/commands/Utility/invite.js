@@ -10,7 +10,10 @@ module.exports = new cmd(
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 			.addField("**Support Server**", `[Click Here](${bot.config.support.invite})`, true)
 			.addField("**Bot Invite**", `[Click Here](${bot.config.bot_invite})`, true)
-			.setFooter(`Invites for SparkV • ${bot.config.embed.footer}`, bot.user.displayAvatarURL())
+			.setFooter({
+				text: `Invites for SparkV • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL()
+			})
 			.setColor(bot.config.embed.color);
 
 		await await message.replyT({

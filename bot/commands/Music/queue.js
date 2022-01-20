@@ -12,7 +12,10 @@ async function execute(bot, message, args, command, data) {
 		.setDescription(queue.songs.map((song, id) => `**${id + 1}**. ${song.name} - ${song.formattedDuration}`).slice(0, 10).join(`\n`))
 		.setColor(bot.config.embed.color)
 		.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-		.setFooter(`${bot.config.emojis.music} | Displaying music queue.`, bot.user.displayAvatarURL());
+		.setFooter({
+			text: `${bot.config.emojis.music} | Displaying music queue.`,
+			iconURL: bot.user.displayAvatarURL()
+		});
 
 	return await message.replyT({
 		embeds: [queueEmbed]

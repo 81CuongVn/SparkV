@@ -33,10 +33,16 @@ module.exports = async bot => {
 
 			if (song.playlist) {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter({
+						text: `${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`,
+						iconURL: song.user.displayAvatarURL()
+					});
 			} else {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter({
+						text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
+						iconURL: song.user.displayAvatarURL()
+					});
 			}
 
 			const MusicSelect = new Discord.MessageSelectMenu()
@@ -104,7 +110,10 @@ module.exports = async bot => {
 				.addField("`🔁` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
-				.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL())
+				.setFooter({
+					text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
+					iconURL: song.user.displayAvatarURL()
+				})
 				.setTimestamp();
 
 			const MusicSelect = new Discord.MessageSelectMenu()
@@ -187,10 +196,10 @@ module.exports = async bot => {
 				)
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
-				.setFooter(
-					`📼 ${song.user.username} (${song.user.tag}) • ${bot.config.embed.footer}`,
-					bot.user.displayAvatarURL(),
-				)
+				.setFooter({
+					text: `📼 ${song.user.username} (${song.user.tag}) • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL(),
+				})
 				.setTimestamp();
 
 			queue.textChannel.send(SongAddedQueue);

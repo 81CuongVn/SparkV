@@ -70,7 +70,10 @@ async function execute(bot, message, args, command, data) {
 			.setThumbnail(User.avatar)
 			.addField(`Moderator/Admin: `, `${message.author.tag}`)
 			.addField(`Reason: `, Reason)
-			.setFooter(`${bot.config.prefix}Mute to mute a user • ${bot.config.embed.footer}`)
+			.setFooter({
+				text: `${bot.config.prefix}Mute to mute a user • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 

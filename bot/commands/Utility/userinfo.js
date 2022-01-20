@@ -31,7 +31,10 @@ module.exports = new cmd(
 					inline: true,
 				},
 			)
-			.setFooter(bot.config.embed.footer, bot.user.displayAvatarURL({ dynamic: true, format: "png" }))
+			.setFooter({
+				text: bot.config.embed.footer,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true, format: "png" })
+			})
 			.setColor(bot.config.embed.color);
 
 		await message.replyT({

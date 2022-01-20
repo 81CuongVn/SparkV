@@ -21,7 +21,10 @@ async function execute(bot, message, args, command) {
 					url: response.data.author.url
 				})
 				.addFields(response.data.fields)
-				.setFooter(response.data.footer.text, response.data.footer.icon_url)
+				.setFooter({
+					text: response.data.footer.text,
+					iconURL: response.data.footer.icon_url
+				})
 				.setURL(response.data.url)
 				.setColor(response.data.color)
 				.setTimestamp();

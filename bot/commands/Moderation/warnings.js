@@ -16,7 +16,10 @@ async function execute(bot, message, args, command, data) {
 	const warningsEmbed = new Discord.MessageEmbed()
 		.setTitle(`${User.user ? User.user.tag : User.tag}'s infractions`)
 		.setDescription(`${User} has **${data.member.infractionsCount}** warning${data.member.infractionsCount > 1 ? "s" : ""}.\n\n${infractions}`)
-		.setFooter(bot.config.embed.footer, User.user ? User.user.displayAvatarURL({ dynamic: true, format: "png" }) : User.displayAvatarURL({ dynamic: true, format: "png" }))
+		.setFooter({
+			text: bot.config.embed.footer,
+			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true, format: "png" }) : User.displayAvatarURL({ dynamic: true, format: "png" })
+		})
 		.setColor(bot.config.embed.color);
 
 	await message.replyT({
