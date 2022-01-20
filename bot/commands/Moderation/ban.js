@@ -41,7 +41,10 @@ async function execute(bot, message, args, command, data) {
 		.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 		.addField(`Moderator/Admin: `, `${message.author.tag}`)
 		.addField(`Reason: `, ReasonForBan)
-		.setFooter(`${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`)
+		.setFooter({
+			text: `${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 

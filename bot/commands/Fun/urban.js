@@ -8,7 +8,10 @@ async function execute(bot, message, args, command, data) {
 		const ErrorEmbed = new Discord.MessageEmbed()
 			.setTitle(`${bot.config.emojis.error} | Invalid command usage!`)
 			.setDescription(`Please provide a word to urban!`)
-			.setFooter(`Try ^Urban [Word] • ${bot.config.embed.footer}`);
+			.setFooter({
+				text: `Try ^Urban [Word] • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			});
 
 		return await await message.replyT({
 			embeds: [ErrorEmbed],
@@ -24,10 +27,10 @@ async function execute(bot, message, args, command, data) {
 		.setThumbnail(`https://i.imgur.com/VFXr0ID.jpg`)
 		.addField(`Example`, args.example)
 		.setURL(args.permalink)
-		.setFooter(
-			`👍${args.thumbs_up} 👎${args.thumbs_down} | 😃${args.author} • ${bot.config.embed.footer}`,
-			bot.user.displayAvatarURL(),
-		)
+		.setFooter({
+			text: `👍${args.thumbs_up} 👎${args.thumbs_down} | 😃${args.author} • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		})
 		.setColor(bot.config.embed.color);
 
 	return await await message.replyT({

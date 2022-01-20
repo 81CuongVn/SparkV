@@ -29,7 +29,10 @@ async function execute(bot, message, args, command, data) {
 	const VerificationEmbed = new Discord.MessageEmbed()
 		.setTitle(`Convermination Prompt`)
 		.setDescription(`Are you sure you want to do this?`)
-		.setFooter(`Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`);
+		.setFooter({
+			text: `Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		});
 
 	const VerificationMessage = await await message.replyT({
 		embeds: [VerificationEmbed],
@@ -60,7 +63,10 @@ async function execute(bot, message, args, command, data) {
 			.setThumbnail(UserToKick.avatar)
 			.addField(`Moderator/Admin: `, `${message.author.tag}`)
 			.addField(`Reason: `, ReasonForKick)
-			.setFooter(`${bot.config.prefix}Ban to ban a user. • ${bot.config.embed.footer}`)
+			.setFooter({
+				text: `${bot.config.prefix}Ban to ban a user. • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
