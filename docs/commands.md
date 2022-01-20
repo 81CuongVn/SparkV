@@ -2,25 +2,22 @@
 
 SparkV's Command List! SparkV contains more than **137 commands**!
 
-## 🤵 Administration
-
-| Name               | Description                                                 | Usage       | Cooldown  |
-| ------------------ | ----------------------------------------------------------- | ----------- | --------- |
-| **deletegiveaway** | Delete a giveaway. Requires the permision MANAGE_MESSAGES.  |             | 2 seconds |
-| **rerollgiveaway** | Rerolls a giveaway. Requires the permision MANAGE_MESSAGES. | {MessageID} | 2 seconds |
-| **setprefix**      | Changes the prefix.                                         |             | 2 seconds |
-| **startgiveaway**  | Starts a giveaway. Requires the permision MANAGE_MESSAGES.  |             | 2 seconds |
-
 ## 🐶 Animals
 
-| Name       | Description                                        | Usage | Cooldown  |
-| ---------- | -------------------------------------------------- | ----- | --------- |
-| **animal** | I will send a animal pic from multible subreddits. |       | 2 seconds |
-| **bunny**  | Awww cute bunny!                                   |       | 2 seconds |
-| **cat**    | I will send a cute cat! Cute, but dogs are cuter.  |       | 3 seconds |
-| **dog**    | I will send a cute dog! Aweeeee :D                 |       | 3 seconds |
-| **duck**   | Quack :D                                           |       | 3 seconds |
-| **fox**    | I will send a cute fox! Ducks are cuter.           |       | 3 seconds |
+| Name       | Description                                                      | Usage | Cooldown  |
+| ---------- | ---------------------------------------------------------------- | ----- | --------- |
+| **animal** | I will send an animal's picture chosen from multible subreddits. |       | 2 seconds |
+| **bunny**  | Awww cute bunny!                                                 |       | 2 seconds |
+| **cat**    | I will send a cute cat! Cute, but dogs are cuter.                |       | 3 seconds |
+| **dog**    | I will send a cute dog! Aweeeee :D                               |       | 3 seconds |
+| **duck**   | Quack :D                                                         |       | 3 seconds |
+| **fox**    | I will send a cute fox! Ducks are cuter.                         |       | 3 seconds |
+
+## ⚙️ Configuration
+
+| Name          | Description         | Usage | Cooldown  |
+| ------------- | ------------------- | ----- | --------- |
+| **setprefix** | Changes the prefix. |       | 2 seconds |
 
 ## 💰 Economy
 
@@ -81,6 +78,14 @@ SparkV's Command List! SparkV contains more than **137 commands**!
 | **wouldyourather**    | Would you rather.                                                                                    |                 | 2 seconds  |
 | **youtube**           | YouTube together!                                                                                    |                 | 60 seconds |
 
+## Giveaways
+
+| Name               | Description                                                 | Usage       | Cooldown  |
+| ------------------ | ----------------------------------------------------------- | ----------- | --------- |
+| **creategiveaway** | Creates a giveaway. Requires the permision MANAGE_MESSAGES. |             | 2 seconds |
+| **deletegiveaway** | Delete a giveaway. Requires the permision MANAGE_MESSAGES.  |             | 2 seconds |
+| **rerollgiveaway** | Rerolls a giveaway. Requires the permision MANAGE_MESSAGES. | {MessageID} | 2 seconds |
+
 ## 📷 Images
 
 | Name               | Description                     | Usage                | Cooldown  |
@@ -104,18 +109,6 @@ SparkV's Command List! SparkV contains more than **137 commands**!
 | **wasted**         | Dang man, that's a life wasted. | {user | self}        | 2 seconds |
 | **youtubecomment** | YouTube comment lol.            | {user | self} {text} | 2 seconds |
 
-## 📋 Information
-
-| Name          | Description                                                          | Usage  | Cooldown  |
-| ------------- | -------------------------------------------------------------------- | ------ | --------- |
-| **credits**   | Look at everyone who helped make SparkV!                             |        | 2 seconds |
-| **dashboard** | I'll send my dashboard!                                              | {user} | 2 seconds |
-| **donate**    | Donate to help SparkV's developement. Every donation is appreciated! |        | 2 seconds |
-| **help**      | View SparkV's 100+ cmds.                                             | {cmd}  | 2 seconds |
-| **invite**    | Displays links.                                                      |        | 2 seconds |
-| **rules**     | Follow them lol.                                                     |        | 2 seconds |
-| **website**   | I'll send my website!                                                |        | 2 seconds |
-
 ## 😂 Memey
 
 | Name               | Description                                       | Usage | Cooldown  |
@@ -133,23 +126,23 @@ SparkV's Command List! SparkV contains more than **137 commands**!
 
 ## 🛠️ Moderation
 
-| Name            | Description                                                                                                                          | Usage                                                                                          | Cooldown  |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------- |
-| **ban**         | Is a user bothering you and keep coming back after you kick them? Using this command, they won't come back unless they are unbanned. | {user} {optional reason}                                                                       | 2 seconds |
-| **clear**       | I'll delete messages for you!                                                                                                        | {number of messages to delete | all} {Optional: Mention a User to only delete the messages of} | 2 seconds |
-| **infractions** | I'll display a user's warnings.                                                                                                      | {user}                                                                                         | 2 seconds |
-| **kick**        | Is a user bothering you? Using this command, you can kick them from the server!                                                      | {user} {optional user}                                                                         | 2 seconds |
-| **lock**        | I'll lock the current channel.                                                                                                       |                                                                                                | 2 seconds |
-| **lockdown**    | I'll lock the server.                                                                                                                | {on | off}                                                                                     | 2 seconds |
-| **mute**        | I'll mute someone.                                                                                                                   | {user} {reason}                                                                                | 2 seconds |
-| **nickname**    | I'll change a user's nickname to your choice.                                                                                        | {user} {reason}                                                                                | 2 seconds |
-| **slowmode**    | I will set the channel's slowmode to anything you want.                                                                              | {user} {reason}                                                                                | 2 seconds |
-| **timeout**     | Timeout a user.                                                                                                                      | (user) (optional: reason)                                                                      | 2 seconds |
-| **unlock**      | I'll unlock the current channel.                                                                                                     |                                                                                                | 2 seconds |
-| **unmute**      | I'll unmute someone who was muted previously.                                                                                        | {user} {reason}                                                                                | 2 seconds |
-| **warn**        | I will warn a user                                                                                                                   | {user} {optional reason}                                                                       | 2 seconds |
+| Name         | Description                                                                                                                          | Usage                                                                                          | Cooldown  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------- |
+| **ban**      | Is a user bothering you and keep coming back after you kick them? Using this command, they won't come back unless they are unbanned. | {user} {optional reason}                                                                       | 2 seconds |
+| **clear**    | I'll delete messages for you!                                                                                                        | {number of messages to delete | all} {Optional: Mention a User to only delete the messages of} | 2 seconds |
+| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                                                      | {user} {optional user}                                                                         | 2 seconds |
+| **lock**     | I'll lock the current channel.                                                                                                       |                                                                                                | 2 seconds |
+| **lockdown** | I'll lock the server.                                                                                                                | {on | off}                                                                                     | 2 seconds |
+| **mute**     | I'll mute someone.                                                                                                                   | {user} {reason}                                                                                | 2 seconds |
+| **nickname** | I'll change a user's nickname to your choice.                                                                                        | {user} {reason}                                                                                | 2 seconds |
+| **slowmode** | I will set the channel's slowmode to anything you want.                                                                              | {user} {reason}                                                                                | 2 seconds |
+| **timeout**  | Timeout a user.                                                                                                                      | (user) (optional: reason)                                                                      | 2 seconds |
+| **unlock**   | I'll unlock the current channel.                                                                                                     |                                                                                                | 2 seconds |
+| **unmute**   | I'll unmute someone who was muted previously.                                                                                        | {user} {reason}                                                                                | 2 seconds |
+| **warn**     | I will warn a user                                                                                                                   | {user} {optional reason}                                                                       | 2 seconds |
+| **warnings** | I'll display a user's warnings.                                                                                                      | {user}                                                                                         | 2 seconds |
 
-## 🎵 Music
+## Music
 
 | Name         | Description                                                                                                                     | Usage                                      | Cooldown   |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ---------- |
@@ -194,12 +187,19 @@ SparkV's Command List! SparkV contains more than **137 commands**!
 | -------------- | --------------------------------------------------------------------------------------------- | -------------------------- | --------- |
 | **avatar**     | 4K avatar 512x512                                                                             | (@member) (optional: -url) | 2 seconds |
 | **calculator** | Calculate any equation!                                                                       |                            | 2 seconds |
+| **credits**    | Look at everyone who helped make SparkV!                                                      |                            | 2 seconds |
+| **dashboard**  | I'll send my dashboard!                                                                       | {user}                     | 2 seconds |
 | **date**       | Gets the current date.                                                                        |                            | 2 seconds |
 | **decode**     | decode a string that was encoded                                                              | {type} {string}            | 2 seconds |
+| **donate**     | Donate to help SparkV's developement. Every donation is appreciated!                          |                            | 2 seconds |
 | **encode**     | encode a string                                                                               | {type} {string}            | 2 seconds |
+| **help**       | View SparkV's 100+ cmds.                                                                      | {cmd}                      | 2 seconds |
+| **invite**     | Displays links.                                                                               |                            | 2 seconds |
 | **roleid**     | 4K avatar 512x512                                                                             | (@member) (optional: -url) | 2 seconds |
+| **rules**      | Follow them lol.                                                                              |                            | 2 seconds |
 | **servericon** | 4K server icon 512x512                                                                        | (optional: -url)           | 2 seconds |
 | **stats**      | SparkV's stats.                                                                               |                            | 2 seconds |
 | **userid**     | Gets the ID of the mentioned user. If you don't mention someone, I will send your ID instead. | (optional: @member)        | 2 seconds |
 | **userinfo**   | See information about a user.                                                                 | {user}                     | 2 seconds |
+| **website**    | I'll send my website!                                                                         |                            | 2 seconds |
 | **zalago**     | Generate zalgo text.                                                                          | {text}                     | 2 seconds |
