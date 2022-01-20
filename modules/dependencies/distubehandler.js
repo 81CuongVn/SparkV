@@ -66,6 +66,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				fetchReply: true
 			});
 
 			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
@@ -137,6 +138,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				fetchReply: true
 			});
 
 			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
