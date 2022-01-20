@@ -3,8 +3,8 @@ const Discord = require("discord.js");
 module.exports = {
 	once: false,
 	async execute(bot, reaction, user) {
-		if (reaction?.partial) await reaction?.fetch();
-		if (reaction.message?.partial) await reaction?.message?.fetch();
+		if (reaction?.partial) await reaction?.fetch().catch(() => {});
+		if (reaction.message?.partial) await reaction?.message?.fetch().catch(() => {});
 
 		const message = reaction.message;
 
