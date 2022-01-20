@@ -1,7 +1,7 @@
 const RedditCommand = require("../../templates/redditCommand");
 
 module.exports = new RedditCommand({
-	description: "I will send a animal pic from multible subreddits.",
+	description: "I will send an animal's picture chosen from multible subreddits.",
 	dirname: __dirname,
 	aliases: ["cuteanimal"],
 	usage: "",
