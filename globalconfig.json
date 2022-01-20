@@ -12,14 +12,19 @@
     "totalShards": "auto"
   },
   "embed": {
-    "color": "BLUE",
+    "color": "#1fa9ff",
     "footer": "^Donate | ^Invite"
   },
   "emojis": {
     "success": "<a:Check:819934065025220668>",
     "error": "<a:Cross:819934065314234418>",
     "music": "<a:PepeMusic:819933524525449256>",
-    "roblox": "<:Roblox:918614055151890483>"
+    "roblox": "<:Roblox:918614055151890483>",
+    "servers": "<:servers:933608928959406081>",
+    "player": "<:player:933552618272350249>",
+    "clock": "<:uptime:933605688553406514>",
+    "memory": "<:memory:933732415153782854>",
+    "stats": "<:stats:933736680924520550>"
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
