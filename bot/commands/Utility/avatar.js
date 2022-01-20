@@ -7,7 +7,7 @@ async function execute(bot, message, args) {
 	const User = await bot.functions.fetchUser(args[0]) || message.author;
 	const avatar = User.displayAvatarURL({ dynamic: true, format: "png" });
 
-	const pngType = avatar.replace(".png", ".png").replace(".gif", ".png");
+	const pngType = avatar.replace(".gif", ".png");
 	const jpgType = avatar.replace(".png", ".jpg").replace(".gif", ".jpg");
 	const gifType = avatar.replace(".png", ".gif").replace(".gif", ".gif");
 
