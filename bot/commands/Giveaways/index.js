@@ -6,8 +6,8 @@ const commands = fs
 	.map(c => require(`${__dirname}/${c}`));
 
 module.exports = {
-	name: "Administration",
-	description: "Server Admins only. This category includes config commands.",
-	emoji: "🤵",
+	name: "Giveaways",
+	description: "These commands let you create/manage your own giveaways!",
+	emoji: "<a:tada:819934065414242344>",
 	commands,
 };

@@ -158,9 +158,9 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: `Starts a giveaway. Requires the permision MANAGE_MESSAGES.`,
+	description: `Creates a giveaway. Requires the permision MANAGE_MESSAGES.`,
 	dirname: __dirname,
 	usage: ``,
-	aliases: ["startg", "sgiveaway"],
+	aliases: ["startg", "sgiveaway", "cgiveaway", "createg"],
 	perms: ["EMBED_LINKS", "MANAGE_MESSAGES"]
 });
