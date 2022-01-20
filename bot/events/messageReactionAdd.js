@@ -41,7 +41,8 @@ module.exports = {
 				.setTimestamp();
 
 			const starMsg = await channel.messages.fetch(stars.id);
-			await msg.edit({ content: `⭐ **${parseInt(star[1]) + 1}** | ${message.channel}`, embeds: [embed] });
+
+			await msg.edit({ content: `⭐ **${parseInt(star[1]) + 1}** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		} else {
 			const embed = new Discord.MessageEmbed()
 				.setDescription(message.cleanContent || "No content...")
@@ -57,7 +58,7 @@ module.exports = {
 				.setColor("YELLOW")
 				.setTimestamp();
 
-			await channel.send({ content: `⭐ **1** | ${message.channel}`, embeds: [embed] });
+			await channel.send({ content: `⭐ **1** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		}
 	}
 };
