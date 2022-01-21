@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **138 commands**!
+SparkV's Command List! SparkV contains more than **139 commands**!
 
 ## 🐶 Animals
 
@@ -88,26 +88,27 @@ SparkV's Command List! SparkV contains more than **138 commands**!
 
 ## 📷 Images
 
-| Name               | Description                     | Usage                | Cooldown  |
-| ------------------ | ------------------------------- | -------------------- | --------- |
-| **affect**         | Yes it does noob                | {optional user}      | 2 seconds |
-| **bed**            | Why do you hate me, brother?    | {optional user}      | 2 seconds |
-| **changemymind**   | Change my mind.                 | {text}               | 2 seconds |
-| **color**          | Hex to color.                   | {hex}                | 2 seconds |
-| **facepalm**       | bruh                            | {optional user}      | 2 seconds |
-| **invert**         | bruh                            | {optional user}      | 2 seconds |
-| **jail**           | Haha get in jail noob           | {optional user}      | 2 seconds |
-| **ohno**           | OH NO HE'S STUPID!              | {text}               | 2 seconds |
-| **opinion**        | lol                             | {text}               | 2 seconds |
-| **rainbow**        | wow bro are you gae?            | {optional user}      | 2 seconds |
-| **rip**            | Rest In Peace.                  | {optional user}      | 2 seconds |
-| **shit**           | Ew!                             | {user | self}        | 2 seconds |
-| **slap**           | SLAP SLAP SLAP!                 | {user | self}        | 2 seconds |
-| **trash**          | wow it trash                    | {user | self}        | 2 seconds |
-| **trigger**        | wow you mad bro                 | {user | self}        | 2 seconds |
-| **wanted**         | Wanted sign.                    | {user | self}        | 2 seconds |
-| **wasted**         | Dang man, that's a life wasted. | {user | self}        | 2 seconds |
-| **youtubecomment** | YouTube comment lol.            | {user | self} {text} | 2 seconds |
+| Name               | Description                                                         | Usage                | Cooldown  |
+| ------------------ | ------------------------------------------------------------------- | -------------------- | --------- |
+| **affect**         | Yes it does noob                                                    | {optional user}      | 2 seconds |
+| **bed**            | Why do you hate me, brother?                                        | {optional user}      | 2 seconds |
+| **changemymind**   | Change my mind.                                                     | {text}               | 2 seconds |
+| **cheese**         | Images of cheese. Requested by SmashingBC so I added it. (r/Cheese) |                      | 2 seconds |
+| **color**          | Hex to color.                                                       | {hex}                | 2 seconds |
+| **facepalm**       | bruh                                                                | {optional user}      | 2 seconds |
+| **invert**         | bruh                                                                | {optional user}      | 2 seconds |
+| **jail**           | Haha get in jail noob                                               | {optional user}      | 2 seconds |
+| **ohno**           | OH NO HE'S STUPID!                                                  | {text}               | 2 seconds |
+| **opinion**        | lol                                                                 | {text}               | 2 seconds |
+| **rainbow**        | wow bro are you gae?                                                | {optional user}      | 2 seconds |
+| **rip**            | Rest In Peace.                                                      | {optional user}      | 2 seconds |
+| **shit**           | Ew!                                                                 | {user | self}        | 2 seconds |
+| **slap**           | SLAP SLAP SLAP!                                                     | {user | self}        | 2 seconds |
+| **trash**          | wow it trash                                                        | {user | self}        | 2 seconds |
+| **trigger**        | wow you mad bro                                                     | {user | self}        | 2 seconds |
+| **wanted**         | Wanted sign.                                                        | {user | self}        | 2 seconds |
+| **wasted**         | Dang man, that's a life wasted.                                     | {user | self}        | 2 seconds |
+| **youtubecomment** | YouTube comment lol.                                                | {user | self} {text} | 2 seconds |
 
 ## 😂 Memey
 
@@ -198,7 +199,7 @@ SparkV's Command List! SparkV contains more than **138 commands**!
 | **roleid**     | Grab the ID of any role!                                                                       | (@role)                                    | 2 seconds |
 | **rules**      | Follow the rules or else you will be banned from SparkV.                                       |                                            | 2 seconds |
 | **servericon** | Gets the current server's server icon in all sizes and file types!                             |                                            | 2 seconds |
-| **serverinfo** | I will get the any server's info by the invite link!                                           | (optional: invite default: current server) | 2 seconds |
+| **serverinfo** | I will get the current server's info or any server's info by the invite link!                  | (optional: invite default: current server) | 2 seconds |
 | **stats**      | SparkV's stats.                                                                                |                                            | 2 seconds |
 | **userid**     | I will get the ID of the mentioned user. If you don't menion a user, I'll get your ID instead. | (optional: @member default: you)           | 2 seconds |
 | **userinfo**   | See information about a user.                                                                  | {user}                                     | 2 seconds |
