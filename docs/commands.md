@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **137 commands**!
+SparkV's Command List! SparkV contains more than **138 commands**!
 
 ## 🐶 Animals
 
@@ -183,23 +183,24 @@ SparkV's Command List! SparkV contains more than **137 commands**!
 
 ## 🧰 Utility
 
-| Name           | Description                                                                                   | Usage                      | Cooldown  |
-| -------------- | --------------------------------------------------------------------------------------------- | -------------------------- | --------- |
-| **avatar**     | 4K avatar 512x512                                                                             | (@member) (optional: -url) | 2 seconds |
-| **calculator** | Calculate any equation!                                                                       |                            | 2 seconds |
-| **credits**    | Look at everyone who helped make SparkV!                                                      |                            | 2 seconds |
-| **dashboard**  | I'll send my dashboard!                                                                       | {user}                     | 2 seconds |
-| **date**       | Gets the current date.                                                                        |                            | 2 seconds |
-| **decode**     | decode a string that was encoded                                                              | {type} {string}            | 2 seconds |
-| **donate**     | Donate to help SparkV's developement. Every donation is appreciated!                          |                            | 2 seconds |
-| **encode**     | encode a string                                                                               | {type} {string}            | 2 seconds |
-| **help**       | View SparkV's 100+ cmds.                                                                      | {cmd}                      | 2 seconds |
-| **invite**     | Displays links.                                                                               |                            | 2 seconds |
-| **roleid**     | 4K avatar 512x512                                                                             | (@member) (optional: -url) | 2 seconds |
-| **rules**      | Follow them lol.                                                                              |                            | 2 seconds |
-| **servericon** | 4K server icon 512x512                                                                        | (optional: -url)           | 2 seconds |
-| **stats**      | SparkV's stats.                                                                               |                            | 2 seconds |
-| **userid**     | Gets the ID of the mentioned user. If you don't mention someone, I will send your ID instead. | (optional: @member)        | 2 seconds |
-| **userinfo**   | See information about a user.                                                                 | {user}                     | 2 seconds |
-| **website**    | I'll send my website!                                                                         |                            | 2 seconds |
-| **zalago**     | Generate zalgo text.                                                                          | {text}                     | 2 seconds |
+| Name           | Description                                                                                    | Usage                                      | Cooldown  |
+| -------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------ | --------- |
+| **avatar**     | Get a user's avatar in all sizes and file types!                                               | (optional: @member default: you)           | 2 seconds |
+| **calculator** | Calculate any equation!                                                                        |                                            | 2 seconds |
+| **credits**    | Look at everyone who helped make SparkV!                                                       |                                            | 2 seconds |
+| **dashboard**  | I'll send my dashboard!                                                                        | {user}                                     | 2 seconds |
+| **date**       | Gets the current date.                                                                         |                                            | 2 seconds |
+| **decode**     | decode a string that was encoded                                                               | {type} {string}                            | 2 seconds |
+| **donate**     | Donate to help SparkV's developement. Every donation is appreciated!                           |                                            | 2 seconds |
+| **encode**     | encode a string                                                                                | {type} {string}                            | 2 seconds |
+| **help**       | View SparkV's 100+ cmds.                                                                       | {cmd}                                      | 2 seconds |
+| **invite**     | Displays links.                                                                                |                                            | 2 seconds |
+| **roleid**     | Grab the ID of any role!                                                                       | (@role)                                    | 2 seconds |
+| **rules**      | Follow the rules or else you will be banned from SparkV.                                       |                                            | 2 seconds |
+| **servericon** | Gets the current server's server icon in all sizes and file types!                             |                                            | 2 seconds |
+| **serverinfo** | I will get the any server's info by the invite link!                                           | (optional: invite default: current server) | 2 seconds |
+| **stats**      | SparkV's stats.                                                                                |                                            | 2 seconds |
+| **userid**     | I will get the ID of the mentioned user. If you don't menion a user, I'll get your ID instead. | (optional: @member default: you)           | 2 seconds |
+| **userinfo**   | See information about a user.                                                                  | {user}                                     | 2 seconds |
+| **website**    | I'll send my website!                                                                          |                                            | 2 seconds |
+| **zalgo**      | Generate zalgo text.                                                                           | (text)                                     | 2 seconds |
