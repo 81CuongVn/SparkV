@@ -4,6 +4,8 @@ module.exports = {
 	once: false,
 	async execute(bot, interaction) {
 		if (interaction.isCommand()) {
+			await interaction.deferReply();
+
 			// Get the command
 			const command = bot.commands.get(interaction.commandName);
 

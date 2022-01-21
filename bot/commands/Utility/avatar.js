@@ -3,15 +3,13 @@ const canvacord = require("canvacord");
 
 const cmd = require("../../templates/command");
 
-async function execute(bot, message, args) {
-	const User = await bot.functions.fetchUser(args[0]) || message.author;
+async function execute(bot, message, args, command, data) {
+	const User = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
 	const avatar = User.displayAvatarURL({ dynamic: true, format: "png" });
 
 	const pngType = avatar.replace(".gif", ".png");
 	const jpgType = avatar.replace(".png", ".jpg").replace(".gif", ".jpg");
 	const gifType = avatar.replace(".png", ".gif");
-
-	if (message.content.includes("-url")) await message.replyT(`URL: <${avatar}>`);
 
 	const avatarEmbed = new Discord.MessageEmbed()
 		.setAuthor({
@@ -35,9 +33,16 @@ async function execute(bot, message, args) {
 }
 
 module.exports = new cmd(execute, {
-	description: "4K avatar 512x512",
+	description: "Get a user's avatar in all sizes and file types!",
 	dirname: __dirname,
 	aliases: [],
-	usage: `(@member) (optional: -url)`,
-	slash: true
+	usage: `(optional: @member default: you)`,
+	slash: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to get the avatar of.",
+		}
+	]
 });

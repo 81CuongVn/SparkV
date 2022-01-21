@@ -5,7 +5,7 @@ const cmd = require("../../templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const BotMessage = await message.replyT(`${bot.config.emojis.stats} Fetching stats...`);
+		const BotMessage = await message.replyT(`${bot.config.emojis.stats} | Fetching stats...`);
 
 		const UsedMemory = os.totalmem() - os.freemem();
 		const TotalMemory = os.totalmem();
@@ -30,7 +30,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
-		await BotMessage.edit({
+		return await BotMessage.edit({
 			content: `${bot.config.emojis.success} Loading complete!`,
 			embeds: [StatsEmbed]
 		});

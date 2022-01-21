@@ -5,11 +5,7 @@ const cmd = require("../../templates/command");
 
 module.exports = new cmd(
 	async (bot, message, args) => {
-		if (!args) {
-			return await message.replyT(
-				"Next time, choose the type of encoding and the text to encode. Types: `base64`, `hex` or `url`",
-			);
-		}
+		if (!args) return await message.replyT("Next time, choose the type of encoding and the text to encode. Types: `base64`, `hex` or `url`");
 
 		const [type, ...string] = args;
 
@@ -29,6 +25,6 @@ module.exports = new cmd(
 		dirname: __dirname,
 		usage: "<type> <string>",
 		aliases: [],
-		perms: ["EMBED_LINKS"],
+		perms: ["EMBED_LINKS"]
 	},
 );

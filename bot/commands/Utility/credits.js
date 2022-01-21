@@ -24,7 +24,7 @@ module.exports = new cmd(
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 			.addFields(Credits);
 
-		return await message.reply({
+		return await message.replyT({
 			embeds: [NewEmbed]
 		});
 	},
@@ -34,6 +34,6 @@ module.exports = new cmd(
 		usage: "",
 		aliases: ["devs", "developers"],
 		perms: ["EMBED_LINKS"],
-		slash: true,
+		slash: true
 	},
 );

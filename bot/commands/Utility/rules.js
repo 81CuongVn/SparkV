@@ -53,7 +53,7 @@ module.exports = new cmd(
 		EasyPages(message, pages, ["⬅", "➡"]);
 	},
 	{
-		description: "Follow them lol.",
+		description: "Follow the rules or else you will be banned from SparkV.",
 		dirname: __dirname,
 		usage: "",
 		aliases: ["TOS"],

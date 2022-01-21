@@ -19,9 +19,7 @@ module.exports = class Command {
 
 	async run(bot, message, args, command, data) {
 		if (this.settings.requireArgs && !args[0]) {
-			return await message.replyT(
-				`${bot.config.emojis.error} | Invalid arguments. Please make sure you follow this command's usage. Usage: ${this.settings.usage}`,
-			);
+			return await message.replyT(`${bot.config.emojis.error} | Invalid arguments. Please make sure you follow ${this.settings.name} command's usage. Usage: \`${data.guild.prefix}${this.settings.name} ${this.settings.usage}\``);
 		}
 
 		return this.execute(bot, message, args, command, data);

@@ -3,8 +3,8 @@ const Zalgo = require("to-zalgo");
 
 const cmd = require("../../templates/command");
 
-module.exports = new cmd(async (bot, message, args) => {
-	const text = args.join(" ");
+module.exports = new cmd(async (bot, message, args, command, data) => {
+	const text = message?.applicationId ? data.options.getString("text") : args.join(" ");
 
 	if (!text) return await message.replyT("You need to enter some text to zalgo.");
 
@@ -12,7 +12,17 @@ module.exports = new cmd(async (bot, message, args) => {
 }, {
 	description: "Generate zalgo text.",
 	dirname: __dirname,
-	usage: "<text>",
+	usage: "(text)",
 	aliases: ["zgen"],
-	perms: ["EMBED_LINKS"]
+	perms: [],
+	slash: true,
+	requireArgs: true,
+	options: [
+		{
+			type: 3,
+			name: "text",
+			description: "text to zalgo.",
+			required: true
+		}
+	]
 });

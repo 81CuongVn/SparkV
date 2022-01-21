@@ -11,7 +11,7 @@ async function execute(bot, message, args, command, data) {
 		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		Selections.push({
-			label: Category.name,
+			label: `${Category.name} [${Category.commands.length}]`,
 			description: Category.description,
 			value: Category.name,
 			emoji: Category.emoji ? Category.emoji : null,
@@ -45,15 +45,14 @@ async function execute(bot, message, args, command, data) {
 		bot.categories.map(cat => CreateSelection(message, cat));
 
 		const NewEmbed = new MessageEmbed()
-			.setTitle(await message.translate("Select a Category!"))
-			.setDescription(await message.translate("Select a category from tapping the selection box below."))
 			.setAuthor({
 				name: "SparkV Help",
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
+			.setDescription(await message.translate("Welcome to SparkV's help menu! Select a category from tapping the selection box below."))
 			.setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true }) : message.user.displayAvatarURL({ dynamic: true }))
 			.setFooter({
-				text: await message.translate("SparkV - Making your Discord life easier!"),
+				text: await message.translate(bot.config.embed.footer),
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(bot.config.embed.color)
@@ -82,7 +81,7 @@ async function execute(bot, message, args, command, data) {
 		const row = new MessageActionRow().addComponents(CatSelect);
 		const row2 = new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton);
 
-		const helpMessage = await message.reply({
+		const helpMessage = await message.replyT({
 			embeds: [NewEmbed],
 			components: [row, row2],
 			fetchReply: true
@@ -117,7 +116,7 @@ async function execute(bot, message, args, command, data) {
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 
 		if (!cmd) {
-			return await message.reply({
+			return await message.replyT({
 				content: await message.translate("The cmd you requested could not be found."),
 				ephemeral: true
 			});

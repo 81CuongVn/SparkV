@@ -26,5 +26,6 @@ module.exports = new cmd(
 		usage: "",
 		aliases: ["invite", "support"],
 		perms: ["EMBED_LINKS"],
+		slash: true
 	},
 );

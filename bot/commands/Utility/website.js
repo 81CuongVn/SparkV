@@ -10,5 +10,6 @@ module.exports = new cmd(
 		usage: "",
 		aliases: ["web"],
 		perms: ["EMBED_LINKS"],
+		slash: true
 	},
 );
