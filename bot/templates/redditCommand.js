@@ -56,7 +56,7 @@ module.exports = class RedditCommand {
 			RedditEmbed.setDescription(selectedPost.selftext);
 		}
 
-		await message.reply({
+		await message.replyT({
 			embeds: [RedditEmbed]
 		});
 	}

@@ -47,7 +47,7 @@ module.exports = {
 		if (!botMember.permissionsIn(message.channel).has(Discord.Permissions.FLAGS.SEND_MESSAGES)) return;
 
 		// If the guild is part of the guild blacklist, return.
-		if (bot.config.blacklist.guilds[message.guild.id]) return await message.reply(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
+		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
 		// Cache the member.
 		if (message.guild && !message.member) await message.guild.members.fetch(message.author.id);
@@ -417,7 +417,7 @@ module.exports = {
 					iconURL: bot.user.displayAvatarURL()
 				});
 
-			return await message.reply({
+			return await message.replyT({
 				embeds: [cooldownEmbed],
 			});
 		}

@@ -22,7 +22,7 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
-	await message.reply({
+	await message.replyT({
 		embeds: [BalanceEmbed],
 	});
 }
