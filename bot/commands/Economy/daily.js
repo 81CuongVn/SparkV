@@ -11,9 +11,7 @@ async function execute(bot, message, args, command, data) {
 	data.user.markModified("cooldowns.daily");
 	await data.user.save();
 
-	await message.replyT(
-		`${bot.config.emojis.success} | You've just earned ⏣${bot.functions.formatNumber(15000)}!${data.user.money.multiplier > 1 ? ` Oh, it seems you also have a **${data.user.money.multiplier}**x coin multiplier! (+⏣${bot.functions.formatNumber(15000 * data.user.money.multiplier)} gained in total).` : ""}`,
-	);
+	await message.replyT(`${bot.config.emojis.success} | You've just earned ⏣${bot.functions.formatNumber(15000)}!${data.user.money.multiplier > 1 ? ` Oh, it seems you also have a **${data.user.money.multiplier}**x coin multiplier! (+⏣${bot.functions.formatNumber(15000 * data.user.money.multiplier)} gained in total).` : ""}`);
 }
 
 module.exports = new cmd(execute, {
@@ -23,4 +21,5 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	perms: [],
 	cooldown: 10,
+	slash: true
 });

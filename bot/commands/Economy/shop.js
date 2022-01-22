@@ -4,7 +4,6 @@ const easypages = require("discordeasypages");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const User = await bot.functions.GetMember(message, args);
 	const pages = [];
 
 	bot.shop.each(item => {
@@ -19,13 +18,14 @@ async function execute(bot, message, args, command, data) {
 		pages.push(itemEmbed);
 	});
 
-	easypages(message, pages);
+	easypages(message, pages, "shop_menu");
 }
 
 module.exports = new cmd(execute, {
-	description: `Give someone some data.user.money.balance!`,
+	description: `Displays the shop!`,
 	dirname: __dirname,
-	usage: `<user>`,
+	usage: ``,
 	aliases: [],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });

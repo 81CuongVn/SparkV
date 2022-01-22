@@ -10,9 +10,7 @@ async function execute(bot, message, args, command, data) {
 	data.user.markModified("money.balance");
 	await data.user.save();
 
-	await message.replyT(
-		`${bot.config.emojis.success} | You begged and recieved ⏣${bot.functions.formatNumber(Ammount)}!`,
-	);
+	await message.replyT(`${bot.config.emojis.success} | You begged and recieved ⏣${bot.functions.formatNumber(Ammount)}!`);
 }
 
 module.exports = new cmd(execute, {
@@ -21,4 +19,5 @@ module.exports = new cmd(execute, {
 	usage: `<optional user>`,
 	aliases: [],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });
