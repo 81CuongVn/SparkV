@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 	await memberData.save();
 
 	User.send(`You were warned in **${message.guild.name}**. Reason: ${Reason}`).catch(async err => {
-		await message.channel.send(`${User}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${Reason}.`);
+		await message.replyT(`${User}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${Reason}.`);
 	});
 
 	const WarnEmbed = new MessageEmbed()

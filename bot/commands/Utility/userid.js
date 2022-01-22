@@ -3,7 +3,7 @@ const canvacord = require("canvacord");
 
 const cmd = require("../../templates/command");
 
-async function execute(bot, message, args) {
+async function execute(bot, message, args, command, data) {
 	const user = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
 
 	if (!user) return await message.replyT("Please mention a user to get the id of.");

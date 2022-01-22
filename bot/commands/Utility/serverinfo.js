@@ -80,7 +80,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["server"],
 	usage: `(optional: invite default: current server)`,
-	slash: false,
+	slash: true,
 	options: [
 		{
 			type: 3,

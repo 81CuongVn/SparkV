@@ -6,7 +6,7 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	const role = message?.applicationId ? data.options.getRole("role") : message.mentions.roles.first();
 
-	if (!role) return message.channel.send("Please mention a valid role to get the id of.");
+	if (!role) return message.replyT("Please mention a valid role to get the id of.");
 
 	await message.replyT(`The id of the role **${role.name}** is **${role.id}**.`);
 }
