@@ -94,10 +94,12 @@ module.exports = async bot => {
 			collector.on("end", async interaction => {
 				// Checks if not deleted.
 				if (MusicMessage) {
-					MusicMessage?.update({
-						embeds: [NowPlayingEmbed],
-						components: []
-					});
+					try {
+						MusicMessage?.update({
+							embeds: [NowPlayingEmbed],
+							components: []
+						});
+					} catch (e) { }
 				}
 			});
 		})
@@ -165,10 +167,12 @@ module.exports = async bot => {
 
 			collector.on("end", async collected => {
 				if (MusicMessage) {
-					MusicMessage?.update({
-						embeds: [SongAddedQueue],
-						components: []
-					});
+					try {
+						MusicMessage?.update({
+							embeds: [SongAddedQueue],
+							components: []
+						});
+					} catch (e) { }
 				}
 			});
 		})
@@ -185,14 +189,14 @@ module.exports = async bot => {
 						)}\n👎︱Dislikes: ${bot.functions.formatNumber(
 							song.dislikes,
 						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration
-						}\`\`\``,
+							}\`\`\``,
 						inline: true,
 					},
 
 					{
 						name: `🔊︱Audio Settings`,
 						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"
-						}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
+							}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
 						inline: true,
 					},
 				)

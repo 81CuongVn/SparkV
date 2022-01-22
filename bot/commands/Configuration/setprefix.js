@@ -3,29 +3,36 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 const database = require("../../../database/handler");
 
-async function execute(bot, message, args, command) {
-	if (!args[0]) {
-		return await message.replyT("You need to provide a **prefix**.");
-	}
+async function execute(bot, message, args, command, data) {
+	const prefix = data.options.getString("prefix");
 
-	if (args[0].length > 5) {
-		return await message.replyT("You need to provide a prefix **UNDER** `5` characters.");
-	}
+	if (!prefix) return await message.replyT("You need to provide a valid **prefix**.");
+	if (prefix.length > 5) return await message.replyT("You need to provide a prefix **UNDER** `5` characters.");
 
-	const data = await database.getGuild(message.guild.id);
+	const gdata = await database.getGuild(message.guild.id);
 
-	data.prefix = args.join(" ").trim();
-	data.markModified("prefix");
+	gdata.prefix = prefix.trim();
+	gdata.markModified("prefix");
 
-	await data.save();
+	await gdata.save();
 
-	return await message.replyT(`The prefix is now **\`${args[0]}\`**`);
+	return await message.replyT(`The prefix is now **\`${prefix}\`**`);
 }
 
 module.exports = new cmd(execute, {
 	description: `Changes the prefix.`,
 	dirname: __dirname,
-	usage: "",
+	usage: "(prefix limit: 5 chars)",
 	aliases: [],
 	perms: ["MANAGE_MESSAGES"],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 3,
+			name: "prefix",
+			description: "The prefix to change to. Default: ^",
+			required: true
+		}
+	]
 });

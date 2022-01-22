@@ -14,64 +14,40 @@ const Schema = new mongoose.Schema({
 
 	plugins: {
 		welcome: {
-			enabled: {
-				default: false,
-				type: Boolean,
-			},
-			message: {
-				default: "Welcome {mention} to **{server}**! You're our **{members}th member**!",
-				type: String,
-			},
-			channel: {
-				type: String,
-				default: null,
-			},
+			type: Object,
+			default: {
+				enabled: false,
+				message: "Welcome {mention} to **{server}**! You're our **{members}th member**!",
+				channel: null
+			}
 		},
 		goodbye: {
-			enabled: {
-				default: false,
-				type: Boolean,
-			},
-			message: {
-				default: "Bye {mention}! We're really sad to see you go. Without you, we're now **{members} members**.",
-				type: String,
-			},
-			channel: {
-				type: String,
-				default: null,
-			},
+			type: Object,
+			default: {
+				enabled: false,
+				message: "Bye {mention}! We're really sad to see you go. Without you, we're now **{members} members**.",
+				channel: null
+			}
 		},
 		automod: {
-			removeLinks: { type: Boolean, default: false },
-			removeProfanity: { type: Boolean, default: false },
-			removeDuplicateText: { type: Boolean, default: false },
+			type: Object,
+			default: {
+				removeLinks: false,
+				removeProfanity: false,
+				removeDuplicateText: false
+			}
 		},
 		leveling: {
-			enabled: { type: Boolean, default: false },
-			max: { type: Number, default: 25 },
-			min: { type: Number, default: 5 },
+			type: Object,
+			default: {
+				enabled: false,
+				max: 25,
+				min: 5
+			}
 		},
 		chatbot: { type: String, default: false },
-		starboard: { type: String, default: null },
+		starboard: { type: String, default: null }
 	}
-});
-
-Schema.pre("findOneAndUpdate", function() {
-	const update = this.getUpdate();
-	if (update.__v !== null) {
-		delete update.__v;
-	}
-	const keys = ["$set", "$setOnInsert"];
-	for (const key of keys) {
-		if (update[key] !== null && update[key].__v !== null) {
-			delete update[key].__v;
-			if (Object.keys(update[key]).length === 0) {
-				delete update[key];
-			}
-		}
-	}
-	update.$inc = update.$inc || {};
-	update.$inc.__v = 1;
 });
 
 module.exports = new mongoose.model("Guild", Schema);

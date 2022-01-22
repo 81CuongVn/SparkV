@@ -95,7 +95,7 @@ module.exports = {
 			});
 
 			// Check for profanity (curse words)
-			if (data.guild.plugins.automod.removeProfanity === true) {
+			if (data.guild.plugins.automod.removeProfanity === "true") {
 				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
 					const ignoredWords = [`hello`];
 					let cursed = false;
@@ -180,7 +180,7 @@ module.exports = {
 			}
 
 			// Check for links
-			if (data.guild.plugins.automod.removeLinks === true) {
+			if (data.guild.plugins.automod.removeLinks === "true") {
 				if (
 					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) &&
 					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR) &&
@@ -259,7 +259,7 @@ module.exports = {
 			}
 
 			// Check for spam
-			if (data.guild.plugins.automod.removeDuplicateText === true) {
+			if (data.guild.plugins.automod.removeDuplicateText === "true") {
 				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) || !message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
 					if (!message.channel.name.startsWith(`spam`) && !message.channel.name.endsWith(`spam`)) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
@@ -353,7 +353,7 @@ module.exports = {
 			}
 
 			// Leveling!
-			if (data.guild.plugins.leveling.enabled === true) {
+			if (data.guild.plugins.leveling.enabled === "true") {
 				let MaxXP = data.guild.plugins.leveling.max;
 				let MinXP = data.guild.plugins.leveling.min;
 
