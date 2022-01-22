@@ -4,22 +4,17 @@ const EasyPages = require("discordeasypages");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (!args) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Please supply the title of a song to search for.`);
-	}
+	const query = message?.applicationId ? data.options.get("search").value : args.join(" ");
 
-	args = args.join(" ");
+	if (!query) return message.replyT(`${bot.config.emojis.error} | Please supply the title of a song to search for.`);
 
-	const Lyrics = await require(`lyrics-finder`)(args);
+	const Lyrics = await require(`lyrics-finder`)(query);
 
-	if (!Lyrics) {
-		return await message.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${args}**!`);
-	}
+	if (!Lyrics) return await message.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
 
 	if (Lyrics.length <= 2000) {
 		const SongEmbed = new Discord.MessageEmbed()
-			.setTitle(args)
+			.setTitle(query)
 			.setDescription(Lyrics)
 			.setFooter({
 				text: bot.config.embed.footer
@@ -52,7 +47,7 @@ async function execute(bot, message, args, command, data) {
 
 	const CreatePage = (bot, Message, x) => {
 		const SongEmbed = new Discord.MessageEmbed()
-			.setTitle(args)
+			.setTitle(query)
 			.setDescription(x)
 			.setFooter({
 				text: bot.config.embed.footer
@@ -75,4 +70,13 @@ module.exports = new cmd(execute, {
 	usage: "<song title or URL>",
 	aliases: ["song", "verse"],
 	perms: ["EMBED_LINKS"],
+	slash: true,
+	options: [
+		{
+			type: 3,
+			name: "search",
+			description: "The song URL or song title.",
+			required: true
+		}
+	]
 });

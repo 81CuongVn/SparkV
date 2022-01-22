@@ -19,4 +19,13 @@ module.exports = new cmd(execute, {
 	usage: "<number>",
 	aliases: ["leap"],
 	perms: ["EMBED_LINKS"],
+	slash: false,
+	options: [
+		{
+			type: 3,
+			name: "number",
+			description: "The prefix to change to. Default: ^",
+			required: true
+		}
+	]
 });

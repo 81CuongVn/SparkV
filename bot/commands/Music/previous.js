@@ -18,4 +18,5 @@ module.exports = new cmd(execute, {
 	usage: "<number>",
 	aliases: [],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });

@@ -24,7 +24,8 @@ module.exports = new cmd(execute, {
 	description:
     "Change what the song sounds like! Filters: 3d, bassboost, echo, karaoke, nightcore, vaporwave. Requires admin to prevent abuse.",
 	dirname: __dirname,
-	usage: "<Filter>",
+	usage: "(filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off)",
 	aliases: ["setfilter"],
 	perms: ["EMBED_LINKS"],
+	slash: false
 });

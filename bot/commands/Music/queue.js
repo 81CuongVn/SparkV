@@ -14,7 +14,7 @@ async function execute(bot, message, args, command, data) {
 		.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 		.setFooter({
 			text: `${bot.config.emojis.music} | Displaying music queue.`,
-			iconURL: bot.user.displayAvatarURL()
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		});
 
 	return await message.replyT({
@@ -28,4 +28,5 @@ module.exports = new cmd(execute, {
 	usage: "<number>",
 	aliases: ["que"],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });

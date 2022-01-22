@@ -188,15 +188,13 @@ module.exports = async bot => {
 							song.likes,
 						)}\n👎︱Dislikes: ${bot.functions.formatNumber(
 							song.dislikes,
-						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration
-							}\`\`\``,
+						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration}\`\`\``,
 						inline: true,
 					},
 
 					{
 						name: `🔊︱Audio Settings`,
-						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"
-							}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
+						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
 						inline: true,
 					},
 				)

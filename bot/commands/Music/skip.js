@@ -5,7 +5,7 @@ const cmd = require("../../templates/musicCommand");
 async function execute(bot, message, args, command, data) {
 	const queue = await bot.distube.getQueue(message);
 
-	if (!queue) return message.channel.send(`${bot.config.emojis.error} | There is nothing in the queue right now!`);
+	if (!queue) return message.replyT(`${bot.config.emojis.error} | There is nothing in the queue right now!`);
 
 	try {
 		const song = queue.skip();
@@ -22,4 +22,5 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: ["nextsong", "nsong", "nexts", "next"],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });

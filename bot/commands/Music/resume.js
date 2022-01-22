@@ -23,4 +23,5 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: ["unpause"],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });
