@@ -8,9 +8,7 @@ async function execute(bot, message, args, command, data) {
 	try {
 		const UserID = await noblox.getIdFromUsername(args[0]);
 
-		if (!UserID) {
-			return await message.replyT(`User lookup canceled. User doesn't exist.`);
-		}
+		if (!UserID) return await message.replyT(`User lookup canceled. User doesn't exist.`);
 
 		await noblox.getPlayerInfo(UserID).then(async PlayerInfo => {
 			const InfoEmbed = new Discord.MessageEmbed()
