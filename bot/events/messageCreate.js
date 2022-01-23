@@ -477,10 +477,6 @@ async function chatbot(message, wasMentioned) {
 		)
 			.then(async response => {
 				if (response?.data?.cnt) {
-					if (message.deleted) {
-						return;
-					}
-
 					const APIEmbed = new Discord.MessageEmbed()
 						.setTitle(`SparkV`)
 						.setDescription(response.data.cnt)
