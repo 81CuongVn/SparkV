@@ -354,23 +354,28 @@ module.exports = {
 
 			// Leveling!
 			if (data.guild.plugins.leveling.enabled === "true") {
+				/*
 				let MaxXP = data.guild.plugins.leveling.max;
 				let MinXP = data.guild.plugins.leveling.min;
 
-				if (isNaN(MaxXP)) MaxXP = 25;
+				if (isNaN(MaxXP)) MaxXP = 15;
 				if (isNaN(MinXP)) MinXP = 5;
+				*/
 
-				const RandomXP = Math.floor(Math.random() * MaxXP || 25) + MinXP || 5;
+				const RandomXP = Math.floor(Math.random() * 15) + 5;
 				const HasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, RandomXP);
 
 				if (HasLeveledUp) {
 					const User = await Levels.fetch(message.author.id, message.guild.id);
+					const levelMsg = data.guild.plugins.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
-					await message.replyT(
-						bot.config.responses.LevelUpMessage.toString()
-							.replaceAll(`{author}`, message.author)
-							.replaceAll(`{level}`, bot.functions.formatNumber(User.level)),
-					);
+					if (parseInt(data.guild.plugins.leveling?.channel) && message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling?.channel))) {
+						const channel = message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling.channel));
+
+						await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+					} else {
+						await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+					}
 				}
 			}
 		}
