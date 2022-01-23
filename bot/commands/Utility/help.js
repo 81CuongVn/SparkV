@@ -2,6 +2,14 @@ const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = req
 
 const cmd = require("../../templates/command");
 
+const emojis = [
+	"⬅️",
+	"◀️",
+	"#️⃣",
+	"▶️",
+	"➡️"
+];
+
 async function execute(bot, message, args, command, data) {
 	const prefix = data?.guild.prefix || await bot.database.getGuild(message.guild.id).prefix;
 	const Selections = [];
@@ -18,22 +26,24 @@ async function execute(bot, message, args, command, data) {
 		});
 	};
 
-	const CreateCmdPage = async (bot, interaction, Category) => {
-		if (Category.name.toLowerCase().includes("owner") && interaction.user.id !== bot.config.ownerID) return;
+	const CreateCmdPage = async (bot, message, Category) => {
+		const user = message.applicationId ? message.user : message.author;
+
+		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
-				name: `${Category.emoji} SparkV Help - ${Category.name}`,
-				iconURL: `https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`
+				name: `${Category.emojiID ? "" : Category.emoji}SparkV ${Category.name}`,
+				iconURL: `https://cdn.discordapp.com/emojis/${Category.emojiID}.webp?size=56&quality=lossless`
 			})
 			.setDescription(bot.commands
 				.filter(command => command.settings.enabled && command.category === Category.name)
 				.map(command => `\`^${command.settings.name} ${command.settings.usage}\`\n${command.settings.description}`)
 				.join(`\n\n`))
-			.setThumbnail(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png?size=256`)
+			.setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`)
 			.setFooter({
 				text: "SparkV - Making your Discord life easier!",
-				iconURL: `https://cdn.discordapp.com/avatars/${interaction.message.author.id}/${interaction.message.author.avatar}.png?size=256`
+				iconURL: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
 			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
@@ -44,19 +54,51 @@ async function execute(bot, message, args, command, data) {
 	if (!args[0]) {
 		bot.categories.map(cat => CreateSelection(message, cat));
 
+		const categories = [];
+		bot.categories.map(cat => categories.push({
+			name: `${cat.emoji} ${cat.name} [${cat.commands.length}]`,
+			value: cat.description,
+			inline: true
+		}));
+
+		let PageNumber = 0;
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
 				name: "SparkV Help",
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
-			.setDescription(await message.translate("Welcome to SparkV's help menu! Select a category from tapping the selection box below."))
-			.setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true }) : message.user.displayAvatarURL({ dynamic: true }))
+			.addFields(categories)
 			.setFooter({
-				text: await message.translate(bot.config.embed.footer),
+				text: await message.translate(`Welcome to SparkV's help menu! Select a category from tapping the selection box below. • ${bot.config.embed.footer}`),
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
+
+		const quickLeft = new MessageButton()
+			.setEmoji(emojis[0])
+			.setCustomId("quickLeft")
+			.setStyle("PRIMARY");
+
+		const left = new MessageButton()
+			.setEmoji(emojis[1])
+			.setCustomId("left")
+			.setStyle("PRIMARY");
+
+		const number = new MessageButton()
+			.setEmoji(emojis[2])
+			.setCustomId("number")
+			.setStyle("PRIMARY");
+
+		const right = new MessageButton()
+			.setEmoji(emojis[3])
+			.setCustomId("right")
+			.setStyle("PRIMARY");
+
+		const quickRight = new MessageButton()
+			.setEmoji(emojis[4])
+			.setCustomId("quickRight")
+			.setStyle("PRIMARY");
 
 		const CatSelect = new MessageSelectMenu()
 			.setCustomId("SelectHelpMenu")
@@ -78,26 +120,97 @@ async function execute(bot, message, args, command, data) {
 			.setLabel(await message.translate("Vote"))
 			.setStyle("LINK");
 
-		const row = new MessageActionRow().addComponents(CatSelect);
-		const row2 = new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton);
+		bot.categories.map(cat => CreateCmdPage(bot, message, cat));
 
 		const helpMessage = await message.replyT({
-			embeds: [NewEmbed],
-			components: [row, row2],
+			embeds: [
+				NewEmbed
+			],
+			components: [
+				new MessageActionRow().addComponents(quickLeft, left, number, right, quickRight),
+				new MessageActionRow().addComponents(CatSelect),
+				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton)
+			],
 			fetchReply: true
 		});
 
-		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectHelpMenu", time: 300 * 1000 });
-		collector.on("collect", async interaction => {
-			bot.categories.map(cat => CreateCmdPage(bot, interaction, cat));
+		const collector = helpMessage.createMessageComponentCollector({ filter: interaction => {
+			if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate();
 
-			await interaction.update({
+			return true;
+		}, time: 300 * 1000 });
+
+		collector.on("collect", async interaction => {
+			if (interaction.customId) {
+				if (interaction.customId === "SelectHelpMenu") {
+					await interaction.update({
+						embeds: [
+							pages.filter(p => p.author.name.includes(interaction.values[0]))[0]
+						],
+						components: [
+							new MessageActionRow().addComponents(quickLeft, left, number, right, quickRight),
+							new MessageActionRow().addComponents(CatSelect),
+							new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
+						],
+					});
+				} else if (interaction.customId === "quickLeft") {
+					PageNumber = 0;
+				} else if (interaction.customId === "left") {
+					if (PageNumber > 0) {
+						--PageNumber;
+					} else {
+						PageNumber = pages.length - 1;
+					}
+				} else if (interaction.customId === "right") {
+					if (PageNumber + 1 < pages.length) {
+						++PageNumber;
+					} else {
+						PageNumber = 0;
+					}
+				} else if (interaction.customId === "quickRight") {
+					PageNumber = pages.length - 1;
+				} else if (interaction.customId === "number") {
+					const infoMsg = await message.reply("Please send a page number.");
+
+					await message.channel.awaitMessages({ filter: msg => {
+						if (msg.author.id === msg.client.user.id) return false;
+
+						if (!msg.content) {
+							msg.reply("Please send a number!");
+
+							return false;
+						}
+
+						if (!parseInt(msg.content) && isNaN(msg.content)) {
+							msg.reply("Please send a valid number!");
+
+							return false;
+						}
+
+						if (parseInt(msg.content) > pages.length) {
+							msg.reply("That's a page number higher than the amount of pages there are.");
+
+							return false;
+						}
+
+						return true;
+					}, max: 1, time: 30 * 1000, errors: ["time"] }).then(async collected => {
+						const input = parseInt(collected.first().content);
+
+						PageNumber = input - 1;
+						collected.first().delete().catch(err => { });
+						infoMsg.delete().catch(err => { });
+					}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
+				} else {
+					return;
+				}
+			}
+
+			interaction.update({
 				embeds: [
-					pages.filter(p => p.author.name.includes(interaction.values[0]))[0]
-				],
-				components: [
-					new MessageActionRow().addComponents(CatSelect),
-					new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
+					pages[PageNumber].setFooter({
+						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
+					})
 				],
 			});
 		});
@@ -105,10 +218,9 @@ async function execute(bot, message, args, command, data) {
 		collector.on("end", async () => {
 			await helpMessage.edit({
 				embeds: [
-					NewEmbed.setTitle(await message.translate("Timed Out!"), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate("Please rerun command."))
+					NewEmbed.setTitle(await message.translate("Help Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
 				],
-				components: [],
-				ephemeral: true
+				components: []
 			});
 		});
 	} else {

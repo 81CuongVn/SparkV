@@ -2,24 +2,13 @@
 
 SparkV's Command List! SparkV contains more than **139 commands**!
 
-## 🐶 Animals
-
-| Name       | Description                                                      | Usage | Cooldown  |
-| ---------- | ---------------------------------------------------------------- | ----- | --------- |
-| **animal** | I will send an animal's picture chosen from multible subreddits. |       | 2 seconds |
-| **bunny**  | Awww cute bunny!                                                 |       | 2 seconds |
-| **cat**    | I will send a cute cat! Cute, but dogs are cuter.                |       | 3 seconds |
-| **dog**    | I will send a cute dog! Aweeeee :D                               |       | 3 seconds |
-| **duck**   | Quack :D                                                         |       | 3 seconds |
-| **fox**    | I will send a cute fox! Ducks are cuter.                         |       | 3 seconds |
-
-## ⚙️ Configuration
+## Config
 
 | Name          | Description         | Usage                   | Cooldown  |
 | ------------- | ------------------- | ----------------------- | --------- |
 | **setprefix** | Changes the prefix. | (prefix limit: 5 chars) | 2 seconds |
 
-## 💰 Economy
+## Economy
 
 | Name          | Description                                                          | Usage                            | Cooldown  |
 | ------------- | -------------------------------------------------------------------- | -------------------------------- | --------- |
@@ -37,7 +26,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **withdraw**  | Withdraw your data.user.money.balance in your bank into your wallet. |                                  | 2 seconds |
 | **work**      | Work for your job and earn some coins.                               |                                  | 2 seconds |
 
-## 😃 Fun
+## Fun
 
 | Name              | Description                                                                                                                                      | Usage             | Cooldown  |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | --------- |
@@ -54,7 +43,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **urban**         | I will return an urban dictionary definition of a word! Due to recent API failures, this command is disabled to provide you a better experience. | {word}            | 2 seconds |
 | **uselessfact**   | I will get a useless fact! You're better off with the advice command...                                                                          | {word}            | 2 seconds |
 
-## 🎮 Games
+## Games
 
 | Name                  | Description                                                                                          | Usage           | Cooldown   |
 | --------------------- | ---------------------------------------------------------------------------------------------------- | --------------- | ---------- |
@@ -86,46 +75,30 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **deletegiveaway** | Delete a giveaway. Requires the permision MANAGE_MESSAGES.  |             | 2 seconds |
 | **rerollgiveaway** | Rerolls a giveaway. Requires the permision MANAGE_MESSAGES. | {MessageID} | 2 seconds |
 
-## 📷 Images
+## Images
 
-| Name               | Description                                                         | Usage                | Cooldown  |
-| ------------------ | ------------------------------------------------------------------- | -------------------- | --------- |
-| **affect**         | Yes it does noob                                                    | {optional user}      | 2 seconds |
-| **bed**            | Why do you hate me, brother?                                        | {optional user}      | 2 seconds |
-| **changemymind**   | Change my mind.                                                     | {text}               | 2 seconds |
-| **cheese**         | Images of cheese. Requested by SmashingBC so I added it. (r/Cheese) |                      | 2 seconds |
-| **color**          | Hex to color.                                                       | {hex}                | 2 seconds |
-| **facepalm**       | bruh                                                                | {optional user}      | 2 seconds |
-| **invert**         | bruh                                                                | {optional user}      | 2 seconds |
-| **jail**           | Haha get in jail noob                                               | {optional user}      | 2 seconds |
-| **ohno**           | OH NO HE'S STUPID!                                                  | {text}               | 2 seconds |
-| **opinion**        | lol                                                                 | {text}               | 2 seconds |
-| **rainbow**        | wow bro are you gae?                                                | {optional user}      | 2 seconds |
-| **rip**            | Rest In Peace.                                                      | {optional user}      | 2 seconds |
-| **shit**           | Ew!                                                                 | {user | self}        | 2 seconds |
-| **slap**           | SLAP SLAP SLAP!                                                     | {user | self}        | 2 seconds |
-| **trash**          | wow it trash                                                        | {user | self}        | 2 seconds |
-| **trigger**        | wow you mad bro                                                     | {user | self}        | 2 seconds |
-| **wanted**         | Wanted sign.                                                        | {user | self}        | 2 seconds |
-| **wasted**         | Dang man, that's a life wasted.                                     | {user | self}        | 2 seconds |
-| **youtubecomment** | YouTube comment lol.                                                | {user | self} {text} | 2 seconds |
+| Name               | Description                     | Usage                      | Cooldown  |
+| ------------------ | ------------------------------- | -------------------------- | --------- |
+| **affect**         | Yes it does noob                | {optional user}            | 2 seconds |
+| **bed**            | Why do you hate me, brother?    | {optional user}            | 2 seconds |
+| **changemymind**   | Change my mind.                 | {text}                     | 2 seconds |
+| **color**          | Hex to color.                   | {hex}                      | 2 seconds |
+| **facepalm**       | bruh                            | {optional user}            | 2 seconds |
+| **invert**         | bruh                            | {optional user}            | 2 seconds |
+| **jail**           | Haha get in jail noob           | {optional user}            | 2 seconds |
+| **ohno**           | OH NO HE'S STUPID!              | {text}                     | 2 seconds |
+| **opinion**        | lol                             | {text}                     | 2 seconds |
+| **rainbow**        | wow bro are you gae?            | {optional user}            | 2 seconds |
+| **rip**            | Rest In Peace.                  | {optional user}            | 2 seconds |
+| **shit**           | Ew!                             | (user default: you)        | 2 seconds |
+| **slap**           | SLAP SLAP SLAP!                 | (user default: you)        | 2 seconds |
+| **trash**          | wow it trash                    | (user default: you)        | 2 seconds |
+| **trigger**        | wow you mad bro                 | (user default: you)        | 2 seconds |
+| **wanted**         | Wanted sign.                    | (user default: you)        | 2 seconds |
+| **wasted**         | Dang man, that's a life wasted. | (user default: you)        | 2 seconds |
+| **youtubecomment** | YouTube comment lol.            | (user default: you) {text} | 2 seconds |
 
-## 😂 Memey
-
-| Name               | Description                                       | Usage | Cooldown  |
-| ------------------ | ------------------------------------------------- | ----- | --------- |
-| **animalsadvice**  | Take an advice from an animal!                    |       | 2 seconds |
-| **comedy**         | The place for comedy memes from r/ComedyCemetery! |       | 2 seconds |
-| **comic**          | A comic to keep you entertained.                  |       | 2 seconds |
-| **dankmeme**       | Meme but SUPER dank. Only the funnyiest memes.    |       | 2 seconds |
-| **doseofinternet** | I'll send a dose of the internet.                 |       | 2 seconds |
-| **economy**        | lol                                               |       | 2 seconds |
-| **gocommitdie**    | The funny Roblox subredit.                        |       | 2 seconds |
-| **meirl**          | meirl memes lol.                                  |       | 2 seconds |
-| **meme**           | LOL                                               |       | 2 seconds |
-| **prequel**        | Star Wars memes lol.                              |       | 2 seconds |
-
-## 🛠️ Moderation
+## Moderation
 
 | Name         | Description                                                                                                                          | Usage                                                                                          | Cooldown  |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------- |
@@ -173,6 +146,28 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **setcoins** | Set someone's coins!           | {user} {ammount} | 2 seconds |
 | **setxp**    | Set XP.                        | {user} {ammount} | 2 seconds |
 
+## Reddit
+
+| Name               | Description                                                         | Usage | Cooldown  |
+| ------------------ | ------------------------------------------------------------------- | ----- | --------- |
+| **animal**         | I will send an animal's picture chosen from multible subreddits.    |       | 2 seconds |
+| **animalsadvice**  | Take an advice from an animal!                                      |       | 2 seconds |
+| **bunny**          | Awww cute bunny!                                                    |       | 2 seconds |
+| **cat**            | I will send a cute cat! Cute, but dogs are cuter.                   |       | 3 seconds |
+| **cheese**         | Images of cheese. Requested by SmashingBC so I added it. (r/Cheese) |       | 2 seconds |
+| **comedy**         | The place for comedy memes from r/ComedyCemetery!                   |       | 2 seconds |
+| **comic**          | A comic to keep you entertained.                                    |       | 2 seconds |
+| **dankmeme**       | Meme but SUPER dank. Only the funnyiest memes.                      |       | 2 seconds |
+| **dog**            | I will send a cute dog! Aweeeee :D                                  |       | 3 seconds |
+| **doseofinternet** | I'll send a dose of the internet.                                   |       | 2 seconds |
+| **duck**           | Quack :D                                                            |       | 3 seconds |
+| **economy**        | lol                                                                 |       | 2 seconds |
+| **fox**            | I will send a cute fox! Ducks are cuter.                            |       | 3 seconds |
+| **gocommitdie**    | The funny Roblox subredit.                                          |       | 2 seconds |
+| **meirl**          | meirl memes lol.                                                    |       | 2 seconds |
+| **meme**           | LOL                                                                 |       | 2 seconds |
+| **prequel**        | Star Wars memes lol.                                                |       | 2 seconds |
+
 ## Roblox
 
 | Name            | Description                                                       | Usage           | Cooldown  |
@@ -182,7 +177,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **verify**      | Verify yourself! Only works when enabled on the dashboard.        | {username}      | 2 seconds |
 | **whois**       | SparkV will look up any user and return information on that user. | {username}      | 2 seconds |
 
-## 🧰 Utility
+## Utility
 
 | Name           | Description                                                                                    | Usage                                      | Cooldown  |
 | -------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------ | --------- |

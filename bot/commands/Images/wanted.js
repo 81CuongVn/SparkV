@@ -16,5 +16,5 @@ module.exports = new cmd(execute, {
 	description: "Wanted sign.",
 	aliases: ["wsign", "wanteds"],
 	dirname: __dirname,
-	usage: `<user | self>`,
+	usage: `(user default: you)`,
 });

@@ -16,5 +16,5 @@ module.exports = new cmd(execute, {
 	description: "wow it trash",
 	aliases: ["garbage"],
 	dirname: __dirname,
-	usage: `<user | self>`,
+	usage: `(user default: you)`,
 });

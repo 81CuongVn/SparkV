@@ -16,5 +16,5 @@ module.exports = new cmd(execute, {
 	description: "Dang man, that's a life wasted.",
 	aliases: ["waste"],
 	dirname: __dirname,
-	usage: `<user | self>`,
+	usage: `(user default: you)`,
 });

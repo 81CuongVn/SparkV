@@ -4,9 +4,7 @@ const request = require(`axios`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command) {
-	if (!args) {
-		return await message.replyT(`${bot.config.emojis.error} | Next time, respond with the ID of the game lmao.`);
-	}
+	if (!args) return await message.replyT(`${bot.config.emojis.error} | Next time, respond with the ID of the game lmao.`);
 
 	request.get(`https://roblox-embed-discord-jpcnmriva99q.runkit.sh/${args}.response.data`)
 		.then(async response => {

@@ -9,6 +9,7 @@ const commands = fs
 module.exports = {
 	name: "Roblox",
 	description: "The commands that handle Roblox features (Shout, WhoIs), easily done with SparkV.",
-	emoji: config.emojis.roblox,
+	emoji: "<:Roblox:918614055151890483>",
+	emojiID: "918614055151890483",
 	commands,
 };

@@ -6,8 +6,9 @@ const commands = fs
 	.map(c => require(`${__dirname}/${c}`));
 
 module.exports = {
-	name: "Memey",
-	description: "A gift from SparkV. The most hottest memes on reddit right now.",
-	emoji: "😂",
+	name: "Config",
+	description: "These commands let you personalize SparkV!",
+	emoji: "<:config:934870512235073606>",
+	emojiID: "934870512235073606",
 	commands,
 };
