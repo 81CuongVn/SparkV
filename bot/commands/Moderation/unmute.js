@@ -42,7 +42,10 @@ async function execute(bot, message, args, command, data) {
 	const VerificationEmbed = new Discord.MessageEmbed()
 		.setTitle(`Convermination Prompt`)
 		.setDescription(`Are you sure you want to do this?`)
-		.setFooter(`Canceling in 60 seconds if no emoji reacted • ${bot.config.embed.footer}`);
+		.setFooter({
+			text: `Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		});
 
 	const VerificationMessage = await await message.replyT(VerificationEmbed);
 	const Emoji = await bot.PromptMessage(
@@ -67,7 +70,10 @@ async function execute(bot, message, args, command, data) {
 			.setThumbnail(User.avatar)
 			.addField(`Moderator/Admin: `, `${message.author.tag}`)
 			.addField(`Reason: `, Reason)
-			.setFooter(`${bot.config.prefix}Mute to mute a user • ${bot.config.embed.footer}`)
+			.setFooter({
+				text: `${bot.config.prefix}Mute to mute a user • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
@@ -85,6 +91,6 @@ module.exports = new cmd(execute, {
 	description: `I'll unmute someone who was muted previously.`,
 	dirname: __dirname,
 	aliases: [],
-	usage: `<user> <reason>`,
+	usage: `(user) <reason>`,
 	perms: ["MANAGE_CHANNELS"],
 });

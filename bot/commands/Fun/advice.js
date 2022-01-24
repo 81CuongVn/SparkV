@@ -9,7 +9,10 @@ async function execute(bot, message) {
 			const AdviceEmbed = new Discord.MessageEmbed()
 				.setTitle("Here's an advice")
 				.setDescription(response.data.slip.advice)
-				.setFooter(`You got advice #${response.data.slip.id} • ${bot.config.embed.footer}`, bot.user.displayAvatarURL())
+				.setFooter({
+					text: `You got advice #${response.data.slip.id} • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+				})
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 

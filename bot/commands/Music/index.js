@@ -7,7 +7,8 @@ const commands = fs
 
 module.exports = {
 	name: "Music",
-	description: "The power of music - all in a single bot.",
-	emoji: "🎵",
+	description: "The ultimate power of music - for free. Rock on!",
+	emoji: "<:music:934889415648608256>",
+	emojiID: "934889415648608256",
 	commands,
 };

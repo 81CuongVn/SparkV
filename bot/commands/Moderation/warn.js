@@ -27,13 +27,16 @@ async function execute(bot, message, args, command, data) {
 	await memberData.save();
 
 	User.send(`You were warned in **${message.guild.name}**. Reason: ${Reason}`).catch(async err => {
-		await message.channel.send(`${User}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${Reason}.`);
+		await message.replyT(`${User}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${Reason}.`);
 	});
 
 	const WarnEmbed = new MessageEmbed()
 		.setTitle(`Warn Successful!`)
 		.setDescription(`I successfully warned ${User} (${User.id}).`)
-		.setFooter(bot.config.embed.footer, bot.user.displayAvatarURL())
+		.setFooter({
+			text: bot.config.embed.footer,
+			iconURL: bot.user.displayAvatarURL()
+		})
 		.setColor(bot.config.embed.color);
 
 	await message.replyT({
@@ -45,6 +48,6 @@ module.exports = new cmd(execute, {
 	description: `I will warn a user`,
 	dirname: __dirname,
 	aliases: [],
-	usage: `<user> <optional reason>`,
+	usage: `(user) <optional reason>`,
 	perms: ["KICK_MEMBERS"],
 });

@@ -16,5 +16,5 @@ module.exports = new cmd(execute, {
 	description: "Ew!",
 	aliases: ["crap"],
 	dirname: __dirname,
-	usage: `<user | self>`,
+	usage: `(user default: you)`,
 });

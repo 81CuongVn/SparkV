@@ -24,15 +24,13 @@ async function execute(bot, message, args, command, data) {
 	UserMoney.markModified("money.balance");
 	await UserMoney.save();
 
-	await message.replyT(
-		`${bot.config.emojis.success} | You gave ${User} ⏣${bot.functions.formatNumber(args[1])} coins!`,
-	);
+	await message.replyT(`${bot.config.emojis.success} | You gave ${User} ⏣${bot.functions.formatNumber(args[1])} coins!`);
 }
 
 module.exports = new cmd(execute, {
 	description: `Give someone some data.user.money.balance!`,
 	dirname: __dirname,
-	usage: `<user>`,
+	usage: `(user)`,
 	aliases: ["gift"],
 	perms: ["EMBED_LINKS"],
 });

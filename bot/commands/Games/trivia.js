@@ -20,7 +20,7 @@ async function execute(bot, message, args, command, data) {
 			timestamp: true,
 		},
 		difficulty: args[0] || "easy",
-		thinkMessage: "Hmmmmm",
+		thinkMessage: "Loading",
 		winMessage: "It was **{{answer}}**. You gave the correct answer in **{{time}}**.",
 		loseMessage: "Better luck next time! The correct answer was **{{answer}}**.",
 		emojis: {

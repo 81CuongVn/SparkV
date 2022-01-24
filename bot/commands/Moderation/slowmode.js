@@ -29,6 +29,6 @@ module.exports = new cmd(execute, {
 	description: `I will set the channel's slowmode to anything you want.`,
 	dirname: __dirname,
 	aliases: ["slow"],
-	usage: `<user> <reason>`,
+	usage: `(user) <reason>`,
 	perms: ["MANAGE_CHANNELS", "MANAGE_MESSAGES"],
 });

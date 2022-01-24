@@ -23,4 +23,5 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: ["softstop"],
 	perms: ["EMBED_LINKS"],
+	slash: true
 });

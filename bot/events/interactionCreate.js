@@ -4,6 +4,8 @@ module.exports = {
 	once: false,
 	async execute(bot, interaction) {
 		if (interaction.isCommand()) {
+			await interaction.deferReply();
+
 			// Get the command
 			const command = bot.commands.get(interaction.commandName);
 
@@ -36,15 +38,15 @@ module.exports = {
 				command.settings.options = [];
 			}
 
-			for (const arg of command.settings.options) {
-				const gotArg = await interaction.options.get(arg.name);
+			// for (const arg of command.settings.options) {
+			// 	const gotArg = await interaction.options.get(arg.name);
 
-				if (gotArg) {
-					args.push([
-						[arg.name] = gotArg.value
-					]);
-				}
-			}
+			// 	if (gotArg) {
+			// 		args.push([
+			// 			[arg.name] = gotArg.value
+			// 		]);
+			// 	}
+			// }
 
 			bot.StatClient.postCommand(command.settings.name, interaction.user.id);
 

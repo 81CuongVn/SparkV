@@ -157,14 +157,15 @@ module.exports = {
    * @returns {Object} Member. If the member is not found, the value will be null.
    */
 	async GetMember(message, args) {
-		let member = message.mentions.members.first();
+		let member;
+
 		const checkCache = bot.users.cache.get(args.slice(0).join(" "));
 		const checkCache2 = bot.users.cache.get(args[0]);
 		const checkGuildCache = message.guild.members.cache.find(
 			u => u.user.username.toLowerCase() === args.slice(0).join(" ") || u.user.username === args[0],
 		);
 
-		if (message.mentions.members.first()) {
+		if (message?.mentions?.members?.first()) {
 			member = message.mentions.members.first();
 		} else if (message.guild.members.cache.get(args[0])) {
 			member = message.guild.members.cache.get(args[0]);

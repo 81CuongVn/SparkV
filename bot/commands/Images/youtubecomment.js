@@ -26,5 +26,5 @@ module.exports = new cmd(execute, {
 	description: `YouTube comment lol.`,
 	aliases: ["ytcomment", "ytc"],
 	dirname: __dirname,
-	usage: `<user | self> <text>`,
+	usage: `(user default: you) <text>`,
 });

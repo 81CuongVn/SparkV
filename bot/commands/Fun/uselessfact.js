@@ -9,7 +9,10 @@ async function execute(bot, message) {
 			const FunFactEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.success} | Did you know?`)
 				.setDescription(response.data.text)
-				.setFooter(`Fun facts powered by https://uselessfacts.jsph.pl! • ${bot.config.embed.footer}`)
+				.setFooter({
+					text: `Fun facts powered by https://uselessfacts.jsph.pl! • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+				})
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 

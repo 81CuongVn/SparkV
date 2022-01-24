@@ -3,12 +3,16 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	const query = args.join(" ");
+	const query = message?.applicationId ? data.options.get("search").value : args.join(" ");
 
 	if (!query) return await message.replyT(`${bot.config.emojis.error} | Please enter a song URL or query to search!`);
 
 	try {
-		bot.distube.play(message, query);
+		bot.distube.play(message.member.voice.channel, query, {
+			textChannel: message.channel,
+		});
+
+		await message.replyT(`${bot.config.emojis.success} | Now playing: ${query}`);
 	} catch (err) {
 		console.error(err);
 
@@ -22,4 +26,13 @@ module.exports = new cmd(execute, {
 	usage: "<song title or URL>",
 	aliases: ["p"],
 	perms: ["EMBED_LINKS"],
+	slash: true,
+	options: [
+		{
+			type: 3,
+			name: "search",
+			description: "The song URL or song title.",
+			required: true
+		}
+	]
 });

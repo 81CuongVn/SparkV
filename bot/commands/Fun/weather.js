@@ -36,7 +36,10 @@ async function execute(bot, message, args, command, data) {
 				.addField(`**Feels Like**`, `${Current.temperature}°F`, true)
 				.addField(`**Humidity**`, `${Current.humidity}%`, true)
 				.addField(`**Timezone**`, `${Location.timezone} UTC`, true)
-				.setFooter(`Weather forecast for ${Current.observationpoint} • ${bot.config.embed.footer}`)
+				.setFooter({
+					text: `Weather forecast for ${Current.observationpoint} • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+				})
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 

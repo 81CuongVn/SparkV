@@ -47,7 +47,7 @@ module.exports = {
 		if (!botMember.permissionsIn(message.channel).has(Discord.Permissions.FLAGS.SEND_MESSAGES)) return;
 
 		// If the guild is part of the guild blacklist, return.
-		if (bot.config.blacklist.guilds[message.guild.id]) return await message.reply(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
+		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
 		// Cache the member.
 		if (message.guild && !message.member) await message.guild.members.fetch(message.author.id);
@@ -95,7 +95,7 @@ module.exports = {
 			});
 
 			// Check for profanity (curse words)
-			if (data.guild.plugins.automod.removeProfanity === true) {
+			if (data.guild.plugins.automod.removeProfanity === "true") {
 				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
 					const ignoredWords = [`hello`];
 					let cursed = false;
@@ -180,7 +180,7 @@ module.exports = {
 			}
 
 			// Check for links
-			if (data.guild.plugins.automod.removeLinks === true) {
+			if (data.guild.plugins.automod.removeLinks === "true") {
 				if (
 					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) &&
 					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR) &&
@@ -259,7 +259,7 @@ module.exports = {
 			}
 
 			// Check for spam
-			if (data.guild.plugins.automod.removeDuplicateText === true) {
+			if (data.guild.plugins.automod.removeDuplicateText === "true") {
 				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) || !message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
 					if (!message.channel.name.startsWith(`spam`) && !message.channel.name.endsWith(`spam`)) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
@@ -353,24 +353,30 @@ module.exports = {
 			}
 
 			// Leveling!
-			if (data.guild.plugins.leveling.enabled === true) {
+			if (data.guild.plugins.leveling.enabled === "true") {
+				/*
+				Max & Min XP Config
 				let MaxXP = data.guild.plugins.leveling.max;
 				let MinXP = data.guild.plugins.leveling.min;
 
-				if (isNaN(MaxXP)) MaxXP = 25;
+				if (isNaN(MaxXP)) MaxXP = 15;
 				if (isNaN(MinXP)) MinXP = 5;
+				*/
 
-				const RandomXP = Math.floor(Math.random() * MaxXP || 25) + MinXP || 5;
+				const RandomXP = Math.floor(Math.random() * 15) + 5;
 				const HasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, RandomXP);
 
 				if (HasLeveledUp) {
 					const User = await Levels.fetch(message.author.id, message.guild.id);
+					const levelMsg = data.guild.plugins.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
-					await message.replyT(
-						bot.config.responses.LevelUpMessage.toString()
-							.replaceAll(`{author}`, message.author)
-							.replaceAll(`{level}`, bot.functions.formatNumber(User.level)),
-					);
+					if (parseInt(data.guild.plugins.leveling?.channel) && message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling?.channel))) {
+						const channel = message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling.channel));
+
+						await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+					} else {
+						await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+					}
 				}
 			}
 		}
@@ -412,9 +418,12 @@ module.exports = {
 				.setDescription(`Please wait ${Math.ceil((time - Date.now()) / 1000)} more seconds to use that command again.`)
 				.setThumbnail(message.author.avatarURL)
 				.setColor(`#0099ff`)
-				.setFooter(bot.config.embed.footer, bot.user.displayAvatarURL());
+				.setFooter({
+					text: bot.config.embed.footer,
+					iconURL: bot.user.displayAvatarURL()
+				});
 
-			return await message.reply({
+			return await message.replyT({
 				embeds: [cooldownEmbed],
 			});
 		}
@@ -474,17 +483,13 @@ async function chatbot(message, wasMentioned) {
 		)
 			.then(async response => {
 				if (response?.data?.cnt) {
-					if (message.deleted) {
-						return;
-					}
-
 					const APIEmbed = new Discord.MessageEmbed()
 						.setTitle(`SparkV`)
 						.setDescription(response.data.cnt)
-						.setFooter(
-							`Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
-							message.client.user.displayAvatarURL(),
-						)
+						.setFooter({
+							text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
+							iconURL: message.client.user.displayAvatarURL()
+						})
 						.setColor(message.client.config.embed.color);
 
 					message.client.StatClient.postCommand(`ChatBot`, message.author.id);

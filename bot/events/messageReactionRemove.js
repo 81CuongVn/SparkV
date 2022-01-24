@@ -33,7 +33,9 @@ module.exports = {
 				})
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
-				.setFooter(`⭐ ${parseInt(star[1]) + 1} | ${message.id}`)
+				.setFooter({
+					text: `⭐ ${parseInt(star[1]) + 1} | ${message.id}`
+				})
 				.setColor(foundStar.color)
 				.setTimestamp();
 

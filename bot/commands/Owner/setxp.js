@@ -22,6 +22,6 @@ module.exports = new cmd(execute, {
 	description: `Set XP.`,
 	aliases: [],
 	dirname: __dirname,
-	usage: `<user> <ammount>`,
+	usage: `(user) <ammount>`,
 	ownerOnly: true
 });

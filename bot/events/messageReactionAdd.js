@@ -3,8 +3,8 @@ const Discord = require("discord.js");
 module.exports = {
 	once: false,
 	async execute(bot, reaction, user) {
-		if (reaction?.partial) await reaction?.fetch();
-		if (reaction.message?.partial) await reaction?.message?.fetch();
+		if (reaction?.partial) await reaction?.fetch().catch(() => {});
+		if (reaction.message?.partial) await reaction?.message?.fetch().catch(() => {});
 
 		const message = reaction.message;
 
@@ -34,12 +34,15 @@ module.exports = {
 				})
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
-				.setFooter(`⭐ ${parseInt(star[1]) + 1} | ${message.id}`)
+				.setFooter({
+					text: `⭐ ${parseInt(star[1]) + 1} | ${message.id}`
+				})
 				.setColor(foundStar.color)
 				.setTimestamp();
 
 			const starMsg = await channel.messages.fetch(stars.id);
-			await msg.edit({ content: `⭐ **${parseInt(star[1]) + 1}** | ${message.channel}`, embeds: [embed] });
+
+			await msg.edit({ content: `⭐ **${parseInt(star[1]) + 1}** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		} else {
 			const embed = new Discord.MessageEmbed()
 				.setDescription(message.cleanContent || "No content...")
@@ -49,11 +52,13 @@ module.exports = {
 				})
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
-				.setFooter(`⭐ 1 | ${message.id}`)
+				.setFooter({
+					text: `⭐ 1 | ${message.id}`
+				})
 				.setColor("YELLOW")
 				.setTimestamp();
 
-			await channel.send({ content: `⭐ **1** | ${message.channel}`, embeds: [embed] });
+			await channel.send({ content: `⭐ **1** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		}
 	}
 };

@@ -33,10 +33,16 @@ module.exports = async bot => {
 
 			if (song.playlist) {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter({
+						text: `${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`,
+						iconURL: song.user.displayAvatarURL()
+					});
 			} else {
 				NowPlayingEmbed = NowPlayingEmbed
-					.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL());
+					.setFooter({
+						text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
+						iconURL: song.user.displayAvatarURL()
+					});
 			}
 
 			const MusicSelect = new Discord.MessageSelectMenu()
@@ -60,6 +66,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				fetchReply: true
 			});
 
 			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
@@ -87,10 +94,12 @@ module.exports = async bot => {
 			collector.on("end", async interaction => {
 				// Checks if not deleted.
 				if (MusicMessage) {
-					MusicMessage?.update({
-						embeds: [NowPlayingEmbed],
-						components: []
-					});
+					try {
+						MusicMessage?.update({
+							embeds: [NowPlayingEmbed],
+							components: []
+						});
+					} catch (e) { }
 				}
 			});
 		})
@@ -104,7 +113,10 @@ module.exports = async bot => {
 				.addField("`🔁` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
-				.setFooter(`Requested by ${song.user.tag} • ${bot.config.embed.footer}`, song.user.displayAvatarURL())
+				.setFooter({
+					text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
+					iconURL: song.user.displayAvatarURL()
+				})
 				.setTimestamp();
 
 			const MusicSelect = new Discord.MessageSelectMenu()
@@ -128,6 +140,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
 				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				fetchReply: true
 			});
 
 			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
@@ -154,10 +167,12 @@ module.exports = async bot => {
 
 			collector.on("end", async collected => {
 				if (MusicMessage) {
-					MusicMessage?.update({
-						embeds: [SongAddedQueue],
-						components: []
-					});
+					try {
+						MusicMessage?.update({
+							embeds: [SongAddedQueue],
+							components: []
+						});
+					} catch (e) { }
 				}
 			});
 		})
@@ -173,24 +188,22 @@ module.exports = async bot => {
 							song.likes,
 						)}\n👎︱Dislikes: ${bot.functions.formatNumber(
 							song.dislikes,
-						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration
-						}\`\`\``,
+						)}\n▶︱Views: ${bot.functions.formatNumber(song.views)}\n📼︱Duration: ${song.formattedDuration}\`\`\``,
 						inline: true,
 					},
 
 					{
 						name: `🔊︱Audio Settings`,
-						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"
-						}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
+						value: `\`\`\`🔉︱Volume: ${queue.volume}%\n🔁︱Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "❎"}\n🔂︱AutoPlay: ${queue.autoplay ? "✅" : "❎"}\`\`\``,
 						inline: true,
 					},
 				)
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
-				.setFooter(
-					`📼 ${song.user.username} (${song.user.tag}) • ${bot.config.embed.footer}`,
-					bot.user.displayAvatarURL(),
-				)
+				.setFooter({
+					text: `📼 ${song.user.username} (${song.user.tag}) • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL(),
+				})
 				.setTimestamp();
 
 			queue.textChannel.send(SongAddedQueue);

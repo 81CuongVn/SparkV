@@ -12,7 +12,7 @@ async function execute(bot, message) {
 			footer: bot.config.embed.footer,
 			timestamp: true,
 		},
-		thinkMessage: "Hmmmmm",
+		thinkMessage: "Loading",
 		winMessage: "Great job! It was **{{answer}}**. You got it correct in **{{time}}**.",
 		loseMessage: "Awwww. You choose the wrong answer. It was **{{answer}}**.",
 		othersMessage: "Only <@{{author}}> can use the buttons!",

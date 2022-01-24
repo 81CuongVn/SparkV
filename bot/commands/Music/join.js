@@ -15,4 +15,5 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: [],
 	perms: [],
+	slash: true
 });

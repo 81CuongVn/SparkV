@@ -9,15 +9,11 @@ module.exports = {
 	async execute(bot, member) {
 		const data = await database.getGuild(member.guild.id);
 
-		if (!data.plugins.welcome.enabled) {
-			return;
-		}
+		if (data.plugins.welcome.enabled === "false") return;
 
 		const channel = member.guild.channels.cache.find(ch => ch.id === data.plugins.welcome.channel);
 
-		if (!channel) {
-			return;
-		}
+		if (!channel) return;
 
 		const image = await new Canvas.Welcome()
 			.setUsername(member.user.username)
@@ -41,11 +37,9 @@ module.exports = {
 			.replaceAll("{server}", `${member.guild.name}`)
 			.replaceAll("{members}", `${bot.functions.formatNumber(member.guild.memberCount)}`);
 
-		channel
-			.send({
-				content: msg,
-				files: [attachment],
-			})
-			.catch(err => {});
+		channel.send({
+			content: msg,
+			files: [attachment],
+		}).catch(err => {});
 	},
 };

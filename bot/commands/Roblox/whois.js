@@ -8,9 +8,7 @@ async function execute(bot, message, args, command, data) {
 	try {
 		const UserID = await noblox.getIdFromUsername(args[0]);
 
-		if (!UserID) {
-			return await message.replyT(`User lookup canceled. User doesn't exist.`);
-		}
+		if (!UserID) return await message.replyT(`User lookup canceled. User doesn't exist.`);
 
 		await noblox.getPlayerInfo(UserID).then(async PlayerInfo => {
 			const InfoEmbed = new Discord.MessageEmbed()
@@ -22,7 +20,9 @@ async function execute(bot, message, args, command, data) {
 					`https://www.roblox.com/headshot-thumbnail/image?userId=${UserID}&width=420&height=420&format=png`,
 				)
 				.setURL(`https://www.roblox.com/users/${UserID}/profile`)
-				.setFooter(`Username: ${PlayerInfo.username} | UserID: ${UserID} • ${bot.config.embed.footer}`)
+				.setFooter({
+					text: `Username: ${PlayerInfo.username} | UserID: ${UserID} • ${bot.config.embed.footer}`
+				})
 				.setColor(bot.config.embed.color);
 
 			await message.replyT({
@@ -35,7 +35,9 @@ async function execute(bot, message, args, command, data) {
 			.setDescription(
 				"Uh oh! Looks like this user doesn't exist or roblox is down. Check [Roblox Status](https://status.roblox.com/).",
 			)
-			.setFooter(`User not found • ${bot.config.embed.footer}`)
+			.setFooter({
+				text: `User not found • ${bot.config.embed.footer}`
+			})
 			.setThumbnail(
 				"https://media.discordapp.net/files/539579135786352652/641188940983959555/627171202464743434.png",
 			)

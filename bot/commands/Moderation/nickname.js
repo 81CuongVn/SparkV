@@ -34,7 +34,10 @@ async function execute(bot, message, args, command, data) {
 	const VerificationEmbed = new Discord.MessageEmbed()
 		.setTitle(`Convermination Prompt`)
 		.setDescription(`Are you sure you want to do this?`)
-		.setFooter(`Canceling in 60 seconds if no emoji reacted • ${bot.config.embed.footer}`);
+		.setFooter({
+			text: `Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		});
 
 	const VerificationMessage = await await message.replyT({
 		embeds: [VerificationEmbed],
@@ -70,6 +73,6 @@ module.exports = new cmd(execute, {
 	description: `I\'ll change a user\'s nickname to your choice.`,
 	dirname: __dirname,
 	aliases: ["setnick"],
-	usage: `<user> <reason>`,
+	usage: `(user) <reason>`,
 	perms: ["CHANGE_NICKNAME"],
 });

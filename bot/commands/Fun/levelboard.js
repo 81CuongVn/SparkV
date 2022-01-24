@@ -6,9 +6,7 @@ const cmd = require("../../templates/command");
 const Emotes = ["🥇", "🥈", "🥉"];
 
 async function execute(bot, message, args, command, data) {
-	if (data.guild.plugins.leveling.enabled === false) {
-		return await message.reply("Leveling is disabled. Please enable it on the dashboard.");
-	}
+	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 	const RawLeaderboard = await Levels.fetchLeaderboard(message.guild.id, 10);
 	const Leaderboard = await Levels.computeLeaderboard(bot, RawLeaderboard, true);
@@ -20,7 +18,10 @@ async function execute(bot, message, args, command, data) {
 	const LeaderboardEmbed = new Discord.MessageEmbed()
 		.setTitle(`${message.guild.name}'s Level Leaderboard`)
 		.setDescription(Leader.join("\n"))
-		.setFooter(`${bot.user.username} • ${bot.config.embed.footer}`, bot.user.displayAvatarURL())
+		.setFooter({
+			text: `${bot.user.username} • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		})
 		.setColor(bot.config.embed.color);
 
 	await message.replyT({

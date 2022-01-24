@@ -39,9 +39,10 @@ async function replyTranslate(options) {
 	if (typeof options === "string") {
 		const newOptions = {
 			content: options,
+			fetchReply: true,
 			allowedMentions: {
 				repliedUser: false
-			}
+			},
 		};
 
 		options = newOptions;
@@ -50,11 +51,28 @@ async function replyTranslate(options) {
 	if (options.content) {
 		const translation = await translateContent(options.content);
 
-		return this.reply({
-			content: translation,
-			allowedMentions: {
-				repliedUser: false
-			}
-		});
-	} else { return this.reply(options); }
+		if (this?.applicationId) {
+			return this.followUp({
+				content: translation,
+				fetchReply: true,
+				allowedMentions: {
+					repliedUser: false
+				}
+			});
+		} else {
+			return this.reply({
+				content: translation,
+				fetchReply: true,
+				allowedMentions: {
+					repliedUser: false
+				},
+			});
+		}
+	} else {
+		if (this?.applicationId) {
+			return this.followUp(options);
+		}
+
+		return this.reply(options);
+	}
 }

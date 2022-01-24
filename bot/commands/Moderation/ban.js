@@ -41,7 +41,10 @@ async function execute(bot, message, args, command, data) {
 		.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 		.addField(`Moderator/Admin: `, `${message.author.tag}`)
 		.addField(`Reason: `, ReasonForBan)
-		.setFooter(`${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`)
+		.setFooter({
+			text: `${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
@@ -53,7 +56,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: `Is a user bothering you and keep coming back after you kick them? Using this command, they won\'t come back unless they are unbanned.`,
 	dirname: __dirname,
-	usage: `<user> <optional reason>`,
+	usage: `(user) <optional reason>`,
 	aliases: [`pban`],
 	perms: ["BAN_MEMBERS"],
 });

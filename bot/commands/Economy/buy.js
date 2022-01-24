@@ -20,7 +20,7 @@ module.exports = new cmd(
 
 		if (!item.sale) return await message.replyT("This item is not for sale right now.");
 
-		if (data.user.money.balance < item.price) return await message.reply("You don't have enough money to buy this item!");
+		if (data.user.money.balance < item.price) return await message.replyT("You don't have enough money to buy this item!");
 
 		data.user.money.balance -= item.price;
 		data.user.markModified("money.balance");

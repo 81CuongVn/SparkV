@@ -3,26 +3,27 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	let User = await bot.functions.fetchUser(args[0]);
-	let UserData;
+	const User = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
 
-	if (User) {
-		UserData = await bot.database.getUser(User.id);
-	} else {
-		User = message.author;
-		UserData = data.user;
-	}
+	if (!User) return message.replyT("Please mention a valid user to get the balance of.");
+
+	const UserData = await bot.database.getUser(User.user ? User.user.id : User.id);
 
 	const BalanceEmbed = new Discord.MessageEmbed()
-		.setTitle(`**${User.tag}'s Balance**`)
-		.setDescription(`
-			🪙 Wallet: ⏣${bot.functions.formatNumber(UserData.money.balance)}
-			🏦 Bank: ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}
-		`)
+		.setAuthor({
+			name: `**${User.user ? User.user.tag : User.tag}'s Balance**`,
+			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true }) : User.displayAvatarURL({ dynamic: true })
+		})
+		.addField("🪙 Wallet", `⏣${bot.functions.formatNumber(UserData.money.balance)}`, true)
+		.addField("🏦 Bank", ` ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}`, true)
+		.setFooter({
+			text: `${data.guild.prefix}Deposit to protect your money from being robbed! • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
-	await message.reply({
+	await message.replyT({
 		embeds: [BalanceEmbed],
 	});
 }
@@ -31,5 +32,13 @@ module.exports = new cmd(execute, {
 	description: `View your balance.`,
 	dirname: __dirname,
 	aliases: ["bal"],
-	usage: `<optional user>`,
+	usage: "(user default: you)",
+	slash: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to get the balance of.",
+		}
+	]
 });

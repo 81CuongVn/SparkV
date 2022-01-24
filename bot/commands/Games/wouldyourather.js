@@ -12,7 +12,7 @@ async function execute(bot, message, args, command, data) {
 			footer: bot.config.embed.footer,
 			timestamp: true,
 		},
-		thinkMessage: "Hmmmmmm",
+		thinkMessage: "Loading",
 		othersMessage: "Only <@{{author}}> can use the buttons!",
 		buttons: { optionA: "Option A", optionB: "Option B" },
 	});

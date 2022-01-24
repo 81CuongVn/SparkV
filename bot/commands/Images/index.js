@@ -8,6 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Images",
 	description: "Make cool images easily!",
-	emoji: "📷",
+	emoji: "<:images:934907893436788827>",
+	emojiID: "934907893436788827",
 	commands,
 };

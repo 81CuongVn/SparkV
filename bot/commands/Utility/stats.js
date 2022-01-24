@@ -5,47 +5,34 @@ const cmd = require("../../templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const BotMessage = await message.replyT("Fetching Stats...");
-		let footerMessage = `SparkV's Stats • ${bot.config.embed.footer}`;
-
-		if (bot.functions.MSToTime(bot.uptime) === "5 Minutes") footerMessage = "pog you found me lol great job on timing it on exactly 5 minutes";
+		const BotMessage = await message.replyT(`${bot.config.emojis.stats} | Fetching stats...`);
 
 		const UsedMemory = os.totalmem() - os.freemem();
 		const TotalMemory = os.totalmem();
 		const MemoryPersentage = `${((UsedMemory / TotalMemory) * 100).toFixed(2)}%`;
 
-		const LocalPing = new Date().getTime() - message.createdTimestamp;
-		const APIPing = bot.ws.ping;
+		// RamData = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)
 
 		const StatsEmbed = new Discord.MessageEmbed()
-			.setTitle("📊 Stats 📊")
-			.addField("**LATENCY**", `\`\`\`SparkV: ${LocalPing}ms\nAPI: ${APIPing}ms\`\`\``, true)
-			.addField(
-				"**STORAGE**",
-				`\`\`\`Memory: ${(UsedMemory / Math.pow(1024, 3)).toFixed(2)}/${(TotalMemory / Math.pow(1024, 3)).toFixed(
-					2,
-				)} (${MemoryPersentage}) MB\nRAM: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(
-					process.memoryUsage().heapTotal /
-          1024 /
-          1024
-				).toFixed(2)}MB\`\`\``,
-				true,
-			)
-			.addField(
-				"**DATA**",
-				`\`\`\`Uptime: ${bot.functions.MSToTime(bot.uptime)}\nServers: ${bot.functions.formatNumber(
-					await bot.functions.GetServerCount(),
-				)}\nUsers: ${bot.functions.formatNumber(await bot.functions.GetUserCount())}\`\`\``,
-				true,
-			)
-			.setFooter(footerMessage)
+			.setAuthor({
+				name: `SparkV Stats`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
+			.addField(`${bot.config.emojis.stats} **LATENCY**`, `\`\`\`SparkV: ${new Date().getTime() - message.createdTimestamp}ms\nAPI: ${bot.ws.ping}ms\`\`\``, true)
+			.addField(`${bot.config.emojis.memory} **MEMORY**`, `\`\`\`${(UsedMemory / Math.pow(1024, 3)).toFixed(2)}/${(TotalMemory / Math.pow(1024, 3)).toFixed(2)} (${MemoryPersentage}) MB\`\`\``, true)
+			.addField(`${bot.config.emojis.servers} **SERVERS**`, `\`\`\`${bot.functions.formatNumber(await bot.functions.GetServerCount())}\`\`\``, true)
+			.addField(`${bot.config.emojis.player} **USERS**`, `\`\`\`${bot.functions.formatNumber(await bot.functions.GetUserCount())}\`\`\``, true)
+			.addField(`${bot.config.emojis.clock} **UPTIME**`, `\`\`\`${bot.functions.MSToTime(bot.uptime)}\`\`\``, true)
+			.setFooter({
+				text: `SparkV's Stats • ${bot.config.embed.footer}`,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
-		console.log(BotMessage);
 		return await BotMessage.edit({
-			content: "Loading complete!",
-			embeds: [StatsEmbed],
+			content: `${bot.config.emojis.success} Loading complete!`,
+			embeds: [StatsEmbed]
 		});
 	},
 	{
@@ -54,5 +41,6 @@ module.exports = new cmd(
 		usage: "",
 		aliases: ["ping", "pong", "up", "ram", "memory", "uptime", "latency", "data", "storage"],
 		perms: ["EMBED_LINKS"],
+		slash: true
 	},
 );
