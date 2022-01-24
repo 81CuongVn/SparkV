@@ -56,7 +56,7 @@ async function execute(bot, message, args, command, data) {
 		pages.push(NewEmbed);
 	};
 
-	if (data.options.getString("command") || args[0]) {
+	if (data?.options?.getString("command") || args[0]) {
 		const name = message?.applicationId ? data.options.getString("command").toLowerCase() : args[0].toLowerCase();
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 
