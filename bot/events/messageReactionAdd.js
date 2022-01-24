@@ -19,7 +19,7 @@ module.exports = {
 		if (!channel) return;
 
 		const fetchedMessages = await channel.messages.fetch({ limit: 100 });
-		const stars = fetchedMessages.find(m => m.embeds[0].footer.text.startsWith("⭐") && m.embeds[0].footer.text.endsWith(message.id));
+		const stars = fetchedMessages.find(m => m.embeds[0]?.footer?.text.startsWith("⭐") && m.embeds[0]?.footer?.text.endsWith(message.id));
 
 		if (stars) {
 			const star = /^\⭐\s([0-9]{1,3})\s\|\s([0-9]{17,20})/.exec(stars.embeds[0].footer.text);
