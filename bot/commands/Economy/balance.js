@@ -11,7 +11,7 @@ async function execute(bot, message, args, command, data) {
 
 	const BalanceEmbed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: `**${User.user ? User.user.tag : User.tag}'s Balance**`,
+			name: `${User.user ? User.user.tag : User.tag}'s Balance`,
 			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true }) : User.displayAvatarURL({ dynamic: true })
 		})
 		.addField("🪙 Wallet", `⏣${bot.functions.formatNumber(UserData.money.balance)}`, true)
