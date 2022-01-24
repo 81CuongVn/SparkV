@@ -8,7 +8,6 @@ async function execute(bot, message, args, command, data) {
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please mention someone to view their warnings!`);
 
 	if (!data.member.infractionsCount === 0) return await message.replyT("This user doesn't have any infractions!");
-
 	if (data.member.infractionsCount >= 25) return await message.replyT("This user has too many infractions!");
 
 	const infractions = data.member.infractions.map(infraction => `**${infraction.type}** - <t:${~~(infraction.date / 1000)}:R>\n`);
@@ -31,6 +30,6 @@ module.exports = new cmd(execute, {
 	description: `I'll display a user's warnings.`,
 	dirname: __dirname,
 	aliases: ["infractions"],
-	usage: `<user>`,
+	usage: `(user)`,
 	perms: ["KICK_MEMBERS"],
 });

@@ -91,6 +91,6 @@ module.exports = new cmd(execute, {
 	description: `I'll unmute someone who was muted previously.`,
 	dirname: __dirname,
 	aliases: [],
-	usage: `<user> <reason>`,
+	usage: `(user) <reason>`,
 	perms: ["MANAGE_CHANNELS"],
 });

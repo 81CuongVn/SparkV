@@ -30,7 +30,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: `Give someone some data.user.money.balance!`,
 	dirname: __dirname,
-	usage: `<user>`,
+	usage: `(user)`,
 	aliases: ["gift"],
 	perms: ["EMBED_LINKS"],
 });

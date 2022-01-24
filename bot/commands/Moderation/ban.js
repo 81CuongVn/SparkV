@@ -56,7 +56,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: `Is a user bothering you and keep coming back after you kick them? Using this command, they won\'t come back unless they are unbanned.`,
 	dirname: __dirname,
-	usage: `<user> <optional reason>`,
+	usage: `(user) <optional reason>`,
 	aliases: [`pban`],
 	perms: ["BAN_MEMBERS"],
 });

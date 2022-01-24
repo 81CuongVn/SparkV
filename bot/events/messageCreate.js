@@ -355,6 +355,7 @@ module.exports = {
 			// Leveling!
 			if (data.guild.plugins.leveling.enabled === "true") {
 				/*
+				Max & Min XP Config
 				let MaxXP = data.guild.plugins.leveling.max;
 				let MinXP = data.guild.plugins.leveling.min;
 

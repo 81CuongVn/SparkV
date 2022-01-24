@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **139 commands**!
+SparkV's Command List! SparkV contains more than **138 commands**!
 
 ## Config
 
@@ -10,21 +10,21 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 
 ## Economy
 
-| Name          | Description                                                          | Usage                            | Cooldown  |
-| ------------- | -------------------------------------------------------------------- | -------------------------------- | --------- |
-| **balance**   | View your balance.                                                   | (user default: you)              | 2 seconds |
-| **beg**       | Beg for coins.                                                       | {optional user}                  | 2 seconds |
-| **buy**       | Buy an item from the shop.                                           | {item name} (optional: quantity) | 2 seconds |
-| **daily**     | Collect your daily amount of coins!                                  |                                  | 1 seconds |
-| **deposit**   | Deposit your data.user.money.balance into your bank.                 | {all or ammount}                 | 2 seconds |
-| **inventory** | Shows the items you have.                                            |                                  | 2 seconds |
-| **pay**       | Give someone some data.user.money.balance!                           | {user}                           | 2 seconds |
-| **rob**       | why u bully me?                                                      | {user}                           | 2 seconds |
-| **shop**      | Displays the shop!                                                   |                                  | 2 seconds |
-| **slots**     | Don't gamble kids!                                                   | {amount}                         | 2 seconds |
-| **use**       | Use an item in your inventory.                                       |                                  | 2 seconds |
-| **withdraw**  | Withdraw your data.user.money.balance in your bank into your wallet. |                                  | 2 seconds |
-| **work**      | Work for your job and earn some coins.                               |                                  | 2 seconds |
+| Name          | Description                                              | Usage                            | Cooldown  |
+| ------------- | -------------------------------------------------------- | -------------------------------- | --------- |
+| **balance**   | View your balance.                                       | (user default: you)              | 2 seconds |
+| **beg**       | Beg for coins.                                           | {optional user}                  | 2 seconds |
+| **buy**       | Buy an item from the shop.                               | {item name} (optional: quantity) | 2 seconds |
+| **coinflip**  | Bet on a side and flip a coin! (heads/tails)             | (Side)                           | 2 seconds |
+| **daily**     | Collect your daily amount of coins!                      |                                  | 1 seconds |
+| **deposit**   | Deposit your money into your bank.                       | (amount)                         | 2 seconds |
+| **inventory** | Shows the items you have.                                |                                  | 2 seconds |
+| **pay**       | Give someone some data.user.money.balance!               | (user)                           | 2 seconds |
+| **rob**       | Steal somebody's hard earned money.                      | (user)                           | 2 seconds |
+| **shop**      | Displays the shop!                                       |                                  | 2 seconds |
+| **slots**     | Don't gamble kids!                                       | {amount}                         | 2 seconds |
+| **use**       | Use an item in your inventory.                           |                                  | 2 seconds |
+| **withdraw**  | Withdraw any amount of your bank money into your wallet. | (amount)                         | 2 seconds |
 
 ## Fun
 
@@ -34,7 +34,6 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **advice**        | You'll need it.                                                                                                                                  |                   | 2 seconds |
 | **afk**           | This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.          | {optional reason} | 2 seconds |
 | **ascii**         | I will change any text to ascii!                                                                                                                 | {text}            | 2 seconds |
-| **coinflip**      | I have no bias! I swear noob!1!                                                                                                                  |                   | 2 seconds |
 | **levelboard**    | Just a little fun.                                                                                                                               |                   | 2 seconds |
 | **rank**          | View a users rank!                                                                                                                               | {optional user}   | 2 seconds |
 | **reverse**       | I will reverse any text you give me lol.                                                                                                         | {optional user}   | 2 seconds |
@@ -52,7 +51,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **chess**             | Play a game of chess! Requires two people in a VC.                                                   | {username}      | 60 seconds |
 | **connectfour**       | Play a game of ConnectFour with me or mention someone to play with!                                  | {optional user} | 60 seconds |
 | **fasttype**          | Play a game of fast type! This will show you your WPM.                                               |                 | 2 seconds  |
-| **fight**             | Fight another player!                                                                                | {user}          | 2 seconds  |
+| **fight**             | Fight another player!                                                                                | (user)          | 2 seconds  |
 | **fishing**           | Catch some fish! Requires you to join a VC.                                                          |                 | 60 seconds |
 | **hiddenwords**       | Find the hidden words in a sentence.                                                                 |                 | 2 seconds  |
 | **lieswatter**        | Play a game of Lie Swatter! Choose which is the truth, or a lie.                                     |                 | 2 seconds  |
@@ -102,19 +101,19 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 
 | Name         | Description                                                                                                                          | Usage                                                                                          | Cooldown  |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------- |
-| **ban**      | Is a user bothering you and keep coming back after you kick them? Using this command, they won't come back unless they are unbanned. | {user} {optional reason}                                                                       | 2 seconds |
+| **ban**      | Is a user bothering you and keep coming back after you kick them? Using this command, they won't come back unless they are unbanned. | (user) {optional reason}                                                                       | 2 seconds |
 | **clear**    | I'll delete messages for you!                                                                                                        | {number of messages to delete | all} {Optional: Mention a User to only delete the messages of} | 2 seconds |
-| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                                                      | {user} {optional user}                                                                         | 2 seconds |
+| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                                                      | (user) {optional user}                                                                         | 2 seconds |
 | **lock**     | I'll lock the current channel.                                                                                                       |                                                                                                | 2 seconds |
 | **lockdown** | I'll lock the server.                                                                                                                | {on | off}                                                                                     | 2 seconds |
-| **mute**     | I'll mute someone.                                                                                                                   | {user} {reason}                                                                                | 2 seconds |
-| **nickname** | I'll change a user's nickname to your choice.                                                                                        | {user} {reason}                                                                                | 2 seconds |
-| **slowmode** | I will set the channel's slowmode to anything you want.                                                                              | {user} {reason}                                                                                | 2 seconds |
+| **mute**     | I'll mute someone.                                                                                                                   | (user) {reason}                                                                                | 2 seconds |
+| **nickname** | I'll change a user's nickname to your choice.                                                                                        | (user) {reason}                                                                                | 2 seconds |
+| **slowmode** | I will set the channel's slowmode to anything you want.                                                                              | (user) {reason}                                                                                | 2 seconds |
 | **timeout**  | Timeout a user.                                                                                                                      | (user) (optional: reason)                                                                      | 2 seconds |
 | **unlock**   | I'll unlock the current channel.                                                                                                     |                                                                                                | 2 seconds |
-| **unmute**   | I'll unmute someone who was muted previously.                                                                                        | {user} {reason}                                                                                | 2 seconds |
-| **warn**     | I will warn a user                                                                                                                   | {user} {optional reason}                                                                       | 2 seconds |
-| **warnings** | I'll display a user's warnings.                                                                                                      | {user}                                                                                         | 2 seconds |
+| **unmute**   | I'll unmute someone who was muted previously.                                                                                        | (user) {reason}                                                                                | 2 seconds |
+| **warn**     | I will warn a user                                                                                                                   | (user) {optional reason}                                                                       | 2 seconds |
+| **warnings** | I'll display a user's warnings.                                                                                                      | (user)                                                                                         | 2 seconds |
 
 ## Music
 
@@ -141,10 +140,10 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 
 | Name         | Description                    | Usage            | Cooldown  |
 | ------------ | ------------------------------ | ---------------- | --------- |
-| **eval**     | This is an owner only command. | {user}           | 2 seconds |
+| **eval**     | This is an owner only command. | (user)           | 2 seconds |
 | **restart**  | This is an owner only command. | {coins}          | 2 seconds |
-| **setcoins** | Set someone's coins!           | {user} {ammount} | 2 seconds |
-| **setxp**    | Set XP.                        | {user} {ammount} | 2 seconds |
+| **setcoins** | Set someone's coins!           | (user) {ammount} | 2 seconds |
+| **setxp**    | Set XP.                        | (user) {ammount} | 2 seconds |
 
 ## Reddit
 
@@ -184,12 +183,12 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **avatar**     | Get a user's avatar in all sizes and file types!                                               | (optional: @member default: you)           | 2 seconds |
 | **calculator** | Calculate any equation!                                                                        |                                            | 2 seconds |
 | **credits**    | Look at everyone who helped make SparkV!                                                       |                                            | 2 seconds |
-| **dashboard**  | I'll send my dashboard!                                                                        | {user}                                     | 2 seconds |
+| **dashboard**  | I'll send my dashboard!                                                                        | (user)                                     | 2 seconds |
 | **date**       | Gets the current date.                                                                         |                                            | 2 seconds |
 | **decode**     | decode a string that was encoded                                                               | {type} {string}                            | 2 seconds |
 | **donate**     | Donate to help SparkV's developement. Every donation is appreciated!                           |                                            | 2 seconds |
 | **encode**     | encode a string                                                                                | {type} {string}                            | 2 seconds |
-| **help**       | View SparkV's 100+ cmds.                                                                       | {cmd}                                      | 2 seconds |
+| **help**       | View SparkV's 130+ commands.                                                                   | (optional: command)                        | 2 seconds |
 | **invite**     | Displays links.                                                                                |                                            | 2 seconds |
 | **roleid**     | Grab the ID of any role!                                                                       | (@role)                                    | 2 seconds |
 | **rules**      | Follow the rules or else you will be banned from SparkV.                                       |                                            | 2 seconds |
@@ -197,6 +196,6 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **serverinfo** | I will get the current server's info or any server's info by the invite link!                  | (optional: invite default: current server) | 2 seconds |
 | **stats**      | SparkV's stats.                                                                                |                                            | 2 seconds |
 | **userid**     | I will get the ID of the mentioned user. If you don't menion a user, I'll get your ID instead. | (optional: @member default: you)           | 2 seconds |
-| **userinfo**   | See information about a user.                                                                  | {user}                                     | 2 seconds |
+| **userinfo**   | See information about a user.                                                                  | (user)                                     | 2 seconds |
 | **website**    | I'll send my website!                                                                          |                                            | 2 seconds |
 | **zalgo**      | Generate zalgo text.                                                                           | (text)                                     | 2 seconds |

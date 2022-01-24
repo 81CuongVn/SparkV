@@ -20,6 +20,6 @@ module.exports = new cmd(execute, {
 	description: `Set someone's coins!`,
 	aliases: [],
 	dirname: __dirname,
-	usage: `<user> <ammount>`,
+	usage: `(user) <ammount>`,
 	ownerOnly: true
 });

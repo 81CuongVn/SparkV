@@ -40,7 +40,7 @@ module.exports = new cmd(
 	{
 		description: "See information about a user.",
 		dirname: __dirname,
-		usage: "<user>",
+		usage: "(user)",
 		aliases: ["ui"],
 		perms: ["EMBED_LINKS"],
 		slash: true,

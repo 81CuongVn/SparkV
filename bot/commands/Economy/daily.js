@@ -3,15 +3,45 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (86400000 - (Date.now() - data.user.cooldowns.daily) > 0) return await message.replyT(`Whoa there buddy. I'm not made of money! You've already claimed your daily reward today. Check back <t:${~~((data.user.cooldowns.daily / 1000) + 86400)}:R>.`);
+	if (43200000 - (Date.now() - data.user.cooldowns.daily) > 0) {
+		const Embed = new Discord.MessageEmbed()
+			.setAuthor({
+				name: message.user.tag,
+				iconURL: message.user.displayAvatarURL({ dynamic: true })
+			})
+			.setTitle("Daily Reward")
+			.setDescription(`You've already claimed your daily reward today.\nCheck back <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:R> at <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:t>.`)
+			.addField("Want More?", "Get an extra ⏣25,000 by voting [here](https://top.gg/bot/884525761694933073/vote)!", true)
+			.setColor("RED")
+			.setTimestamp();
 
-	data.user.money.balance = parseInt(data.user.money.balance) + 15000;
+		return await message.replyT({
+			embeds: [Embed],
+		});
+	}
+
+	data.user.money.balance = (parseInt(data.user.money.balance) + 15000) * data.user.money.multiplier;
 	data.user.cooldowns.daily = Date.now();
+
 	data.user.markModified("money.balance");
 	data.user.markModified("cooldowns.daily");
+
 	await data.user.save();
 
-	await message.replyT(`${bot.config.emojis.success} | You've just earned ⏣${bot.functions.formatNumber(15000)}!${data.user.money.multiplier > 1 ? ` Oh, it seems you also have a **${data.user.money.multiplier}**x coin multiplier! (+⏣${bot.functions.formatNumber(15000 * data.user.money.multiplier)} gained in total).` : ""}`);
+	const Embed = new Discord.MessageEmbed()
+		.setAuthor({
+			name: message.user.tag,
+			iconURL: message.user.displayAvatarURL({ dynamic: true })
+		})
+		.setTitle("Daily Reward")
+		.setDescription(`You obtained your daily reward of ⏣15,000 coins!${data.user.money.multiplier > 1 ? ` Wow, it also seems you also have a **${data.user.money.multiplier}x** coin multiplier!` : ""}\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
+		.addField("Want More?", "Get an extra ⏣25,000 by voting [here](https://top.gg/bot/884525761694933073/vote)!", true)
+		.setColor("GREEN")
+		.setTimestamp();
+
+	await message.replyT({
+		embeds: [Embed]
+	});
 }
 
 module.exports = new cmd(execute, {

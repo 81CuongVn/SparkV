@@ -39,7 +39,7 @@ async function execute(bot, message) {
 
 module.exports = new cmd(execute, {
 	description: "Fight another player!",
-	usage: "<user>",
+	usage: "(user)",
 	dirname: __dirname,
 	aliases: [],
 	perms: ["EMBED_LINKS"],

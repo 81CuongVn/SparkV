@@ -5,9 +5,7 @@ const canvacord = require(`canvacord`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (data.guild.plugins.leveling.enabled === false) {
-		return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
-	}
+	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 	let Target = await bot.functions.fetchUser(args[0]) || message.author;
 	Target = await message.guild.members.fetch(Target);
@@ -15,9 +13,7 @@ async function execute(bot, message, args, command, data) {
 	const User = await Levels.fetch(Target.user.id, message.guild.id, true);
 	const NeededXP = Levels.xpFor(parseInt(User.level) + 1);
 
-	if (!User) {
-		return await message.replyT(`${bot.config.emojis.error} | This user hasn't earned any XP yet!`);
-	}
+	if (!User) return await message.replyT(`${bot.config.emojis.error} | This user hasn't earned any XP yet!`);
 
 	const Rank = new canvacord.Rank()
 		.setUsername(Target.user.username)

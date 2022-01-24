@@ -2,7 +2,7 @@
   "ownerID": "571811686617710592",
   "ID": "884525761694933073",
   "prefix": "^",
-  "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://dashboard.sparkv.tk/discord/callback&permissions=4231916662",
+  "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=4231916662",
   "support": {
     "id": 763803059876397056,
     "invite": "https://discord.gg/PPtzT8Mu3h"
@@ -30,7 +30,6 @@
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
-    "LevelUpMessage": "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!",
     "AFKMessage": "Hey dude, **{userMentioned}** is currently AFK. Their reason: {reason}",
     "AFKWelcomeMessage": "Hey bud, welcome back! I removed your AFK status.",
     "InvalidPermisions": {
