@@ -16,10 +16,6 @@ async function execute(bot, message, args, command, data) {
 		})
 		.addField("🪙 Wallet", `⏣${bot.functions.formatNumber(UserData.money.balance)}`, true)
 		.addField("🏦 Bank", ` ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}`, true)
-		.setFooter({
-			text: `${data.guild.prefix}Deposit to protect your money from being robbed! • ${bot.config.embed.footer}`,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
