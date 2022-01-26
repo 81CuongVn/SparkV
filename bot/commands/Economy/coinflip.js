@@ -14,20 +14,20 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setTitle(`You flipped ${Side}.`)
+		.setTitle(`You flipped ${Replies[ReplyText]}.`)
 		.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true);
 
 	if (Side === Replies[ReplyText]) {
 		data.user.money.balance += (Bet * 2);
 
 		Embed
-			.setDescription(`Congrats, you won **⏣${await bot.functions.formatNumber(Bet * 2)}** coins!\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
+			.setDescription(`Congrats, you won **⏣${await bot.functions.formatNumber(Bet * 2)}** coins!\nBecause you bet on ${Side}, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
 			.setColor("GREEN");
 	} else {
 		data.user.money.balance -= Bet;
 
 		Embed
-			.setDescription(`Aww, you lost **⏣${await bot.functions.formatNumber(Bet)}** coins.\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
+			.setDescription(`Aww, you bet on ${Side} however your coin landed on ${Replies[ReplyText]}. You lost **⏣${await bot.functions.formatNumber(Bet)}** coins.\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
 			.setColor("RED");
 	}
 
