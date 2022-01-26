@@ -1,4 +1,7 @@
 const logger = require("../../modules/logger");
+const Discord = require("discord.js");
+
+const cooldowns = [];
 
 module.exports = {
 	once: false,
@@ -11,6 +14,30 @@ module.exports = {
 
 			if (!command) return;
 
+			// Cooldown System
+			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
+
+			const userCooldown = cooldowns[interaction.user.id];
+			const time = userCooldown[command.settings.name] || 0;
+
+			if (time && (time > Date.now())) {
+				const cooldownEmbed = new Discord.MessageEmbed()
+					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
+					.setDescription(`Please wait ${Math.ceil((time - Date.now()) / 1000)} more seconds to use that command again.`)
+					.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
+					.setColor(`#0099ff`)
+					.setFooter({
+						text: bot.config.embed.footer,
+						iconURL: bot.user.displayAvatarURL()
+					});
+
+				return await message.replyT({
+					embeds: [cooldownEmbed],
+				});
+			}
+
+			cooldowns[interaction.user.id][command.settings.name] = Date.now() + command.settings.cooldown;
+
 			const data = {};
 
 			// Get the Guild
@@ -18,10 +45,10 @@ module.exports = {
 				const guild = await bot.database.getGuild(interaction.guild.id);
 
 				data.guild = guild;
+				data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
+
 				interaction.guild.data = data.guild;
 			}
-
-			if (interaction.guild) data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
 
 			// User data
 			data.user = await bot.database.getUser(interaction.user.id);
@@ -34,11 +61,9 @@ module.exports = {
 			// Get the command's args
 			const args = [];
 
-			if (!command.settings.options) {
-				command.settings.options = [];
-			}
+			if (!command.settings.options) command.settings.options = [];
 
-			// for (const arg of command.settings.options) {
+			// For (const arg of command.settings.options) {
 			// 	const gotArg = await interaction.options.get(arg.name);
 
 			// 	if (gotArg) {
@@ -55,8 +80,18 @@ module.exports = {
 			} catch (error) {
 				console.error(error);
 
-				await interaction.reply({
-					content: "❌ | There was an error while executing this command!",
+				const ErrorEmbed = new Discord.MessageEmbed()
+					.setAuthor({
+						name: interaction.user.tag,
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+					})
+					.setTitle("Uh oh!")
+					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+					.addField("**Error**", `\`\`\`${error.message}\`\`\``)
+					.setColor("RED");
+
+				await interaction.followUp({
+					embeds: [ErrorEmbed],
 					ephemeral: true,
 				});
 			}
