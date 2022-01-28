@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **138 commands**!
+SparkV's Command List! SparkV contains more than **139 commands**!
 
 ## Config
 
@@ -10,21 +10,22 @@ SparkV's Command List! SparkV contains more than **138 commands**!
 
 ## Economy
 
-| Name          | Description                                              | Usage                            | Cooldown  |
-| ------------- | -------------------------------------------------------- | -------------------------------- | --------- |
-| **balance**   | View your balance.                                       | (user default: you)              | 2 seconds |
-| **beg**       | Beg for coins.                                           | {optional user}                  | 2 seconds |
-| **buy**       | Buy an item from the shop.                               | {item name} (optional: quantity) | 2 seconds |
-| **coinflip**  | Bet on a side and flip a coin! (heads/tails)             | (Side)                           | 2 seconds |
-| **daily**     | Collect your daily amount of coins!                      |                                  | 1 seconds |
-| **deposit**   | Deposit your money into your bank.                       | (amount)                         | 2 seconds |
-| **inventory** | Shows the items you have.                                |                                  | 2 seconds |
-| **pay**       | Give someone some data.user.money.balance!               | (user)                           | 2 seconds |
-| **rob**       | Steal somebody's hard earned money.                      | (user)                           | 2 seconds |
-| **shop**      | Displays the shop!                                       |                                  | 2 seconds |
-| **slots**     | Don't gamble kids!                                       | {amount}                         | 2 seconds |
-| **use**       | Use an item in your inventory.                           |                                  | 2 seconds |
-| **withdraw**  | Withdraw any amount of your bank money into your wallet. | (amount)                         | 2 seconds |
+| Name           | Description                                              | Usage                            | Cooldown  |
+| -------------- | -------------------------------------------------------- | -------------------------------- | --------- |
+| **balance**    | View your balance.                                       | (user default: you)              | 2 seconds |
+| **beg**        | Beg for coins.                                           | {optional user}                  | 2 seconds |
+| **buy**        | Buy an item from the shop.                               | {item name} (optional: quantity) | 2 seconds |
+| **coinflip**   | Bet on a side and flip a coin! (heads/tails)             | (Side)                           | 2 seconds |
+| **daily**      | Collect your daily amount of coins!                      |                                  | 1 seconds |
+| **deposit**    | Deposit your money into your bank.                       | (amount)                         | 2 seconds |
+| **inventory**  | Shows the items you have.                                |                                  | 2 seconds |
+| **moneyboard** | Just a little fun.                                       |                                  | 2 seconds |
+| **pay**        | Give someone some data.user.money.balance!               | (user)                           | 2 seconds |
+| **rob**        | Steal somebody's hard earned money.                      | (user)                           | 2 seconds |
+| **shop**       | Displays the shop!                                       |                                  | 2 seconds |
+| **slots**      | Don't gamble kids!                                       | {amount}                         | 2 seconds |
+| **use**        | Use an item in your inventory.                           |                                  | 2 seconds |
+| **withdraw**   | Withdraw any amount of your bank money into your wallet. | (amount)                         | 2 seconds |
 
 ## Fun
 
@@ -76,26 +77,26 @@ SparkV's Command List! SparkV contains more than **138 commands**!
 
 ## Images
 
-| Name               | Description                     | Usage                      | Cooldown  |
-| ------------------ | ------------------------------- | -------------------------- | --------- |
-| **affect**         | Yes it does noob                | {optional user}            | 2 seconds |
-| **bed**            | Why do you hate me, brother?    | {optional user}            | 2 seconds |
-| **changemymind**   | Change my mind.                 | {text}                     | 2 seconds |
-| **color**          | Hex to color.                   | {hex}                      | 2 seconds |
-| **facepalm**       | bruh                            | {optional user}            | 2 seconds |
-| **invert**         | bruh                            | {optional user}            | 2 seconds |
-| **jail**           | Haha get in jail noob           | {optional user}            | 2 seconds |
-| **ohno**           | OH NO HE'S STUPID!              | {text}                     | 2 seconds |
-| **opinion**        | lol                             | {text}                     | 2 seconds |
-| **rainbow**        | wow bro are you gae?            | {optional user}            | 2 seconds |
-| **rip**            | Rest In Peace.                  | {optional user}            | 2 seconds |
-| **shit**           | Ew!                             | (user default: you)        | 2 seconds |
-| **slap**           | SLAP SLAP SLAP!                 | (user default: you)        | 2 seconds |
-| **trash**          | wow it trash                    | (user default: you)        | 2 seconds |
-| **trigger**        | wow you mad bro                 | (user default: you)        | 2 seconds |
-| **wanted**         | Wanted sign.                    | (user default: you)        | 2 seconds |
-| **wasted**         | Dang man, that's a life wasted. | (user default: you)        | 2 seconds |
-| **youtubecomment** | YouTube comment lol.            | (user default: you) {text} | 2 seconds |
+| Name               | Description                               | Usage                                                       | Cooldown  |
+| ------------------ | ----------------------------------------- | ----------------------------------------------------------- | --------- |
+| **affect**         | This won't affect my child at all!        | (user: optional default: you)                               | 3 seconds |
+| **bed**            | Why do you hate me, brother?              | (user: optional default: you) (user: optional default: you) | 3 seconds |
+| **changemymind**   | The "Change my mind" meme.                | (text)                                                      | 3 seconds |
+| **color**          | Hex to color.                             | {hex}                                                       | 2 seconds |
+| **facepalm**       | bruh                                      | (user: optional default: you)                               | 3 seconds |
+| **invert**         | Invert the colors on somebody's avatar.   | (user: optional default: you)                               | 3 seconds |
+| **jail**           | Show someone's avatar in jail.            | (user: optional default: you)                               | 3 seconds |
+| **ohno**           | OH NO! HE'S STUPID!                       | (text)                                                      | 3 seconds |
+| **opinion**        | lol                                       | {text}                                                      | 2 seconds |
+| **rainbow**        | wow you gae (DISCLAIMER: This is a joke.) | (user: optional default: you)                               | 3 seconds |
+| **rip**            | Rest In Peace.                            | (user: optional default: you)                               | 3 seconds |
+| **shit**           | Dammit! I stept in shit!!                 | (user: optional default: you)                               | 3 seconds |
+| **slap**           | Damn. That's a hard slap!                 | (user: optional default: you) (user: optional default: you) | 3 seconds |
+| **trash**          | Compaire someone to trash.                | (user: optional default: you)                               | 3 seconds |
+| **trigger**        | wow you mad bro                           | (user: optional default: you)                               | 3 seconds |
+| **wanted**         | Create a wanted poster.                   | (user: optional default: you)                               | 3 seconds |
+| **wasted**         | W A S T E D                               | (user: optional default: you)                               | 3 seconds |
+| **youtubecomment** | YouTube comment lol.                      | (user default: you) {text}                                  | 2 seconds |
 
 ## Moderation
 
@@ -142,7 +143,7 @@ SparkV's Command List! SparkV contains more than **138 commands**!
 | ------------ | ------------------------------ | ---------------- | --------- |
 | **eval**     | This is an owner only command. | (user)           | 2 seconds |
 | **restart**  | This is an owner only command. | {coins}          | 2 seconds |
-| **setcoins** | Set someone's coins!           | (user) {ammount} | 2 seconds |
+| **setcoins** | Set someone's coins!           | (user) (ammount) | 2 seconds |
 | **setxp**    | Set XP.                        | (user) {ammount} | 2 seconds |
 
 ## Reddit

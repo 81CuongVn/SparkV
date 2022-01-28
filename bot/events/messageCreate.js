@@ -23,6 +23,15 @@ function deleteMessages(bot, matches) {
 	});
 }
 
+// Timeout user
+function timeoutUser(message, data) {
+	if (message.member.isCommunicationDisabled()) return;
+
+	message.member.timeout(10 * data.member.infractionsCount, `User was placed on timeout for ${(10 * data.member.infractionsCount) * 1000}.`)
+		.then(async () => await message.replyT(`You've been **MUTED** for ${(10 * data.member.infractionsCount) * 1000} seconds for getting **${data.member.infractionsCount}** warning(s).`))
+		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
+}
+
 module.exports = {
 	once: false,
 	async execute(bot, message) {
@@ -123,58 +132,38 @@ module.exports = {
 						data.member.markModified("infractions");
 
 						message.delete().catch(err => { });
-						message.replyT(
-							`🔨 | ${message.author}, please stop cursing. If you curse again, you'll be muted. | You have **${data.member.infractionsCount}** warning(s).`,
-						);
+						message.replyT(`🔨 | ${message.author}, please stop cursing. If you continue, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
-						if (data.member.infractionsCount === 12) {
-							await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
+						timeoutUser(message, data);
 
-							try {
-								message.member.ban({
-									reason:
-										"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-								});
-							} catch (err) {
-								return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-							}
-						}
+						// If (data.member.infractionsCount === 12) {
+						// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
 
-						if (data.member.infractionsCount === 6) {
-							message.member
-								.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-								.catch(err => { });
-							await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
+						// 	try {
+						// 		message.member.ban({
+						// 			reason:
+						// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
+						// 		});
+						// 	} catch (err) {
+						// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
+						// 	}
+						// }
 
-							try {
-								message.member.kick({
-									reason:
-										"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-								});
-							} catch (err) {
-								return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-							}
-						}
+						// if (data.member.infractionsCount === 6) {
+						// 	message.member
+						// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
+						// 		.catch(err => { });
+						// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
 
-						if (data.member.infractionsCount === 3) {
-							const mutedRole = message.guild.roles.cache.find(
-								role => role.name.toLowerCase().includes("muted") || role.name.toLowerCase().includes("mute"),
-							);
-
-							if (!mutedRole) {
-								await message.replyT("Unable to find the muted role.");
-							} else {
-								message.member.roles.add(mutedRole);
-
-								setTimeout(() => {
-									message.member.roles.remove(mutedRole);
-								}, 300 * 1000);
-							}
-
-							await message.replyT(
-								`You've been muted for getting **${data.member.infractionsCount}** warning(s). You'll be unmuted in 5 minutes.`,
-							);
-						}
+						// 	try {
+						// 		message.member.kick({
+						// 			reason:
+						// 				"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
+						// 		});
+						// 	} catch (err) {
+						// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
+						// 	}
+						// }
 					}
 				}
 			}
@@ -203,58 +192,38 @@ module.exports = {
 							.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
 					}
 
-					message.replyT(
-						`🔨 | ${message.author}, you cannot send links! | You have **${data.member.infractionsCount}** warning(s).`,
-					);
+					message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
-					if (data.member.infractionsCount === 12) {
-						await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
+					timeoutUser(message, data);
 
-						try {
-							message.member.ban({
-								reason:
-									"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-							});
-						} catch (err) {
-							return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-						}
-					}
+					// If (data.member.infractionsCount === 12) {
+					// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
 
-					if (data.member.infractionsCount === 6) {
-						message.member
-							.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-							.catch(err => { });
-						await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
+					// 	try {
+					// 		message.member.ban({
+					// 			reason:
+					// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
+					// 		});
+					// 	} catch (err) {
+					// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
+					// 	}
+					// }
 
-						try {
-							message.member.kick({
-								reason:
-									"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-							});
-						} catch (err) {
-							return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-						}
-					}
+					// if (data.member.infractionsCount === 6) {
+					// 	message.member
+					// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
+					// 		.catch(err => { });
+					// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
 
-					if (data.member.infractionsCount === 3) {
-						const mutedRole = message.guild.roles.cache.find(
-							role => role.name.toLowerCase().includes("muted") || role.name.toLowerCase().includes("mute"),
-						);
-
-						if (!mutedRole) {
-							await message.replyT("Unable to find the muted role.");
-						} else {
-							message.member.roles.add(mutedRole);
-
-							setTimeout(() => {
-								message.member.roles.remove(mutedRole);
-							}, 300 * 1000);
-						}
-
-						await message.replyT(
-							`You've been muted for getting **${data.member.infractionsCount}** warning(s). You'll be unmuted in 5 minutes.`,
-						);
-					}
+					// 	try {
+					// 		message.member.kick({
+					// 			reason:
+					// 				"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
+					// 		});
+					// 	} catch (err) {
+					// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
+					// 	}
+					// }
 				}
 			}
 
@@ -281,7 +250,7 @@ module.exports = {
 
 						if (!foundMatches) return;
 
-						const matches = foundMatches.filter(msg => msg.sendTimestamp > Date.now() - 5500);
+						const matches = foundMatches.filter(msg => msg.sendTimestamp > Date.now() - 6500);
 
 						if (matches.length >= 5) {
 							++data.member.infractionsCount;
@@ -294,59 +263,59 @@ module.exports = {
 							data.member.markModified("infractions");
 							await data.member.save();
 
-							message.replyT(
-								`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`,
-							);
+							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
-							if (data.member.infractionsCount === 12) {
-								deleteMessages(bot, matches);
-								await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
+							timeoutUser(message, data);
 
-								try {
-									message.member.ban({
-										reason:
-											"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-									});
-								} catch (err) {
-									return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-								}
-							}
+							// If (data.member.infractionsCount === 12) {
+							// 	deleteMessages(bot, matches);
+							// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
 
-							if (data.member.infractionsCount === 6) {
-								deleteMessages(bot, matches);
-								message.member
-									.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-									.catch(err => { });
-								await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
+							// 	try {
+							// 		message.member.ban({
+							// 			reason:
+							// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
+							// 		});
+							// 	} catch (err) {
+							// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
+							// 	}
+							// }
 
-								try {
-									message.member.kick({
-										reason:
-											"Continued to spam after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-									});
-								} catch (err) {
-									return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-								}
-							}
+							// if (data.member.infractionsCount === 6) {
+							// 	deleteMessages(bot, matches);
+							// 	message.member
+							// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
+							// 		.catch(err => { });
+							// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
 
-							if (data.member.infractionsCount === 3) {
-								deleteMessages(bot, matches);
-								const mutedRole = message.guild.roles.cache.find(
-									role => role.name.toLowerCase().includes("muted") || role.name.toLowerCase().includes("mute"),
-								);
+							// 	try {
+							// 		message.member.kick({
+							// 			reason:
+							// 				"Continued to spam after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
+							// 		});
+							// 	} catch (err) {
+							// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
+							// 	}
+							// }
 
-								if (!mutedRole) {
-									await message.replyT("Unable to find the muted role.");
-								} else {
-									message.member.roles.add(mutedRole);
+							// if (data.member.infractionsCount === 3) {
+							// 	deleteMessages(bot, matches);
+							// 	const mutedRole = message.guild.roles.cache.find(
+							// 		role => role.name.toLowerCase().includes("muted") || role.name.toLowerCase().includes("mute"),
+							// 	);
 
-									setTimeout(() => {
-										message.member.roles.remove(mutedRole);
-									}, 300 * 1000);
-								}
+							// 	if (!mutedRole) {
+							// 		await message.replyT("Unable to find the muted role.");
+							// 	} else {
+							// 		message.member.roles.add(mutedRole);
 
-								await message.replyT(`You've been muted for getting **${data.member.infractionsCount}** warning(s).`);
-							}
+							// 		setTimeout(() => {
+							// 			message.member.roles.remove(mutedRole);
+							// 		}, 300 * 1000);
+							// 	}
+
+							// 	await message.replyT(`You've been muted for getting **${data.member.infractionsCount}** warning(s).`);
+							// }
 						}
 					}
 				}
@@ -386,12 +355,8 @@ module.exports = {
 
 		if (!prefix) {
 			if (message.mentions.has(bot.user)) {
-				if (data.guild.plugins.chatbot === "mention") {
-					return chatbot(message, true);
-				}
-			} else if (data.guild.plugins.chatbot === "message") {
-				return chatbot(message, false);
-			}
+				if (data.guild.plugins.chatbot === "mention") return chatbot(message, true);
+			} else if (data.guild.plugins.chatbot === "message") { return chatbot(message, false); }
 
 			return;
 		}
@@ -473,35 +438,48 @@ async function chatbot(message, wasMentioned) {
 		SlicedMessage = message.content.slice(21);
 	}
 
-	try {
-		await fetch.get(
-			`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(
-				process.env.CHAT_KEY,
-			)}&uid=${encodeURIComponent(message.author.id)}&msg=${encodeURIComponent(
-				wasMentioned === true ? SlicedMessage : message,
-			)}`,
-		)
-			.then(async response => {
-				if (response?.data?.cnt) {
-					const APIEmbed = new Discord.MessageEmbed()
-						.setTitle(`SparkV`)
-						.setDescription(response.data.cnt)
-						.setFooter({
-							text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
-							iconURL: message.client.user.displayAvatarURL()
-						})
-						.setColor(message.client.config.embed.color);
+	await fetch.get(
+		`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(
+			process.env.CHAT_KEY,
+		)}&uid=${encodeURIComponent(message.author.id)}&msg=${encodeURIComponent(
+			wasMentioned === true ? SlicedMessage : message,
+		)}`,
+	)
+		.then(async response => {
+			const APIEmbed = new Discord.MessageEmbed();
 
-					message.client.StatClient.postCommand(`ChatBot`, message.author.id);
+			if (response?.data?.cnt) {
+				APIEmbed
+					.setAuthor({
+						name: message.author.tag,
+						iconURL: message.author.displayAvatarURL({ dynamic: true })
+					})
+					.setTitle("SparkV")
+					.setDescription(response.data.cnt)
+					.setFooter({
+						text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
+						iconURL: message.client.user.displayAvatarURL()
+					})
+					.setColor(message.client.config.embed.color);
+			} else {
+				const APIEmbed = new Discord.MessageEmbed()
+					.setAuthor({
+						name: message.author.tag,
+						iconURL: message.author.displayAvatarURL({ dynamic: true })
+					})
+					.setTitle("SparkV - ERROR!")
+					.setDescription("Sorry, SparkV is unable to process your message. Please try again later.")
+					.setFooter({
+						text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
+						iconURL: message.client.user.displayAvatarURL()
+					})
+					.setColor("RED");
+			}
 
-					await message.replyT({
-						embeds: [APIEmbed],
-					});
-				} else {
-					return console.error(`Failed to get message from Chat bot. Response: ${response.data}`);
-				}
+			message.client.StatClient.postCommand(`ChatBot`, message.author.id);
+
+			await message.replyT({
+				embeds: [APIEmbed],
 			});
-	} catch (err) {
-		return console.error(`Failed to get message from Chat bot. ${err}`);
-	}
+		});
 }
