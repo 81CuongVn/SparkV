@@ -5,7 +5,7 @@ const NewCommand = require("./command");
 
 module.exports = class ModCommand {
 	constructor(sett) {
-		this.settings = new NewCommand(null, Object.assign({ cooldown: 2.5 * 1000 }, sett)).settings;
+		this.settings = new NewCommand(null, Object.assign({ cooldown: 2.5 * 1000, slash: true }, sett)).settings;
 	}
 
 	async run(bot, message, args, command, data) {
