@@ -7,8 +7,8 @@ async function execute(bot, message, args, command, data) {
 
 	if (data.user.money.bank < amount) return await message.replyT(`${bot.config.emojis.error} | You don't have that much data.user.money.balance in your bank!`);
 
-	data.user.money.balance += amount;
-	data.user.money.bank -= amount;
+	data.user.money.balance = parseInt(data.user.money.balance) + amount;
+	data.user.money.bank = parseInt(data.user.money.balance) - amount;
 
 	data.user.markModified("money.balance");
 	data.user.markModified("money.bank");
