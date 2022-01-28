@@ -25,6 +25,8 @@ module.exports = {
 			const ServerRemovedEmbed = new Discord.MessageEmbed()
 				.setTitle("🔽︱Guild Removed")
 				.setDescription(`SparkV left **${guild.name} (${guild.id})**.`)
+				.setThumbnail(guild.iconURL())
+				.setImage(guild.bannerURL())
 				.setColor("RED");
 
 			Logger.send({

@@ -5,8 +5,6 @@ module.exports = {
 	async execute(bot, guild) {
 		if (!guild.available) return;
 
-		await bot.LoadSlashCommands();
-
 		console.log(`SparkV has been added to ${guild.name} (Id: ${guild.id}).`);
 
 		bot.user.setPresence({
@@ -23,6 +21,8 @@ module.exports = {
 			const ServerAddedEmbed = new Discord.MessageEmbed()
 				.setTitle("🔼︱Guild Added")
 				.setDescription(`SparkV has joined **${guild.name} (${guild.id})**!`)
+				.setThumbnail(guild.iconURL())
+				.setImage(guild.bannerURL())
 				.setColor("GREEN");
 
 			Logger.send({
