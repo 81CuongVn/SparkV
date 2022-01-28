@@ -1,25 +1,13 @@
 const Discord = require("discord.js");
-const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args) {
-	const User = (await bot.functions.fetchUser(args[0])) || message.author;
-	const User2 = (await bot.functions.fetchUser(args[1])) || message.author;
-
-	const Image = await canvacord.Canvas.bed(
-		User.displayAvatarURL({ format: "png" }),
-		User2.displayAvatarURL({ format: "png" }),
-	);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "bed.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
+module.exports = new cmd({
 	description: "Why do you hate me, brother?",
-	aliases: ["underbed"],
 	dirname: __dirname,
-	usage: `<optional user>`,
+	aliases: ["underbed"],
+	usage: `(user: optional default: you) (user: optional default: you)`,
+	effect: "bed",
+	user2: true,
+	useAuthorFirst: true,
 });

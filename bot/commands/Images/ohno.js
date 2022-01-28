@@ -1,21 +1,12 @@
 const Discord = require("discord.js");
-const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args, command, data) {
-	args = args.join(" ");
-
-	const Image = await canvacord.Canvas.ohno(args);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "jail.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
-	description: "OH NO HE'S STUPID!",
-	aliases: ["stupid"],
+module.exports = new cmd({
+	description: "OH NO! HE'S STUPID!",
 	dirname: __dirname,
-	usage: `<text>`,
+	aliases: ["studpid"],
+	usage: `(text)`,
+	effect: "ohno",
+	useText: true
 });

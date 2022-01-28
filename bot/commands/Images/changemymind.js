@@ -1,25 +1,12 @@
-const Discord = require(`discord.js`);
-const canvacord = require(`canvacord`);
+const Discord = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args, command, data) {
-	if (!args || !args[0]) {
-		return await message.replyT(`Please provide text.`);
-	}
-
-	args = args.join(` `);
-
-	const Image = await canvacord.Canvas.changemymind(args);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "affect.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
-	description: `Change my mind.`,
-	aliases: ["cmm"],
+module.exports = new cmd({
+	description: "The \"Change my mind\" meme.",
 	dirname: __dirname,
-	usage: `<text>`,
+	aliases: ["cmm"],
+	usage: `(text)`,
+	effect: "changemymind",
+	useText: true
 });

@@ -1,23 +1,13 @@
 const Discord = require("discord.js");
-const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args) {
-	const User2 = await bot.functions.fetchUser(args[0]) || message.author;
-	const Image = await canvacord.Canvas.slap(
-		message.author.displayAvatarURL({ format: "png" }),
-		User2.displayAvatarURL({ format: "png" }),
-	);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "slap.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
-	description: "SLAP SLAP SLAP!",
-	aliases: ["punch"],
+module.exports = new cmd({
+	description: "Damn. That's a hard slap!",
 	dirname: __dirname,
-	usage: `(user default: you)`,
+	aliases: ["attack"],
+	usage: `(user: optional default: you) (user: optional default: you)`,
+	effect: "slap",
+	user2: true,
+	useAuthorFirst: true,
 });

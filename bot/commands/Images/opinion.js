@@ -24,3 +24,16 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: `<text>`,
 });
+
+// const Discord = require("discord.js");
+
+// const cmd = require("../../templates/imageCommand");
+
+// module.exports = new cmd({
+// 	description: "Very bad opinion.",
+// 	dirname: __dirname,
+// 	aliases: ["nofact"],
+// 	usage: `(text)`,
+// 	effect: "opinion",
+// 	useTextAndUser: true
+// });

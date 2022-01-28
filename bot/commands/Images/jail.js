@@ -1,20 +1,11 @@
 const Discord = require("discord.js");
-const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args, command, data) {
-	const User = await bot.functions.fetchUser(args[0]) || message.author;
-	const Image = await canvacord.Canvas.jail(User.displayAvatarURL({ format: "png" }), true);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "jail.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
-	description: "Haha get in jail noob",
-	aliases: ["lockup"],
+module.exports = new cmd({
+	description: "Show someone's avatar in jail.",
 	dirname: __dirname,
-	usage: `<optional user>`,
+	aliases: ["flipcolor"],
+	usage: `(user: optional default: you)`,
+	effect: "jail",
 });
