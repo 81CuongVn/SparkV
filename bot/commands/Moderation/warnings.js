@@ -3,17 +3,20 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const User = message.mentions.members.first() || message.author;
+	const User = message?.applicationId ? (data.options.getMember("user") || message.user) : (message.mentions.members.first() || message.author);
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please mention someone to view their warnings!`);
 
 	if (!data.member.infractionsCount === 0) return await message.replyT("This user doesn't have any infractions!");
-	if (data.member.infractionsCount >= 25) return await message.replyT("This user has too many infractions!");
+	if (data.member.infractionsCount >= 100) return await message.replyT("This user has over 100 infractions!");
 
 	const infractions = data.member.infractions.map(infraction => `**${infraction.type}** - <t:${~~(infraction.date / 1000)}:R>\n`);
 
 	const warningsEmbed = new Discord.MessageEmbed()
-		.setTitle(`${User.user ? User.user.tag : User.tag}'s infractions`)
+		.setAuthor({
+			name: `${User.user.tag}'s Warnings`,
+			iconURL: User.user.displayAvatarURL({ format: "png" })
+		})
 		.setDescription(`${User} has **${data.member.infractionsCount}** warning${data.member.infractionsCount > 1 ? "s" : ""}.\n\n${infractions}`)
 		.setFooter({
 			text: bot.config.embed.footer,
@@ -32,4 +35,12 @@ module.exports = new cmd(execute, {
 	aliases: ["infractions"],
 	usage: `(user)`,
 	perms: ["KICK_MEMBERS"],
+	slash: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to display the warnings of.",
+		}
+	]
 });
