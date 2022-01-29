@@ -23,12 +23,16 @@ module.exports = {
 				.setTitle("🔼︱Guild Added")
 				.setDescription(`SparkV has joined **${guild.name} (${guild.id})**!`)
 				.addField("<:player:933552618272350249> **Members**", `${bot.functions.formatNumber(guild.memberCount)}`, true)
-				.addField("🔗 **Vanity URL**", `https://discord.gg/${guild.vanityURLCode}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
-				.setURL(`https://discord.gg/${guild.vanityURLCode}`)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
 				.setColor("GREEN");
+
+			if (guild.vanityURLCode) {
+				ServerAddedEmbed
+					.setURL(`https://discord.gg/${guild.vanityURLCode}`)
+					.addField("🔗 **Vanity URL**", `https://discord.gg/${guild.vanityURLCode}`, true);
+			}
 
 			if (Owner) {
 				ServerAddedEmbed.setAuthor({
