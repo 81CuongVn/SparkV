@@ -2,7 +2,7 @@
   "ownerID": "571811686617710592",
   "ID": "884525761694933073",
   "prefix": "^",
-  "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=4231916662",
+  "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=276962339958",
   "support": {
     "id": 763803059876397056,
     "invite": "https://discord.gg/PPtzT8Mu3h"
@@ -13,7 +13,7 @@
   },
   "embed": {
     "color": "#1fa9ff",
-    "footer": "If you encounter any issues/ have suggestions, join our server! discord.gg/PPtzT8Mu3h"
+    "footer": "If you encounter any issues/have suggestions, join our server! discord.gg/PPtzT8Mu3h"
   },
   "emojis": {
     "success": "<a:Check:819934065025220668>",
