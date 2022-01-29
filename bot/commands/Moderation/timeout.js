@@ -9,8 +9,8 @@ async function execute(bot, interaction, args, command, data) {
 	const reason = data.options.getString("reason");
 
 	if (user.isCommunicationDisabled()) return interaction.replyT("That user is already in timeout!");
-	if (user.id === interaction.member.id) return interaction.replyTT(`${bot.config.emojis.error} | You cannot timeout yourself.`);
-	if (user.user.bot) return await interaction.replyTT(`You cannot timeout a bot lmfao.`);
+	if (user.id === interaction.member.id) return interaction.replyT(`${bot.config.emojis.error} | You cannot timeout yourself.`);
+	if (user.user.bot) return await interaction.replyT(`You cannot timeout a bot lmfao.`);
 
 	if (!time) return interaction.replyT("The time provided was invalid.");
 
