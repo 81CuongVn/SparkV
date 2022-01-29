@@ -3,13 +3,13 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const amount = data.options.getNumber("money").toString();
+	const amount = data.options.getNumber("money");
 
 	if (data.user.money.balance < amount) return await message.replyT(`${bot.config.emojis.error} | You don't have that money.`);
 	if (data.user.money.bankMax < amount) return await message.replyT(`${bot.config.emojis.error} | You don't have enough bank space to hold ⏣${amount}!`);
 
-	data.user.money.balance = parseInt(data.user.money.balance) - amount;
-	data.user.money.bank = parseInt(data.user.money.balance) + amount;
+	data.user.money.balance -= amount;
+	data.user.money.bank += amount;
 
 	data.user.markModified("money.balance");
 	data.user.markModified("money.bank");
