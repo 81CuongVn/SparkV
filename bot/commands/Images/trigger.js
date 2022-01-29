@@ -8,4 +8,5 @@ module.exports = new cmd({
 	aliases: ["mad"],
 	usage: `(user: optional default: you)`,
 	effect: "trigger",
+	type: "gif"
 });

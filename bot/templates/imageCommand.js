@@ -54,7 +54,7 @@ module.exports = class ModCommand {
 			if (this.settings?.user2 === true && !this.settings.useText) Two = (await bot.functions.fetchUser(this.settings?.useAuthorFirst === true ? (args[1] ? args[1] : args[0]) : message.author) || message.author).displayAvatarURL({ format: "png" });
 
 			const GeneratedImage = await canvacord.Canvas[this.settings.effect](One, Two);
-			const Image = new Discord.MessageAttachment(GeneratedImage, `${this.settings.effect}.png`);
+			const Image = new Discord.MessageAttachment(GeneratedImage, `${this.settings.effect}.${this.settings?.type || "png"}`);
 
 			const ImageEmbed = new Discord.MessageEmbed()
 				.setAuthor({
@@ -62,7 +62,7 @@ module.exports = class ModCommand {
 					iconURL: message.author.displayAvatarURL({ format: "png" })
 				})
 				.setTitle("Image Creation Successful!")
-				.setImage(`attachment://${this.settings.effect}.png`)
+				.setImage(`attachment://${this.settings.effect}.${this.settings?.type || "png"}`)
 				.addField("Download Link", `[Click Here](${Image.proxyURL})`)
 				.setFooter({
 					text: bot.config.embed.footer,
