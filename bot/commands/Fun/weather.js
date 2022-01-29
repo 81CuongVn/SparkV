@@ -4,9 +4,7 @@ const Weather = require(`weather-js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (!args) {
-		return await message.replyT(`${bot.config.emojis.error} | Please specify a location!`);
-	}
+	if (!args) return await message.replyT(`${bot.config.emojis.error} | Please specify a location!`);
 
 	args = args.join(` `);
 
@@ -16,13 +14,8 @@ async function execute(bot, message, args, command, data) {
 			degreeType: `F`,
 		},
 		async (error, result) => {
-			if (error) {
-				return await message.replyT(error);
-			}
-
-			if (result === undefined || result.length === 0) {
-				return await message.replyT(`${bot.config.emojis.error} | Invalid location!`);
-			}
+			if (error) return await message.replyT(error);
+			if (result === undefined || result.length === 0) return await message.replyT(`${bot.config.emojis.error} | Invalid location!`);
 
 			const Current = result[0].current;
 			const Location = result[0].location;
@@ -51,13 +44,10 @@ async function execute(bot, message, args, command, data) {
 }
 
 exports.config = {
-	name: `Weather`,
 	description: `Checks for todays weather forcast in the location specified.`,
 	aliases: [],
-	usage: `<contry>`,
-	category: `😃Fun😃`,
+	usage: `(contry)`,
 	bot_permissions: [`SEND_MESSAGES`, `EMBED_LINKS`, `VIEW_CHANNEL`, `ADD_REACTIONS`],
 	member_permissions: [],
-	enabled: true,
 	cooldown: 5,
 };
