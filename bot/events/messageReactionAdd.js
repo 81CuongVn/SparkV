@@ -53,12 +53,12 @@ module.exports = {
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
 				.setFooter({
-					text: `⭐ 1 | ${message.id}`
+					text: `⭐ 2 | ${message.id}`
 				})
 				.setColor("YELLOW")
 				.setTimestamp();
 
-			await channel.send({ content: `⭐ **1** | ${message.channel}`, embeds: [embed] }).catch(() => {});
+			await channel.send({ content: `⭐ **2** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		}
 	}
 };
