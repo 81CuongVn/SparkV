@@ -12,7 +12,6 @@ async function execute(bot, message, args, command, data) {
 	if (data.user.money.balance < 500) return await message.replyT(`${bot.config.emojis.error} | Bruh you cannot rob someone unless you have over ⏣500 coins.`);
 	if (UserBalance.money.balance <= 0) return await message.replyT(`${bot.config.emojis.error} | Bruh they have no coins leave them alone you noob!`);
 	if ((message?.applicationId ? message.user.id : message.author.id) === User.id) return await message.replyT(`${bot.config.emojis.error} | Why do you want to rob yourself lol.`);
-	if (User.id === bot.config.ownerID) return await message.replyT(`${bot.config.emojis.error} | This user is protected! You can buy a protection shield from being robbed in the shop.`);
 	if (User.user.bot) return await message.replyT(`${bot.config.emojis.error} | You cannot rob bots.`);
 	if (UserBalance.money.balance < 0) return await message.replyT(`${bot.config.emojis.error} | This user is in **DEBT**! LOL!! HOW ON EARTH DID THAT HAPPEN LMFAOOOOO!!! Anyways, contact support and we'll reset your balance. :)`);
 
@@ -92,6 +91,7 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	perms: ["EMBED_LINKS"],
 	slash: true,
+	slashOnly: true,
 	options: [
 		{
 			type: 6,

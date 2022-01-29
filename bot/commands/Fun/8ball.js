@@ -24,19 +24,15 @@ const Replies = [
 	`very doubtful`,
 ];
 
-async function execute(bot, message, args, command, data) {
-	if (!args || !args[0]) {
-		return await message.replyT(`Please provide a question to ask 8ball.`);
-	}
+module.exports = new cmd(async (bot, message, args, command, data) => {
+	if (!args || !args[0]) return await message.replyT(`Please provide a question to ask 8ball.`);
 
-	const ReplyText = Math.floor(Math.random() * Replies.length + 0);
-
-	return await message.replyT(Replies[ReplyText]);
-}
-
-module.exports = new cmd(execute, {
+	return await message.replyT(Replies[Math.floor(Math.random() * Replies.length + 0)]);
+}, {
 	description: `Just a little fun.`,
 	dirname: __dirname,
 	aliases: ["ball"],
-	usage: `<question>`,
+	usage: `(question)`,
+	slash: true,
+	slashOnly: true
 });
