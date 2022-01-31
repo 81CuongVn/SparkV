@@ -73,9 +73,9 @@ module.exports = {
 			// 	}
 			// }
 
-			if (commandfile.settings.enabled === false) return await interaction.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
-			if (commandfile.settings.guildOnly && !message.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
-			if (commandfile.settings.ownerOnly && message.user.id !== bot.user.ownerID) return await interaction.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
+			if (command.settings.enabled === false) return await interaction.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
+			if (command.settings.guildOnly && !message.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
+			if (command.settings.ownerOnly && message.user.id !== bot.user.ownerID) return await interaction.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
 
 			bot.StatClient.postCommand(command.settings.name, interaction.user.id);
 
