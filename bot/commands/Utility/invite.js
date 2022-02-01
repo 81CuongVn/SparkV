@@ -7,7 +7,7 @@ module.exports = new cmd(
 		const InvitesEmbend = new Discord.MessageEmbed()
 			.setTitle("Invites")
 			.setDescription(`The following are links for SparkV!`)
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
+			.setThumbnail(message?.applicationId ? message.user.displayAvatarURL({ dynamic: true, format: "gif" }) : message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
 			.addField("**Support Server**", `[Click Here](${bot.config.support.invite})`, true)
 			.addField("**Bot Invite**", `[Click Here](${bot.config.bot_invite})`, true)
 			.setFooter({
