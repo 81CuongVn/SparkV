@@ -15,21 +15,10 @@ async function execute(bot, message, args, command, data) {
 	const Selections = [];
 	const pages = [];
 
-	const CreateSelection = async (message, Category) => {
-		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
-
-		Selections.push({
-			label: `${Category.name} [${Category.commands.length}]`,
-			description: Category.description,
-			value: Category.name,
-			emoji: Category.emoji ? Category.emoji : null,
-		});
-	};
-
-	const CreateCmdPage = async (bot, message, Category) => {
+	bot.categories.map(cat => {
 		const commands = [];
 		bot.commands
-			.filter(command => command.settings.enabled && command.category === Category.name)
+			.filter(command => command.settings.enabled && command.category === cat.name)
 			.map(command => commands.push({
 				name: `\`${command.settings?.slashOnly === true ? "/" : data.guild.prefix}${command.settings.name} ${command.settings.usage}\``,
 				value: command.settings.description,
@@ -38,12 +27,12 @@ async function execute(bot, message, args, command, data) {
 
 		const user = message.applicationId ? message.user : message.author;
 
-		if (Category.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
+		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
-				name: `${Category.emojiID ? "" : Category.emoji}SparkV ${Category.name}`,
-				iconURL: `https://cdn.discordapp.com/emojis/${Category.emojiID}.webp?size=56&quality=lossless`
+				name: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
+				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
 			})
 			.addFields(commands)
 			.setFooter({
@@ -54,39 +43,7 @@ async function execute(bot, message, args, command, data) {
 			.setTimestamp();
 
 		pages.push(NewEmbed);
-	};
-
-	if (data?.options?.getString("command") || args[0]) {
-		const name = message?.applicationId ? data.options.getString("command").toLowerCase() : args[0].toLowerCase();
-		const cmd = bot.commands.get(name) || bot.aliases.get(name);
-
-		if (!cmd) {
-			return await message.replyT({
-				content: await message.translate("The cmd you requested could not be found."),
-				ephemeral: true
-			});
-		}
-
-		const cmdHelpEmbed = new MessageEmbed()
-			.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
-			.setDescription(await message.translate(cmd.settings.description))
-			.addField(await message.translate("Category"), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
-			.addField(await message.translate("Aliases"), cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``, true)
-			.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
-			.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
-			.setFooter({
-				text: await message.translate(`${prefix}Help to get a list of all cmds • ${bot.config.embed.footer}`),
-				iconURL: bot.user.displayAvatarURL()
-			})
-			.setColor(bot.config.embed.color);
-
-		return await message.replyT({
-			embeds: [cmdHelpEmbed],
-			ephemeral: true
-		});
-	}
-
-	bot.categories.map(cat => CreateSelection(message, cat));
+	});
 
 	const categories = [];
 	bot.categories.map(cat => categories.push({
@@ -94,6 +51,77 @@ async function execute(bot, message, args, command, data) {
 		value: cat.description,
 		inline: true
 	}));
+
+	const InviteButton = new MessageButton()
+		.setURL(bot.config.bot_invite)
+		.setLabel("Invite")
+		.setStyle("LINK");
+
+	const SupportButton = new MessageButton()
+		.setURL(bot.config.support.invite)
+		.setLabel(await message.translate("Support Invite"))
+		.setStyle("LINK");
+
+	const VoteButton = new MessageButton()
+		.setURL("https://top.gg/bot/884525761694933073")
+		.setLabel(await message.translate("Vote"))
+		.setStyle("LINK");
+
+	if (data?.options?.getString("search") || args[0]) {
+		const name = message?.applicationId ? data.options.getString("search").toString().toLowerCase() : args[0].toString().toLowerCase();
+		const cmd = bot.commands.get(name) || bot.aliases.get(name);
+		const category = bot.categories.get(name.charAt(0).toUpperCase() + name.slice(1));
+
+		let embed = new MessageEmbed();
+
+		if (cmd) {
+			embed
+				.setAuthor({
+					name: message?.applicationId ? message.user.tag : message.author.tag,
+					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
+				})
+				.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
+				.setDescription(await message.translate(cmd.settings.description))
+				.addField(await message.translate("Category"), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
+				.addField(await message.translate("Aliases"), cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``, true)
+				.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
+				.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
+				.setFooter({
+					text: await message.translate(`${prefix}Help to get a list of all cmds • ${bot.config.embed.footer}`),
+					iconURL: bot.user.displayAvatarURL()
+				})
+				.setColor(bot.config.embed.color);
+		} else if (category) {
+			embed = pages.filter(p => p.author.name.includes(category.name))[0];
+		} else if (!cmd && !category) {
+			embed
+				.setAuthor({
+					name: message?.applicationId ? message.user.tag : message.author.tag,
+					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
+				})
+				.setTitle("Uh oh!")
+				.setDescription("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**")
+				.setColor("RED");
+		}
+
+		return await message.replyT({
+			embeds: [embed],
+			components: [
+				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
+			]
+		});
+	}
+
+	bot.categories.map(cat => async (message, Category) => {
+		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
+
+		Selections.push({
+			label: `${cat.name} [${cat.commands.length}]`,
+			description: cat.description,
+			value: cat.name,
+			emoji: cat.emoji ? cat.emoji : null,
+		});
+	});
 
 	let PageNumber = 0;
 	const NewEmbed = new MessageEmbed()
@@ -138,23 +166,6 @@ async function execute(bot, message, args, command, data) {
 		.setCustomId("SelectHelpMenu")
 		.setPlaceholder(await message.translate("Select a category to view it's cmds."))
 		.addOptions(Selections);
-
-	const InviteButton = new MessageButton()
-		.setURL(bot.config.bot_invite)
-		.setLabel("Invite")
-		.setStyle("LINK");
-
-	const SupportButton = new MessageButton()
-		.setURL(bot.config.support.invite)
-		.setLabel(await message.translate("Support Invite"))
-		.setStyle("LINK");
-
-	const VoteButton = new MessageButton()
-		.setURL("https://top.gg/bot/884525761694933073")
-		.setLabel(await message.translate("Vote"))
-		.setStyle("LINK");
-
-	bot.categories.map(cat => CreateCmdPage(bot, message, cat));
 
 	const helpMessage = await message.replyT({
 		embeds: [
@@ -244,37 +255,45 @@ async function execute(bot, message, args, command, data) {
 			}
 		}
 
-		interaction.update({
-			embeds: [
-				pages[PageNumber].setFooter({
-					text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
-				})
-			],
-		});
+		try {
+			interaction.update({
+				embeds: [
+					pages[PageNumber].setFooter({
+						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
+					})
+				],
+			});
+		} catch (err) {
+			// Page deleted.
+		}
 	});
 
 	collector.on("end", async () => {
-		await helpMessage.edit({
-			embeds: [
-				NewEmbed.setTitle(await message.translate("Help Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
-			],
-			components: []
-		});
+		try {
+			await helpMessage?.edit({
+				embeds: [
+					NewEmbed.setTitle(await message.translate("Help Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
+				],
+				components: []
+			});
+		} catch (err) {
+			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
+		}
 	});
 }
 
 module.exports = new cmd(execute, {
 	description: `View SparkV's 130+ commands.`,
 	aliases: [`cmds`, `commands`, "vote"],
-	usage: `(optional: command)`,
+	usage: `(optional: search)`,
 	perms: ["EMBED_LINKS"],
 	dirname: __dirname,
 	slash: true,
 	options: [
 		{
 			type: 3,
-			name: "command",
-			description: "gives details about a certain cmd. Leave this option empty to send the whole cmd list."
+			name: "search",
+			description: "Gives details about a certain cmd/category. Leave this option empty to send the whole cmd list."
 		}
 	]
 });
