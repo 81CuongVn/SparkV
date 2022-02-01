@@ -19,7 +19,7 @@ async function execute(bot, message, args, command, data) {
 		.setUsername(Target.user.username)
 		.setDiscriminator(Target.user.discriminator)
 		.setAvatar(Target.user.displayAvatarURL({ dynamic: false, format: "png" }))
-		.setStatus(Target.presence?.status)
+		.setStatus(Target?.presence?.status || "offline")
 		.setRank(User.position)
 		.setLevel(User.level || 0)
 		.setCurrentXP(User.xp || 0)
