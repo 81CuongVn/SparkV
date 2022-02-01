@@ -22,10 +22,14 @@ module.exports = {
 
 			if (time && (time > Date.now())) {
 				const cooldownEmbed = new Discord.MessageEmbed()
-					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
-					.setDescription(`Please wait ${Math.ceil((time - Date.now()) / 1000)} more seconds to use that command again.`)
+					.setAuthor({
+						name: interaction.user.tag,
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+					})
+					.setTitle(`${bot.config.emojis.error} | Whoa there!`)
+					.setDescription(`Please wait **${Math.ceil((time - Date.now()) / 1000)}** more seconds to use that command again.`)
 					.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-					.setColor(`#0099ff`)
+					.setColor("RED")
 					.setFooter({
 						text: bot.config.embed.footer,
 						iconURL: bot.user.displayAvatarURL()
