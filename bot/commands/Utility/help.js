@@ -112,7 +112,7 @@ async function execute(bot, message, args, command, data) {
 		});
 	}
 
-	bot.categories.map(cat => async (message, Category) => {
+	bot.categories.map(cat => {
 		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		Selections.push({
