@@ -101,7 +101,7 @@ module.exports = async bot => {
 
 				if (!queue) return interaction.replyT("There is no music playing.");
 
-				const Embed = new Discord.MessageEmbed()
+				const embed = new Discord.MessageEmbed()
 					.setAuthor({
 						name: song.user.username,
 						iconURL: song.user.displayAvatarURL({ dynamic: true })
@@ -150,7 +150,7 @@ module.exports = async bot => {
 				}
 
 				interaction.replyT({
-					embeds: [Embed],
+					embeds: [embed],
 				});
 			});
 
@@ -211,7 +211,7 @@ module.exports = async bot => {
 
 				if (!queue) return interaction.replyT("There is no music playing.");
 
-				const Embed = new Discord.MessageEmbed()
+				const embed = new Discord.MessageEmbed()
 					.setAuthor({
 						name: song.user.username,
 						iconURL: song.user.displayAvatarURL({ dynamic: true })
@@ -260,7 +260,7 @@ module.exports = async bot => {
 				}
 
 				interaction.replyT({
-					embeds: [Embed],
+					embeds: [embed],
 				});
 			});
 
