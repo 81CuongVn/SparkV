@@ -7,14 +7,21 @@ async function execute(bot, message, args, command, data) {
 
 	if (!queue) return message.replyT(`${bot.config.emojis.error} | There is nothing in the queue right now!`);
 
-	try {
-		const song = queue.skip();
+	queue.skip();
 
-		await message.replyT(`${bot.config.emojis.error} | Successfully skipped! Now playing **${song.title}**.`);
-	} catch (err) {
-		console.error(err);
-		message.replyT(`${bot.config.emojis.error} | An error occurred while skipping!`);
-	}
+	const embed = new Discord.MessageEmbed()
+		.setAuthor({
+			name: User.user ? User.user.tag : User.tag,
+			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true }) : User.displayAvatarURL({ dynamic: true })
+		})
+		.setTitle(`${bot.config.emojis.error} | Skipped!`)
+		.setDescription(`Skiped to the next song.`)
+		.setFooter(bot.config.embed.footer)
+		.setColor("RED");
+
+	await message.replyT({
+		embeds: [embed]
+	});
 }
 
 module.exports = new cmd(execute, {
