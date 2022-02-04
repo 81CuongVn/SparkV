@@ -88,7 +88,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
 				components: [
-					new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)
+					new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton, StopButton)
 				],
 				fetchReply: true
 			});
@@ -199,7 +199,7 @@ module.exports = async bot => {
 
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
-				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
+				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton, StopButton)],
 				fetchReply: true
 			});
 
