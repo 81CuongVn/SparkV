@@ -93,7 +93,7 @@ module.exports = async bot => {
 				fetchReply: true
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ time: 300 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 			collector.on("collect", async interaction => {
 				await interaction.deferReply();
 
@@ -203,7 +203,7 @@ module.exports = async bot => {
 				fetchReply: true
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ time: 300 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 			collector.on("collect", async interaction => {
 				await interaction.deferReply();
 
