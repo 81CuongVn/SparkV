@@ -4,8 +4,8 @@ const axios = require("axios");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (args && args[0]) {
-		let invite = message?.applicationId ? data.options.get("invite").value : args[0];
+	if (data.options.getString("invite")) {
+		let invite = message?.applicationId ? data.options.getString("invite") : args[0];
 
 		invite = invite.match(/(?:https?:\/\/)?(?:\w+\.)?discord(?:(?:app)?\.com\/invite|\.gg)\/([A-Za-z0-9-]+)/);
 
