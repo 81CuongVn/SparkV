@@ -80,6 +80,11 @@ module.exports = async bot => {
 				.setCustomId("TP")
 				.setStyle("PRIMARY");
 
+			const StopButton = new Discord.MessageButton()
+				.setEmoji("⏹️")
+				.setCustomId("stop")
+				.setStyle("DANGER");
+
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
 				components: [
@@ -96,6 +101,13 @@ module.exports = async bot => {
 
 				if (!queue) return interaction.replyT("There is no music playing.");
 
+				const Embed = new Discord.MessageEmbed()
+					.setAuthor({
+						name: song.user.username,
+						iconURL: song.user.displayAvatarURL({ dynamic: true })
+					})
+					.setFooter(bot.config.embed.footer);
+
 				if (interaction.customId === "loop") {
 					const loopModes = [
 						0,
@@ -108,21 +120,37 @@ module.exports = async bot => {
 
 					queue.setRepeatMode(nextLoopMode);
 
-					interaction.replyT(`${bot.config.emojis.music} | Looping is now ${loopMode}.`);
+					embed
+						.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)
+						.setDescription(`Looping is now ${loopMode}`)
+						.setColor(bot.config.embed.color);
 				} else if (interaction.customId === "TP") {
 					if (queue.paused) {
 						queue.resume();
 
-						return await interaction.replyT(`${bot.config.emojis.music} | Successfully resumed the music!`);
-					}
+						embed
+							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
+							.setDescription(`Resumed ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+							.setColor("GREEN");
+					} else {
+						queue.pause();
 
-					queue.pause();
-					await interaction.replyT(`${bot.config.emojis.music} | Successfully paused the music!`);
+						embed
+							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
+							.setDescription(`Paused ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+							.setColor("RED");
+					}
+				} else if (interaction.customId === "stop") {
+					queue.stop();
+
+					embed
+						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
+						.setDescription(`Stopped playing ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+						.setColor("RED");
 				}
 
-				MusicMessage.edit({
-					embeds: [NowPlayingEmbed],
-					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
+				interaction.replyT({
+					embeds: [Embed],
 				});
 			});
 
@@ -154,19 +182,24 @@ module.exports = async bot => {
 				})
 				.setTimestamp();
 
-			const LoopButton = new Discord.MessageButton()
-				.setEmoji("🔁")
-				.setCustomId("loop")
-				.setStyle("PRIMARY");
-
 			const TogglePlayingButton = new Discord.MessageButton()
 				.setEmoji("⏯")
 				.setCustomId("TP")
 				.setStyle("PRIMARY");
 
+			const LoopButton = new Discord.MessageButton()
+				.setEmoji("🔁")
+				.setCustomId("loop")
+				.setStyle("PRIMARY");
+
+			const StopButton = new Discord.MessageButton()
+				.setEmoji("⏹️")
+				.setCustomId("stop")
+				.setStyle("DANGER");
+
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
-				components: [new Discord.MessageActionRow().addComponents(LoopButton)],
+				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
 				fetchReply: true
 			});
 
@@ -177,6 +210,13 @@ module.exports = async bot => {
 				const queue = bot.distube.getQueue(interaction);
 
 				if (!queue) return interaction.replyT("There is no music playing.");
+
+				const Embed = new Discord.MessageEmbed()
+					.setAuthor({
+						name: song.user.username,
+						iconURL: song.user.displayAvatarURL({ dynamic: true })
+					})
+					.setFooter(bot.config.embed.footer);
 
 				if (interaction.customId === "loop") {
 					const loopModes = [
@@ -190,21 +230,37 @@ module.exports = async bot => {
 
 					queue.setRepeatMode(nextLoopMode);
 
-					interaction.replyT(`${bot.config.emojis.music} | Looping is now ${loopMode}.`);
+					embed
+						.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)
+						.setDescription(`Looping is now ${loopMode}`)
+						.setColor(bot.config.embed.color);
 				} else if (interaction.customId === "TP") {
 					if (queue.paused) {
 						queue.resume();
 
-						return await interaction.replyT(`${bot.config.emojis.music} | Successfully resumed the music!`);
-					}
+						embed
+							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
+							.setDescription(`Resumed ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+							.setColor("GREEN");
+					} else {
+						queue.pause();
 
-					queue.pause();
-					await interaction.replyT(`${bot.config.emojis.music} | Successfully paused the music!`);
+						embed
+							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
+							.setDescription(`Paused ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+							.setColor("RED");
+					}
+				} else if (interaction.customId === "stop") {
+					queue.stop();
+
+					embed
+						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
+						.setDescription(`Stopped playing ${song.playlist?.name || song.name} by ${song.uploader.name}.`)
+						.setColor("RED");
 				}
 
-				MusicMessage.edit({
-					embeds: [NowPlayingEmbed],
-					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
+				interaction.replyT({
+					embeds: [Embed],
 				});
 			});
 
@@ -255,7 +311,7 @@ module.exports = async bot => {
 			try {
 				const Pages = [];
 
-				const CreatePage = Song => {
+				results.map(Song => {
 					const NewEmbed = new Discord.MessageEmbed()
 						.setTitle(`${Song.formattedDuration} | ${Song.name}`)
 						.setColor(bot.config.embed.color)
@@ -263,9 +319,7 @@ module.exports = async bot => {
 						.setImage(Song.thumbnail);
 
 					Pages.push(NewEmbed);
-				};
-
-				results.map(song => CreatePage(song));
+				});
 
 				EasyPages(
 					message,
