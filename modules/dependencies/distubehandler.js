@@ -1,10 +1,21 @@
 const Discord = require("discord.js");
+const { DisTube } = require("distube");
+const { SpotifyPlugin } = require("@distube/spotify");
+const { SoundCloudPlugin } = require("@distube/soundcloud");
 const EasyPages = require("discordeasypages");
 
 module.exports = async bot => {
-	const { DisTube, Queue } = require("distube");
-	const { SpotifyPlugin } = require("@distube/spotify");
-	const { SoundCloudPlugin } = require("@distube/soundcloud");
+	const spotifySettings = {
+		parallel: true,
+		emitEventsAfterFetching: true,
+	};
+
+	if (process.env.SPOTIFYID && process.env.SPOTIFYSECRET) {
+		spotifySettings.api = {
+			clientId: process.env.SPOTIFYID,
+			clientSecret: process.env.SPOTIFYSECRET,
+		};
+	}
 
 	bot.distube = new DisTube(bot, {
 		searchSongs: 0,
@@ -12,7 +23,21 @@ module.exports = async bot => {
 		leaveOnFinish: true,
 		leaveOnEmpty: true,
 		leaveOnStop: true,
-		plugins: [new SpotifyPlugin(), new SoundCloudPlugin()],
+		emitNewSongOnly: true,
+		savePreviousSongs: true,
+		emitAddSongWhenCreatingQueue: false,
+		emptyCooldown: 25,
+		ytdlOptions: {
+			format: "audioonly",
+			quality: "highestaudio",
+			highWaterMark: 1024 * 1024 * 64,
+			liveBuffer: 60 * 1000,
+			dlChunkSize: 1024 * 1024 * 4,
+		},
+		plugins: [
+			new SpotifyPlugin(spotifySettings),
+			new SoundCloudPlugin()
+		],
 		youtubeDL: true,
 		updateYouTubeDL: true,
 		youtubeCookie: process.env.YTCOOKIE
@@ -45,49 +70,59 @@ module.exports = async bot => {
 					});
 			}
 
-			const MusicSelect = new Discord.MessageSelectMenu()
-				.setCustomId("SelectMusicMenu")
-				.setPlaceholder("Select a setting to toggle.")
-				.addOptions([
-					{
-						label: "Loop",
-						description: "Toggle the looping of the current song. Assessible also though the loop command.",
-						value: "loop",
-						emoji: "🔁"
-					},
-					{
-						label: "AutoPlay",
-						description: "Toggles autoplay for the whole server. When the song(s) end(s), SparkV will find another song simular to the song that was just played.".slice(0, 100),
-						value: "autoplay",
-						emoji: "🔁"
-					}
-				]);
+			const LoopButton = new Discord.MessageButton()
+				.setEmoji("🔁")
+				.setCustomId("loop")
+				.setStyle("PRIMARY");
+
+			const TogglePlayingButton = new Discord.MessageButton()
+				.setEmoji("⏯")
+				.setCustomId("TP")
+				.setStyle("PRIMARY");
 
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
-				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				components: [
+					new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)
+				],
 				fetchReply: true
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ time: 300 * 1000 });
 			collector.on("collect", async interaction => {
+				await interaction.deferReply();
+
 				const queue = bot.distube.getQueue(interaction);
 
 				if (!queue) return interaction.replyT("There is no music playing.");
 
-				if (interaction.values[0] === "loop") {
-					queue.setRepeatMode(queue.autoplay === true ? 0 : 1);
+				if (interaction.customId === "loop") {
+					const loopModes = [
+						0,
+						1,
+						2
+					];
 
-					interaction.replyT(`Looping is now ${(queue.autoplay === true ? "**DISABLED**" : "**ENABLED**")}.`);
-				} else if (interaction.values[0] === "autoplay") {
-					const autoplay = queue.toggleAutoplay();
+					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
 
-					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
+					queue.setRepeatMode(nextLoopMode);
+
+					interaction.replyT(`${bot.config.emojis.music} | Looping is now ${loopMode}.`);
+				} else if (interaction.customId === "TP") {
+					if (queue.paused) {
+						queue.resume();
+
+						return await interaction.replyT(`${bot.config.emojis.music} | Successfully resumed the music!`);
+					}
+
+					queue.pause();
+					await interaction.replyT(`${bot.config.emojis.music} | Successfully paused the music!`);
 				}
 
 				MusicMessage.edit({
 					embeds: [NowPlayingEmbed],
-					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
 				});
 			});
 
@@ -119,49 +154,57 @@ module.exports = async bot => {
 				})
 				.setTimestamp();
 
-			const MusicSelect = new Discord.MessageSelectMenu()
-				.setCustomId("SelectMusicMenu")
-				.setPlaceholder("Select a setting to toggle.")
-				.addOptions([
-					{
-						label: "Loop",
-						description: "Toggle the looping of the current song. Assessible also though the loop command.",
-						value: "loop",
-						emoji: "🔁"
-					},
-					{
-						label: "AutoPlay",
-						description: "Toggles autoplay for the whole server. When the song(s) end(s), SparkV will find another song simular to the song that was just played.".slice(0, 100),
-						value: "autoplay",
-						emoji: "🔁"
-					}
-				]);
+			const LoopButton = new Discord.MessageButton()
+				.setEmoji("🔁")
+				.setCustomId("loop")
+				.setStyle("PRIMARY");
+
+			const TogglePlayingButton = new Discord.MessageButton()
+				.setEmoji("⏯")
+				.setCustomId("TP")
+				.setStyle("PRIMARY");
 
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
-				components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				components: [new Discord.MessageActionRow().addComponents(LoopButton)],
 				fetchReply: true
 			});
 
-			const collector = MusicMessage.createMessageComponentCollector({ filter: interaction => interaction.customId === "SelectMusicMenu", time: 300 * 1000 });
+			const collector = MusicMessage.createMessageComponentCollector({ time: 300 * 1000 });
 			collector.on("collect", async interaction => {
+				await interaction.deferReply();
+
 				const queue = bot.distube.getQueue(interaction);
 
 				if (!queue) return interaction.replyT("There is no music playing.");
 
-				if (interaction.values[0] === "loop") {
-					queue.setRepeatMode(queue.autoplay === true ? 0 : 1);
+				if (interaction.customId === "loop") {
+					const loopModes = [
+						0,
+						1,
+						2
+					];
 
-					interaction.replyT(`Looping is now ${(queue.autoplay === true ? "**DISABLED**" : "**ENABLED**")}.`);
-				} else if (interaction.values[0] === "autoplay") {
-					const autoplay = queue.toggleAutoplay();
+					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
 
-					interaction.replyT(`AutoPlay is now ${(autoplay ? "**ENABLED**" : "**DISABLED**")}.`);
+					queue.setRepeatMode(nextLoopMode);
+
+					interaction.replyT(`${bot.config.emojis.music} | Looping is now ${loopMode}.`);
+				} else if (interaction.customId === "TP") {
+					if (queue.paused) {
+						queue.resume();
+
+						return await interaction.replyT(`${bot.config.emojis.music} | Successfully resumed the music!`);
+					}
+
+					queue.pause();
+					await interaction.replyT(`${bot.config.emojis.music} | Successfully paused the music!`);
 				}
 
-				await MusicMessage.edit({
-					embeds: [SongAddedQueue],
-					components: [new Discord.MessageActionRow().addComponents(MusicSelect)],
+				MusicMessage.edit({
+					embeds: [NowPlayingEmbed],
+					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton)],
 				});
 			});
 
