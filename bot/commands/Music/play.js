@@ -7,17 +7,11 @@ async function execute(bot, message, args, command, data) {
 
 	if (!query) return await message.replyT(`${bot.config.emojis.error} | Please enter a song URL or query to search!`);
 
-	try {
-		bot.distube.play(message.member.voice.channel, query, {
-			textChannel: message.channel,
-		});
+	bot.distube.play(message.member.voice.channel, query, {
+		textChannel: message.channel,
+	});
 
-		await message.replyT(`${bot.config.emojis.success} | Now playing: ${query}`);
-	} catch (err) {
-		console.error(err);
-
-		await message.replyT(`${bot.config.emojis.error} | Uh oh! An error occured.`);
-	}
+	return await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
 }
 
 module.exports = new cmd(execute, {
