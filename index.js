@@ -35,19 +35,25 @@ async function checkForUpdate() {
 async function start() {
 	require("dotenv").config();
 
-	Sentry.init({
-		dsn: process.env.SENTRYTOKEN,
-		release: `${PackageInfo.name}@${PackageInfo.version}`,
-		integrations: [new Integrations.BrowserTracing()],
-		tracesSampleRate: 0.2,
-		tracesSampler: samplingContext => {}
-	});
+	if (process.env.SENTRYTOKEN) {
+		Sentry.init({
+			dsn: process.env.SENTRYTOKEN,
+			release: `${PackageInfo.name}@${PackageInfo.version}`,
+			integrations: [new Integrations.BrowserTracing()],
+			tracesSampleRate: 0.2,
+			tracesSampler: samplingContext => {}
+		});
+	} else {
+		Logger("WARNING - NO API KEY FOR SENTRY! SPARKV MAY BREAK WITHOUT SENTRY LOGGING KEY.", "warn");
+	}
 
 	if (process.env.MONGOOSEURL) {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		});
+	} else {
+		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
 	}
 
 	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));

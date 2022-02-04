@@ -13,15 +13,18 @@ module.exports = {
 
 		// Bot Lists //
 		if (process.argv.includes("--dev") === false) {
+			const ApiKeys = {};
+
+			if (process.env.DBLKEY) ApiKeys.topgg = process.env.DBLKEY;
+			if (process.env.DBL2KEY) ApiKeys.discordbotlist = process.env.DBL2KEY;
+			if (process.env.VBLKEY) ApiKeys.voidbots = process.env.VBLKEY;
+			if (process.env.DLBLKEY) ApiKeys.discordlabs = process.env.DLBLKEY;
+			if (process.env.DBGGKEY) ApiKeys.discordbotsgg = process.env.DBGGKEY;
+
+
 			const poster = new dbots.Poster({
 				client: bot,
-				apiKeys: {
-					topgg: process.env.DBLKEY,
-					discordbotlist: process.env.DBL2KEY,
-					voidbots: process.env.VBLKEY,
-					discordlabs: process.env.DLBLKEY,
-					discordbotsgg: process.env.DBGGKEY
-				},
+				apiKeys: ApiKeys,
 				clientLibrary: "discord.js",
 				serverCount: async () => await bot.functions.GetServerCount(),
 				userCount: async () => await bot.functions.GetUserCount(),
