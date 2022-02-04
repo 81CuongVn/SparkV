@@ -23,12 +23,11 @@
     "npm": "8.x"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.7.0",
     "@discordjs/rest": "^0.2.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "@distube/soundcloud": "^1.1.0",
     "@distube/spotify": "^1.1.0",
-    "@distube/ytdl-core": "^4.9.4",
+    "@distube/yt-dlp": "^0.0.2",
     "@sentry/node": "^6.16.1",
     "@sentry/tracing": "^6.16.1",
     "@vitalets/google-translate-api": "^7.0.0",
