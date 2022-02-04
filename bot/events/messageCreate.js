@@ -420,9 +420,19 @@ module.exports = {
 
 			bot.logger(err, "error");
 
-			await message.replyT(
-				`${bot.config.emojis.error} | Uh oh! Something went wrong handling that command. Please join my Support Server (^Invite), create a ticket and report the following error: ${err}. Sorry!`,
-			);
+			const ErrorEmbed = new Discord.MessageEmbed()
+				.setAuthor({
+					name: interaction.user.tag,
+					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+				})
+				.setTitle("Uh oh!")
+				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+				.addField("**Error**", `\`\`\`${error.message}\`\`\``)
+				.setColor("RED");
+
+			await message.replyT({
+				embeds: [ErrorEmbed],
+			});
 		}
 	},
 };
@@ -431,7 +441,7 @@ async function chatbot(message, wasMentioned) {
 	let SlicedMessage;
 
 	if (message.content.slice(21) === "") {
-		// If case the user replys to SparkV instead of mentioning him, or for some other silly reason.
+		// If the user replies to SparkV instead of mentioning him.
 
 		SlicedMessage = message.content;
 	} else {
