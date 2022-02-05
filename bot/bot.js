@@ -14,7 +14,7 @@ const { Collection, Intents, Permissions, Options } = require("discord.js");
 const Client = require("./structures/client");
 const SparkV = new Client({
 	intents: [
-		// Intents.FLAGS.DIRECT_MESSAGES,
+		Intents.FLAGS.DIRECT_MESSAGES,
 		// Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
 		// Intents.FLAGS.DIRECT_MESSAGE_TYPING
 		Intents.FLAGS.GUILDS,
