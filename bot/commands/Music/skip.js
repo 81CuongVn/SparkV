@@ -11,8 +11,8 @@ async function execute(bot, message, args, command, data) {
 
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: User.user.tag,
-			iconURL: User.user.displayAvatarURL({ dynamic: true })
+			name: message.user.tag,
+			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
 		.setTitle(`${bot.config.emojis.error} | Skipped!`)
 		.setDescription(`Skiped to the next song.`)
