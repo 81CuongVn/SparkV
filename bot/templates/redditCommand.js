@@ -34,7 +34,9 @@ module.exports = class RedditCommand {
 				.then(res => res.data)
 				.catch(() => null);
 
-			await bot.redis.set(this.settings.endpoint, JSON.stringify(res), "EX", 15 * 60);
+			await bot.redis.set(this.settings.endpoint, JSON.stringify(res), {
+				EX: 15 * 60
+			});
 		}
 
 		if (!res) return;
