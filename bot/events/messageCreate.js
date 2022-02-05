@@ -422,8 +422,8 @@ module.exports = {
 
 			const ErrorEmbed = new Discord.MessageEmbed()
 				.setAuthor({
-					name: interaction.user.tag,
-					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+					name: message.author.tag,
+					iconURL: message.author.displayAvatarURL({ dynamic: true })
 				})
 				.setTitle("Uh oh!")
 				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
