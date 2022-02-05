@@ -8,7 +8,7 @@ async function execute(bot, message, args, command) {
 		return await message.replyT(`${bot.config.emojis.error} | Next time, respond with the ID of the game lmao.`);
 	}
 
-	request.get(`https://roblox-embed-discord-jpcnmriva99q.runkit.sh/${args}.response.data`)
+	request.get(`https://roblox-embed-discord-jpcnmriva99q.runkit.sh/${args}.json`)
 		.then(async response => {
 			const Embed = new Discord.MessageEmbed()
 				.setTitle(response.data.title)
