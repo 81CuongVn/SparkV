@@ -94,6 +94,9 @@ module.exports = class bot extends Client {
 		}
 
 		this.discordTogether = new DiscordTogether(this);
+
+		if (!process.env.REDIS_URL) return this.logger("error", "Redis URI not found in environment variables. Please add it to your secrets manager so that commands that require a cache (Animals, Memes, Etc) can function.");
+
 		this.redis = require("redis").createClient({
 			url: process.env.REDIS_URL
 		});
@@ -153,16 +156,13 @@ module.exports = class bot extends Client {
 						this.commands.set(commandname, command);
 
 						if (command.settings.slash && command.settings.slash === true) {
-							if (command.settings.description.length >= 100) {
-								const sliced = command.settings.description.slice(0, 96);
-
-								command.settings.description = `${sliced}...`;
-							}
+							if (command.settings.description.length >= 100) command.settings.description = `${command.settings.description.slice(0, 96)}...`;
 
 							await this.slashCommands.push({
 								name: commandname,
 								description: command.settings.description,
 								options: command.settings.options || [],
+								type: command.settings.type || 1,
 							});
 						}
 
@@ -186,6 +186,28 @@ module.exports = class bot extends Client {
 				});
 			});
 		});
+
+		// Coming soon: App commands
+		// These commands will be accessable from right-clicking on a user/message in Discord.
+		// await fs.readdir(path.join(`${MainPath}/appCommands`), async (err, files) => {
+		// 	if (err) return this.logger(`App commands failed to load! ${err}`, "error");
+
+		// 	await files.forEach(async file => {
+		// 		if (!file.endsWith(".js")) return;
+
+		// 		const commandname = file.split(".")[0];
+		// 		const command = require(path.resolve(`${MainPath}/appCommands/${commandname}`));
+
+		// 		if (!command || !command.settings || command.config) return;
+
+		// 		command.settings.name = commandname;
+
+		// 		await this.slashCommands.push({
+		// 			name: commandname,
+		// 			type: command.settings.type,
+		// 		});
+		// 	});
+		// });
 
 		await this.LoadSlashCommands(this.slashCommands);
 	}
