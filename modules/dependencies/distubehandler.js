@@ -38,8 +38,7 @@ module.exports = async bot => {
 			new SpotifyPlugin(spotifySettings),
 			new SoundCloudPlugin()
 		],
-		youtubeDL: true,
-		updateYouTubeDL: true,
+		youtubeDL: false,
 		youtubeCookie: process.env.YTCOOKIE
 	});
 
