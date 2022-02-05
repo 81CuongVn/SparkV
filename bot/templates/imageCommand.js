@@ -5,7 +5,7 @@ const NewCommand = require("./command");
 
 module.exports = class ModCommand {
 	constructor(sett) {
-		this.settings = new NewCommand(null, Object.assign({ cooldown: 2.5 * 1000, slash: true }, sett)).settings;
+		this.settings = new NewCommand(null, Object.assign({ cooldown: 2.5 * 1000 }, sett)).settings;
 	}
 
 	async run(bot, message, args, command, data) {
@@ -56,6 +56,8 @@ module.exports = class ModCommand {
 			const GeneratedImage = await canvacord.Canvas[this.settings.effect](One, Two);
 			const Image = new Discord.MessageAttachment(GeneratedImage, `${this.settings.effect}.${this.settings?.type || "png"}`);
 
+			console.log(Image.proxyURL);
+
 			const ImageEmbed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: `${this.settings.effect} | ${message.author.tag}`,
@@ -63,7 +65,6 @@ module.exports = class ModCommand {
 				})
 				.setTitle("Image Creation Successful!")
 				.setImage(`attachment://${this.settings.effect}.${this.settings?.type || "png"}`)
-				.addField("Download Link", `[Click Here](${Image.proxyURL})`)
 				.setFooter({
 					text: bot.config.embed.footer,
 					iconURL: bot.user.displayAvatarURL({ format: "png" })
