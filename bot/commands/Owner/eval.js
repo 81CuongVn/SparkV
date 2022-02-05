@@ -5,7 +5,10 @@ const fetch = require("axios");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const input = args.join(" ");
+	let input = args.join(" ");
+
+	if (input.startsWith("```") && input.endsWith("```")) input = input.slice(3, -3);
+
 	const hasAsync = input.includes("return") || input.includes("await");
 	let result;
 
