@@ -28,7 +28,7 @@ async function execute(bot, interaction, args, command, data) {
 	let PageNumber = 0;
 
 	for (const line of LyricsArray) {
-		if ((charCount + line.length) < 500) {
+		if ((charCount + line.length) < 500 && LyricsSubArray[curLine]) {
 			LyricsSubArray[curLine] = `${LyricsSubArray[curLine] + line}\n`;
 			charCount += line.length;
 		} else {
