@@ -29,5 +29,6 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: ["nextsong", "nsong", "nexts", "next"],
 	perms: ["EMBED_LINKS"],
-	slash: true
+	slash: true,
+	slashOnly: true
 });
