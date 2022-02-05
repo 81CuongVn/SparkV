@@ -5,11 +5,11 @@ const cmd = require("../../templates/musicCommand");
 async function execute(bot, message, args, command, data) {
 	try {
 		bot.distube.voices.join(message.member.voice.channel);
+
+		return await message.replyT(`${bot.config.emojis.music} | Successfully joined voice channel.`);
 	} catch (err) {
 		return message.replyT(`${bot.config.emojis.error} | I cannot join the voice channel! Please make sure I have the permission to join the voice channel nad that the voice channel is not full.`);
 	}
-
-	return await message.replyT("Successfully joined voice channel.");
 }
 
 module.exports = new cmd(execute, {
@@ -19,5 +19,6 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: [],
 	perms: [],
-	slash: true
+	slash: true,
+	slashOnly: true
 });

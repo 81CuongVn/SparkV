@@ -3,9 +3,13 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	bot.distube.voices.leave(message);
+	try {
+		bot.distube.voices.leave(message);
 
-	return await message.replyT("Successfully left voice channel.");
+		return await message.replyT("Successfully left voice channel.");
+	} catch (err) {
+		return message.replyT(`${bot.config.emojis.error} | I cannot join the voice channel! Please make sure I have the permission to join the voice channel nad that the voice channel is not full.`);
+	}
 }
 
 module.exports = new cmd(execute, {
