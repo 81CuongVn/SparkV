@@ -65,7 +65,6 @@
     "opusscript": "^0.0.8",
     "os": "^0.1.2",
     "redis": "^4.0.3",
-    "serve-favicon": "^2.5.0",
     "socket.io-client": "^4.4.1",
     "statcord.js": "^3.3.0",
     "to-zalgo": "^1.0.1",
