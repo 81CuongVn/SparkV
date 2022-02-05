@@ -30,7 +30,7 @@ const SparkV = new Client({
 		Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
 		// Intents.FLAGS.GUILD_MESSAGE_TYPING,
 	],
-	partials: ["MESSAGE", "CHANNEL", "REACTION"],
+	partials: ["MESSAGE", "REACTION"],
 	presence: {
 		activity: {
 			name: `Loading SparkV (99%)`,
