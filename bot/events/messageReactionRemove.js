@@ -43,7 +43,15 @@ module.exports = {
 			}
 
 			const starMsg = await channel.messages.fetch(stars.id);
-			await starMsg.edit({ content: `⭐ **${parseInt(star[1]) - 1}** ${message.channel}`, embeds: [embed] });
+
+			try {
+				await starMsg.edit({ content: `⭐ **${parseInt(star[1]) - 1}** ${message.channel}`, embeds: [embed] });
+			} catch (err) {
+				// Most likely the message was created by a different bot with a Starboard system. Let's try and repost and then delete the old one.
+
+				await channel.send({ content: `⭐ **${parseInt(star[1]) - 1}** ${message.channel}`, embeds: [embed] });
+				await starMsg.delete().catch(() => {});
+			}
 
 			if (parseInt(star[1] - 1) === 0) return setTimeout(() => starMsg.delete(), 3 * 1000);
 		}

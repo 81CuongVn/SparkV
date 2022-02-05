@@ -27,7 +27,6 @@ module.exports = {
 			const msg = await channel.messages.fetch(stars.id);
 
 			const embed = new Discord.MessageEmbed()
-				.setDescription(foundStar.description || "No content...")
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -40,12 +39,15 @@ module.exports = {
 				.setColor(foundStar.color)
 				.setTimestamp();
 
+			if (foundStar?.description) {
+				embed.setDescription(foundStar.description);
+			}
+
 			const starMsg = await channel.messages.fetch(stars.id);
 
 			await msg.edit({ content: `⭐ **${parseInt(star[1]) + 1}** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		} else {
 			const embed = new Discord.MessageEmbed()
-				.setDescription(message.cleanContent || "No content...")
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -58,7 +60,11 @@ module.exports = {
 				.setColor("YELLOW")
 				.setTimestamp();
 
-			await channel.send({ content: `⭐ **2** | ${message.channel}`, embeds: [embed] }).catch(() => {});
+			if (message?.cleanContent) {
+				embed.setDescription(message.cleanContent);
+			}
+
+			await channel?.send({ content: `⭐ **2** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		}
 	}
 };
