@@ -26,7 +26,6 @@ module.exports = {
 			const foundStar = stars.embeds[0];
 
 			const embed = new Discord.MessageEmbed()
-				.setDescription(foundStar.description || "No content...")
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -38,6 +37,10 @@ module.exports = {
 				})
 				.setColor(foundStar.color)
 				.setTimestamp();
+
+			if (foundStar?.description) {
+				embed.setDescription(foundStar.description);
+			}
 
 			const starMsg = await channel.messages.fetch(stars.id);
 			await starMsg.edit({ content: `⭐ **${parseInt(star[1]) - 1}** ${message.channel}`, embeds: [embed] });
