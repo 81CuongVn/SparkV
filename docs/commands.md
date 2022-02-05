@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **139 commands**!
+SparkV's Command List! SparkV contains more than **142 commands**!
 
 ## Config
 
@@ -23,7 +23,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **pay**        | Give someone some data.user.money.balance!               | (user)                           | 2 seconds |
 | **rob**        | Steal somebody's hard earned money.                      | (user)                           | 2 seconds |
 | **shop**       | Displays the shop!                                       |                                  | 2 seconds |
-| **slots**      | Don't gamble kids!                                       | {amount}                         | 2 seconds |
+| **slots**      | Don't gamble kids!                                       | (amount)                         | 2 seconds |
 | **use**        | Use an item in your inventory.                           |                                  | 2 seconds |
 | **withdraw**   | Withdraw any amount of your bank money into your wallet. | (amount)                         | 2 seconds |
 
@@ -31,7 +31,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 
 | Name              | Description                                                                                                                                      | Usage             | Cooldown  |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | --------- |
-| **8ball**         | Just a little fun.                                                                                                                               | {question}        | 2 seconds |
+| **8ball**         | Just a little fun.                                                                                                                               | (question)        | 2 seconds |
 | **advice**        | You'll need it.                                                                                                                                  |                   | 2 seconds |
 | **afk**           | This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.          | {optional reason} | 2 seconds |
 | **ascii**         | I will change any text to ascii!                                                                                                                 | {text}            | 2 seconds |
@@ -42,6 +42,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **showerthought** | You know that momment where you think/realize something crazy in the shower? Well, there is a wh...                                              |                   | 2 seconds |
 | **urban**         | I will return an urban dictionary definition of a word! Due to recent API failures, this command is disabled to provide you a better experience. | {word}            | 2 seconds |
 | **uselessfact**   | I will get a useless fact! You're better off with the advice command...                                                                          | {word}            | 2 seconds |
+| **weather**       | Checks for todays weather forcast in the location specified.                                                                                     | (contry)          | 1 seconds |
 
 ## Games
 
@@ -124,7 +125,7 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **join**     | Joins your voice channel.                                                                                                       |                                                             | 10 seconds |
 | **jump**     | I will jump to a certain song in the queue.                                                                                     | {number}                                                    | 10 seconds |
 | **leave**    | Joins your voice channel.                                                                                                       |                                                             | 10 seconds |
-| **lyrics**   | Get any song's lyrics!                                                                                                          | {song title or URL}                                         | 2 seconds  |
+| **lyrics**   | Get any song's lyrics!                                                                                                          | (song title or URL)                                         | 2 seconds  |
 | **pause**    | Pauses the current song playing.                                                                                                |                                                             | 10 seconds |
 | **play**     | Plays a song with the given name or URL.                                                                                        | {song title or URL}                                         | 10 seconds |
 | **previous** | Change the current track's position.                                                                                            | {number}                                                    | 10 seconds |
@@ -136,15 +137,6 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **skip**     | Skip to the next song in the queue.                                                                                             |                                                             | 10 seconds |
 | **stop**     | Disconnects me from the voice channel and removes all songs in queue.                                                           |                                                             | 10 seconds |
 | **volume**   | Sets the volume of the currently playing track.                                                                                 |                                                             | 10 seconds |
-
-## 👑 Owner
-
-| Name         | Description                    | Usage            | Cooldown  |
-| ------------ | ------------------------------ | ---------------- | --------- |
-| **eval**     | This is an owner only command. | (user)           | 2 seconds |
-| **restart**  | This is an owner only command. | {coins}          | 2 seconds |
-| **setcoins** | Set someone's coins!           | (user) (ammount) | 2 seconds |
-| **setxp**    | Set XP.                        | (user) {ammount} | 2 seconds |
 
 ## Reddit
 
@@ -189,10 +181,11 @@ SparkV's Command List! SparkV contains more than **139 commands**!
 | **decode**     | decode a string that was encoded                                                               | {type} {string}                            | 2 seconds |
 | **donate**     | Donate to help SparkV's developement. Every donation is appreciated!                           |                                            | 2 seconds |
 | **encode**     | encode a string                                                                                | {type} {string}                            | 2 seconds |
-| **help**       | View SparkV's 130+ commands.                                                                   | (optional: command)                        | 2 seconds |
+| **help**       | View SparkV's 130+ commands.                                                                   | (optional: search)                         | 2 seconds |
 | **invite**     | Displays links.                                                                                |                                            | 2 seconds |
 | **roleid**     | Grab the ID of any role!                                                                       | (@role)                                    | 2 seconds |
 | **rules**      | Follow the rules or else you will be banned from SparkV.                                       |                                            | 2 seconds |
+| **screenshot** | Screenshot a site!                                                                             | (website URL)                              | 2 seconds |
 | **servericon** | Gets the current server's server icon in all sizes and file types!                             |                                            | 2 seconds |
 | **serverinfo** | I will get the current server's info or any server's info by the invite link!                  | (optional: invite default: current server) | 2 seconds |
 | **stats**      | SparkV's stats.                                                                                |                                            | 2 seconds |

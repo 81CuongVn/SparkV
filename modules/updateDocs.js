@@ -15,6 +15,11 @@ module.exports = {
 		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
 
 		bot.categories
+			.filter(cat => {
+				if (cat.name.toLowerCase().includes("owner")) return false;
+
+				return true;
+			})
 			.sort((a, b) => {
 				const aCmds = bot.commands.filter(c => {
 					if (c) {
