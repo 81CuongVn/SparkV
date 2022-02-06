@@ -19,9 +19,9 @@ async function execute(bot, message, args, command, data) {
 		if (err.startsWith(`Giveaway with ID ${Giveaway.messageID} is not ended`)) {
 			await message.replyT("This giveaway hasn't ended yet!");
 		} else {
-			console.error(err).then(async () => {
-				await message.replyT("An error occured with SparkV! Please try this command again.");
-			});
+			bot.logger(err, "error");
+
+			await message.replyT("An error occured with SparkV! Please try this command again.");
 		}
 	});
 }

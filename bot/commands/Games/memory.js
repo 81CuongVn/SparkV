@@ -49,7 +49,7 @@ async function execute(bot, message, args, command, data) {
 
 		return MemorizeMessage.edit(`🎉 You won!`);
 	} catch (err) {
-		console.error(err);
+		bot.logger(err, "error");
 	}
 }
 

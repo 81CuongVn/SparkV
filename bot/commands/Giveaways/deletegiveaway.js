@@ -15,8 +15,10 @@ async function execute(bot, message, args, command, data) {
 		return await message.replyT(`I couldn't find a giveaway with that message ID.`);
 	}
 
-	bot.GiveawayManager.delete(Giveaway.messageID).then(async () => await message.replyT(`Giveaway successfully deleted!`)).catch(err => {
-		console.error(err).then(async () => await message.replyT(`An error occured with SparkV! Please try this command again.`));
+	bot.GiveawayManager.delete(Giveaway.messageID).then(async () => await message.replyT(`Giveaway successfully deleted!`)).catch(async err => {
+		bot.logger(err, "error");
+
+		await message.replyT(`An error occured with SparkV! Please try this command again.`);
 	});
 }
 

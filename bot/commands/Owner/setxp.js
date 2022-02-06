@@ -12,7 +12,7 @@ async function execute(bot, message, args, command, data) {
 	try {
 		await Levels.setXp(User.id, message.guild.id, args[1]).then(async () => await message.replyT(`${bot.config.emojis.success} | Successfully set ${User}'s XP to ${bot.functions.formatNumber(args[1])}!`));
 	} catch (err) {
-		console.error(err);
+		bot.logger(err, "error");
 
 		await message.replyT(`${bot.config.emojis.error} | Error setting ${User}'s XP to ${bot.functions.formatNumber(args[1])}.`);
 	}

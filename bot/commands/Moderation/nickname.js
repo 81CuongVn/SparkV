@@ -59,7 +59,7 @@ async function execute(bot, message, args, command, data) {
 			.then(async () => await message.replyT(`${bot.config.emojis.success} | I successfully changed ${User}\`s nickname to ${NewNickname}!`))
 			.catch(async err => {
 				await message.replyT(`${bot.config.emojis.error} | Uh oh! I cannot change their nickname.`).then(() => {
-					console.error(err);
+					bot.logger(err, "error");
 				});
 			});
 	} else if (emoji === bot.config.emojis.error) {

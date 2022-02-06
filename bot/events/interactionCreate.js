@@ -86,7 +86,7 @@ module.exports = {
 			try {
 				await command.run(bot, interaction, args, interaction.commandName, data);
 			} catch (error) {
-				console.error(error);
+				bot.logger(error, "error");
 
 				const ErrorEmbed = new Discord.MessageEmbed()
 					.setAuthor({
@@ -98,7 +98,7 @@ module.exports = {
 					.addField("**Error**", `\`\`\`${error.message}\`\`\``)
 					.setColor("RED");
 
-				await interaction.followUp({
+				await interaction.replyT({
 					embeds: [ErrorEmbed],
 					ephemeral: true,
 				});

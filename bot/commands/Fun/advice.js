@@ -19,7 +19,7 @@ async function execute(bot, message) {
 			await message.replyT({
 				embeds: [AdviceEmbed]
 			});
-		}).catch(err => console.error(err));
+		}).catch(err => bot.logger(err, "error"));
 }
 
 module.exports = new cmd(execute, {
