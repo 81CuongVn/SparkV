@@ -170,4 +170,5 @@ module.exports = new cmd(execute, {
 	usage: "<username>",
 	aliases: [],
 	perms: ["EMBED_LINKS"],
+	enabled: false
 });
