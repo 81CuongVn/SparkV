@@ -52,9 +52,13 @@ async function setNewData(message, options) {
 		embeds: [requestMsg]
 	});
 
-	await message.channel.awaitMessages({ filter: options.filter, max: 1, time: options.time * 1000, errors: ["time"] }).then(async collected => {
+	await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async collected => {
 		try {
 			await options.handleData(collected.first(), requestMsg);
+
+			await channelMsg.edit({
+				embeds: [requestMsg]
+			});
 
 			try {
 				setTimeout(() => {
@@ -64,6 +68,8 @@ async function setNewData(message, options) {
 			} catch (err) {
 				// Do nothing. Most likely the message was deleted.
 			}
+
+			return true;
 		} catch (err) {
 			const ErrorEmbed = new MessageEmbed()
 				.setAuthor({
@@ -75,9 +81,11 @@ async function setNewData(message, options) {
 				.addField("**Error**", `\`\`\`${err.message}\`\`\``)
 				.setColor("RED");
 
-			return await message.reply(ErrorEmbed);
+			return await message.reply({
+				embeds: [ErrorEmbed]
+			});
 		}
-	}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
+	}).catch(async collected => await message.replyT(`Canceled due to no valid response within ${options.time} seconds.`));
 }
 
 async function execute(bot, message, args, command, data) {
@@ -151,15 +159,18 @@ async function execute(bot, message, args, command, data) {
 									.setTitle(`<:config:934870512235073606> | New Prefix Changed`)
 									.setDescription(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`);
 
-								data.guild.prefix = prefix;
+								data.guild.prefix = newPrefix;
 								data.guild.markModified("prefix");
 
 								await data.guild.save();
+
+								return true;
 							}
 						});
 					},
 				},
-			]
+			],
+			stateDisabled: true,
 		},
 		{
 			name: "Starboard",
@@ -285,7 +296,7 @@ async function execute(bot, message, args, command, data) {
 					},
 				},
 			],
-			getState: () => data.guild.plugins.starboard.enabled,
+			getState: () => data.guild.plugins?.starboard?.enabled,
 			setState: async type => {
 				if (type === "enable") {
 					data.guild.plugins.starboard.enabled = "true";
@@ -293,7 +304,7 @@ async function execute(bot, message, args, command, data) {
 					data.guild.plugins.starboard.enabled = "false";
 				}
 
-				data.guild.markModified("plugins.starboard");
+				data.guild.markModified("plugins.starboard.enabled");
 
 				await data.guild.save();
 			}
@@ -313,12 +324,12 @@ async function execute(bot, message, args, command, data) {
 				return buttonsIncluded.push(buttonData);
 			}
 
+			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button.data.setDisabled(false));
+
 			if (curSetting?.getState() === "true") {
 				buttonsIncluded.push(button.data.setDisabled(false));
 			} else if (curSetting?.getState() === "false") {
 				buttonsIncluded.push(button.data.setDisabled(true));
-			} else {
-				buttonsIncluded.push(button.data.setDisabled(false));
 			}
 		});
 
@@ -345,7 +356,11 @@ async function execute(bot, message, args, command, data) {
 			name: "SparkV Settings Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => `${setting?.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error} ${setting.name}`).join("\n")}`)
+		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => {
+			const state = setting?.stateDisabled === true ? "<:slash:939972618814128159>" : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
+
+			return `${state ? `${state} ` : ""}${setting.name}`;
+		}).join("\n")}`)
 		.setFooter({
 			text: await message.translate(`Select a setting to edit below. • ${bot.config.embed.footer}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
