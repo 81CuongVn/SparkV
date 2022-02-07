@@ -73,6 +73,7 @@ async function replyTranslate(options) {
 
 		if (options?.content) data.content = options.content;
 		if (options?.embeds) data.embeds = options.embeds;
+		if (options?.components) data.components = options.components;
 
 		if (this?.applicationId) {
 			if (options?.ephemeral === true) data.ephemeral = true;
