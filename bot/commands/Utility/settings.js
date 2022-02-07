@@ -115,7 +115,6 @@ async function execute(bot, message, args, command, data) {
 			buttons: [
 				{
 					name: "Prefix",
-					required: true,
 					data: new MessageButton()
 						.setLabel("Prefix")
 						.setEmoji(bot.config.emojis.slash)
@@ -160,19 +159,7 @@ async function execute(bot, message, args, command, data) {
 						});
 					},
 				},
-			],
-			getState: () => data.guild.plugins.starboard.enabled,
-			setState: async type => {
-				if (type === "enable") {
-					data.guild.plugins.starboard.enabled = "true";
-				} else if (type === "disable") {
-					data.guild.plugins.starboard.enabled = "false";
-				}
-
-				data.guild.markModified("plugins.starboard");
-
-				await data.guild.save();
-			}
+			]
 		},
 		{
 			name: "Starboard",
@@ -326,10 +313,12 @@ async function execute(bot, message, args, command, data) {
 				return buttonsIncluded.push(buttonData);
 			}
 
-			if (curSetting.getState() === "true") {
+			if (curSetting?.getState() === "true") {
 				buttonsIncluded.push(button.data.setDisabled(false));
-			} else {
+			} else if (curSetting?.getState() === "false") {
 				buttonsIncluded.push(button.data.setDisabled(true));
+			} else {
+				buttonsIncluded.push(button.data.setDisabled(false));
 			}
 		});
 
@@ -356,7 +345,7 @@ async function execute(bot, message, args, command, data) {
 			name: "SparkV Settings Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => `${setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error} ${setting.name}`).join("\n")}`)
+		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => `${setting?.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error} ${setting.name}`).join("\n")}`)
 		.setFooter({
 			text: await message.translate(`Select a setting to edit below. • ${bot.config.embed.footer}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
