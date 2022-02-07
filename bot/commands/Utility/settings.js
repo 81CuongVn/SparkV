@@ -16,7 +16,69 @@ const cFilter = async m => {
 	}
 };
 
-const messageCollectorError = async (message, collected) => await message.replyT("Canceled due to no valid response within 30 seconds.");
+const numFilter = async m => {
+	if (m.author.id === m.client.user.id) return false;
+
+	if (m.content) {
+		if (isNaN(m.content) || parseInt(m.content) < 1) {
+			await message.replyT(`${bot.config.emojis.error} | Please provide a valid __number__. Try again.`);
+
+			return false;
+		}
+
+		return true;
+	} else {
+		await m.replyT("Please reply with a __number__. Not an image. Try again.");
+
+		return false;
+	}
+};
+
+async function setNewData(message, options) {
+	const requestMsg = new MessageEmbed()
+		.setAuthor({
+			name: message.user.tag,
+			iconURL: message.user.displayAvatarURL({ dynamic: true })
+		})
+		.setTitle(options.title)
+		.setDescription(options.description)
+		.setFooter({
+			text: bot.config.embed.footer,
+			icon_url: bot.user.displayAvatarURL({ dynamic: true })
+		})
+		.setColor(options.color);
+
+	const channelMsg = await message.replyT({
+		embeds: [requestMsg]
+	});
+
+	await message.channel.awaitMessages({ filter: options.filter, max: 1, time: options.time * 1000, errors: ["time"] }).then(async collected => {
+		try {
+			await options.handleData(collected.first(), requestMsg);
+
+			try {
+				setTimeout(() => {
+					channelMsg.delete();
+					collected.first().delete();
+				}, 5 * 1000);
+			} catch (err) {
+				// Do nothing. Most likely the message was deleted.
+			}
+		} catch (err) {
+			const ErrorEmbed = new MessageEmbed()
+				.setAuthor({
+					name: interaction.user.tag,
+					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+				})
+				.setTitle("Uh oh!")
+				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
+				.addField("**Error**", `\`\`\`${err.message}\`\`\``)
+				.setColor("RED");
+
+			return await message.reply(ErrorEmbed);
+		}
+	}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
+}
 
 async function execute(bot, message, args, command, data) {
 	const loadingEmbed = new MessageEmbed()
@@ -61,78 +123,41 @@ async function execute(bot, message, args, command, data) {
 						.setStyle("PRIMARY"),
 					getData: () => data.guild.prefix,
 					setData: async () => {
-						const requestMsg = new MessageEmbed()
-							.setAuthor({
-								name: message.user.tag,
-								iconURL: message.user.displayAvatarURL({ dynamic: true })
-							})
-							.setTitle(`<:config:934870512235073606> | New Prefix`)
-							.setDescription(`Please send a new prefix to change to. You have 15 seconds to send a prefix.`)
-							.setFooter({
-								text: bot.config.embed.footer,
-								icon_url: bot.user.displayAvatarURL({ dynamic: true })
-							})
-							.setColor("BLUE");
+						await setNewData(message, {
+							title: "<:config:934870512235073606> | New Prefix",
+							description: "Please enter the new prefix for the bot.\n\n**Note:** The prefix cannot be longer than 5 characters.",
+							color: "BLUE",
+							time: 15,
+							filter: async m => {
+								if (m.author.id === m.client.user.id) return false;
 
-						const channelMsg = await message.replyT({
-							embeds: [requestMsg]
-						});
+								if (m.content) {
+									if (m.content.length >= 5) {
+										await m.replyT(`${bot.config.emojis.error} | The new prefix cannot be longer than 5 characters. Try again.`);
 
-						await message.channel.awaitMessages({ filter: async m => {
-							if (m.author.id === m.client.user.id) return false;
+										return false;
+									}
 
-							if (m.content) {
-								if (m.content.length >= 5) {
-									await m.replyT(`${bot.config.emojis.error} | The new prefix cannot be longer than 5 characters. Try again.`);
+									return true;
+								} else {
+									await m.replyT("Dude... I need you to send a message. Not a picture.");
 
 									return false;
 								}
-
-								return true;
-							} else {
-								await m.replyT("Dude... I need you to send a message. Not a picture.");
-
-								return false;
-							}
-						}, max: 1, time: 15 * 1000, errors: ["time"] }).then(async collected => {
-							try {
-								const prefix = collected.first().content.trim();
+							},
+							handleData: async (collected, requestMsg) => {
+								const newPrefix = collected.content.trim();
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | New Prefix Changed`)
-									.setDescription(`Successfully changed prefix from **${data.guild.prefix}** to **${prefix}**.`);
+									.setDescription(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`);
 
 								data.guild.prefix = prefix;
 								data.guild.markModified("prefix");
 
 								await data.guild.save();
-
-								await channelMsg.edit({
-									embeds: [requestMsg]
-								});
-
-								try {
-									setTimeout(() => {
-										channelMsg.delete();
-										collected.first().delete();
-									}, 5 * 1000);
-								} catch (err) {
-									// Do nothing. Most likely the message was deleted.
-								}
-							} catch (err) {
-								const ErrorEmbed = new MessageEmbed()
-									.setAuthor({
-										name: interaction.user.tag,
-										iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-									})
-									.setTitle("Uh oh!")
-									.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
-									.addField("**Error**", `\`\`\`${err.message}\`\`\``)
-									.setColor("RED");
-
-								return await message.reply(ErrorEmbed);
 							}
-						}).catch(async collected => messageCollectorError(message, collected));
+						});
 					},
 				},
 			],
@@ -177,64 +202,23 @@ async function execute(bot, message, args, command, data) {
 						}
 					},
 					setData: async () => {
-						const requestMsg = new MessageEmbed()
-							.setAuthor({
-								name: message.user.tag,
-								iconURL: message.user.displayAvatarURL({ dynamic: true })
-							})
-							.setTitle(`<:config:934870512235073606> | Starboard Channel Setup`)
-							.setDescription(`Please send a channel to setup the starboard in. You have 60 seconds to send a channel.`)
-							.setFooter({
-								text: bot.config.embed.footer,
-								icon_url: bot.user.displayAvatarURL({ dynamic: true })
-							})
-							.setColor("GOLD");
+						await setNewData(message, {
+							title: "<:config:934870512235073606> | Starboard Channel Setup",
+							description: "Please send a channel to setup the starboard in. You have 60 seconds to send a channel.",
+							color: "GOLD",
+							time: 60,
+							filter: cFilter,
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`<:config:934870512235073606> | Sarboard Channel Setup`)
+									.setDescription(`Successfully setup starboard channel to ${collected.content}.`);
 
-						const channelMsg = await message.replyT({
-							embeds: [requestMsg]
-						});
-
-						await message.channel.awaitMessages({ filter: cFilter, max: 1, time: 60 * 1000, errors: ["time"] }).then(async collected => {
-							try {
-								const channelID = collected.first().content.slice(2, -1);
-
-								channel = collected.first().content;
-								data.guild.plugins.starboard.channel = channelID;
-
-								data.guild.markModified("plugins.starboard");
+								data.guild.plugins.starboard.channel = collected.content.slice(2, -1);
+								data.guild.markModified("plugins.starboard.channel");
 
 								await data.guild.save();
-
-								requestMsg
-									.setTitle(`<:config:934870512235073606> | Starboard Channel Setup`)
-									.setDescription(`Successfully setup starboard channel to ${channel}.`);
-
-								channelMsg.edit({
-									embeds: [requestMsg]
-								});
-
-								try {
-									setTimeout(() => {
-										channelMsg.delete();
-										collected.first().delete();
-									}, 5 * 1000);
-								} catch (err) {
-									// Do nothing. Most likely the message was deleted.
-								}
-							} catch (err) {
-								const ErrorEmbed = new MessageEmbed()
-									.setAuthor({
-										name: interaction.user.tag,
-										iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-									})
-									.setTitle("Uh oh!")
-									.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${data.message}`)
-									.addField("**Error**", `\`\`\`${data.message}\`\`\``)
-									.setColor("RED");
-
-								return await message.reply(ErrorEmbed);
-							}
-						}).catch(async collected => messageCollectorError(message, collected));
+							},
+						});
 					},
 				},
 				{
@@ -246,78 +230,41 @@ async function execute(bot, message, args, command, data) {
 						.setStyle("SECONDARY"),
 					getData: () => data.guild.plugins?.starboard?.emoji || "⭐",
 					setData: async () => {
-						const requestMsg = new MessageEmbed()
-							.setAuthor({
-								name: message.user.tag,
-								iconURL: message.user.displayAvatarURL({ dynamic: true })
-							})
-							.setTitle(`<:config:934870512235073606> | Changing Starboard Emoji`)
-							.setDescription(`Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.`)
-							.setFooter({
-								text: bot.config.embed.footer,
-								icon_url: bot.user.displayAvatarURL({ dynamic: true })
-							})
-							.setColor("GOLD");
+						await setNewData(message, {
+							title: "<:config:934870512235073606> | Changing Starboard Emoji",
+							description: "Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.",
+							color: "GOLD",
+							time: 30,
+							filter: async m => {
+								if (m.author.id === m.client.user.id) return false;
 
-						const channelMsg = await message.replyT({
-							embeds: [requestMsg]
-						});
+								if (m.content) {
+									if (m.content.length >= 100) {
+										await m.replyT(`${bot.config.emojis.error} | The new emoji cannot be longer than 100 characters. If it was any higher, it wouldn't be an emoji. Try again.`);
 
-						await message.channel.awaitMessages({ filter: async m => {
-							if (m.author.id === m.client.user.id) return false;
+										return false;
+									}
 
-							if (m.content) {
-								if (m.content.length >= 100) {
-									await m.replyT(`${bot.config.emojis.error} | The new emoji cannot be longer than 100 characters. If it was any higher, it wouldn't be an emoji. Try again.`);
+									return true;
+								} else {
+									await m.replyT("Dude... I need you to send a emoji. Not a picture.");
 
 									return false;
 								}
-
-								return true;
-							} else {
-								await m.replyT("Dude... I need you to send a emoji. Not a picture.");
-
-								return false;
-							}
-						}, max: 1, time: 30 * 1000, errors: ["time"] }).then(async collected => {
-							try {
+							},
+							handleData: async (collected, requestMsg) => {
 								const newEmoji = collected.first().content;
-								data.guild.plugins.starboard.emoji = newEmoji;
-
-								data.guild.markModified("plugins.emoji");
-
-								await data.guild.save();
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | Changing Starboard Emoji`)
-									.setDescription(`Successfully setup starboard emoji to ${newEmoji}.`);
+									.setDescription(`Successfully changed starboard emoji from ${data.guild.plugins.starboard.emoji} to ${newEmoji}.`);
 
-								channelMsg.edit({
-									embeds: [requestMsg]
-								});
+								data.guild.plugins.starboard.emoji = newEmoji;
+								data.guild.markModified("plugins.starboard.emoji");
 
-								try {
-									setTimeout(() => {
-										channelMsg.delete();
-										collected.first().delete();
-									}, 5 * 1000);
-								} catch (err) {
-									// Do nothing. Most likely the message was deleted.
-								}
-							} catch (err) {
-								const ErrorEmbed = new MessageEmbed()
-									.setAuthor({
-										name: interaction.user.tag,
-										iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-									})
-									.setTitle("Uh oh!")
-									.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${data.message}`)
-									.addField("**Error**", `\`\`\`${data.message}\`\`\``)
-									.setColor("RED");
-
-								return await message.reply(ErrorEmbed);
-							}
-						}).catch(async collected => messageCollectorError(message, collected));
+								await data.guild.save();
+							},
+						});
 					},
 				},
 				{
@@ -329,78 +276,25 @@ async function execute(bot, message, args, command, data) {
 						.setStyle("SECONDARY"),
 					getData: () => data.guild.plugins?.starboard?.min || 2,
 					setData: async () => {
-						const requestMsg = new MessageEmbed()
-							.setAuthor({
-								name: message.user.tag,
-								iconURL: message.user.displayAvatarURL({ dynamic: true })
-							})
-							.setTitle(`<:config:934870512235073606> | Changing Starboard Minimum`)
-							.setDescription(`Please send a number to change the minimum amount of stars required to create a star message. You have 15 seconds to send a number.`)
-							.setFooter({
-								text: bot.config.embed.footer,
-								icon_url: bot.user.displayAvatarURL({ dynamic: true })
-							})
-							.setColor("GOLD");
-
-						const channelMsg = await message.replyT({
-							embeds: [requestMsg]
-						});
-
-						await message.channel.awaitMessages({ filter: async m => {
-							if (m.author.id === m.client.user.id) return false;
-
-							if (m.content) {
-								if (isNaN(m.content) || parseInt(m.content) < 1) {
-									await message.replyT(`${bot.config.emojis.error} | Please provide a valid __number__. Try again.`);
-
-									return false;
-								}
-
-								return true;
-							} else {
-								await m.replyT("Please reply with a __number__. Not an image. Try again.");
-
-								return false;
-							}
-						}, max: 1, time: 30 * 1000, errors: ["time"] }).then(async collected => {
-							try {
+						await setNewData(message, {
+							title: "<:config:934870512235073606> | Changing Starboard Minimum",
+							description: "Please send a number to change the minimum amount of stars required to create a star message. You have 15 seconds to send a number.",
+							color: "GOLD",
+							time: 15,
+							filter: numFilter,
+							handleData: async (collected, requestMsg) => {
 								const min = collected.first().content;
-								data.guild.plugins.starboard.min = min;
-
-								data.guild.markModified("plugins.min");
-
-								await data.guild.save();
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | Changing Starboard Minimum`)
-									.setDescription(`Successfully changed starboard minimum to ${min}.`);
+									.setDescription(`Successfully changed starboard minimum from ${data.guild.plugins.starboard.min} to ${min}.`);
 
-								channelMsg.edit({
-									embeds: [requestMsg]
-								});
+								data.guild.plugins.starboard.min = min;
+								data.guild.markModified("plugins.starboard.min");
 
-								try {
-									setTimeout(() => {
-										channelMsg.delete();
-										collected.first().delete();
-									}, 5 * 1000);
-								} catch (err) {
-									// Do nothing. Most likely the message was deleted.
-								}
-							} catch (err) {
-								const ErrorEmbed = new MessageEmbed()
-									.setAuthor({
-										name: interaction.user.tag,
-										iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-									})
-									.setTitle("Uh oh!")
-									.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${data.message}`)
-									.addField("**Error**", `\`\`\`${data.message}\`\`\``)
-									.setColor("RED");
-
-								return await message.reply(ErrorEmbed);
-							}
-						}).catch(async collected => messageCollectorError(message, collected));
+								await data.guild.save();
+							},
+						});
 					},
 				},
 			],
