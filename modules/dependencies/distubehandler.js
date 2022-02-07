@@ -38,7 +38,7 @@ module.exports = async bot => {
 			new SpotifyPlugin(spotifySettings),
 			new SoundCloudPlugin()
 		],
-		youtubeDL: false,
+		youtubeDL: true,
 		youtubeCookie: process.env.YTCOOKIE
 	});
 
@@ -327,7 +327,7 @@ module.exports = async bot => {
 					"⚡ - To select this song, send the current page number. For example, to select page 1 send 1.",
 				);
 			} catch (err) {
-				console.error(err);
+				bot.logger(err, "error");
 			}
 		})
 		.on("searchDone", (message, answer, query) => { })
@@ -345,7 +345,7 @@ module.exports = async bot => {
 		.on("empty", queue => queue.textChannel.send("Voice chat is empty. I'm going to leave the voice chat now."))
 		.on("disconnect", queue => queue.textChannel.send("Disconnected from voice chat."))
 		.on("error", (channel, err) => {
-			console.error(err);
+			bot.logger(err, "error");
 
 			channel.textChannel?.send(`❎︱Uh oh! An error occured. Please try again later. ${err}`);
 		});
