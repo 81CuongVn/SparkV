@@ -12,9 +12,9 @@ module.exports = {
 
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (!data.plugins?.starboard) return;
+		if (data.plugins?.starboard?.enabled === false) return;
 
-		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard);
+		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard?.channel);
 
 		if (!channel) return;
 

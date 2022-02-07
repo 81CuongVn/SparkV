@@ -27,9 +27,9 @@ async function translateContent(content) {
 
 		await translate(content2, {
 			to: this.guild.data.language
-		}).then(res => content.includes(" | ") ? translation = `${content1} | ${res.text}` : translation = res.text).catch(err => console.error(err));
+		}).then(res => content.includes(" | ") ? translation = `${content1} | ${res.text}` : translation = res.text).catch(err => bot.logger(err, "error"));
 
-		await this.client.redis.set(`${content}-${this.guild.data.language}`, JSON.stringify(translation), "EX", 15 * 60);
+		await this.client.redis.set(`${content}-${this.guild.data.language}`, JSON.stringify(translation));
 	}
 
 	return await translation;
@@ -50,29 +50,34 @@ async function replyTranslate(options) {
 
 	if (options.content) {
 		const translation = await translateContent(options.content);
+		const data = {
+			content: translation,
+			fetchReply: true,
+			allowedMentions: {
+				repliedUser: false
+			},
+		};
 
 		if (this?.applicationId) {
-			return this.followUp({
-				content: translation,
-				fetchReply: true,
-				allowedMentions: {
-					repliedUser: false
-				}
-			});
+			return this.followUp(data);
 		} else {
-			return this.reply({
-				content: translation,
-				fetchReply: true,
-				allowedMentions: {
-					repliedUser: false
-				},
-			});
+			return this.reply(data);
 		}
 	} else {
-		if (this?.applicationId) {
-			return this.followUp(options);
-		}
+		const data = {
+			fetchReply: true,
+			allowedMentions: {
+				repliedUser: false
+			},
+		};
 
-		return this.reply(options);
+		if (options?.content) data.content = options.content;
+		if (options?.embeds) data.embeds = options.embeds;
+
+		if (this?.applicationId) {
+			if (options?.ephemeral === true) data.ephemeral = true;
+
+			return this.followUp(data);
+		} else { return this.reply(data); }
 	}
 }

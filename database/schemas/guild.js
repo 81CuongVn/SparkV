@@ -47,8 +47,16 @@ const Schema = new mongoose.Schema({
 				min: 5
 			}
 		},
+		starboard: {
+			type: Object,
+			default: {
+				enabled: "false",
+				channel: null,
+				emoji: "⭐",
+				min: 1,
+			}
+		},
 		chatbot: { type: String, default: "false" },
-		starboard: { type: String, default: null }
 	}
 });
 

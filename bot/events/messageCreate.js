@@ -398,7 +398,7 @@ module.exports = {
 		if (commandfile.settings.enabled === false) return await message.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
 		if (commandfile.settings.guildOnly && !message.guild) return await message.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
 		if (commandfile.settings.ownerOnly && message.author.id !== bot.config.ownerID) return await message.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
-		if (commandfile.settings.slashOnly) return await message.replyT("This command is restricted for slash commands only. Please use the command with a slash (`/`) in front of it.");
+		if (commandfile.settings.slashOnly) return await message.replyT(`${bot.config.emojis.slash} | This command is restricted for slash commands only. Please use the command with a slash (\`/\`) in front of it.`);
 
 		try {
 			await commandfile.run(bot, message, args, command, data).then(async () => {
@@ -415,7 +415,7 @@ module.exports = {
 				});
 
 				scope.setTag(`Command`, commandfile.settings.name);
-				scope.setTag(`GuildType`, message.channel.type);
+				scope.setTag(`GuildType`, message?.channel?.type || "UNKNOWN");
 			});
 
 			bot.logger(err, "error");

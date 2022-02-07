@@ -27,7 +27,8 @@
     "stats": "<:stats:933736680924520550>",
     "config": "<:config:934870512235073606>",
     "tada": "<a:tada:819934065414242344>",
-    "search": "<:search:939232222672748604>"
+    "search": "<:search:939232222672748604>",
+    "slash": "<:slash:939972618814128159>"
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
