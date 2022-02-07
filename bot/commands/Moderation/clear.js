@@ -4,9 +4,6 @@ const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
 	const user = message.mentions.users.first();
-	if (!args[0] || isNaN(args[0]) || parseInt(args[0]) < 1) {
-		return message.replyT("Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.");
-	}
 
 	if (args[0] && args[0] === "all") {
 		const clonedChannel = await message.channel.clone();
@@ -16,6 +13,8 @@ async function execute(bot, message, args, command, data) {
 
 		return newChannel.replyT("Successfully cleared all messages.");
 	}
+
+	if (!args[0] || isNaN(args[0]) || parseInt(args[0]) < 1) return message.replyT("Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.");
 
 	await message.delete().catch(err => {});
 
@@ -27,13 +26,9 @@ async function execute(bot, message, args, command, data) {
 	messages.forEach(message => messagesTable.push(message));
 	messages = messagesTable;
 
-	if (user) {
-		messages.filter(m => m.author.id === user.id);
-	}
+	if (user) messages.filter(m => m.author.id === user.id);
 
-	if (messages.length > args[0]) {
-		messages.length = parseInt(args[0], 10);
-	}
+	if (messages.length > args[0]) messages.length = parseInt(args[0], 10);
 
 	messages.filter(m => !m.pinned);
 	args[0]++;
