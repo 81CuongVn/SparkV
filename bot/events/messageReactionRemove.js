@@ -8,11 +8,11 @@ module.exports = {
 
 		const message = reaction.message;
 
-		if (reaction.emoji.name !== "⭐" || reaction.count < 2) return;
+		if (reaction.emoji.name !== (data.plugins?.starboard?.emoji || "⭐") || reaction.count < (parseInt(data.plugins?.starboard?.min) || 2)) return;
 
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (data.plugins?.starboard?.enabled === false) return;
+		if (!data.plugins?.starboard?.enabled === "true") return;
 
 		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard?.channel);
 

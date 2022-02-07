@@ -10,7 +10,7 @@ module.exports = {
 
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (data.plugins?.starboard?.enabled === false) return;
+		if (!data.plugins?.starboard?.enabled === "true") return;
 		if (reaction.emoji.name !== (data.plugins?.starboard?.emoji || "⭐") || reaction.count < (parseInt(data.plugins?.starboard?.min) || 2)) return;
 
 		const channel = message.guild.channels.cache.find(c => c.id === data.plugins?.starboard?.channel);
