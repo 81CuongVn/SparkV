@@ -13,6 +13,14 @@ const Schema = new mongoose.Schema({
 	autoRemoveCommands: { type: Boolean, default: "false" },
 
 	plugins: {
+		logging: {
+			type: Object,
+			default: {
+				enabled: "false",
+				channel: null,
+				level: "info"
+			}
+		},
 		welcome: {
 			type: Object,
 			default: {

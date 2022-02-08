@@ -308,6 +308,67 @@ async function execute(bot, message, args, command, data) {
 
 				await data.guild.save();
 			}
+		},
+		{
+			name: "Logging",
+			emoji: "📝",
+			description: "Log actions in your server!",
+			disabled: false,
+			buttons: [
+				{
+					name: "Toggle",
+					data: ToggleButton,
+					getData: () => data.guild.plugins?.logging?.enabled || "false",
+				},
+				{
+					name: "Channel",
+					required: true,
+					enabledText: "Successfully setup channel!",
+					data: new MessageButton()
+						.setLabel("Channel")
+						.setEmoji("#️⃣")
+						.setCustomId("channel")
+						.setStyle("SECONDARY"),
+					getData: () => {
+						if (data.guild.plugins?.logging?.channel) {
+							return `<#${data.guild.plugins.logging.channel}>`;
+						} else {
+							return "None";
+						}
+					},
+					setData: async () => {
+						await setNewData(message, {
+							title: "<:config:934870512235073606> | Logging Channel Setup",
+							description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
+							color: "BLUE",
+							time: 60,
+							filter: cFilter,
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`<:config:934870512235073606> | Logging Channel Setup`)
+									.setDescription(`Successfully setup logging channel to ${collected.content}.`);
+
+								data.guild.plugins.logging.channel = collected.content.slice(2, -1);
+								data.guild.markModified("plugins.logging.channel");
+
+								await data.guild.save();
+							},
+						});
+					},
+				},
+			],
+			getState: () => data.guild.plugins?.logging?.enabled,
+			setState: async type => {
+				if (type === "enable") {
+					data.guild.plugins.logging.enabled = "true";
+				} else if (type === "disable") {
+					data.guild.plugins.logging.enabled = "false";
+				}
+
+				data.guild.markModified("plugins.logging.enabled");
+
+				await data.guild.save();
+			}
 		}
 	];
 
@@ -411,10 +472,11 @@ async function execute(bot, message, args, command, data) {
 	async function setupSettings() {
 		settings.forEach(async setting => {
 			const SettingButton = new MessageButton()
-				.setLabel(`${setting.name}`)
+				.setLabel(setting.name)
 				.setEmoji(setting.emoji)
 				.setCustomId(setting.name)
-				.setStyle("PRIMARY");
+				.setStyle("PRIMARY")
+				.setDisabled(setting?.disabled ? setting.disabled : false);
 
 			if (!buttons[number]) {
 				buttons[number] = {
