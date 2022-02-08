@@ -593,7 +593,7 @@ async function execute(bot, message, args, command, data) {
 		try {
 			await botMessage?.edit({
 				embeds: [
-					NewEmbed
+					Menu
 						.setTitle(await message.translate("Config Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true }))
 						.setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
 				],
