@@ -76,7 +76,7 @@ module.exports = class ModCommand {
 				files: [Image]
 			});
 		} catch (err) {
-			console.log(err);
+			bot.logger(err, "error");
 
 			const ImageEmbed = new Discord.MessageEmbed()
 				.setTitle(this.settings.name)

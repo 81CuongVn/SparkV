@@ -36,7 +36,7 @@ async function execute(bot, message, args, command, data) {
 			});
 		});
 	} catch (err) {
-		console.log(err);
+		bot.logger(err, "error");
 
 		const ImageEmbed = new Discord.MessageEmbed()
 			.setTitle(`Screenshot of ${website} Failed!`)

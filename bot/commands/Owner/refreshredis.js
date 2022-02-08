@@ -20,12 +20,12 @@ async function execute(bot, message, args, command, data) {
 
 		LoadingMsg.edit(`${bot.config.emojis.success} | All done! Every Reddit command's cache has been purged.`);
 	} catch (err) {
-		console.log(err);
+		bot.logger(err, "error");
 
 		const ErrorEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: interaction.user.tag,
-				iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+				name: interaction.author.tag,
+				iconURL: interaction.author.displayAvatarURL({ dynamic: true })
 			})
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to refresh the Redis cache!**`)
@@ -44,6 +44,5 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	ownerOnly: true,
-	slash: true,
 	options: [],
 });
