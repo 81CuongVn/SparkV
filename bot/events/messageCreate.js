@@ -28,7 +28,7 @@ function timeoutUser(message, data) {
 	if (message.member.isCommunicationDisabled()) return;
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `User was placed on timeout for ${(10 * data.member.infractionsCount) * 1000}.`)
-		.then(async () => await message.replyT(`You've been **MUTED** for ${(10 * data.member.infractionsCount) * 1000} seconds for getting **${data.member.infractionsCount}** warning(s).`))
+		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime(10 * data.member.infractionsCount)} for getting **${data.member.infractionsCount}** warning(s).`))
 		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
 }
 
