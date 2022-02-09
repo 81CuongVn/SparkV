@@ -24,11 +24,11 @@ function deleteMessages(bot, matches) {
 }
 
 // Timeout user
-function timeoutUser(message, data) {
+function timeoutUser(offense, message, data) {
 	if (message.member.isCommunicationDisabled()) return;
 
-	message.member.timeout((10 * data.member.infractionsCount) * 1000, `User was placed on timeout for ${(10 * data.member.infractionsCount) * 1000}.`)
-		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime(10 * data.member.infractionsCount)} for getting **${data.member.infractionsCount}** warning(s).`))
+	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
+		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
 		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
 }
 
@@ -134,7 +134,7 @@ module.exports = {
 						message.delete().catch(err => { });
 						message.replyT(`🔨 | ${message.author}, please stop cursing. If you continue, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
-						timeoutUser(message, data);
+						timeoutUser("cursing", message, data);
 
 						// If (data.member.infractionsCount === 12) {
 						// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
@@ -194,7 +194,7 @@ module.exports = {
 
 					message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
-					timeoutUser(message, data);
+					timeoutUser("sending links", message, data);
 
 					// If (data.member.infractionsCount === 12) {
 					// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
@@ -265,7 +265,7 @@ module.exports = {
 
 							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
-							timeoutUser(message, data);
+							timeoutUser("spamming", message, data);
 
 							// If (data.member.infractionsCount === 12) {
 							// 	deleteMessages(bot, matches);
