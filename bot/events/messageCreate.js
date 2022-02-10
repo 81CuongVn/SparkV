@@ -426,8 +426,7 @@ module.exports = {
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
 				})
 				.setTitle("Uh oh!")
-				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-				.addField("**Error**", `\`\`\`${error.message}\`\`\``)
+				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
 				.setColor("RED");
 
 			await message.replyT({
