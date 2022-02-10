@@ -32,13 +32,13 @@ module.exports = new cmd(
 			.addField("Joined", `<t:${~~(member.joinedAt / 1000)}:R>`, true)
 			.addField("Registered", `<t:${~~(user.createdAt / 1000)}:R>`, true)
 			.addField("Join Position", `${await position || "UNKNOWN"}/${members.length}`, true)
-			.addField("Badges", `${user.flags.toArray().map(b => b)}`, true)
 			.setFooter({
 				text: `ID: ${user.user ? user.user.id : user.id} • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(bot.config.embed.color);
 
+		if (user.flags) InfoEmbed.addField("Badges", `${user.flags.toArray().map(b => b)}`, true);
 		if (user.user ? user.user.bannerURL({ dynamic: true }) : user.bannerURL({ dynamic: true })) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
 		await message.replyT({
