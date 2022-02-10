@@ -62,10 +62,10 @@ async function execute(bot, message, args, command, data) {
 			});
 
 		if (message.guild?.welcome_screen?.description) serverEmbed.setDescription(message.guild.welcome_screen.description);
-		if (message.guild?.banner) serverEmbed.setImage(`https://cdn.discordapp.com/banners/${serverinfo.guild.id}/${serverinfo.guild.banner}.png?size=1024`);
+		if (message.guild?.banner) serverEmbed.setImage(`https://cdn.discordapp.com/banners/${message.guild.id}/${message.guild.banner}.png?size=1024`);
 		if (message.guild?.vanity_url_code) {
 			serverEmbed
-				.addField("**Vanity URL**", `https://discord.gg/${serverinfo.guild.vanity_url_code}`, true)
+				.addField("**Vanity URL**", `https://discord.gg/${message.guild.vanity_url_code}`, true)
 				.setURL(`https://discord.gg/${message.guild.vanityURLCode}`);
 		}
 
