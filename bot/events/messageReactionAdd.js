@@ -54,16 +54,14 @@ module.exports = {
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
 				.setFooter({
-					text: `⭐ 2 | ${message.id}`
+					text: `⭐ ${data.plugins?.starboard?.min || 2} | ${message.id}`
 				})
 				.setColor("YELLOW")
 				.setTimestamp();
 
-			if (message?.cleanContent) {
-				embed.setDescription(message.cleanContent);
-			}
+			if (message?.cleanContent) embed.setDescription(message.cleanContent);
 
-			await channel?.send({ content: `⭐ **2** | ${message.channel}`, embeds: [embed] }).catch(() => {});
+			await channel?.send({ content: `⭐ **${data.plugins?.starboard?.min || 2}** | ${message.channel}`, embeds: [embed] }).catch(() => {});
 		}
 	}
 };
