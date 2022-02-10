@@ -73,9 +73,7 @@ module.exports = new cmd(
 			})
 			.setColor(bot.config.embed.color);
 
-		const userflags = user.user ? await user.user.fetchFlags() : await user.fetchFlags();
-
-		if (userflags.length > 0) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
+		if (user.flags.toArray().length > 0) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
 		if (roles) InfoEmbed.addField("\`🏆\` Roles", roles, true);
 
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
