@@ -3,6 +3,13 @@ const Discord = require("discord.js");
 
 const cmd = require("../../templates/command");
 
+const statuses = {
+	online: "🟢",
+	idle: "🌙",
+	dnd: "🔴",
+	offline: "⚫"
+};
+
 module.exports = new cmd(
 	async (bot, message, args, command, data) => {
 		let user = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
@@ -28,17 +35,17 @@ module.exports = new cmd(
 					: user.displayAvatarURL({ dynamic: true }),
 			})
 			.setThumbnail(user.user ? user.user.displayAvatarURL({ dynamic: true }) : user.displayAvatarURL({ dynamic: true }))
-			.addField("Status", `${member?.presence?.status || "offline"}`, true)
-			.addField("Joined", `<t:${~~(member.joinedAt / 1000)}:R>`, true)
-			.addField("Registered", `<t:${~~(user.createdAt / 1000)}:R>`, true)
-			.addField("Join Position", `${await position || "UNKNOWN"}/${members.length}`, true)
+			.addField(`\`${statuses[member?.presence?.status || "offline"]}\` Status`, `${member?.presence?.status || "offline"}`, true)
+			.addField("\`⌚\` Joined Server", `<t:${~~(member.joinedAt / 1000)}:R>`, true)
+			.addField("\`🚪\` Registered", `<t:${~~(user.createdAt / 1000)}:R>`, true)
+			.addField("\`🔢\`Join Position", `${await position || "UNKNOWN"}/${members.length}`, true)
 			.setFooter({
-				text: `ID: ${user.user ? user.user.id : user.id} • ${bot.config.embed.footer}`,
+				text: `\`🔢\` ID: ${user.user ? user.user.id : user.id} • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(bot.config.embed.color);
 
-		if (user.flags) InfoEmbed.addField("Badges", `${user.flags.toArray().map(b => b)}`, true);
+		if (user?.flags?.length > 0) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => b)}`, true);
 		if (user.user ? user.user.bannerURL({ dynamic: true }) : user.bannerURL({ dynamic: true })) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
 		await message.replyT({
