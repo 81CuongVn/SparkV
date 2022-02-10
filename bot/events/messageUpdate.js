@@ -4,6 +4,11 @@ module.exports = {
 	once: false,
 	async execute(bot, oldM, newM) {
 		if (!newM.editedAt) return;
+		if (newM.author.bot) return;
+		if (!oldM.content || !newM.content) return;
+		if (newM.content.length > 1024) return;
+		if (newM.content === oldM.content) return;
+		if (newM.content.includes("@everyone") || newM.content.includes("@here")) newM.content = newM.cleanContent;
 
 		const data = await bot.database.getGuild(newM.guildId);
 
