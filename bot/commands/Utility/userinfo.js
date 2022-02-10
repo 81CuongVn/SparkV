@@ -22,9 +22,28 @@ module.exports = new cmd(
 		const member = message.channel.guild.members.cache.get(user.id);
 
 		const userdata = await bot.database.getUser(user.id);
-		// const roles = member.roles.cache.map(r => `<@&${r.id}>`).join(", ");
 
 		user = user.user ? await user.user.fetch() : await user.fetch();
+
+		let num = 0;
+		let addedRoles = 0;
+		let plusRoles = false;
+		let roles = member.roles.cache
+			.sort((a, b) => b.comparePositionTo(a))
+			.filter(r => r.id !== message.guild.id)
+			.map((r, id) => {
+				if (num < 4) {
+					num++;
+
+					return `<@&${r.id}>`;
+				} else {
+					plusRoles = true;
+					addedRoles++;
+				}
+			})
+			.join(" ");
+
+		if (plusRoles === true) roles += `+${addedRoles}`;
 
 		const members = message.guild.members.cache
 			.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
@@ -38,18 +57,16 @@ module.exports = new cmd(
 
 		const InfoEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: user.user ? user.user.tag : user.tag,
+				name: `${statuses[member?.presence?.status || "offline"]} | ${user.user ? user.user.tag : user.tag}`,
 				iconURL: user.user
 					? user.user.displayAvatarURL({ dynamic: true })
 					: user.displayAvatarURL({ dynamic: true }),
 			})
 			.setThumbnail(user.user ? user.user.displayAvatarURL({ dynamic: true }) : user.displayAvatarURL({ dynamic: true }))
-			.addField(`\`${statuses[member?.presence?.status || "offline"]}\` Status`, `${member?.presence?.status || "offline"}`, true)
 			.addField("\`⌚\` Joined Server", `<t:${~~(member.joinedAt / 1000)}:R>`, true)
 			.addField("\`🚪\` Registered", `<t:${~~(user.createdAt / 1000)}:R>`, true)
 			.addField("\`😎\` Using SparkV Since", `<t:${~~(userdata.registrationDate / 1000)}:R>`, true)
 			.addField("\`🔢\`Join Position", `${await position || "UNKNOWN"}/${members.length}`, true)
-			// .addField("\`🔧\` Roles", roles || "None", false)
 			.setFooter({
 				text: `🔢 ID: ${user.user ? user.user.id : user.id} • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -59,6 +76,8 @@ module.exports = new cmd(
 		const userflags = user.user ? await user.user.fetchFlags() : await user.fetchFlags();
 
 		if (userflags) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
+		if (roles) InfoEmbed.addField("\`🏆\` Roles", roles, true);
+
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
 		await message.replyT({
