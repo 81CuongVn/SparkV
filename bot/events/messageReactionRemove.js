@@ -7,10 +7,9 @@ module.exports = {
 		if (reaction.message?.partial) await reaction?.message.fetch();
 
 		const message = reaction.message;
+		const data = await bot.database.getGuild(message.guildId);
 
 		if (reaction.emoji.name !== (data.plugins?.starboard?.emoji || "⭐") || reaction.count < (parseInt(data.plugins?.starboard?.min) || 2)) return;
-
-		const data = await bot.database.getGuild(message.guildId);
 
 		if (!data.plugins?.starboard?.enabled === "true") return;
 
