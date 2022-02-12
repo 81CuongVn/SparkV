@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: "Beg for coins.",
 	dirname: __dirname,
-	usage: `<optional user>`,
+	usage: "",
 	aliases: [],
 	perms: ["EMBED_LINKS"],
 	slash: true

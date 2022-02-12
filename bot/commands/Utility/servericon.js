@@ -33,6 +33,6 @@ module.exports = new cmd(execute, {
 	description: "Gets the current server's server icon in all sizes and file types!",
 	dirname: __dirname,
 	aliases: ["si"],
-	usage: ``,
+	usage: "",
 	slash: true,
 });

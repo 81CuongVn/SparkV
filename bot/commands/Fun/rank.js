@@ -39,5 +39,5 @@ module.exports = new cmd(execute, {
 	description: `View a users rank!`,
 	dirname: __dirname,
 	aliases: ["level", "xp"],
-	usage: `<optional user>`,
+	usage: `(optional user)`,
 });

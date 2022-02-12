@@ -15,5 +15,5 @@ module.exports = new cmd(execute, {
 	description: `I will reverse any text you give me lol.`,
 	aliases: [],
 	dirname: __dirname,
-	usage: `<optional user>`,
+	usage: `(text)`,
 });

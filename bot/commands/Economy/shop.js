@@ -24,7 +24,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: `Displays the shop!`,
 	dirname: __dirname,
-	usage: ``,
+	usage: "",
 	aliases: [],
 	perms: ["EMBED_LINKS"],
 	slash: true

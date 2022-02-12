@@ -23,5 +23,5 @@ module.exports = new cmd(execute, {
 	description: `Calculate any equation!`,
 	aliases: ["calc"],
 	dirname: __dirname,
-	usage: ``,
+	usage: "",
 });

@@ -47,7 +47,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: "Collect your daily amount of coins!",
 	dirname: __dirname,
-	usage: ``,
+	usage: "",
 	aliases: [],
 	perms: [],
 	cooldown: 10,

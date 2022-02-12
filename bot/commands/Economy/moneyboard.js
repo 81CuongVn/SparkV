@@ -39,7 +39,7 @@ module.exports = new cmd(execute, {
 	description: `Just a little fun.`,
 	dirname: __dirname,
 	aliases: ["moneyleaderboard", "mlb"],
-	usage: ``,
+	usage: "",
 	slash: true,
 	slashOnly: true,
 	options: [

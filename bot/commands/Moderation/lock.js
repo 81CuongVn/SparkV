@@ -18,6 +18,6 @@ module.exports = new cmd(execute, {
 	description: "I'll lock the current channel.",
 	dirname: __dirname,
 	aliases: [],
-	usage: ``,
+	usage: "",
 	perms: ["MANAGE_CHANNELS"],
 });

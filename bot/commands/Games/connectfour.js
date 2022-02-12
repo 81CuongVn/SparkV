@@ -211,7 +211,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: `Play a game of ConnectFour with me or mention someone to play with!`,
 	dirname: __dirname,
-	usage: "<optional user>",
+	usage: "(optional user)",
 	aliases: ["cf"],
 	perms: ["EMBED_LINKS"],
 });

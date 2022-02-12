@@ -18,6 +18,6 @@ module.exports = new cmd(execute, {
 	description: "I'll unlock the current channel.",
 	dirname: __dirname,
 	aliases: ["ulock"],
-	usage: ``,
+	usage: "",
 	perms: ["MANAGE_CHANNELS"],
 });

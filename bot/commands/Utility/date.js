@@ -7,6 +7,6 @@ module.exports = new cmd(async (bot, message) => await message.replyT(`The curre
 	description: "Gets the current date.",
 	dirname: __dirname,
 	aliases: [],
-	usage: ``,
+	usage: "",
 	slash: true
 });

@@ -40,6 +40,6 @@ module.exports = new cmd(
 		description: "Use an item in your inventory.",
 		dirname: __dirname,
 		aliases: [],
-		usage: ``,
+		usage: "",
 	},
 );
