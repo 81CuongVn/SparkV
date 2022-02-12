@@ -16,7 +16,6 @@ async function execute(bot, message, args, command, data) {
 	const place3 = places[Math.floor(Math.random() * places.length)];
 
 	const winningPlace = Math.floor(Math.random() * 2);
-	console.log(winningPlace);
 
 	const place1B = new MessageButton()
 		.setLabel(place1)
@@ -64,7 +63,6 @@ async function execute(bot, message, args, command, data) {
 
 		SearchEmbed.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true);
 
-		console.log(placeNum, winningPlace, placeNum === winningPlace);
 		if (placeNum === winningPlace) {
 			const foundMoney = Math.floor(Math.random() * 1000) * data.user.money.multiplier;
 
