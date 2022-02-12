@@ -118,38 +118,6 @@ async function execute(bot, message, args, command, data) {
 			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
 		}
 	});
-
-	// Const Embed = new Discord.MessageEmbed()
-	// 	.setAuthor({
-	// 		name: message.user.tag,
-	// 		iconURL: message.user.displayAvatarURL({ dynamic: true })
-	// 	})
-
-	// if (choice === 1) {
-	// 	const RandomAmmount = (Math.floor(Math.random() * 500) + 1) * data.user.money.multiplier;
-	// 	const ReplyText = Math.floor(Math.random() * YesReplies.length);
-
-	// 	data.user.money.balance += RandomAmmount;
-
-	// 	Embed
-	// 		.setTitle(`**${YesReplies[ReplyText]}**`)
-	// 		.setDescription(`From begging, you received **⏣${await bot.functions.formatNumber(RandomAmmount)}**. You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins!`)
-	// 		.setColor("GREEN");
-	// } else {
-	// 	const ReplyText = Math.floor(Math.random() * YesReplies.length);
-
-	// 	Embed
-	// 		.setTitle(`**${NoReplies[ReplyText]}**`)
-	// 		.setDescription(`No money for you. You're balance stays the same at **⏣${await bot.functions.formatNumber(data.user.money.balance)}** coins.`)
-	// 		.setColor("RED");
-	// }
-
-	// data.user.markModified("money.balance");
-	// await data.user.save();
-
-	// await message.replyT({
-	// 	embeds: [Embed],
-	// });
 }
 
 module.exports = new cmd(execute, {
@@ -158,5 +126,6 @@ module.exports = new cmd(execute, {
 	usage: "",
 	aliases: [],
 	perms: ["EMBED_LINKS"],
-	slash: true
+	slash: true,
+	cooldown: 15,
 });
