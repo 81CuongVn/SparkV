@@ -27,12 +27,14 @@ module.exports = new cmd(
 
 		let num = 0;
 		let addedRoles = 0;
+		let roleCount = 0;
 		let plusRoles = false;
 		let roleColor;
 		let roles = member.roles.cache
 			.sort((a, b) => b.comparePositionTo(a))
 			.filter(r => r.id !== message.guild.id)
 			.map((r, id) => {
+				roleCount++;
 				if (num === 1) roleColor = r.hexColor;
 
 				if (num < 4) {
@@ -77,7 +79,7 @@ module.exports = new cmd(
 			.setColor(roleColor || bot.config.embed.color);
 
 		if (user.flags.toArray().length > 0) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
-		if (roles) InfoEmbed.addField("\`🏆\` Roles", roles, true);
+		if (roles) InfoEmbed.addField(`\`🏆\` Roles (${roleCount})`, roles, false);
 
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
