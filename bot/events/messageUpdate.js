@@ -24,8 +24,12 @@ module.exports = {
 				iconURL: newM.author.displayAvatarURL({ dynamic: true })
 			})
 			.setDescription(`**Message Edited in ${newM.channel}**`)
-			.addField("Old Message", oldM.content, true)
-			.addField("New Message", newM.content, true)
+			.addField("Before", oldM.content, true)
+			.addField("After", newM.content, true)
+			.setFooter({
+				text: `User ID: ${message.author.id} | Message ID: ${message.id}`,
+				iconURL: message.author.displayAvatarURL({ dynamic: true })
+			})
 			.setColor("YELLOW")
 			.setTimestamp();
 
