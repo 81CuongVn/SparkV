@@ -33,13 +33,13 @@ module.exports = {
 				.setColor("RED");
 
 			if (guild.vanityURLCode) {
-				ServerAddedEmbed
+				ServerRemovedEmbed
 					.setURL(`https://discord.gg/${guild.vanityURLCode}`)
 					.addField("🔗 **Vanity URL**", `https://discord.gg/${guild.vanityURLCode}`, true);
 			}
 
 			if (Owner) {
-				ServerAddedEmbed.setAuthor({
+				ServerRemovedEmbed.setAuthor({
 					name: Owner?.user?.username,
 					iconURL: Owner?.user?.displayAvatarURL({ dynamic: true })
 				});
