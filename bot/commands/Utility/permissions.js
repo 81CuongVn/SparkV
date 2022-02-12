@@ -27,7 +27,7 @@ const requiredPerms = [
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const myPerms = message.channel.permissionsFor(message.member);
+		const myPerms = message.channel.permissionsFor(message.guild.me);
 		const perms = Object.keys(Discord.Permissions.FLAGS);
 
 		let description = "";
