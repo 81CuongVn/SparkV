@@ -1,4 +1,4 @@
-const discord = require("discord.js");
+const Discord = require("discord.js");
 
 module.exports = class Command {
 	constructor(execute, sett) {
@@ -19,7 +19,21 @@ module.exports = class Command {
 
 	async run(bot, message, args, command, data) {
 		if (this.settings.requireArgs && !args[0]) {
-			return await message.replyT(`${bot.config.emojis.error} | Invalid arguments. Please make sure you follow ${this.settings.name} command's usage. Usage: \`${data.guild.prefix}${this.settings.name} ${this.settings.usage}\``);
+			return await message.replyT({
+				content: `${bot.config.emojis.error} | Invalid arguments. Please make sure you follow ${this.settings.name} command's usage. Usage: \`${data.guild.prefix}${this.settings.name} ${this.settings.usage}\``,
+				ephemeral: true,
+			});
+		}
+
+		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
+
+		for (const perm of this.settings.perms) {
+			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
+				return await message.replyT({
+					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
+					ephemeral: true,
+				});
+			}
 		}
 
 		return this.execute(bot, message, args, command, data);
