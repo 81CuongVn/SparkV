@@ -190,7 +190,7 @@ async function execute(bot, message, args, command, data) {
 	collector.on("collect", async interaction => {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
-				await interaction.edit({
+				await interaction.update({
 					embeds: [
 						pages.filter(p => p.author.name.includes(interaction.values[0]))[0]
 					],
