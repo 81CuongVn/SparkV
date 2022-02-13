@@ -7,11 +7,12 @@ module.exports = {
 		if (reaction.message?.partial) await reaction?.message.fetch();
 
 		const message = reaction.message;
+
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (reaction.emoji.name !== (data.plugins?.starboard?.emoji || "⭐") || reaction.count < (parseInt(data.plugins?.starboard?.min) || 2)) return;
-
 		if (!data.plugins?.starboard?.enabled === "true") return;
+		if (!(reaction.emoji.name === (data.plugins?.starboard?.emoji || "⭐"))) return;
+		if (reaction.count >= (parseInt(data.plugins?.starboard?.min) || 2)) return;
 
 		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard?.channel);
 
@@ -23,7 +24,6 @@ module.exports = {
 		if (stars) {
 			const star = /^\⭐\s([0-9]{1,3})\s\|\s([0-9]{17,20})/.exec(stars.embeds[0].footer.text);
 			const foundStar = stars.embeds[0];
-
 			const embed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: message.author.tag,
@@ -32,7 +32,7 @@ module.exports = {
 				.setImage(message.attachments.first()?.url || null)
 				.addField("Source", `[Jump to Message!](${message.url})`, true)
 				.setFooter({
-					text: `⭐ ${parseInt(star[1]) + 1} | ${message.id}`
+					text: `⭐ ${parseInt(star[1]) - 1} | ${message.id}`
 				})
 				.setColor(foundStar.color)
 				.setTimestamp();
@@ -40,6 +40,7 @@ module.exports = {
 			if (foundStar?.description) {
 				embed.setDescription(foundStar.description);
 			}
+
 
 			const starMsg = await channel.messages.fetch(stars.id);
 
