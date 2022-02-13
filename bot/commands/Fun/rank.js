@@ -8,16 +8,16 @@ async function execute(bot, message, args, command, data) {
 	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 	const Target = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
-	const TargetMember = await message.guild.members.fetch(Target.id);
+	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);
 
-	const User = await Levels.fetch(Target.id, message.guild.id, true);
+	const User = await Levels.fetch(Target.user ? Target.user.id : Target.id, message.guild.id, true);
 	const NeededXP = Levels.xpFor(parseInt(User.level) + 1);
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | This user hasn't earned any XP yet!`);
 
 	const Rank = new canvacord.Rank()
-		.setUsername(Target.username)
-		.setDiscriminator(Target.discriminator)
+		.setUsername(Target.user ? Target.user.username : Target.username)
+		.setDiscriminator(Target.user ? Target.user.discriminator : Target.discriminator)
 		.setAvatar(Target.displayAvatarURL({ dynamic: false, format: "png" }))
 		.setStatus(TargetMember?.presence?.status || "offline")
 		.setRank(User.position)
