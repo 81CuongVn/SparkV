@@ -21,7 +21,6 @@ const requiredPerms = [
 	"MANAGE_ROLES",
 	"MANAGE_THREADS",
 	"SEND_MESSAGES_IN_THREADS",
-	"START_EMBEDDED_ACTIVITIES",
 	"MODERATE_MEMBERS"
 ];
 
@@ -41,8 +40,8 @@ module.exports = new cmd(
 
 		const embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: message.user.tag,
-				iconURL: message.user.displayAvatarURL({ dynamic: true })
+				name: bot.user.tag,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setDescription(description)
 			.setThumbnail(message.guild.iconURL({ dynamic: true, format: "png" }))
