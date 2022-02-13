@@ -44,7 +44,7 @@ module.exports = async bot => {
 
 	bot.distube
 		.on("playSong", async (queue, song) => {
-			let NowPlayingEmbed = new Discord.MessageEmbed()
+			const NowPlayingEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name} by ${song.uploader.name}`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
@@ -56,13 +56,13 @@ module.exports = async bot => {
 				.setTimestamp();
 
 			if (song.playlist) {
-				NowPlayingEmbed = NowPlayingEmbed
+				NowPlayingEmbed
 					.setFooter({
 						text: `${song.user.tag} • (${song.playlist.songs.length} songs) - Now Playing ${song.name} • ${bot.config.embed.footer}`,
 						iconURL: song.user.displayAvatarURL()
 					});
 			} else {
-				NowPlayingEmbed = NowPlayingEmbed
+				NowPlayingEmbed
 					.setFooter({
 						text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
 						iconURL: song.user.displayAvatarURL()
@@ -87,7 +87,7 @@ module.exports = async bot => {
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [NowPlayingEmbed],
 				components: [
-					new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton, StopButton)
+					new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)
 				],
 				fetchReply: true
 			});
@@ -198,7 +198,7 @@ module.exports = async bot => {
 
 			const MusicMessage = await queue.textChannel.send({
 				embeds: [SongAddedQueue],
-				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, LoopButton, StopButton)],
+				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)],
 				fetchReply: true
 			});
 
@@ -332,18 +332,11 @@ module.exports = async bot => {
 		})
 		.on("searchDone", (message, answer, query) => { })
 		.on("searchCancel", async message => await message.replyT(`Searching canceled.`))
-		.on("searchInvalidAnswer", async message =>
-			await message.replyT(
-				"Search answer invalid. Make sure you're sending your selected song's page number. For example, if I wanted to play a song on the 5th page, I would send the number 5.",
-			),
-		)
+		.on("searchInvalidAnswer", async message => await message.replyT("Search answer invalid. Make sure you're sending your selected song's page number. For example, if I wanted to play a song on the 5th page, I would send the number 5."))
 		.on("searchNoResult", async message => await message.replyT("No result found!"))
 		.on("finish", queue => queue.textChannel.send("No songs left in queue."))
-		.on("noRelated", async message =>
-			await message.replyT("I cannot find a related video to play. I am stopping the music."),
-		)
+		.on("noRelated", async message => await message.replyT("I cannot find a related video to play. I am stopping the music."))
 		.on("empty", queue => queue.textChannel.send("Voice chat is empty. I'm going to leave the voice chat now."))
-		.on("disconnect", queue => queue.textChannel.send("Disconnected from voice chat."))
 		.on("error", (channel, err) => {
 			bot.logger(err, "error");
 
