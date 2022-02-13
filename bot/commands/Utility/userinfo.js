@@ -35,7 +35,7 @@ module.exports = new cmd(
 			.filter(r => r.id !== message.guild.id)
 			.map((r, id) => {
 				roleCount++;
-				if (num === 1) roleColor = r.hexColor;
+				if (num === 0) roleColor = r.hexColor;
 
 				if (num < 4) {
 					num++;
@@ -62,7 +62,7 @@ module.exports = new cmd(
 
 		const InfoEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: `${statuses[member?.presence?.status || "offline"]} | ${user.user ? user.user.tag : user.tag}`,
+				name: `${statuses[member?.presence?.status || "offline"]} | ${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? "Robot" : "Human"})`,
 				iconURL: user.user
 					? user.user.displayAvatarURL({ dynamic: true })
 					: user.displayAvatarURL({ dynamic: true }),
