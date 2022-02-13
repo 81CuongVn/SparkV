@@ -51,15 +51,9 @@ module.exports = {
 				.setTitle("Thanks for adding me!")
 				.setDescription(`
 					I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n
-					Simply use the command /help or ^help to get a list of my commands. Want to enable a setting? Go to my dashboard! Use the command ^Dashboard and click on the link I send you.\n
+					Simply use the command \`/help\` to get a list of my commands.\n
+					Want to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\n
 					If you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h`)
-				.addField("Want to Enable A Setting?", `
-					Use the command ^Dashboard or /Dashboard and click on the link I send you.\n
-					Select a server, and personilize the heck out of me! I can even talk to you if you set Chat Bot to enabled.`)
-				.addField("SparkV's Plan", `
-					SparkV's plan is to defeat the money-hungry Discord bot Mee6 in server count and to be the best free Discord bot out there.\n
-					I'm currently in **${bot.functions.formatNumber(bot.guilds.cache.size)}** guilds, and I'm growing fast!
-					I need your help to defeat the money-hungry Mee6. Please tell your friends about me. I need **${16000000 - bot.guilds.cache.size}** more guilds until we pass Mee6!`)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
 				.setFooter({
@@ -85,14 +79,14 @@ module.exports = {
 				.setLabel("Support Invite")
 				.setStyle("LINK");
 
-			const VoteButton = new Discord.MessageButton()
-				.setURL("https://top.gg/bot/884525761694933073")
-				.setLabel("Review/Vote for me!")
+			const Dashboard = new Discord.MessageButton()
+				.setURL("https://www.sparkv.tk/dashboard")
+				.setLabel("Dashboard")
 				.setStyle("LINK");
 
 			await guild.systemChannel.send({
 				embeds: [WelcomeEmbed],
-				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton)],
+				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, Dashboard)],
 			}).catch(err => console.log(`Failed to send message to ${guild.name} (${guild.id})! ${err.message}`));
 		}
 	},
