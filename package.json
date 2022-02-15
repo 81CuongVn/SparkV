@@ -60,6 +60,7 @@
     "noblox.js": "^4.13.0",
     "os": "^0.1.2",
     "redis": "^4.0.3",
+    "simple-get": "^4.0.1",
     "socket.io-client": "^4.4.1",
     "statcord.js": "^3.4.1",
     "to-zalgo": "^1.0.1",
