@@ -278,10 +278,7 @@ async function execute(bot, message, args, command, data) {
 							time: 15,
 							filter: numFilter,
 							handleData: async (collected, requestMsg) => {
-								console.log(collected, requestMsg);
-								console.log("ok");
 								const min = collected.content.trim();
-								console.log(min);
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | Changing Starboard Minimum`)
