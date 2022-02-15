@@ -1,7 +1,7 @@
 const animalCommand = require("../../templates/animalCommand");
 
 module.exports = new animalCommand({
-	description: "I will send a cute cat! Cute, but dogs are cuter.",
+	description: "I will send a cute cat!",
 	dirname: __dirname,
 	aliases: ["cutecat"],
 	usage: "",

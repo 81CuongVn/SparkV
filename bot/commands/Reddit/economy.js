@@ -1,7 +1,7 @@
 const RedditCommand = require("../../templates/redditCommand");
 
 module.exports = new RedditCommand({
-	description: "lol",
+	description: "I will send something from meme economy.",
 	dirname: __dirname,
 	aliases: ["memeeconomy"],
 	usage: "",

@@ -1,7 +1,7 @@
 const RedditCommand = require("../../templates/redditCommand");
 
 module.exports = new RedditCommand({
-	description: "Meme but SUPER dank. Only the funnyiest memes.",
+	description: "Meme but SUPER dank. Only the funniest memes.",
 	dirname: __dirname,
 	aliases: ["sdank", "superdank"],
 	usage: "",

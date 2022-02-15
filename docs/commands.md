@@ -1,13 +1,13 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **143 commands**!
+SparkV's Command List! SparkV contains more than **146 commands**!
 
 ## Economy
 
 | Name           | Description                                              | Usage                            | Cooldown  |
 | -------------- | -------------------------------------------------------- | -------------------------------- | --------- |
 | **balance**    | View your balance.                                       | (user default: you)              | 2 seconds |
-| **beg**        | Beg for coins.                                           | {optional user}                  | 2 seconds |
+| **beg**        | Beg for coins.                                           |                                  | 2 seconds |
 | **buy**        | Buy an item from the shop.                               | {item name} (optional: quantity) | 2 seconds |
 | **coinflip**   | Bet on a side and flip a coin! (heads/tails)             | (Side)                           | 2 seconds |
 | **daily**      | Collect your daily amount of coins!                      |                                  | 1 seconds |
@@ -16,6 +16,7 @@ SparkV's Command List! SparkV contains more than **143 commands**!
 | **moneyboard** | Just a little fun.                                       |                                  | 2 seconds |
 | **pay**        | Give someone some data.user.money.balance!               | (user)                           | 2 seconds |
 | **rob**        | Steal somebody's hard earned money.                      | (user)                           | 2 seconds |
+| **search**     | Search a place for coins!                                |                                  | 1 seconds |
 | **shop**       | Displays the shop!                                       |                                  | 2 seconds |
 | **slots**      | Don't gamble kids!                                       | (amount)                         | 2 seconds |
 | **use**        | Use an item in your inventory.                           |                                  | 2 seconds |
@@ -30,8 +31,8 @@ SparkV's Command List! SparkV contains more than **143 commands**!
 | **afk**           | This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.          | {optional reason} | 2 seconds |
 | **ascii**         | I will change any text to ascii!                                                                                                                 | {text}            | 2 seconds |
 | **levelboard**    | Just a little fun.                                                                                                                               |                   | 2 seconds |
-| **rank**          | View a users rank!                                                                                                                               | {optional user}   | 2 seconds |
-| **reverse**       | I will reverse any text you give me lol.                                                                                                         | {optional user}   | 2 seconds |
+| **rank**          | View a users rank!                                                                                                                               | (optional user)   | 2 seconds |
+| **reverse**       | I will reverse any text you give me lol.                                                                                                         | (text)            | 2 seconds |
 | **say**           | I will say whatever you want me to say.                                                                                                          | {message}         | 1 seconds |
 | **showerthought** | You know that momment where you think/realize something crazy in the shower? Well, there is a wh...                                              |                   | 2 seconds |
 | **urban**         | I will return an urban dictionary definition of a word! Due to recent API failures, this command is disabled to provide you a better experience. | {word}            | 2 seconds |
@@ -40,31 +41,31 @@ SparkV's Command List! SparkV contains more than **143 commands**!
 
 ## Games
 
-| Name                  | Description                                                                                          | Usage           | Cooldown   |
-| --------------------- | ---------------------------------------------------------------------------------------------------- | --------------- | ---------- |
-| **akinator**          | Play a guessing game of akinator!                                                                    |                 | 60 seconds |
-| **betrayal**          | Play a game of betrayal!                                                                             |                 | 60 seconds |
-| **chess**             | Play a game of chess! Requires two people in a VC.                                                   | {username}      | 60 seconds |
-| **connectfour**       | Play a game of ConnectFour with me or mention someone to play with!                                  | {optional user} | 60 seconds |
-| **fasttype**          | Play a game of fast type! This will show you your WPM.                                               |                 | 2 seconds  |
-| **fight**             | Fight another player!                                                                                | (user)          | 2 seconds  |
-| **fishing**           | Catch some fish! Requires you to join a VC.                                                          |                 | 60 seconds |
-| **gamedetails**       | I'll grab the details of any Roblox game for you.                                                    | {command}       | 2 seconds  |
-| **hiddenwords**       | Find the hidden words in a sentence.                                                                 |                 | 2 seconds  |
-| **lieswatter**        | Play a game of Lie Swatter! Choose which is the truth, or a lie.                                     |                 | 2 seconds  |
-| **memory**            | Pratice your memory!                                                                                 | {optional user} | 60 seconds |
-| **neverhaveiever**    | Asks you a question wether you have or have not done something.                                      |                 | 2 seconds  |
-| **poker**             | Play a game of poker! You must be 18+ to play. Requires you to join a vc with a minimum of 2 people. |                 | 60 seconds |
-| **quickclick**        | First person to click the button wins!                                                               |                 | 2 seconds  |
-| **rockpaperscissors** | Play a game of Rock Paper Scissors with me!                                                          |                 | 2 seconds  |
-| **shout**             | SparkV will shout to any group owned by you!                                                         | {Shout Message} | 2 seconds  |
-| **snake**             | Get those apples and grow, grow, grow to get the best score.                                         |                 | 2 seconds  |
-| **tictactoe**         | Play a game of Tic Tac Toe with me or mention someone to play with!                                  |                 | 2 seconds  |
-| **trivia**            | Play a game of trivia!                                                                               |                 | 2 seconds  |
-| **verify**            | Verify yourself! Only works when enabled on the dashboard.                                           | {username}      | 2 seconds  |
-| **whois**             | SparkV will look up any user and return information on that user.                                    | {username}      | 2 seconds  |
-| **wouldyourather**    | Would you rather.                                                                                    |                 | 2 seconds  |
-| **youtube**           | YouTube together!                                                                                    |                 | 60 seconds |
+| Name                  | Description                                                                                          | Usage              | Cooldown   |
+| --------------------- | ---------------------------------------------------------------------------------------------------- | ------------------ | ---------- |
+| **akinator**          | Play a guessing game of akinator!                                                                    |                    | 60 seconds |
+| **betrayal**          | Play a game of betrayal!                                                                             |                    | 60 seconds |
+| **chess**             | Play a game of chess! Requires two people in a VC.                                                   | {username}         | 60 seconds |
+| **connectfour**       | Play a game of ConnectFour with me or mention someone to play with!                                  | (optional user)    | 60 seconds |
+| **fasttype**          | Play a game of fast type! This will show you your WPM.                                               |                    | 2 seconds  |
+| **fight**             | Fight another player!                                                                                | (user)             | 2 seconds  |
+| **fishing**           | Catch some fish! Requires you to join a VC.                                                          |                    | 60 seconds |
+| **gamedetails**       | I'll grab the details of any Roblox game for you.                                                    | {command}          | 2 seconds  |
+| **hiddenwords**       | Find the hidden words in a sentence.                                                                 |                    | 2 seconds  |
+| **lieswatter**        | Play a game of Lie Swatter! Choose which is the truth, or a lie.                                     |                    | 2 seconds  |
+| **memory**            | Pratice your memory!                                                                                 | (level default: 5) | 1 seconds  |
+| **neverhaveiever**    | Asks you a question wether you have or have not done something.                                      |                    | 2 seconds  |
+| **poker**             | Play a game of poker! You must be 18+ to play. Requires you to join a vc with a minimum of 2 people. |                    | 60 seconds |
+| **quickclick**        | First person to click the button wins!                                                               |                    | 2 seconds  |
+| **rockpaperscissors** | Play a game of Rock Paper Scissors with me!                                                          |                    | 2 seconds  |
+| **shout**             | SparkV will shout to any group owned by you!                                                         | {Shout Message}    | 2 seconds  |
+| **snake**             | Get those apples and grow, grow, grow to get the best score.                                         |                    | 2 seconds  |
+| **tictactoe**         | Play a game of Tic Tac Toe with me or mention someone to play with!                                  |                    | 2 seconds  |
+| **trivia**            | Play a game of trivia!                                                                               |                    | 2 seconds  |
+| **verify**            | Verify yourself! Only works when enabled on the dashboard.                                           | {username}         | 2 seconds  |
+| **whois**             | SparkV will look up any user and return information on that user.                                    | {username}         | 2 seconds  |
+| **wouldyourather**    | Would you rather.                                                                                    |                    | 2 seconds  |
+| **youtube**           | YouTube together!                                                                                    |                    | 60 seconds |
 
 ## Giveaways
 
@@ -103,7 +104,7 @@ SparkV's Command List! SparkV contains more than **143 commands**!
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------- |
 | **ban**      | Is a user bothering you and keep coming back after you kick them? Using this command, they won't come back unless they are unbanned. | (user) {optional reason}                                                                       | 2 seconds |
 | **clear**    | I'll delete messages for you!                                                                                                        | {number of messages to delete | all} {Optional: Mention a User to only delete the messages of} | 2 seconds |
-| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                                                      | (user) {optional user}                                                                         | 2 seconds |
+| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                                                      | (user) (reason)                                                                                | 2 seconds |
 | **lock**     | I'll lock the current channel.                                                                                                       |                                                                                                | 2 seconds |
 | **lockdown** | I'll lock the server.                                                                                                                | {on | off}                                                                                     | 2 seconds |
 | **mute**     | I'll mute someone.                                                                                                                   | (user) {reason}                                                                                | 2 seconds |
@@ -138,25 +139,26 @@ SparkV's Command List! SparkV contains more than **143 commands**!
 
 ## Reddit
 
-| Name               | Description                                                         | Usage | Cooldown  |
-| ------------------ | ------------------------------------------------------------------- | ----- | --------- |
-| **animal**         | I will send an animal's picture chosen from multible subreddits.    |       | 2 seconds |
-| **animalsadvice**  | Take an advice from an animal!                                      |       | 2 seconds |
-| **bunny**          | Awww cute bunny!                                                    |       | 2 seconds |
-| **cat**            | I will send a cute cat! Cute, but dogs are cuter.                   |       | 3 seconds |
-| **cheese**         | Images of cheese. Requested by SmashingBC so I added it. (r/Cheese) |       | 2 seconds |
-| **comedy**         | The place for comedy memes from r/ComedyCemetery!                   |       | 2 seconds |
-| **comic**          | A comic to keep you entertained.                                    |       | 2 seconds |
-| **dankmeme**       | Meme but SUPER dank. Only the funnyiest memes.                      |       | 2 seconds |
-| **dog**            | I will send a cute dog! Aweeeee :D                                  |       | 3 seconds |
-| **doseofinternet** | I'll send a dose of the internet.                                   |       | 2 seconds |
-| **duck**           | Quack :D                                                            |       | 3 seconds |
-| **economy**        | lol                                                                 |       | 2 seconds |
-| **fox**            | I will send a cute fox! Ducks are cuter.                            |       | 3 seconds |
-| **gocommitdie**    | The funny Roblox subredit.                                          |       | 2 seconds |
-| **meirl**          | meirl memes lol.                                                    |       | 2 seconds |
-| **meme**           | LOL                                                                 |       | 2 seconds |
-| **prequel**        | Star Wars memes lol.                                                |       | 2 seconds |
+| Name               | Description                                                                  | Usage | Cooldown  |
+| ------------------ | ---------------------------------------------------------------------------- | ----- | --------- |
+| **animal**         | I will send a cute animal's picture selected from multible subreddits. Awww! |       | 2 seconds |
+| **animalsadvice**  | Take an advice from an animal!                                               |       | 2 seconds |
+| **bunny**          | Awww cute bunny!                                                             |       | 2 seconds |
+| **cat**            | I will send a cute cat!                                                      |       | 3 seconds |
+| **cheese**         | Images of cheese. Requested by SmashingBC so I added it. (r/Cheese)          |       | 2 seconds |
+| **comedy**         | The place for comedy memes from r/ComedyCemetery!                            |       | 2 seconds |
+| **comic**          | A comic to keep you entertained.                                             |       | 2 seconds |
+| **dankmeme**       | Meme but SUPER dank. Only the funniest memes.                                |       | 2 seconds |
+| **discord**        | See what's going on on the Discord reddit!                                   |       | 2 seconds |
+| **dog**            | I will send a cute dog! Aweeeee :D                                           |       | 3 seconds |
+| **doseofinternet** | I'll send a dose of the internet.                                            |       | 2 seconds |
+| **duck**           | Quack :D                                                                     |       | 3 seconds |
+| **economy**        | I will send something from meme economy.                                     |       | 2 seconds |
+| **fox**            | I will send a cute fox! Ducks are cuter.                                     |       | 3 seconds |
+| **gocommitdie**    | The funny Roblox subredit.                                                   |       | 2 seconds |
+| **meirl**          | meirl memes lol.                                                             |       | 2 seconds |
+| **meme**           | Funny internet memes!                                                        |       | 2 seconds |
+| **prequel**        | Star Wars memes lol.                                                         |       | 2 seconds |
 
 ## Utility
 
