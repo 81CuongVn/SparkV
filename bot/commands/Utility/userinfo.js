@@ -13,6 +13,7 @@ const badges = {
 	HOUSE_BRAVERY: "<:house_bravery:941439956528803860>",
 	HOUSE_BRILLIANCE: "<:house_brilliance:941439956507840543>",
 	HOUSE_BALANCE: "<:house_balance:941440238486691921>",
+	DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>",
 };
 
 module.exports = new cmd(
