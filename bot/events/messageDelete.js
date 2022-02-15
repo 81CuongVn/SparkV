@@ -4,13 +4,13 @@ module.exports = {
 	once: false,
 	async execute(bot, message) {
 		// If the application owner isn't ready yet, wait for it.
-		if (!bot.application?.owner) await bot.application?.fetch();
+		if (!bot.application?.owner) await bot.application?.fetch().catch(() => {});
 
 		// If the message is a partial, wait for the message to fetch.
-		if (message?.partial) await message.fetch();
+		if (message?.partial) await message.fetch().catch(() => {});
 
 		// If the channel is a partial, wait for the channel to fetch.
-		if (message.channel?.partial) await message.channel.fetch();
+		if (message.channel?.partial) await message.channel.fetch().catch(() => {});
 
 		if (message.author.bot) return;
 		if (!message?.content) return;
