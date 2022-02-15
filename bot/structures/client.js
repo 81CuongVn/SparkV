@@ -5,8 +5,6 @@ const util = require("util");
 const synchronizeSlashCommands = require("discord-sync-commands");
 const { Client, Collection, Intents, Structures } = require("discord.js");
 const { DiscordTogether } = require("discord-together");
-const { Routes } = require("discord-api-types/v9");
-const { REST } = require("@discordjs/rest");
 const Statcord = require("statcord.js");
 
 const Distube = require("../../modules/dependencies/distubehandler");
