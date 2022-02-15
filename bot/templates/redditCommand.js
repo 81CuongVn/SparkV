@@ -49,7 +49,7 @@ module.exports = class RedditCommand {
 			.setImage(this.settings.type === "image" ? selectedPost.url : "")
 			.setURL(`https://www.reddit.com${selectedPost.permalink}`)
 			.setFooter({
-				text: `👍${selectedPost.ups} | 💬${selectedPost.num_comments} | 😃u/${selectedPost.author} | ⚙️r/${selectedPost.subreddit} • ${bot.config.embed.footer}`,
+				text: `👍${selectedPost.ups} | 💬${selectedPost.num_comments} | 😃u/${selectedPost.author} | ⚙️r/${selectedPost.subreddit}`,
 				iconURL: bot.user.displayAvatarURL()
 			})
 			.setColor(bot.config.embed.color);
