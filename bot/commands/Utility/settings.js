@@ -57,7 +57,7 @@ async function setNewData(message, options) {
 			await options.handleData(collected.first(), requestMsg);
 
 			await channelMsg.edit({
-				embeds: [requestMsg]
+				embeds: [requestMsg],
 			});
 
 			try {
@@ -68,8 +68,6 @@ async function setNewData(message, options) {
 			} catch (err) {
 				// Do nothing. Most likely the message was deleted.
 			}
-
-			return true;
 		} catch (err) {
 			const ErrorEmbed = new MessageEmbed()
 				.setAuthor({
@@ -77,8 +75,7 @@ async function setNewData(message, options) {
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 				})
 				.setTitle("Uh oh!")
-				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
-				.addField("**Error**", `\`\`\`${err.message}\`\`\``)
+				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
 				.setColor("RED");
 
 			return await message.reply({
@@ -251,7 +248,7 @@ async function execute(bot, message, args, command, data) {
 								}
 							},
 							handleData: async (collected, requestMsg) => {
-								const newEmoji = collected.first().content;
+								const newEmoji = collected.content;
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | Changing Starboard Emoji`)
@@ -270,7 +267,7 @@ async function execute(bot, message, args, command, data) {
 					data: new MessageButton()
 						.setLabel("Minimum")
 						.setEmoji("2️⃣")
-						.setCustomId("minStars")
+						.setCustomId("minimum")
 						.setStyle("SECONDARY"),
 					getData: () => data.guild.plugins?.starboard?.min || 2,
 					setData: async () => {
@@ -281,13 +278,16 @@ async function execute(bot, message, args, command, data) {
 							time: 15,
 							filter: numFilter,
 							handleData: async (collected, requestMsg) => {
-								const min = collected.first().content;
+								console.log(collected, requestMsg);
+								console.log("ok");
+								const min = collected.content.trim();
+								console.log(min);
 
 								requestMsg
 									.setTitle(`<:config:934870512235073606> | Changing Starboard Minimum`)
 									.setDescription(`Successfully changed starboard minimum from ${data.guild.plugins.starboard.min} to ${min}.`);
 
-								data.guild.plugins.starboard.min = min;
+								data.guild.plugins.starboard.min = parseInt(min);
 								data.guild.markModified("plugins.starboard.min");
 
 								await data.guild.save();
@@ -409,6 +409,7 @@ async function execute(bot, message, args, command, data) {
 				pages.find(page => page.author.name.includes(curSetting.name)),
 			],
 			components: buttons,
+			ephemeral: true
 		});
 	}
 
@@ -537,7 +538,8 @@ async function execute(bot, message, args, command, data) {
 
 				return await botMessage.edit({
 					embeds: [Menu],
-					components: buttons
+					components: buttons,
+					ephemeral: true
 				});
 			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.name.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
@@ -559,8 +561,8 @@ async function execute(bot, message, args, command, data) {
 				}
 
 				refreshSetting(curSetting);
-			} else if (curSetting && curSetting?.buttons.find(button => button.name.toLowerCase() === interaction.customId)) {
-				const button = curSetting.buttons.find(button => button.name.toLowerCase() === interaction.customId);
+			} else if (curSetting && curSetting?.buttons.find(button => button.name.toLowerCase() === interaction.customId.toLowerCase())) {
+				const button = curSetting.buttons.find(button => button.name.toLowerCase() === interaction.customId.toLowerCase());
 
 				await button.setData();
 
@@ -568,7 +570,7 @@ async function execute(bot, message, args, command, data) {
 
 				refreshSetting(curSetting);
 			} else {
-				curSetting = settings.find(setting => setting.name === interaction.customId);
+				curSetting = settings.find(setting => setting.name.toLowerCase() === interaction.customId.toLowerCase());
 
 				if (curSetting) refreshSetting(curSetting);
 			}
@@ -582,10 +584,12 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTitle("Uh oh!")
 				.setDescription(`**A critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-				.addField("**Error**", `\`\`\`${error.message}\`\`\``)
 				.setColor("RED");
 
-			return await botMessage.edit(ErrorEmbed);
+			return await botMessage.edit({
+				embeds: [ErrorEmbed],
+				ephemeral: true
+			});
 		}
 	});
 
@@ -597,7 +601,8 @@ async function execute(bot, message, args, command, data) {
 						.setTitle(await message.translate("Config Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true }))
 						.setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
 				],
-				components: []
+				components: [],
+				ephemeral: true
 			});
 		} catch (err) {
 			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
