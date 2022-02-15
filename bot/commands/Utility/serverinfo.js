@@ -81,6 +81,7 @@ module.exports = new cmd(execute, {
 	aliases: ["server"],
 	usage: `(optional: invite default: current server)`,
 	slash: true,
+	slashOnly: true,
 	options: [
 		{
 			type: 3,
