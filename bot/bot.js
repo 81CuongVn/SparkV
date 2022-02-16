@@ -50,17 +50,17 @@ async function Start() {
 		docsPath: process.env.MainDir
 	});
 
-	SparkV.SocketioClient = require("socket.io-client").connect(
-		`https://${process.env.BASEURL}/api/communication?token=8010405464675`,
-		{
-			reconnection: true,
-			reconnectionDelay: 2000,
-			reconnectionDelayMax: 5000,
-			reconnectionAttempts: Infinity,
-		},
-	);
+	// SparkV.SocketioClient = require("socket.io-client").connect(
+	// 	`https://${process.env.BASEURL}/api/communication?token=8010405464675`,
+	// 	{
+	// 		reconnection: true,
+	// 		reconnectionDelay: 2000,
+	// 		reconnectionDelayMax: 5000,
+	// 		reconnectionAttempts: Infinity,
+	// 	},
+	// );
 
-	SparkV.SocketioClient.on("connect", () => console.log("Website connected successfully."));
+	// SparkV.SocketioClient.on("connect", () => console.log("Website connected successfully."));
 }
 
 Start();
