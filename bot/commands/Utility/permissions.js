@@ -19,9 +19,6 @@ const requiredPerms = [
 	"SPEAK",
 	"MANAGE_NICKNAMES",
 	"MANAGE_ROLES",
-	"MANAGE_THREADS",
-	"SEND_MESSAGES_IN_THREADS",
-	"MODERATE_MEMBERS"
 ];
 
 module.exports = new cmd(
