@@ -59,6 +59,5 @@ module.exports = new cmd(
 		aliases: ["perms"],
 		perms: ["EMBED_LINKS"],
 		slash: true,
-		slashOnly: true
 	},
 );
