@@ -5,7 +5,7 @@ module.exports = new cmd(null, {
 	dirname: __dirname,
 	usage: "",
 	aliases: ["startyt"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	gname: "youtube",
 	type: "together",
 });

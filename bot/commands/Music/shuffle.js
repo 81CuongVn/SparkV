@@ -17,6 +17,6 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: ["shufflequeue", "shuffleq", "squeue"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true
 });

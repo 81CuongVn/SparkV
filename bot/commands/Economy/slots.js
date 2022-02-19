@@ -103,7 +103,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: `(amount)`,
 	aliases: ["bet"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true,
 	slashOnly: true,
 	options: [

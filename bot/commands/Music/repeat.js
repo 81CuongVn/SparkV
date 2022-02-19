@@ -25,6 +25,6 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "<song or queue: leave empty to deactivate>",
 	aliases: ["replay", "loop"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	requireArgs: true,
 });

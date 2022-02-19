@@ -13,6 +13,6 @@ module.exports = new cmd(
 		dirname: __dirname,
 		usage: "",
 		aliases: [],
-		perms: ["EMBED_LINKS"],
+		perms: [],
 	},
 );

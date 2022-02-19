@@ -3,39 +3,47 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const user = message.mentions.users.first();
+	let number = data.options.getNumber("number");
 
-	if (args[0] && args[0] === "all") {
+	const type = data.options.getString("type") || null;
+	const user = data.options.getMember("user") || null;
+	console.log(number, type, user);
+
+	if (type === "all") {
 		const clonedChannel = await message.channel.clone();
 
+		await clonedChannel.setPosition(message.channel.position);
 		await message.channel.delete();
-		clonedChannel.setPosition(message.channel.position);
 
-		return newChannel.replyT("Successfully cleared all messages.");
+		return clonedChannel.send("Successfully cleared **all** messages.").then(m => setTimeout(() => m.delete(), 5 * 1000));
 	}
 
-	if (!args[0] || isNaN(args[0]) || parseInt(args[0]) < 1) return message.replyT("Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.");
+	if (number < 1) return message.replyT("Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.");
 
-	await message.delete().catch(err => {});
+	if (message?.applicationId) {
+		await message.deleteReply();
+	} else {
+		await message.delete().catch(err => {});
+	}
 
 	let messages = await message.channel.messages.fetch({
-		limit: 100
+		limit: 100,
 	});
 
 	const messagesTable = [];
 	messages.forEach(message => messagesTable.push(message));
 	messages = messagesTable;
 
-	if (user) messages.filter(m => m.author.id === user.id);
+	if (user) messages.filter(m => m.author.id === user.user.id);
 
-	if (messages.length > args[0]) messages.length = parseInt(args[0], 10);
+	if (messages.length > number) messages.length = parseInt(number, 10);
 
 	messages.filter(m => !m.pinned);
-	args[0]++;
+	number++;
 
 	message.channel.bulkDelete(messages, true);
 
-	const mSuccess = await message.replyT(`Successfully cleared **${--args[0]}** messages${user ? ` from ${user.tag}.` : "."}`);
+	const mSuccess = await message.replyT(`Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`);
 
 	setTimeout(() => mSuccess.delete(), 2 * 1000);
 }
@@ -46,4 +54,34 @@ module.exports = new cmd(execute, {
 	usage: `<number of messages to delete | all> <Optional: Mention a User to only delete the messages of>`,
 	aliases: [`purge`, `clr`],
 	perms: ["MANAGE_MESSAGES"],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 10,
+			name: "number",
+			description: "The number of messages to delete.",
+			required: true
+		},
+		{
+			type: 3,
+			name: "type",
+			description: "The type of messages to delete. (All, Pinned, or Embeds)",
+			choices: [
+				{
+					name: "all",
+					value: "all"
+				},
+				{
+					name: "pinned",
+					value: "pinned"
+				}
+			]
+		},
+		{
+			type: 6,
+			name: "user",
+			description: "The user to delete the messages of.",
+		}
+	]
 });

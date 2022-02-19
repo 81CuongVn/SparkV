@@ -26,5 +26,5 @@ module.exports = new cmd(execute, {
 	usage: "",
 	dirname: __dirname,
 	aliases: ["nhie"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 });

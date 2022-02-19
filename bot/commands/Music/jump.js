@@ -18,7 +18,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "<number>",
 	aliases: ["leap"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: false,
 	options: [
 		{

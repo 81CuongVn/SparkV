@@ -24,7 +24,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: `(amount)`,
 	aliases: ["dep"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true,
 	slashOnly: true,
 	options: [

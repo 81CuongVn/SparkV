@@ -13,6 +13,7 @@ module.exports = class Command {
 			sett,
 			{
 				perms: ["SEND_MESSAGES"].concat(sett.perms || []),
+				bot_perms: ["EMBED_LINKS"].concat(sett.bot_perms || []),
 			},
 		);
 	}
@@ -31,6 +32,17 @@ module.exports = class Command {
 			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
 				return await message.replyT({
 					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
+					ephemeral: true,
+				});
+			}
+		}
+
+		const botperms = message.channel.permissionsFor(message.guild.me);
+
+		for (const perm of this.settings.bot_perms) {
+			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
+				return await message.replyT({
+					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,
 				});
 			}

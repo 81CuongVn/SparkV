@@ -7,7 +7,7 @@ module.exports = new cmd(null, {
 	dirname: __dirname,
 	usage: "<username>",
 	aliases: [],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	gname: "chess",
 	type: "together",
 });

@@ -169,6 +169,6 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "<username>",
 	aliases: [],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	enabled: false
 });

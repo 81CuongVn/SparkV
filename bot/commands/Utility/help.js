@@ -256,13 +256,13 @@ async function execute(bot, message, args, command, data) {
 		}
 
 		try {
-			interaction.update({
+			interaction?.update({
 				embeds: [
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
 				],
-			});
+			}).catch(err => {});
 		} catch (err) {
 			// Page deleted.
 		}
@@ -286,7 +286,7 @@ module.exports = new cmd(execute, {
 	description: `View SparkV's 130+ commands.`,
 	aliases: [`cmds`, `commands`, "vote"],
 	usage: `(optional: search)`,
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	dirname: __dirname,
 	slash: true,
 	options: [

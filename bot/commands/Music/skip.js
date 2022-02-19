@@ -28,7 +28,7 @@ module.exports = new cmd(execute, {
 	description: `Skip to the next song in the queue.`,
 	usage: "",
 	aliases: ["nextsong", "nsong", "nexts", "next"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true,
 	slashOnly: true
 });

@@ -34,7 +34,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "<number>",
 	aliases: ["que"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true,
 	slashOnly: true
 });

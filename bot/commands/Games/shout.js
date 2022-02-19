@@ -40,5 +40,5 @@ module.exports = new cmd(execute, {
 	usage: "<Shout Message>",
 	enabled: false,
 	aliases: [],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 });

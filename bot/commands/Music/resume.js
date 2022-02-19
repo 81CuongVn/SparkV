@@ -22,6 +22,6 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: ["unpause"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true
 });

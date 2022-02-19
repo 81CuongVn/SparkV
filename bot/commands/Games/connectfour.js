@@ -213,5 +213,5 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "(optional user)",
 	aliases: ["cf"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 });

@@ -33,7 +33,7 @@ module.exports = new cmd(
 		dirname: __dirname,
 		usage: "",
 		aliases: ["devs", "developers"],
-		perms: ["EMBED_LINKS"],
+		perms: [],
 		slash: true
 	},
 );

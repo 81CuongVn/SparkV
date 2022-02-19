@@ -40,7 +40,7 @@ module.exports = new cmd(
 		dirname: __dirname,
 		usage: "",
 		aliases: ["ping", "pong", "up", "ram", "memory", "uptime", "latency", "data", "storage"],
-		perms: ["EMBED_LINKS"],
+		perms: [],
 		slash: true
 	},
 );

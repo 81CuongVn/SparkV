@@ -92,7 +92,7 @@ module.exports = new cmd(
 		dirname: __dirname,
 		usage: "(user)",
 		aliases: ["ui"],
-		perms: ["EMBED_LINKS"],
+		perms: [],
 		slash: true,
 		options: [
 			{

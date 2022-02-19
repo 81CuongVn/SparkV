@@ -19,7 +19,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "<song title or URL>",
 	aliases: ["p"],
-	perms: ["EMBED_LINKS"],
+	perms: [],
 	slash: true,
 	options: [
 		{
