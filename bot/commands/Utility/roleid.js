@@ -17,7 +17,6 @@ module.exports = new cmd(execute, {
 	aliases: ["rid"],
 	usage: `(@role)`,
 	slash: true,
-	slashOnly: true,
 	options: [
 		{
 			type: 8,

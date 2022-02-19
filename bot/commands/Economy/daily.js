@@ -52,5 +52,4 @@ module.exports = new cmd(execute, {
 	perms: [],
 	cooldown: 10,
 	slash: true,
-	slashOnly: true,
 });
