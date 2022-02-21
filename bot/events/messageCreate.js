@@ -374,15 +374,18 @@ module.exports = {
 		if (!cooldowns[message.author.id]) cooldowns[message.author.id] = [];
 
 		const userCooldown = cooldowns[message.author.id];
-
 		const time = userCooldown[commandfile.settings.name] || 0;
 
 		if (time && (time > Date.now())) {
 			const cooldownEmbed = new Discord.MessageEmbed()
+				.setAuthor({
+					name: message.author.tag,
+					iconURL: message.author.displayAvatarURL({ dynamic: true }),
+				})
 				.setTitle(`${bot.config.emojis.error} | Whoa there ${message.author.username}!`)
-				.setDescription(`Please wait ${Math.ceil((time - Date.now()) / 1000)} more seconds to use that command again.`)
-				.setThumbnail(message.author.avatarURL)
-				.setColor(`#0099ff`)
+				.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
+				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+				.setColor("RED")
 				.setFooter({
 					text: bot.config.embed.footer,
 					iconURL: bot.user.displayAvatarURL()
