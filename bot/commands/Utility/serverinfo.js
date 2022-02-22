@@ -158,6 +158,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: `${message?.guild?.iconURL({ dynamic: true }) || "https://cdn.discordapp.com/embed/avatars/1.png"}`,
 		})
 		.setDescription(`
+			\`🔧\` **Region**: ${message.guild.preferredLocale}
 			\`🔮\` **Premium Tier**: ${message.guild.premiumTier ? `${premiumTier[message.guild.premiumTier].emoji || ""} ${premiumTier[message.guild.premiumTier].desc}` : "None"}
 		`)
 		.setThumbnail(message.guild.iconURL({ dynamic: true }))
