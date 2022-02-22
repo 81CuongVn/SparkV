@@ -52,7 +52,7 @@ const explicitContentFilterLevels = {
 };
 
 function handleAnimated(url) {
-	if (url.includes("a_")) return url.replace(".webp", ".gif");
+	if (url.includes("a_")) return url.replace(".png", ".gif");
 }
 
 async function execute(bot, message, args, command, data) {
