@@ -100,8 +100,6 @@ async function execute(bot, message, args, command, data) {
 		});
 	}
 
-	console.log(message.guild);
-
 	const Basic = new Discord.MessageEmbed()
 		.setAuthor({
 			name: `${message.guild.name} | Basic Information`,
