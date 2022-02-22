@@ -21,14 +21,14 @@
     "music": "<a:PepeMusic:819933524525449256>",
     "roblox": "<:Roblox:918614055151890483>",
     "servers": "<:servers:933608928959406081>",
-    "player": "<:player:933552618272350249>",
+    "player": "<:player:945665904073641994>",
     "clock": "<:uptime:933605688553406514>",
     "memory": "<:memory:933732415153782854>",
     "stats": "<:stats:933736680924520550>",
     "config": "<:config:934870512235073606>",
     "tada": "<a:tada:819934065414242344>",
     "search": "<:search:939232222672748604>",
-    "slash": "<:slash:939972618814128159>"
+    "slash": "<:slash:945427182786859138>"
   },
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
