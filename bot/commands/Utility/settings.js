@@ -416,7 +416,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => {
-			const state = setting?.stateDisabled === true ? "<:slash:939972618814128159>" : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
+			const state = setting?.stateDisabled === true ? "<:slash:945427182786859138>" : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
 
 			return `${state ? `${state} ` : ""}${setting.name}`;
 		}).join("\n")}`)
@@ -449,7 +449,7 @@ async function execute(bot, message, args, command, data) {
 
 	function createPages() {
 		settings.forEach(setting => {
-			const settData = setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : "<:slash:939972618814128159>")} ${button.name}: **${button.getData()}**`);
+			const settData = setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : "<:slash:945427182786859138>")} ${button.name}: **${button.getData()}**`);
 			const NewEmbed = new MessageEmbed()
 				.setAuthor({
 					name: `${setting.emojiID ? "" : setting.emoji}SparkV ${setting.name}`,
