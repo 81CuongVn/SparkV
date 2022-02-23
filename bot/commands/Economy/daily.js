@@ -15,7 +15,7 @@ async function execute(bot, message, args, command, data) {
 			.setColor("RED")
 			.setTimestamp();
 
-		return await message.replyT({
+		return await message.editT({
 			embeds: [Embed],
 		});
 	}

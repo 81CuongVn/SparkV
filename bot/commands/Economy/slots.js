@@ -15,8 +15,8 @@ async function execute(bot, message, args, command, data) {
 
 	let win = false;
 
-	if (data.user.money.balance === 0 || data.user.money.balance === null) return await message.replyT(`${bot.config.emojis.error} | You have no money!`);
-	if (bet > data.user.money.balance) return await message.replyT(`${bot.config.emojis.error} | You don't have that much lol.`);
+	if (data.user.money.balance === 0 || data.user.money.balance === null) return await message.editT(`${bot.config.emojis.error} | You have no money!`);
+	if (bet > data.user.money.balance) return await message.editT(`${bot.config.emojis.error} | You don't have that much lol.`);
 
 	const number = [];
 	let amountWon = 0;

@@ -5,7 +5,7 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	const amount = data.options.getNumber("money");
 
-	if (data.user.money.bank < amount) return await message.replyT(`${bot.config.emojis.error} | You don't have that much money in your bank!`);
+	if (data.user.money.bank < amount) return await message.editT(`${bot.config.emojis.error} | You don't have that much money in your bank!`);
 
 	data.user.money.balance += amount;
 	data.user.money.bank -= amount;

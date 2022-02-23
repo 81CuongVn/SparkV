@@ -9,9 +9,7 @@ module.exports = new cmd(
 		let UserData;
 
 		if (User) {
-			if (User.bot) {
-				return await message.replyT("You cannot check the inventory of a bot.");
-			}
+			if (User.bot) return await message.editT("You cannot check the inventory of a bot.");
 
 			UserData = await bot.database.getUser(User.id);
 		} else {
@@ -19,9 +17,7 @@ module.exports = new cmd(
 			UserData = data.user;
 		}
 
-		if (UserData.inventory.length === 0) {
-			return await message.replyT("This user does not have any items in their inventory.");
-		}
+		if (UserData.inventory.length === 0) return await message.editT("This user does not have any items in their inventory.");
 
 		const items = Object.keys(UserData.inventory);
 		const inventory = items.filter(i => UserData.inventory[i] > 0);
