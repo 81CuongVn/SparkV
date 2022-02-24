@@ -1,32 +1,13 @@
 const mongoose = require("mongoose");
 
-function GenerateToken() {
-	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwzy0123456789.-_";
-	let token = "CS-";
-
-	for (let i = 0; i < 32; i++) {
-		token += characters.charAt(Math.floor(Math.random() * characters.length));
-	}
-
-	return token;
-}
-
 const Schema = new mongoose.Schema({
-	// User //
-	id: { type: String },
-
-	// Information //
+	id: { type: String, unique: true },
 	bio: { type: String },
 	birthday: { type: Number },
-
-	// Stats //
 	registrationDate: { type: Number, default: Date.now() },
-
-	// Data //
-	APIToken: { type: String, default: GenerateToken() },
 	cooldowns: { type: Object, default: {
-		daily: { type: Number, trim: true, required: true, default: 0 },
-		weekly: { type: Number, trim: true, required: true, default: 0 }
+		daily: 0,
+		weekly: 0
 	} },
 	afk: { type: String, default: null },
 	money: {
@@ -35,16 +16,12 @@ const Schema = new mongoose.Schema({
 		bankMax: { type: Number, default: 2000 },
 		multiplier: { type: Number, default: 1 }
 	},
-	inventory: {},
-	totalVotes: { type: Number, default: 0 }
-});
-
-Schema.method("GenerateAPIToken", async () => {
-	this.APIToken = GenerateToken();
-
-	data.guild.markModified("APIToken");
-	await this.save();
-	return this.APIToken;
+	votes: { type: Object, default: {
+		voted: null,
+		total: 0,
+		remind: false
+	} },
+	inventory: {}
 });
 
 module.exports = mongoose.model("User", Schema);
