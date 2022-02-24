@@ -19,7 +19,7 @@ const Schema = new mongoose.Schema({
 	votes: { type: Object, default: {
 		voted: null,
 		total: 0,
-		remind: false
+		remind: "false"
 	} },
 	inventory: {}
 });
