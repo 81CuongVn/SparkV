@@ -6,25 +6,10 @@ async function execute(bot, message, args, command, data) {
 	const UserToKick = bot.functions.GetMember(message, args);
 	const ReasonForKick = args.join(` `).slice(22) || `No reason provided.`;
 
-	if (!args[0]) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Please mention someone to kick!`);
-	}
-
-	if (!UserToKick) {
-		return message
-			.replyT(`${bot.config.emojis.error} | I cannot find that member!`);
-	}
-
-	if (UserToKick.id === message.author.id) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You cannot kick yourself.`);
-	}
-
-	if (!UserToKick.kickable) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Uh oh... I can't kick this user!`);
-	}
+	if (!args[0]) return message.replyT(`${bot.config.emojis.error} | Please mention someone to kick!`);
+	if (!UserToKick) return message.replyT(`${bot.config.emojis.error} | I cannot find that member!`);
+	if (UserToKick.id === message.author.id) return message.replyT(`${bot.config.emojis.error} | You cannot kick yourself.`);
+	if (!UserToKick.kickable) return message.replyT(`${bot.config.emojis.error} | Uh oh... I can't kick this user!`);
 
 	const VerificationEmbed = new Discord.MessageEmbed()
 		.setTitle(`Convermination Prompt`)
