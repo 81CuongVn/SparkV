@@ -22,6 +22,8 @@ module.exports = async (content, type = "log") => {
 		}
 
 		return console.log(`⚠ | ${chalk.yellow(content)}`);
+	} else if (type === "debug") {
+		return console.log(`🐛 | ${chalk.green(content)}`);
 	} else if (type === "error") {
 		await withScope(scope => {
 			scope.setLevel(Severity.Error);
