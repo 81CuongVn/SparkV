@@ -7,12 +7,12 @@ module.exports = {
 	once: false,
 	async execute(bot, interaction) {
 		if (interaction.isCommand()) {
-			await interaction.deferReply();
-
 			// Get the command
 			const command = bot.commands.get(interaction.commandName);
 
 			if (!command) return;
+
+			await interaction.deferReply();
 
 			// Cooldown System
 			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
@@ -23,12 +23,12 @@ module.exports = {
 			if (time && (time > Date.now())) {
 				const cooldownEmbed = new Discord.MessageEmbed()
 					.setAuthor({
-						name: message.user.tag,
-						iconURL: message.user.displayAvatarURL({ dynamic: true }),
+						name: interaction.user.tag,
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 					})
-					.setTitle(`${bot.config.emojis.error} | Whoa there ${message.user.username}!`)
+					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
 					.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
-					.setThumbnail(message.user.displayAvatarURL({ dynamic: true }))
+					.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
 					.setColor("RED")
 					.setFooter({
 						text: bot.config.embed.footer,
