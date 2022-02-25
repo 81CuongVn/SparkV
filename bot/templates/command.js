@@ -20,8 +20,21 @@ module.exports = class Command {
 
 	async run(bot, message, args, command, data) {
 		if (this.settings.requireArgs && !args[0]) {
-			return await message.replyT({
-				content: `${bot.config.emojis.error} | Invalid arguments. Please make sure you follow ${this.settings.name} command's usage. Usage: \`${data.guild.prefix}${this.settings.name} ${this.settings.usage}\``,
+			const embed = new Discord.MessageEmbed()
+				.setTitle("Missing Arguments")
+				.setDescription(`You need to provide the correct arguments!`)
+				.addFields([
+					{
+						name: "Usage",
+						value: `\`${this.settings.usage}\``,
+						inline: true
+					}
+				])
+				.setFooter(bot.config.embed.footer)
+				.setColor("RED");
+
+			return await message.editT({
+				embeds: [embed],
 				ephemeral: true,
 			});
 		}
