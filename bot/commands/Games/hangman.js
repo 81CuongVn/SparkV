@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const RandomWord = require("random-word");
+const RandomWord = require("random-words");
 
 const cmd = require("../../templates/gameCommand");
 
