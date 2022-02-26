@@ -60,10 +60,88 @@ module.exports = class ModCommand {
 			} else {
 				await message.replyT(`Invalid game name: \`${this.settings.gname}\``);
 			}
-		} else {
-			await message.replyT(`Invalid game type: \`${this.settings.type}\``);
-		}
+		} else if (this.settings.type === "multiplayerGame") {
+			const playersEmbed = new discord.MessageEmbed()
+				.setAuthor({
+					name: (message.user ? message.user : message.author).tag,
+					iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
+				})
+				.setTitle(`**${(message.user ? message.user : message.author).tag}** has started a ${this.settings.name} game!`)
+				.setDescription("If you would like to join, please tap the \`join\` button below within the next 30 seconds.")
+				.setFooter({
+					text: bot.config.embed.footer,
+					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+				})
+				.setColor("GREEN");
 
-		if (this.execute) return this.execute(bot, message, args, command, data);
+			const joinButton = new discord.MessageButton()
+				.setCustomId("join")
+				.setEmoji("🚪")
+				.setLabel("Join")
+				.setStyle("SUCCESS");
+
+			const leaveButton = new discord.MessageButton()
+				.setCustomId("leave")
+				.setEmoji("🚪")
+				.setLabel("Leave")
+				.setStyle("DANGER");
+
+			const players = [];
+			const playersMessage = await message.replyT({
+				embeds: [playersEmbed],
+				components: [new discord.MessageActionRow().addComponents(joinButton, leaveButton)],
+				fetchReply: true
+			});
+
+			players[message.author.id] = true;
+
+			const collector = await playersMessage.createMessageComponentCollector({
+				filter: interaction => interaction.deferUpdate(),
+				time: 30 * 1000,
+				errors: ["time"],
+				max: 5
+			});
+
+			collector.on("collect", async interaction => {
+				console.log(players)
+				if (interaction.customId === "join") {
+					if (players[m.author.id]) {
+						return message.replyT({
+							content: "You have already joined this game!",
+							ephemeral: true
+						});
+					}
+
+					players[m.author.id] = true;
+
+					return message.replyT({
+						content: "You have joined the game!",
+						ephemeral: true
+					});
+				} else if (interaction.customId === "leave") {
+					if (!players[m.author.id]) {
+						return message.replyT({
+							content: "You have not joined this game yet!",
+							ephemeral: true
+						});
+					}
+
+					players[m.author.id] = null;
+
+					return message.replyT({
+						content: "You have left the game.",
+						ephemeral: true
+					});
+				}
+			});
+
+			collector.on("end", async collected => {
+				data.players = players;
+
+				if (this.execute) return this.execute(bot, message, args, command, data);
+			});
+		} else if (this.settings.type === "normal") {
+			if (this.execute) return this.execute(bot, message, args, command, data);
+		}
 	}
 };
