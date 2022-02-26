@@ -81,6 +81,31 @@ module.exports = {
 
 		// Plugins
 		if (message.guild) {
+			// Vote reminder
+			if (data.user.votes.remind === "true") {
+				if (43200000 - (Date.now() - data.user.votes.voted) > 0) {
+					const voteEmbed = new Discord.MessageEmbed()
+						.setAuthor({
+							name: message.author.tag,
+							iconURL: message.author.displayAvatarURL({ dynamic: true })
+						})
+						.setTitle("You can vote again!")
+						.setDescription(`You can vote again on <:topgg:946558388261769227> **top.gg**.`)
+						.setColor(bot.config.embed.color);
+
+					const VoteButton = new Discord.MessageButton()
+						.setEmoji("<:topgg:946558388261769227>")
+						.setLabel("Vote")
+						.setURL("https://top.gg/bot/884525761694933073")
+						.setStyle("LINK");
+
+					message.author.send({
+						embeds: [voteEmbed],
+						components: [new Discord.MessageActionRow().addComponents(VoteButton)]
+					});
+				}
+			}
+
 			// Check user for AFK Status
 			if (data.user.afk) {
 				data.user.afk = null;
