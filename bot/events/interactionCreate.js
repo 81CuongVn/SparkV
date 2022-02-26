@@ -12,7 +12,9 @@ module.exports = {
 
 			if (!command) return;
 
-			await interaction.deferReply();
+			await interaction.deferReply({
+				ephemeral: command.settings.ephemeral || false,
+			});
 
 			// Cooldown System
 			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
