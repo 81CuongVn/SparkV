@@ -1,16 +1,11 @@
-const Discord = require(`discord.js`);
+const Discord = require("discord.js");
+const randomWords = require("random-words");
 
 const cmd = require("../../templates/command");
 
-const words = [
-	"spark",
-	"bolt",
-	"electromagnetic",
-	"pulse"
-];
-
 module.exports = new cmd(async (bot, message, args, command, data) => {
-	const chosenWord = `${words[Math.floor(Math.random() * words.length)]} ${words[Math.floor(Math.random() * words.length)]}`;
+	const difficulty = parseInt(data.options.getString("difficulty")) || 2;
+	const chosenWord = randomWords({ exactly: 2, wordsPerString: difficulty, join: " " });
 	const gameCreation = Date.now();
 	const Menu = await message.replyT(`📽️ | ${message.user ? message.user : message.author} has started a spelling game!\nYou have 60 seconds to spell the following word correctly.\n> **\`${chosenWord}\`**.`);
 
@@ -45,4 +40,33 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 	aliases: [],
 	usage: "",
 	slash: true,
+	options: [
+		{
+			type: 3,
+			name: "difficulty",
+			description: "How hard the spelling game should be.",
+			choices: [
+				{
+					name: "Easy",
+					value: "2"
+				},
+				{
+					name: "Medium",
+					value: "5"
+				},
+				{
+					name: "Hard",
+					value: "10"
+				},
+				{
+					name: "Extreme",
+					value: "15"
+				},
+				{
+					name: "Super Extreme",
+					value: "20"
+				}
+			]
+		}
+	]
 });
