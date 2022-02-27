@@ -12,8 +12,8 @@ module.exports = {
 		// If the channel is a partial, wait for the channel to fetch.
 		if (message.channel?.partial) await message.channel.fetch().catch(() => {});
 
-		if (message.author.bot) return;
 		if (!message?.content) return;
+		if (message?.author?.bot) return;
 
 		if (message?.content.length > 500) message.content = `${message?.content.slice(0, 96)}...`;
 		if (message?.content.includes("@everyone") || message?.content.includes("@here")) message.content = message.cleanContent;
