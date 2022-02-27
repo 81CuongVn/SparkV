@@ -7,7 +7,6 @@ async function execute(bot, message, args, command, data) {
 
 	const type = data.options.getString("type") || null;
 	const user = data.options.getMember("user") || null;
-	console.log(number, type, user);
 
 	if (type === "all") {
 		const clonedChannel = await message.channel.clone();
@@ -30,11 +29,12 @@ async function execute(bot, message, args, command, data) {
 		limit: 100,
 	});
 
+	if (user) messages = messages.filter(m => m.author.id === user.user.id);
+	if (type === "pinned") messages = messages.filter(m => !m.pinned);
+
 	const messagesTable = [];
 	messages.forEach(message => messagesTable.push(message));
 	messages = messagesTable;
-
-	if (user) messages.filter(m => m.author.id === user.user.id);
 
 	if (messages.length > number) messages.length = parseInt(number, 10);
 
