@@ -11,14 +11,16 @@ module.exports = {
 
 		if (data.plugins.welcome.enabled === "false") return;
 
-		if ((data.plugins.welcome?.roles?.length || 0) > 0) {
-			const roles = data.plugins.welcome.roles.map(r => member.guild.roles.cache.get(r));
+		if (member.pending === false) {
+			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
+				const roles = data.plugins.welcome.roles.map(r => member.guild.roles.cache.get(r));
 
-			data.plugins.welcome.roles.forEach(async r => {
-				if (await member.guild.roles.fetch(r)) {
-					await member.roles.add(await member.guild.roles.fetch(r));
-				}
-			});
+				data.plugins.welcome.roles.forEach(async r => {
+					if (await member.guild.roles.fetch(r)) {
+						await member.roles.add(await member.guild.roles.fetch(r));
+					}
+				});
+			}
 		}
 
 		const channel = member.guild.channels.cache.find(ch => ch.id === data.plugins.welcome.channel);
