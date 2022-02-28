@@ -364,8 +364,8 @@ module.exports = {
 					const User = await Levels.fetch(message.author.id, message.guild.id);
 					const levelMsg = data.guild.plugins.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
-					if (parseInt(data.guild.plugins.leveling?.channel) && message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling?.channel))) {
-						const channel = message.guild.channels.cache.find(c => c.id === parseInt(data.guild.plugins.leveling.channel));
+					if (data.guild.plugins.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling?.channel)) {
+						const channel = message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling.channel);
 
 						await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
 					} else {
