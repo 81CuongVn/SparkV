@@ -72,16 +72,18 @@ module.exports = new cmd(
 			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
 			.addField(`${statuses[member?.presence?.status || "offline"]} Presence`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : capFirstLetter(member?.presence?.status)}\`\`\``, true)
 			.addField(`${bot.config.emojis.clock} Join Position`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
-			.addField(`${bot.config.emojis.id} User ID`, `\`\`\`${user.user ? user.user.id : user.id}\`\`\``, false)
-			.addField(`${bot.config.emojis.plus} Registered`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
-			.addField(`${bot.config.emojis.join} Joined Server`, `<t:${~~(member.joinedAt / 1000)}:R>`, true)
 			.setFooter({
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(roleColor || bot.config.embed.color);
 
-		if (user.flags.toArray().length > 0) InfoEmbed.addField(`${bot.config.emojis.award} Badges`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
+		if (user.flags.toArray().length > 0) InfoEmbed.addField(`${bot.config.emojis.award} Badges`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
+
+		InfoEmbed
+			.addField(`${bot.config.emojis.plus} Registered`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
+			.addField(`${bot.config.emojis.join} Joined Server`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
+
 		if (roles) InfoEmbed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
 
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
