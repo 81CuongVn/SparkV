@@ -3,10 +3,10 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/command");
 
 const statuses = {
-	online: "🟢",
-	idle: "🌙",
-	dnd: "🔴",
-	offline: "⚫"
+	online: "<:online:948002054029340733>",
+	idle: "<:idle:948003685118664784>",
+	dnd: "<:dnd:948003123308396624>",
+	offline: "<:offline:948002054247432202>"
 };
 
 const badges = {
@@ -15,6 +15,10 @@ const badges = {
 	HOUSE_BALANCE: "<:house_balance:941440238486691921>",
 	DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>",
 };
+
+function capFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 module.exports = new cmd(
 	async (bot, message, args, command, data) => {
@@ -62,24 +66,23 @@ module.exports = new cmd(
 
 		const InfoEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: `${statuses[member?.presence?.status || "offline"]} | ${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? "Robot" : "Human"})`,
-				iconURL: user.user
-					? user.user.displayAvatarURL({ dynamic: true })
-					: user.displayAvatarURL({ dynamic: true }),
+				name: `${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? "Robot" : "Human"})`,
+				iconURL: (user.user ? user.user : user).displayAvatarURL({ dynamic: true }),
 			})
-			.setThumbnail(user.user ? user.user.displayAvatarURL({ dynamic: true }) : user.displayAvatarURL({ dynamic: true }))
-			.addField("\`⌚\` Joined Server", `<t:${~~(member.joinedAt / 1000)}:R>`, true)
-			.addField("\`🚪\` Registered", `<t:${~~(user.createdAt / 1000)}:R>`, true)
-			.addField("\`😎\` Using SparkV Since", `<t:${~~(userdata.registrationDate / 1000)}:R>`, true)
-			.addField("\`🔢\`Join Position", `${await position || "UNKNOWN"}/${members.length}`, true)
+			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
+			.addField(`${statuses[member?.presence?.status || "offline"]} Presence`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : capFirstLetter(member?.presence?.status)}\`\`\``, true)
+			.addField(`${bot.config.emojis.clock} Join Position`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
+			.addField(`${bot.config.emojis.id} User ID`, `\`\`\`${user.user ? user.user.id : user.id}\`\`\``, false)
+			.addField(`${bot.config.emojis.plus} Registered`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
+			.addField(`${bot.config.emojis.join} Joined Server`, `<t:${~~(member.joinedAt / 1000)}:R>`, true)
 			.setFooter({
-				text: `🔢 ID: ${user.user ? user.user.id : user.id} • ${bot.config.embed.footer}`,
+				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(roleColor || bot.config.embed.color);
 
-		if (user.flags.toArray().length > 0) InfoEmbed.addField("\`🏅\`Badges", `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
-		if (roles) InfoEmbed.addField(`\`🏆\` Roles (${roleCount})`, roles, false);
+		if (user.flags.toArray().length > 0) InfoEmbed.addField(`${bot.config.emojis.award} Badges`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, true);
+		if (roles) InfoEmbed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
 
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
