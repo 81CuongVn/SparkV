@@ -17,8 +17,6 @@ async function execute(bot, message) {
 	let remaining = word.length;
 	const misses = [];
 
-	console.log(word, progress);
-
 	async function updateGame() {
 		const embed = new Discord.MessageEmbed()
 			.setAuthor({
