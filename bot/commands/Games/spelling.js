@@ -25,10 +25,12 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 		errors: ["time"],
 	}).then(async collected => {
 		const colMessage = collected.first();
-		const seconds = ((Date.now() - gameCreation) / 1000 % 60).toFixed(2);
+		const time = ((Date.now() - gameCreation) / 1000);
+		const seconds = (time % 60).toFixed(2);
+		const WPM = (colMessage.content.toLowerCase().trim().length / 5 / (time / 60)).toFixed(2);
 
-		await Menu.edit(`${Menu.content}\n\n🎉 | ${colMessage.author} has won the game in **${seconds} seconds**!`);
-		await message.replyT(`🥇 ${colMessage.author} got it right in **${seconds} seconds**!`);
+		await Menu.edit(`${Menu.content}\n\n🎉 | ${colMessage.author} has won the game in **${seconds} seconds** with a WPM of **${WPM}**!`);
+		await message.replyT(`🥇 ${colMessage.author} got it right in **${seconds} seconds** with a WPM of **${WPM}**!`);
 	}).catch(err => {
 		bot.logger(err, "error");
 
