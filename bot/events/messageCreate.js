@@ -367,7 +367,12 @@ module.exports = {
 					if (data.guild.plugins.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling?.channel)) {
 						const channel = message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling.channel);
 
-						await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+						try {
+							await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+						} catch (err) {
+							await message.replyT("Uh oh! I don't have access to the channel you've setup for leveling messages. If you need help fixing this, you can always contact support. Support Server: https://discord.gg/PPtzT8Mu3h");
+							await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+						}
 					} else {
 						await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
 					}
