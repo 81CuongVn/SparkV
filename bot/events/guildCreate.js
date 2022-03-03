@@ -22,7 +22,7 @@ module.exports = {
 			const ServerAddedEmbed = new Discord.MessageEmbed()
 				.setTitle("🔼︱Guild Added")
 				.setDescription(`SparkV has joined **${guild.name} (${guild.id})**!`)
-				.addField("<:player:945665904073641994> **Members**", `${bot.functions.formatNumber(guild.memberCount)}`, true)
+				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
