@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Economy",
 	description: "Get rich! Use our fun profit commands.",
-	emoji: "<:cash:945669014930223165>",
-	emojiID: "945669014930223165",
+	emoji: "<:coin:948362336736006144>",
+	emojiID: "948362336736006144",
 	commands,
 };

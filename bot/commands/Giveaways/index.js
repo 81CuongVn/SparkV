@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Giveaways",
 	description: "These commands let you create/manage your own giveaways!",
-	emoji: "<:party:934915498276192297>",
-	emojiID: "934915498276192297",
+	emoji: "<:tada:948365031857356860>",
+	emojiID: "948365031857356860",
 	commands,
 };

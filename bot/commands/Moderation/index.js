@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Moderation",
 	description: "The power to ban, kick, mute and more at your control.",
-	emoji: "<:shield_user:943669490024083489>",
-	emojiID: "943669490024083489",
+	emoji: "<:shield:948028696097337344>",
+	emojiID: "948028696097337344",
 	commands,
 };

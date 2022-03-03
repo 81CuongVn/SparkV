@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Games",
 	description: "Games that will keep you busy!",
-	emoji: "<:game:945727380826234910>",
-	emojiID: "945727380826234910",
+	emoji: "<:game:948029517417578576>",
+	emojiID: "948029517417578576",
 	commands,
 };
