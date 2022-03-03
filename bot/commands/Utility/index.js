@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Utility",
 	description: "Commands mostly used for basic actions, such as getting a server's icon.",
-	emoji: "<:utility:934822001728712744>",
-	emojiID: "934822001728712744",
+	emoji: "<:tool:948028430979567646>",
+	emojiID: "948028430979567646",
 	commands,
 };
