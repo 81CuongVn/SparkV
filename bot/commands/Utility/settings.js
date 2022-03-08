@@ -91,7 +91,7 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setTitle(`<:config:934870512235073606> | Loading settings...`)
+		.setTitle(`${bot.config.emojis.config} | Loading settings...`)
 		.setDescription(`Please wait while I load the settings...`)
 		.setFooter({
 			text: bot.config.embed.footer,
@@ -128,7 +128,7 @@ async function execute(bot, message, args, command, data) {
 					getData: () => data.guild.prefix,
 					setData: async () => {
 						await setNewData(message, {
-							title: "<:config:934870512235073606> | New Prefix",
+							title: `${bot.config.emojis.config} | New Prefix`,
 							description: "Please enter the new prefix for the bot.\n\n**Note:** The prefix cannot be longer than 5 characters.",
 							color: "BLUE",
 							time: 15,
@@ -153,7 +153,7 @@ async function execute(bot, message, args, command, data) {
 								const newPrefix = collected.content.trim();
 
 								requestMsg
-									.setTitle(`<:config:934870512235073606> | New Prefix Changed`)
+									.setTitle(`${bot.config.emojis.config} | New Prefix Changed`)
 									.setDescription(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`);
 
 								data.guild.prefix = newPrefix;
@@ -171,8 +171,8 @@ async function execute(bot, message, args, command, data) {
 		},
 		{
 			name: "Starboard",
-			emoji: "<:premium:939898240093016115>",
-			emojiID: "939898240093016115",
+			emoji: bot.config.emojis.star,
+			emojiID: "948013324216434718",
 			description: "The channel to setup the starboard in. Leave blank to disable.",
 			buttons: [
 				{
@@ -186,7 +186,7 @@ async function execute(bot, message, args, command, data) {
 					enabledText: "Successfully setup channel!",
 					data: new MessageButton()
 						.setLabel("Channel")
-						.setEmoji("#️⃣")
+						.setEmoji(bot.config.emojis.channel)
 						.setCustomId("channel")
 						.setStyle("SECONDARY"),
 					getData: () => {
@@ -198,14 +198,14 @@ async function execute(bot, message, args, command, data) {
 					},
 					setData: async () => {
 						await setNewData(message, {
-							title: "<:config:934870512235073606> | Starboard Channel Setup",
+							title: `${bot.config.emojis.config} | Starboard Channel Setup`,
 							description: "Please send a channel to setup the starboard in. You have 60 seconds to send a channel.",
 							color: "GOLD",
 							time: 60,
 							filter: cFilter,
 							handleData: async (collected, requestMsg) => {
 								requestMsg
-									.setTitle(`<:config:934870512235073606> | Sarboard Channel Setup`)
+									.setTitle(`${bot.config.emojis.config} | Sarboard Channel Setup`)
 									.setDescription(`Successfully setup starboard channel to ${collected.content}.`);
 
 								data.guild.plugins.starboard.channel = collected.content.slice(2, -1);
@@ -220,13 +220,13 @@ async function execute(bot, message, args, command, data) {
 					name: "Emoji",
 					data: new MessageButton()
 						.setLabel("Emoji")
-						.setEmoji("#️<:premium:939898240093016115>")
+						.setEmoji(bot.config.emojis.star)
 						.setCustomId("emoji")
 						.setStyle("SECONDARY"),
 					getData: () => data.guild.plugins?.starboard?.emoji || "⭐",
 					setData: async () => {
 						await setNewData(message, {
-							title: "<:config:934870512235073606> | Changing Starboard Emoji",
+							title: `${bot.config.emojis.config} | Changing Starboard Emoji`,
 							description: "Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.",
 							color: "GOLD",
 							time: 30,
@@ -251,7 +251,7 @@ async function execute(bot, message, args, command, data) {
 								const newEmoji = collected.content;
 
 								requestMsg
-									.setTitle(`<:config:934870512235073606> | Changing Starboard Emoji`)
+									.setTitle(`${bot.config.emojis.config} | Changing Starboard Emoji`)
 									.setDescription(`Successfully changed starboard emoji from ${data.guild.plugins.starboard.emoji} to ${newEmoji}.`);
 
 								data.guild.plugins.starboard.emoji = newEmoji;
@@ -266,13 +266,13 @@ async function execute(bot, message, args, command, data) {
 					name: "Minimum",
 					data: new MessageButton()
 						.setLabel("Minimum")
-						.setEmoji("2️⃣")
+						.setEmoji(bot.config.emojis.numbers.two)
 						.setCustomId("minimum")
 						.setStyle("SECONDARY"),
 					getData: () => data.guild.plugins?.starboard?.min || 2,
 					setData: async () => {
 						await setNewData(message, {
-							title: "<:config:934870512235073606> | Changing Starboard Minimum",
+							title: `${bot.config.emojis.config} | Changing Starboard Minimum`,
 							description: "Please send a number to change the minimum amount of stars required to create a star message. You have 15 seconds to send a number.",
 							color: "GOLD",
 							time: 15,
@@ -281,7 +281,7 @@ async function execute(bot, message, args, command, data) {
 								const min = collected.content.trim();
 
 								requestMsg
-									.setTitle(`<:config:934870512235073606> | Changing Starboard Minimum`)
+									.setTitle(`${bot.config.emojis.config} | Changing Starboard Minimum`)
 									.setDescription(`Successfully changed starboard minimum from ${data.guild.plugins.starboard.min} to ${min}.`);
 
 								data.guild.plugins.starboard.min = parseInt(min);
@@ -323,7 +323,7 @@ async function execute(bot, message, args, command, data) {
 					enabledText: "Successfully setup channel!",
 					data: new MessageButton()
 						.setLabel("Channel")
-						.setEmoji("#️⃣")
+						.setEmoji(bot.config.emojis.channel)
 						.setCustomId("channel")
 						.setStyle("SECONDARY"),
 					getData: () => {
@@ -335,14 +335,14 @@ async function execute(bot, message, args, command, data) {
 					},
 					setData: async () => {
 						await setNewData(message, {
-							title: "<:config:934870512235073606> | Logging Channel Setup",
+							title: `${bot.config.emojis.config} | Logging Channel Setup`,
 							description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
 							color: "BLUE",
 							time: 60,
 							filter: cFilter,
 							handleData: async (collected, requestMsg) => {
 								requestMsg
-									.setTitle(`<:config:934870512235073606> | Logging Channel Setup`)
+									.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
 									.setDescription(`Successfully setup logging channel to ${collected.content}.`);
 
 								data.guild.plugins.logging.channel = collected.content.slice(2, -1);
@@ -416,7 +416,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setDescription(`**Personalize ${message.guild.name}**\n${settings.map(setting => {
-			const state = setting?.stateDisabled === true ? "<:slash:945427182786859138>" : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
+			const state = setting?.stateDisabled === true ? bot.config.emojis.slash : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
 
 			return `${state ? `${state} ` : ""}${setting.name}`;
 		}).join("\n")}`)
@@ -449,7 +449,7 @@ async function execute(bot, message, args, command, data) {
 
 	function createPages() {
 		settings.forEach(setting => {
-			const settData = setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : "<:slash:945427182786859138>")} ${button.name}: **${button.getData()}**`);
+			const settData = setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`);
 			const NewEmbed = new MessageEmbed()
 				.setAuthor({
 					name: `${setting.emojiID ? "" : setting.emoji}SparkV ${setting.name}`,

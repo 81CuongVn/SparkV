@@ -5,21 +5,21 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	const User = message?.applicationId ? data.options.getMember("user") : (await bot.functions.fetchUser(args[0]));
 
-	if (!User) return await message.editT(`${bot.config.emojis.error} | Please say a person to rob.`);
+	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please say a person to rob.`);
 
 	const UserBalance = await bot.database.getUser(User.id);
 
-	if (data.user.money.balance < 500) return await message.editT(`${bot.config.emojis.error} | Bruh you cannot rob someone unless you have over ⏣500 coins.`);
-	if (UserBalance.money.balance <= 0) return await message.editT(`${bot.config.emojis.error} | Bruh they have no coins leave them alone you noob!`);
-	if ((message?.applicationId ? message.user.id : message.author.id) === User.id) return await message.editT(`${bot.config.emojis.error} | Why do you want to rob yourself lol.`);
-	if (User.user.bot) return await message.repeditTlyT(`${bot.config.emojis.error} | You cannot rob bots.`);
-	if (UserBalance.money.balance < 0) return await message.editT(`${bot.config.emojis.error} | This user is in **DEBT**! LOL!! HOW ON EARTH DID THAT HAPPEN LMFAOOOOO!!! Anyways, contact support and we'll reset your balance. :)`);
+	if (data.user.money.balance < 500) return await message.replyT(`${bot.config.emojis.error} | Bruh you cannot rob someone unless you have over ⏣500 coins.`);
+	if (UserBalance.money.balance <= 0) return await message.replyT(`${bot.config.emojis.error} | Bruh they have no coins leave them alone you noob!`);
+	if ((message?.applicationId ? message.user.id : message.author.id) === User.id) return await message.replyT(`${bot.config.emojis.error} | Why do you want to rob yourself lol.`);
+	if (User.user.bot) return await message.replyT(`${bot.config.emojis.error} | You cannot rob bots.`);
+	if (UserBalance.money.balance < 0) return await message.replyT(`${bot.config.emojis.error} | This user is in **DEBT**! LOL!! HOW ON EARTH DID THAT HAPPEN LMFAOOOOO!!! Anyways, contact support and we'll reset your balance. :)`);
 
 	const odds = Math.floor(Math.random() * 100) + 1;
 	const Embed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			name: (message.user ? message.user : message.author).tag,
+			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true);
 

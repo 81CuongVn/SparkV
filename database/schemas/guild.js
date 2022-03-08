@@ -40,9 +40,14 @@ const Schema = new mongoose.Schema({
 			enabled: "false",
 			channel: null,
 			emoji: "⭐",
-			min: 1,
+			min: 1
 		},
-		chatbot: "false",
+		logging: {
+			enabled: "false",
+			channel: null,
+			level: "info"
+		},
+		chatbot: "false"
 	} }
 });
 
