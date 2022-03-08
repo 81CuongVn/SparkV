@@ -1,3 +1,4 @@
+const config = require("../../../globalconfig.json");
 const fs = require("fs");
 
 const commands = fs
@@ -8,6 +9,7 @@ const commands = fs
 module.exports = {
 	name: "Owner",
 	description: "Owner only commands.",
-	emoji: "👑",
+	emoji: config.emojis.owner,
+	emojiID: "950869827193548870",
 	commands,
 };
