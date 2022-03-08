@@ -67,7 +67,7 @@
     "statcord.js": "^3.4.1",
     "to-zalgo": "^1.0.1",
     "urban": "^0.3.4",
-    "utf-8-validate": "^5.0.8",
+    "utf-8-validate": "^5.0.9",
     "weather-js": "^2.0.0",
     "weky": "^3.1.8",
     "zlib-sync": "^0.1.7"
