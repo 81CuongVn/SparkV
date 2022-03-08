@@ -2,20 +2,20 @@ const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = req
 
 const cmd = require("../../templates/command");
 
-const emojis = [
-	"⬅️",
-	"◀️",
-	"#️⃣",
-	"▶️",
-	"➡️"
-];
-
 async function execute(bot, message, args, command, data) {
-	const prefix = data?.guild.prefix || await bot.database.getGuild(message.guild.id).prefix;
 	const Selections = [];
+	const categories = [];
 	const pages = [];
 
 	bot.categories.map(cat => {
+		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
+
+		categories.push({
+			name: `${cat.emoji} ${cat.name} [${cat.commands.length}]`,
+			value: `\`${cat.description}\``,
+			inline: true
+		});
+
 		const commands = [];
 		bot.commands
 			.filter(command => command.settings.enabled && command.category === cat.name)
@@ -45,13 +45,6 @@ async function execute(bot, message, args, command, data) {
 		pages.push(NewEmbed);
 	});
 
-	const categories = [];
-	bot.categories.map(cat => categories.push({
-		name: `${cat.emoji} ${cat.name} [${cat.commands.length}]`,
-		value: cat.description,
-		inline: true
-	}));
-
 	const InviteButton = new MessageButton()
 		.setURL(bot.config.bot_invite)
 		.setLabel("Invite")
@@ -59,12 +52,19 @@ async function execute(bot, message, args, command, data) {
 
 	const SupportButton = new MessageButton()
 		.setURL(bot.config.support.invite)
-		.setLabel(await message.translate("Support Invite"))
+		.setLabel(await message.translate("Support Server"))
 		.setStyle("LINK");
 
 	const VoteButton = new MessageButton()
 		.setURL("https://top.gg/bot/884525761694933073")
+		.setEmoji(bot.config.emojis.stats)
 		.setLabel(await message.translate("Vote"))
+		.setStyle("LINK");
+
+	const WebsiteButton = new MessageButton()
+		.setURL("https://www.sparkv.tk/")
+		.setEmoji(bot.config.emojis.globe)
+		.setLabel(await message.translate("Website"))
 		.setStyle("LINK");
 
 	if (data?.options?.getString("search") || args[0]) {
@@ -80,14 +80,14 @@ async function execute(bot, message, args, command, data) {
 					name: message?.applicationId ? message.user.tag : message.author.tag,
 					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 				})
-				.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
+				.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : data.guild.prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
 				.setDescription(await message.translate(cmd.settings.description))
 				.addField(await message.translate("Category"), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
 				.addField(await message.translate("Aliases"), cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``, true)
 				.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
 				.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
 				.setFooter({
-					text: await message.translate(`${prefix}Help to get a list of all cmds • ${bot.config.embed.footer}`),
+					text: await message.translate(`${data.guild.prefix}Help to get a list of all commands • ${bot.config.embed.footer}`),
 					iconURL: bot.user.displayAvatarURL()
 				})
 				.setColor(bot.config.embed.color);
@@ -107,7 +107,7 @@ async function execute(bot, message, args, command, data) {
 		return await message.replyT({
 			embeds: [embed],
 			components: [
-				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
+				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton),
 			]
 		});
 	}
@@ -123,58 +123,39 @@ async function execute(bot, message, args, command, data) {
 		});
 	});
 
-	let PageNumber = 0;
-	const NewEmbed = new MessageEmbed()
+	const Menu = new MessageEmbed()
 		.setAuthor({
-			name: "SparkV Help",
+			name: "SparkV Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.addFields(categories)
+		.setTitle("**Hi there!**")
+		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\nWant to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
 		.setFooter({
-			text: await message.translate(`Welcome to SparkV's help menu! Select a category from tapping the selection box below. • ${bot.config.embed.footer}`),
+			text: await message.translate(`${bot.config.embed.footer}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
-	const quickLeft = new MessageButton()
-		.setEmoji(emojis[0])
-		.setCustomId("quickLeft")
-		.setStyle("PRIMARY");
+	Selections.push({
+		label: `Menu`,
+		description: "Return to the main menu.",
+		value: "menu",
+		emoji: bot.config.emojis.leave
+	});
 
-	const left = new MessageButton()
-		.setEmoji(emojis[1])
-		.setCustomId("left")
-		.setStyle("PRIMARY");
-
-	const number = new MessageButton()
-		.setEmoji(emojis[2])
-		.setCustomId("number")
-		.setStyle("PRIMARY");
-
-	const right = new MessageButton()
-		.setEmoji(emojis[3])
-		.setCustomId("right")
-		.setStyle("PRIMARY");
-
-	const quickRight = new MessageButton()
-		.setEmoji(emojis[4])
-		.setCustomId("quickRight")
-		.setStyle("PRIMARY");
+	pages.push(Menu);
 
 	const CatSelect = new MessageSelectMenu()
 		.setCustomId("SelectHelpMenu")
-		.setPlaceholder(await message.translate("Select a category to view it's cmds."))
+		.setPlaceholder(await message.translate("Select a category to view its commands."))
 		.addOptions(Selections);
 
 	const helpMessage = await message.replyT({
-		embeds: [
-			NewEmbed
-		],
+		embeds: [Menu],
 		components: [
-			new MessageActionRow().addComponents(quickLeft, left, number, right, quickRight),
 			new MessageActionRow().addComponents(CatSelect),
-			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton)
+			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton),
 		],
 		fetchReply: true
 	});
@@ -191,89 +172,15 @@ async function execute(bot, message, args, command, data) {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
 				await interaction.update({
-					embeds: [
-						pages.filter(p => p.author.name.includes(interaction.values[0]))[0]
-					],
-					components: [
-						new MessageActionRow().addComponents(quickLeft, left, number, right, quickRight),
-						new MessageActionRow().addComponents(CatSelect),
-						new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton),
-					],
+					embeds: [pages.filter(p => p.author.name.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]],
 				});
-			} else if (interaction.customId === "quickLeft") {
-				PageNumber = 0;
-			} else if (interaction.customId === "left") {
-				if (PageNumber > 0) {
-					--PageNumber;
-				} else {
-					PageNumber = pages.length - 1;
-				}
-			} else if (interaction.customId === "right") {
-				if (PageNumber + 1 < pages.length) {
-					++PageNumber;
-				} else {
-					PageNumber = 0;
-				}
-			} else if (interaction.customId === "quickRight") {
-				PageNumber = pages.length - 1;
-			} else if (interaction.customId === "number") {
-				const infoMsg = await message.replyT("Please send a page number.");
-
-				await message.channel.awaitMessages({
-					filter: msg => {
-						if (msg.author.id === msg.client.user.id) return false;
-
-						if (!msg.content) {
-							msg.replyT("Please send a number!");
-
-							return false;
-						}
-
-						if (!parseInt(msg.content) && isNaN(msg.content)) {
-							msg.replyT("Please send a valid number!");
-
-							return false;
-						}
-
-						if (parseInt(msg.content) > pages.length) {
-							msg.replyT("That's a page number higher than the amount of pages there are.");
-
-							return false;
-						}
-
-						return true;
-					}, max: 1, time: 30 * 1000, errors: ["time"]
-				}).then(async collected => {
-					const input = parseInt(collected.first().content);
-
-					PageNumber = input - 1;
-					collected.first().delete().catch(err => { });
-					infoMsg.delete().catch(err => { });
-				}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
-			} else {
-				return;
 			}
-		}
-
-		try {
-			interaction?.update({
-				embeds: [
-					pages[PageNumber].setFooter({
-						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
-					})
-				],
-			}).catch(err => {});
-		} catch (err) {
-			// Page deleted.
 		}
 	});
 
 	collector.on("end", async () => {
 		try {
 			await helpMessage?.edit({
-				embeds: [
-					NewEmbed.setTitle(await message.translate("Help Command - Timed Out!"), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate("You have gone inactive! Please rerun command to use this command again."))
-				],
 				components: []
 			});
 		} catch (err) {
