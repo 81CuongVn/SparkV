@@ -6,8 +6,8 @@ async function execute(bot, message, args, command, data) {
 	if (43200000 - (Date.now() - data.user.cooldowns.daily) > 0) {
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: message.user.tag,
-				iconURL: message.user.displayAvatarURL({ dynamic: true })
+				name: (message.user ? message.user : message.author).tag,
+				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.setTitle("Daily Reward")
 			.setDescription(`You've already claimed your daily reward today.\nCheck back <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:R> at <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:t>.`)
@@ -30,8 +30,8 @@ async function execute(bot, message, args, command, data) {
 
 	const Embed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			name: (message.user ? message.user : message.author).tag,
+			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setTitle("Daily Reward")
 		.setDescription(`You obtained your daily reward of ⏣15,000 coins!${data.user.money.multiplier > 1 ? ` Wow, it also seems you also have a **${data.user.money.multiplier}x** coin multiplier!` : ""}\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)

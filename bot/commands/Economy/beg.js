@@ -16,8 +16,8 @@ async function execute(bot, message, args, command, data) {
 	const choice = Math.floor(Math.random() * 2);
 	const Embed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			name: (message.user ? message.user : message.author).tag,
+			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true);
 
