@@ -16,7 +16,7 @@ async function execute(bot, message, args, command, data) {
 
 	await data.user.save();
 
-	await message.replyT(`${bot.config.emojis.success} | Deposited ⏣${bot.functions.formatNumber(amount)} into bank!`);
+	await message.replyT(`${bot.config.emojis.bank} | Deposited ⏣${bot.functions.formatNumber(amount)} into bank!`);
 }
 
 module.exports = new cmd(execute, {

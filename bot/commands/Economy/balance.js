@@ -15,7 +15,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true }) : User.displayAvatarURL({ dynamic: true })
 		})
 		.addField(`${bot.config.emojis.coin} Wallet`, `⏣${bot.functions.formatNumber(UserData.money.balance)}`, true)
-		.addField("🏦 Bank", ` ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}`, true)
+		.addField(`${bot.config.emojis.bank} Bank`, ` ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}`, true)
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
