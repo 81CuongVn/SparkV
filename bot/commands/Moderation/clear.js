@@ -28,17 +28,13 @@ async function execute(bot, message, args, command, data) {
 	let messages = await message.channel.messages.fetch({
 		limit: 100,
 	});
+	messages = messages.toJSON();
 
 	if (user) messages = messages.filter(m => m.author.id === user.user.id);
 	if (type === "pinned") messages = messages.filter(m => !m.pinned);
 
-	const messagesTable = [];
-	messages.forEach(message => messagesTable.push(message));
-	messages = messagesTable;
-
 	if (messages.length > number) messages.length = parseInt(number, 10);
 
-	messages.filter(m => !m.pinned);
 	number++;
 
 	message.channel.bulkDelete(messages, true);
