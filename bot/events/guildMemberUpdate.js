@@ -11,9 +11,6 @@ module.exports = {
 
 		if (data.plugins.welcome.enabled === "false") return;
 
-		console.log(oldMember.pending);
-		console.log(newMember.pending);
-		console.log(oldMember.pending === true && newMember.pending === false);
 		if (oldMember.pending === true && newMember.pending === false) {
 			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
 				const roles = data.plugins.welcome.roles.map(r => newMember.guild.roles.cache.get(r));
