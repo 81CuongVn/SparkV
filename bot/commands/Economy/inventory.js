@@ -43,6 +43,7 @@ module.exports = new cmd(
 		description: "Shows the items you have.",
 		dirname: __dirname,
 		aliases: ["inv"],
-		usage: ""
+		usage: "(user)",
+		requireArgs: true
 	},
 );
