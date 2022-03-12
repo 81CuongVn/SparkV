@@ -21,7 +21,7 @@ const numFilter = async m => {
 
 	if (m.content) {
 		if (isNaN(m.content) || parseInt(m.content) < 1) {
-			await message.replyT(`${bot.config.emojis.error} | Please provide a valid __number__. Try again.`);
+			await m.replyT(`${bot.config.emojis.error} | Please provide a valid __number__. Try again.`);
 
 			return false;
 		}
@@ -583,10 +583,14 @@ async function execute(bot, message, args, command, data) {
 				.setDescription(`**A critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
 				.setColor("RED");
 
-			return await botMessage.edit({
-				embeds: [ErrorEmbed],
-				ephemeral: true
-			});
+			try {
+				return await botMessage.edit({
+					embeds: [ErrorEmbed],
+					ephemeral: true
+				});
+			} catch (err) {
+
+			}
 		}
 	});
 
