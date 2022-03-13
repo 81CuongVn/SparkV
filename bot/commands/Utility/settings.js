@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = require("discord.js");
+const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Options } = require("discord.js");
 
 const cmd = require("../../templates/command");
 
@@ -48,41 +48,105 @@ async function setNewData(message, options) {
 		})
 		.setColor(options.color);
 
+	const components = [];
+
+	if (options.dropdownItems) {
+		const SelectMenu = new MessageSelectMenu()
+			.setCustomId(`SelectMenu_${options.id}`)
+			.setPlaceholder("Select an option.")
+
+			.addOptions(options.dropdownItems);
+
+		components.push(new MessageActionRow().addComponents(SelectMenu));
+	}
+
 	const channelMsg = await message.replyT({
-		embeds: [requestMsg]
+		embeds: [requestMsg],
+		components: components
 	});
 
-	await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async collected => {
-		try {
-			await options.handleData(collected.first(), requestMsg);
+	if (options.dropdownItems) {
+		const collector = await channelMsg.createMessageComponentCollector({
+			max: 1,
+			time: (options.time * 1000)
+		});
 
-			await channelMsg.edit({
-				embeds: [requestMsg],
-			});
+		collector.on("collect", async interaction => {
+			if (interaction.customId.split("_")[1] === options.id) {
+				try {
+					await options.handleData(interaction.values[0], requestMsg);
 
-			try {
-				setTimeout(() => {
-					channelMsg.delete();
-					collected.first().delete();
-				}, 5 * 1000);
-			} catch (err) {
-				// Do nothing. Most likely the message was deleted.
+					await channelMsg.edit({
+						embeds: [requestMsg],
+						components: []
+					});
+
+					try {
+						setTimeout(() => {
+							channelMsg.delete();
+						}, 5 * 1000);
+					} catch (err) {
+						// Do nothing. Most likely the message was deleted.
+					}
+				} catch (err) {
+					const ErrorEmbed = new MessageEmbed()
+						.setAuthor({
+							name: interaction.user.tag,
+							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+						})
+						.setTitle("Uh oh!")
+						.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
+						.setColor("RED");
+
+					return await message.reply({
+						embeds: [ErrorEmbed]
+					});
+				}
 			}
-		} catch (err) {
-			const ErrorEmbed = new MessageEmbed()
-				.setAuthor({
-					name: interaction.user.tag,
-					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-				})
-				.setTitle("Uh oh!")
-				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
-				.setColor("RED");
+		});
 
-			return await message.reply({
-				embeds: [ErrorEmbed]
-			});
-		}
-	}).catch(async collected => await message.replyT(`Canceled due to no valid response within ${options.time} seconds.`));
+		collector.on("end", async () => {
+			try {
+				await channelMsg?.edit({
+					components: []
+				});
+			} catch (err) {
+				// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
+			}
+		});
+	} else {
+		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async collected => {
+			try {
+				await options.handleData(collected.first(), requestMsg);
+
+				await channelMsg.edit({
+					embeds: [requestMsg],
+				});
+
+				try {
+					setTimeout(() => {
+						channelMsg.delete();
+						collected.first().delete();
+					}, 5 * 1000);
+				} catch (err) {
+					// Do nothing. Most likely the message was deleted.
+				}
+			} catch (err) {
+				const ErrorEmbed = new MessageEmbed()
+					.setAuthor({
+						name: interaction.user.tag,
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+					})
+					.setTitle("Uh oh!")
+					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
+					.setColor("RED");
+
+				return await message.reply({
+					embeds: [ErrorEmbed]
+				});
+			}
+		}).catch(async collected => await message.replyT(`Canceled due to no valid response within ${options.time} seconds.`));
+	}
 }
 
 async function execute(bot, message, args, command, data) {
@@ -158,6 +222,54 @@ async function execute(bot, message, args, command, data) {
 
 								data.guild.prefix = newPrefix;
 								data.guild.markModified("prefix");
+
+								await data.guild.save();
+
+								return true;
+							}
+						});
+					},
+				},
+				{
+					name: "Language",
+					data: new MessageButton()
+						.setLabel("Language")
+						.setEmoji(bot.config.emojis.slash)
+						.setCustomId("language")
+						.setStyle("PRIMARY"),
+					getData: () => data.guild.language,
+					setData: async () => {
+						await setNewData(message, {
+							title: `${bot.config.emojis.config} | New Language`,
+							id: "language",
+							description: "Please select the new language for the bot.",
+							dropdown: true,
+							dropdownItems: [
+								{
+									label: "English",
+									emoji: "🇺🇸",
+									value: "en"
+								},
+								{
+									label: "Spanish",
+									emoji: "🇪🇸",
+									value: "es"
+								},
+								{
+									label: "French",
+									emoji: "🇫🇷",
+									value: "fr"
+								}
+							],
+							color: "BLUE",
+							time: 15,
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`${bot.config.emojis.config} | New Language Changed`)
+									.setDescription(`Successfully changed language from **${data.guild.language}** to **${collected}**.`);
+
+								data.guild.language = collected;
+								data.guild.markModified("language");
 
 								await data.guild.save();
 
