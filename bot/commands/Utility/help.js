@@ -31,13 +31,13 @@ async function execute(bot, message, args, command, data) {
 
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
-				name: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
-				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
+				name: (message?.applicationId ? message.user : message.author).tag,
+				iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.addFields(commands)
 			.setFooter({
-				text: "SparkV - Making your Discord life easier!",
-				iconURL: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
+				text: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
+				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
 			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
@@ -127,13 +127,13 @@ async function execute(bot, message, args, command, data) {
 
 	const Menu = new MessageEmbed()
 		.setAuthor({
-			name: "SparkV Menu",
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			name: (message?.applicationId ? message.user : message.author).tag,
+			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setTitle(await message.translate("**Hi there!**"))
-		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\nWant to enable a setting? You can either vist our [dashboard](https://www.sparkv.tk/dashboard), or run \`/settings\` (Command in BETA, and not all settings have been added).\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
+		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our [dashboard](https://www.sparkv.tk/dashboard), or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
 		.setFooter({
-			text: await message.translate(`${bot.config.embed.footer}`),
+			text: `SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)
@@ -174,7 +174,7 @@ async function execute(bot, message, args, command, data) {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
 				await interaction.update({
-					embeds: [pages.filter(p => p.author.name.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]],
+					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]],
 				});
 			}
 		}
