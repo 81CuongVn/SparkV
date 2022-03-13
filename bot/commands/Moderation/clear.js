@@ -17,7 +17,12 @@ async function execute(bot, message, args, command, data) {
 		return clonedChannel.send("Successfully cleared **all** messages.").then(m => setTimeout(() => m.delete(), 5 * 1000));
 	}
 
-	if (number < 1) return message.replyT("Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.");
+	if (number < 1) {
+		return message.replyT({
+			content: "Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.",
+			ephemeral: true,
+		});
+	}
 
 	if (message?.applicationId) {
 		await message.deleteReply();
@@ -39,15 +44,16 @@ async function execute(bot, message, args, command, data) {
 
 	message.channel.bulkDelete(messages, true);
 
-	const mSuccess = await message.replyT(`Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`);
-
-	setTimeout(() => mSuccess.delete(), 2 * 1000);
+	const mSuccess = await message.replyT({
+		content: `Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`,
+		ephemeral: true,
+	});
 }
 
 module.exports = new cmd(execute, {
 	description: `I'll delete messages for you!`,
 	dirname: __dirname,
-	usage: `<number of messages to delete | all> <Optional: Mention a User to only delete the messages of>`,
+	usage: `<# of messages | all> <Optional: (Type (user only, pinned only))>`,
 	aliases: [`purge`, `clr`],
 	perms: ["MANAGE_MESSAGES"],
 	slash: true,
