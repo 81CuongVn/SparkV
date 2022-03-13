@@ -47,11 +47,13 @@ async function execute(bot, message, args, command, data) {
 
 	const InviteButton = new MessageButton()
 		.setURL(bot.config.bot_invite)
-		.setLabel("Invite")
+		.setEmoji(bot.config.emojis.plus)
+		.setLabel(await message.translate("Invite"))
 		.setStyle("LINK");
 
 	const SupportButton = new MessageButton()
 		.setURL(bot.config.support.invite)
+		.setEmoji("<:question:952361944097128518>")
 		.setLabel(await message.translate("Support Server"))
 		.setStyle("LINK");
 
@@ -128,8 +130,8 @@ async function execute(bot, message, args, command, data) {
 			name: "SparkV Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setTitle("**Hi there!**")
-		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\nWant to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
+		.setTitle(await message.translate("**Hi there!**"))
+		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\nWant to enable a setting? You can either vist our [dashboard](https://www.sparkv.tk/dashboard), or run \`/settings\` (Command in BETA, and not all settings have been added).\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
 		.setFooter({
 			text: await message.translate(`${bot.config.embed.footer}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
