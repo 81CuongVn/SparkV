@@ -5,7 +5,7 @@ const cmd = require("../../templates/command");
 
 module.exports = new cmd(
 	async (bot, message, args, command, data) => {
-		let User = await bot.functions.fetchUser(args[0]);
+		let User = args[0] ? (await bot.functions.fetchUser(args[0]) || message.author) : message.author;
 		let UserData;
 
 		if (User) {
@@ -43,7 +43,6 @@ module.exports = new cmd(
 		description: "Shows the items you have.",
 		dirname: __dirname,
 		aliases: ["inv"],
-		usage: "(user)",
-		requireArgs: true
+		usage: "(user)"
 	},
 );
