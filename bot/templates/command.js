@@ -43,10 +43,12 @@ module.exports = class Command {
 
 		for (const perm of this.settings.perms) {
 			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
-				return await message.replyT({
+				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
 					ephemeral: true,
-				});
+				};
+
+				return message?.applicationId ? await message.editT(table) : await message.replyT(table);
 			}
 		}
 
@@ -54,10 +56,12 @@ module.exports = class Command {
 
 		for (const perm of this.settings.bot_perms) {
 			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
-				return await message.replyT({
+				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,
-				});
+				};
+
+				return message?.applicationId ? await message.editT(table) : await message.replyT(table);
 			}
 		}
 
