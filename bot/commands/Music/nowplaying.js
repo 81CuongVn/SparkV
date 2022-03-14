@@ -22,8 +22,8 @@ async function execute(bot, message, args, command, data) {
 		.setURL(song.url)
 		.setColor(bot.config.embed.color)
 		.setFooter({
-			text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
-			iconURL: song.user.displayAvatarURL()
+			text: `Requested by ${song.member.user.tag} • ${bot.config.embed.footer}`,
+			iconURL: song.member.user.displayAvatarURL()
 		})
 		.setTimestamp();
 
