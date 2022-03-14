@@ -187,8 +187,8 @@ module.exports = async bot => {
 				.setURL(song.url)
 				.setColor(bot.config.embed.color)
 				.setFooter({
-					text: `Requested by ${song.user.tag} • ${bot.config.embed.footer}`,
-					iconURL: song.user.displayAvatarURL()
+					text: `Requested by ${song.member.user.tag} • ${bot.config.embed.footer}`,
+					iconURL: song.member.user.displayAvatarURL()
 				})
 				.setTimestamp();
 
