@@ -48,6 +48,8 @@ module.exports = async (content, type = "log") => {
 					.addField("**Error**", `\`\`\`${content}\`\`\``)
 					.setColor("RED");
 
+				if (content?.stack && process.argv.includes("--dev") !== true) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
+
 				await errorChannel.send({
 					embeds: [ErrorEmbed],
 				});
