@@ -32,16 +32,37 @@ const filter = async m => {
 module.exports = class ModCommand {
 	constructor(execute, sett) {
 		this.execute = execute;
-		this.settings = new NewCommand(execute, Object.assign({ cooldown: 60 * 1000 }, sett)).settings;
+		this.settings = new NewCommand(execute, Object.assign({ cooldown: 20 * 1000 }, sett)).settings;
 	}
 
 	async run(bot, message, args, command, data) {
-		if (this.settings.type === "together") {
-			if (!message.member.voice.channel) return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
+		if (this.settings.type === "activity") {
+			let type;
 
-			bot.discordTogether
-				.createTogetherCode(message.member.voice.channel.id, this.settings.gname)
-				.then(async invite => await message.replyT(`${invite.code}`));
+			if (data?.options?.getString("type") || args[0]) type = data?.options?.getString("type") || this.settings.options[0].choices.find(c => c.name === args[0]).value;
+
+			const invalidArgs = {
+				content: `${bot.config.emojis.error} | The game type must be one of the following: ${this.settings.options[0].choices.map(g => `${g.name}`).join(", ")}`,
+				ephemeral: true
+			};
+
+			if (!type && args[0]) return message.applicationId ? await message.editT(invalidArgs) : await message.replyT(invalidArgs);
+
+			const notVC = {
+				content: `${bot.config.emojis.error} | You must be in a __**voice channel**__ to play this game!`,
+				ephemeral: true
+			};
+
+			if (!message.member.voice.channel) return message.applicationId ? await message.editT(notVC) : await message.replyT(notVC);
+
+			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => {
+				const done = {
+					content: `${bot.config.emojis.success} | Click the following invite to start playing the selected game! ${invite.code}`,
+					ephemeral: true
+				};
+
+				await message.applicationId ? await message.editT(done) : await message.replyT(done);
+			});
 		} else if (this.settings.type === "game") {
 			if (this.settings.gname === "akinator") {
 				message.replyT("What type of game would you like to play? (animal, character or object)").then(async () => {
@@ -103,7 +124,7 @@ module.exports = class ModCommand {
 			});
 
 			collector.on("collect", async interaction => {
-				console.log(players)
+				console.log(players);
 				if (interaction.customId === "join") {
 					if (players[m.author.id]) {
 						return message.replyT({
