@@ -23,18 +23,22 @@ module.exports = class RedditCommand {
 		).settings;
 	}
 
-	async run(bot, message, args, command) {
+	async run(bot, message, args, command, data) {
+		let endpoint = this.settings.endpoint;
+
+		if (data?.options?.getString("type") || args[0]) endpoint = data?.options?.getString("type") || this.settings.options[0].choices.find(c => c.name === args[0]).value;
+
 		let res;
-		const cache = await bot.redis.get(this.settings.endpoint).then(res => JSON.parse(res));
+		const cache = await bot.redis.get(endpoint).then(res => JSON.parse(res));
 
 		if (cache) {
 			res = cache;
 		} else {
-			res = await fetch.get(`https://www.reddit.com${this.settings.endpoint}`)
+			res = await fetch.get(`https://www.reddit.com${endpoint}`)
 				.then(res => res.data)
 				.catch(() => null);
 
-			await bot.redis.set(this.settings.endpoint, JSON.stringify(res), {
+			await bot.redis.set(endpoint, JSON.stringify(res), {
 				EX: 15 * 60
 			});
 		}
