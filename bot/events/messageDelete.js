@@ -15,7 +15,7 @@ module.exports = {
 		if (!message?.content) return;
 		if (message?.author?.bot) return;
 
-		if (message?.content.length < 1) return;
+		if (message?.content.length < 2) return;
 		if (message?.content.length > 500) message.content = `${message?.content.slice(0, 96)}...`;
 		if (message?.content.includes("@everyone") || message?.content.includes("@here")) message.content = message.cleanContent;
 
