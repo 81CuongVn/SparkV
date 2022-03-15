@@ -9,6 +9,7 @@ async function execute(bot, message, args, command, data) {
 
 	bot.distube.play(message.member.voice.channel, query, {
 		textChannel: message.channel,
+		member: message.member,
 	});
 
 	return await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
