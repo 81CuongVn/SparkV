@@ -30,5 +30,12 @@ module.exports = new cmd(async (bot, message, args, command, data) => await mess
 	aliases: ["ball"],
 	usage: `(question)`,
 	slash: true,
-	slashOnly: true
+	slashOnly: true,
+	options: [
+		{
+			type: 3,
+			name: "question",
+			description: "The question to ask 8ball."
+		}
+	]
 });
