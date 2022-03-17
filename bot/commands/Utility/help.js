@@ -53,7 +53,7 @@ async function execute(bot, message, args, command, data) {
 
 	const SupportButton = new MessageButton()
 		.setURL(bot.config.support.invite)
-		.setEmoji("<:question:952361944097128518>")
+		.setEmoji(bot.config.emojis.question)
 		.setLabel(await message.translate("Support Server"))
 		.setStyle("LINK");
 
