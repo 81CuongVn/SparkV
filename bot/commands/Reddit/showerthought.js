@@ -7,5 +7,5 @@ module.exports = new RedditCommand({
 	usage: "",
 	enabled: true,
 	endpoint: "/r/showerthoughts/top/.json?sort=top&t=week",
-	type: "text",
+	type: "text"
 });
