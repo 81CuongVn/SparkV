@@ -5,8 +5,6 @@ const { SpotifyPlugin } = require("@distube/spotify");
 const { SoundCloudPlugin } = require("@distube/soundcloud");
 const { YtDlpPlugin } = require("@distube/yt-dlp");
 
-const EasyPages = require("discordeasypages");
-
 module.exports = async bot => {
 	const spotifySettings = {
 		parallel: true,
@@ -213,27 +211,27 @@ module.exports = async bot => {
 
 			handleMusic(queue, playlist, SongAddedQueue);
 		})
-		.on("searchResult", (message, results) => {
-			try {
-				const Pages = [];
+		// .on("searchResult", (message, results) => {
+		// 	try {
+		// 		const Pages = [];
 
-				results.map(Song => {
-					const NewEmbed = new Discord.MessageEmbed()
-						.setTitle(`${Song.formattedDuration} | ${Song.name}`)
-						.setColor(bot.config.embed.color)
-						.setURL(Song.url)
-						.setImage(Song.thumbnail);
+	// 		results.map(Song => {
+	// 			const NewEmbed = new Discord.MessageEmbed()
+	// 				.setTitle(`${Song.formattedDuration} | ${Song.name}`)
+	// 				.setColor(bot.config.embed.color)
+	// 				.setURL(Song.url)
+	// 				.setImage(Song.thumbnail);
 
-					Pages.push(NewEmbed);
-				});
+	// 			Pages.push(NewEmbed);
+	// 		});
 
-				EasyPages(message, Pages, "SearchResults", {
-					footer: "⚡ - To select this song, send the current page number. For example, to select page 1 send 1.",
-				});
-			} catch (err) {
-				bot.logger(err, "error");
-			}
-		})
+		// 		EasyPages(message, Pages, "SearchResults", {
+		// 			footer: "⚡ - To select this song, send the current page number. For example, to select page 1 send 1.",
+		// 		});
+		// 	} catch (err) {
+		// 		bot.logger(err, "error");
+		// 	}
+		// })
 		.on("searchDone", (message, answer, query) => { })
 		.on("searchCancel", async message => await message.replyT(`Searching canceled.`))
 		.on("searchInvalidAnswer", async message => await message.replyT("Search answer invalid. Make sure you're sending your selected song's page number. For example, if I wanted to play a song on the 5th page, I would send the number 5."))

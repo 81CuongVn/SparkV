@@ -2,14 +2,6 @@ const Discord = require(`discord.js`);
 
 const cmd = require("../../templates/command");
 
-const emojis = [
-	"⬅️",
-	"◀️",
-	"#️⃣",
-	"▶️",
-	"➡️"
-];
-
 async function execute(bot, interaction, args, command, data) {
 	const query = data.options.getString("search");
 
@@ -55,27 +47,27 @@ async function execute(bot, interaction, args, command, data) {
 	});
 
 	const quickLeft = new Discord.MessageButton()
-		.setEmoji(emojis[0])
+		.setEmoji("⬅️")
 		.setCustomId("quickLeft")
 		.setStyle("PRIMARY");
 
 	const left = new Discord.MessageButton()
-		.setEmoji(emojis[1])
+		.setEmoji("◀️")
 		.setCustomId("left")
 		.setStyle("PRIMARY");
 
 	const number = new Discord.MessageButton()
-		.setEmoji(emojis[2])
+		.setEmoji("#️⃣")
 		.setCustomId("number")
 		.setStyle("PRIMARY");
 
 	const right = new Discord.MessageButton()
-		.setEmoji(emojis[3])
+		.setEmoji("▶️")
 		.setCustomId("right")
 		.setStyle("PRIMARY");
 
 	const quickRight = new Discord.MessageButton()
-		.setEmoji(emojis[4])
+		.setEmoji("➡️")
 		.setCustomId("quickRight")
 		.setStyle("PRIMARY");
 
