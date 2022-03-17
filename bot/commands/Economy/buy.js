@@ -4,25 +4,19 @@ const cmd = require("../../templates/command");
 
 module.exports = new cmd(
 	async (bot, message, args, command, data) => {
-		if (!args[1]) args[1] = 1;
+		const itemName = data.options.getString("item").toLowerCase();
+		const amount = data.options.getNumber("amount") || 1;
 
-		if (isNaN(args[1])) return await message.editT("That's not a valid number for the quantity of the item you want to buy.");
+		if (amount === 0 || amount > 100) return await message.editT(`${bot.config.emojis.error} | That's not a valid number for the quantity of the item you want to buy.`);
 
-		args[0] = args[0].toLowerCase();
-		args[1] = parseInt(args[1]);
-
-		if (!bot.shop.some(i => i.ids.includes(args[0]))) return await message.editT("That's not an item you can buy in shop!");
-
-		const itemName = args[0];
-		const amount = args[1];
+		if (!bot.shop.some(i => i.ids.includes(itemName))) return await message.editT(`${bot.config.emojis.error} | That's not an existing item you can buy in shop!`);
 
 		const item = bot.shop.find(i => i.ids.includes(itemName));
 
-		if (!item.sale) return await message.editT("This item is not for sale right now.");
+		if (!item.sale) return await message.editT(`${bot.config.emojis.error} | This item is not for sale right now.`);
+		if (data.user.money.balance < item.price) return await message.editT(`${bot.config.emojis.error} | You don't have enough money to buy this item!`);
 
-		if (data.user.money.balance < item.price) return await message.editT("You don't have enough money to buy this item!");
-
-		data.user.money.balance -= item.price;
+		data.user.money.balance -= (item.price - amount);
 		data.user.markModified("money.balance");
 
 		if (!data.user.inventory[item.name]) data.user.inventory[item.name] = 0;
@@ -31,13 +25,28 @@ module.exports = new cmd(
 		data.user.markModified(`inventory.${item.name}`);
 		await data.user.save();
 
-		await message.replyT(`Successfully bought ${amount} ${amount > 1 ? `${item.name}s` : item.name} for ⏣${item.price}!`);
+		await message.editT(`${bot.config.emojis.success} | Successfully bought ${amount === 1 ? "a" : amount} ${amount > 1 ? `${item.name}s` : item.name} for ⏣${item.price * amount}!`);
 	},
 	{
 		description: "Buy an item from the shop.",
 		dirname: __dirname,
-		requireArgs: true,
 		aliases: [],
-		usage: `<item name> (optional: quantity)`
+		usage: `(item) (optional: quantity)`,
+		slash: true,
+		slashOnly: true,
+		ephemeral: true,
+		options: [
+			{
+				type: 3,
+				name: "item",
+				description: "The item to buy. To find items to buy, open the shop (/shop).",
+				required: true
+			},
+			{
+				type: 10,
+				name: "amount",
+				description: "The quantity of the item you want to buy."
+			}
+		]
 	},
 );

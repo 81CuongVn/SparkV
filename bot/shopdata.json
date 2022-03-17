@@ -11,6 +11,17 @@
         "usable": true
     },
     {
+        "name": "apple",
+        "description": "An apple a day keeps the doctor away!",
+        "usedMessage": "🍎 | You ate a delicious apple.",
+        "ids": [
+            "pz"
+        ],
+        "sale": true,
+        "price": 5,
+        "usable": true
+    },
+    {
         "name": "banknote",
         "description": "A banknote. Used to expand your bank storage.",
         "ids": [

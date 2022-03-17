@@ -42,7 +42,7 @@ async function execute(bot, message, args, command, data) {
 			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ format: "png", dynamic: true })
 		})
-		.setColor("YELLOW");
+		.setColor(bot.config.embed.color);
 
 	const SearchMessage = await message.replyT({
 		embeds: [SearchEmbed],
