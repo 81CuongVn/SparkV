@@ -180,7 +180,7 @@ async function execute(bot, message, args, command, data) {
 			name: "Basic",
 			emoji: bot.config.emojis.slash,
 			emojiID: "939972618814128159",
-			description: "Basic settings for the bot (prefix, languge, etc).",
+			description: "Basic settings for the bot (prefix, language, chatbot, etc).",
 			buttons: [
 				{
 					name: "Prefix",
@@ -208,7 +208,7 @@ async function execute(bot, message, args, command, data) {
 
 									return true;
 								} else {
-									await m.replyT("Dude... I need you to send a message. Not a picture.");
+									await m.replyT(`${bot.config.emojis.error} | Dude... I need you to send a message. Not a picture.`);
 
 									return false;
 								}
@@ -230,46 +230,92 @@ async function execute(bot, message, args, command, data) {
 						});
 					},
 				},
+				// {
+				// 	name: "Language",
+				// 	data: new MessageButton()
+				// 		.setLabel("Language")
+				// 		.setEmoji(bot.config.emojis.slash)
+				// 		.setCustomId("language")
+				// 		.setDisabled(true)
+				// 		.setStyle("PRIMARY"),
+				// 	getData: () => data.guild.language,
+				// 	setData: async () => {
+				// 		await setNewData(message, {
+				// 			title: `${bot.config.emojis.config} | New Language`,
+				// 			id: "language",
+				// 			description: "Please select the new language for the bot.",
+				// 			dropdownItems: [
+				// 				{
+				// 					label: "English",
+				// 					emoji: "🇺🇸",
+				// 					value: "en"
+				// 				},
+				// 				{
+				// 					label: "Spanish",
+				// 					emoji: "🇪🇸",
+				// 					value: "es"
+				// 				},
+				// 				{
+				// 					label: "French",
+				// 					emoji: "🇫🇷",
+				// 					value: "fr"
+				// 				}
+				// 			],
+				// 			color: "BLUE",
+				// 			time: 15,
+				// 			handleData: async (collected, requestMsg) => {
+				// 				requestMsg
+				// 					.setTitle(`${bot.config.emojis.config} | New Language Changed`)
+				// 					.setDescription(`Successfully changed language from **${data.guild.language}** to **${collected}**.`);
+
+				// 				data.guild.language = collected;
+				// 				data.guild.markModified("language");
+
+				// 				await data.guild.save();
+
+				// 				return true;
+				// 			}
+				// 		});
+				// 	},
+				// },
 				{
-					name: "Language",
+					name: "Chatbot",
 					data: new MessageButton()
-						.setLabel("Language")
+						.setLabel("Chatbot")
 						.setEmoji(bot.config.emojis.slash)
-						.setCustomId("language")
+						.setCustomId("chatbot")
 						.setStyle("PRIMARY"),
-					getData: () => data.guild.language,
+					getData: () => data.guild.plugins.chatbot,
 					setData: async () => {
 						await setNewData(message, {
-							title: `${bot.config.emojis.config} | New Language`,
-							id: "language",
-							description: "Please select the new language for the bot.",
-							dropdown: true,
+							title: `${bot.config.emojis.config} | New Chatbot Setting`,
+							id: "chatbot",
+							description: "Please select the new chatbot setting for the bot.",
 							dropdownItems: [
 								{
-									label: "English",
-									emoji: "🇺🇸",
-									value: "en"
+									label: "Disabled",
+									emoji: bot.config.emojis.error,
+									value: "false"
 								},
 								{
-									label: "Spanish",
-									emoji: "🇪🇸",
-									value: "es"
+									label: "Mention",
+									emoji: bot.config.emojis.mention,
+									value: "mention"
 								},
 								{
-									label: "French",
-									emoji: "🇫🇷",
-									value: "fr"
+									label: "Message",
+									value: "message"
 								}
 							],
 							color: "BLUE",
-							time: 15,
+							time: 30,
 							handleData: async (collected, requestMsg) => {
 								requestMsg
-									.setTitle(`${bot.config.emojis.config} | New Language Changed`)
-									.setDescription(`Successfully changed language from **${data.guild.language}** to **${collected}**.`);
+									.setTitle(`${bot.config.emojis.config} | New Chatbot Setting Changed`)
+									.setDescription(`Successfully changed Chatbot from **${data.guild.plugins.chatbot}** to **${collected}**.`);
 
-								data.guild.language = collected;
-								data.guild.markModified("language");
+								data.guild.plugins.chatbot = collected;
+								data.guild.markModified("plugins.chatbot");
 
 								await data.guild.save();
 
@@ -420,7 +466,8 @@ async function execute(bot, message, args, command, data) {
 		},
 		{
 			name: "Logging",
-			emoji: "📝",
+			emoji: bot.config.emojis.stats,
+			emojiID: "947990408657518652",
 			description: "Log actions in your server!",
 			disabled: false,
 			buttons: [
@@ -624,8 +671,17 @@ async function execute(bot, message, args, command, data) {
 	});
 
 	const collector = botMessage.createMessageComponentCollector({
-		filter: interaction => {
+		filter: async interaction => {
 			if (!interaction.deferred) interaction.deferUpdate();
+
+			if (interaction.user.id !== (message.user ? message.user : message.author).id) {
+				await message.replyT({
+					content: `Only ${message.author} can edit these settings!`,
+					ephemeral: true
+				});
+
+				return false;
+			}
 
 			return true;
 		}, time: 300 * 1000
