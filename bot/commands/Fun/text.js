@@ -74,6 +74,7 @@ module.exports = new cmd(execute, {
 			type: 3,
 			name: "type",
 			description: "What you want to do to the text. (reverse, emojify, asciify)",
+			required: true,
 			choices: [
 				{
 					name: "reverse",
