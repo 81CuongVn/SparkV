@@ -5,7 +5,7 @@ const user = require("../../../database/schemas/user");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const reason = args.slice(0).join(" ") || "No reason supplied.";
+	const reason = data.options.getString("reason") || "No reason specified.";
 
 	if (data.user.afk) {
 		data.user.afk = null;
@@ -23,8 +23,17 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: `This command will set your status to AFK. If anyone pings you, that person will be notified that you are afk with your selected reason.`,
+	description: `Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be notified that you are afk.`,
 	dirname: __dirname,
 	aliases: [],
-	usage: `<optional reason>`,
+	usage: `(optional: reason)`,
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 3,
+			name: "reason",
+			description: "The reason you are AFK."
+		}
+	]
 });
