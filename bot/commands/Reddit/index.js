@@ -8,7 +8,7 @@ const commands = fs
 module.exports = {
 	name: "Reddit",
 	description: "Get the latest memes (😂), animal pictures (🐶), and more from Reddit!",
-	emoji: "<:reddit:934913808680517772>",
-	emojiID: "934913808680517772",
+	emoji: "<:reddit:954115515180261406>",
+	emojiID: "954115515180261406",
 	commands,
 };
