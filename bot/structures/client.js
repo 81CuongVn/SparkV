@@ -9,7 +9,6 @@ const Statcord = require("statcord.js");
 
 const Distube = require("../../modules/dependencies/distubehandler");
 const giveawayshandler = require("../../modules/dependencies/giveawayshandler");
-const Noblox = require("../../modules/dependencies/noblox");
 const updateDocs = require("../../modules/updateDocs");
 
 const shopdata = require("../shopdata.json");
@@ -63,7 +62,6 @@ module.exports = class bot extends Client {
 		this.database.init(this);
 		Distube(this);
 		giveawayshandler(this);
-		Noblox(this);
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);
