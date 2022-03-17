@@ -14,15 +14,10 @@ async function execute(bot, message, args, command, data) {
 		await clonedChannel.setPosition(message.channel.position);
 		await message.channel.delete();
 
-		return clonedChannel.send("Successfully cleared **all** messages.").then(m => setTimeout(() => m.delete(), 5 * 1000));
+		return clonedChannel.send(`${bot.config.emojis.success} | Successfully cleared **all** messages.`).then(m => setTimeout(() => m.delete(), 5 * 1000));
 	}
 
-	if (number < 1) {
-		return message.replyT({
-			content: "Please provide valid command usage. For example, {prefix}clear <number of messages to delete>. If you want to delete all the messages, then just do ^clear all.",
-			ephemeral: true,
-		});
-	}
+	if (number < 1 || number > 100) return message.replyT(`${bot.config.emojis.success} | Next time, please provide a number greater than 0 and less than 100.`);
 
 	if (message?.applicationId) {
 		await message.deleteReply();
@@ -42,18 +37,19 @@ async function execute(bot, message, args, command, data) {
 
 	number++;
 
-	message.channel.bulkDelete(messages, true);
+	try {
+		message.channel.bulkDelete(messages, true);
 
-	const mSuccess = await message.replyT({
-		content: `Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`,
-		ephemeral: true,
-	});
+		await message.replyT(`${bot.config.emojis.success} | Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`).then(m => setTimeout(() => m.delete(), 5 * 1000));
+	} catch (err) {
+		await message.replyT(`${bot.config.emojis.error} | Uh oh! I failed to clear **${--number}** messages${user ? ` from ${user.user.tag}` : ""}. Please check my permissions and try again.`);
+	}
 }
 
 module.exports = new cmd(execute, {
 	description: `I'll delete messages for you!`,
 	dirname: __dirname,
-	usage: `<# of messages | all> <Optional: (Type (user only, pinned only))>`,
+	usage: `(# of messages) (Optional: Type (all, user only, pinned only))`,
 	aliases: [`purge`, `clr`],
 	perms: ["MANAGE_MESSAGES"],
 	slash: true,
