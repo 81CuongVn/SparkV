@@ -51,6 +51,8 @@ async function execute(bot, message, args, command, data) {
 
 			editedText = `\`\`\`${data}\`\`\``;
 		});
+	} else if (type === "clapify") {
+		editedText = text.trim().split(/ +/g).length === 1 ? text.split("").join(" 👏 ") : text.trim().split(/ +/g).join(" 👏 ");
 	}
 
 	await message.replyT(editedText);
@@ -87,6 +89,10 @@ module.exports = new cmd(execute, {
 				{
 					name: "asciify",
 					value: "asciify"
+				},
+				{
+					name: "clapify",
+					value: "clapify"
 				}
 			]
 		}
