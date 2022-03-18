@@ -4,23 +4,16 @@ const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const Selections = [];
-	const categories = [];
 	const pages = [];
 
 	bot.categories.map(cat => {
 		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
-		categories.push({
-			name: `${cat.emoji} ${cat.name} [${cat.commands.length}]`,
-			value: `\`${cat.description}\``,
-			inline: true
-		});
-
 		const commands = [];
 		bot.commands
 			.filter(command => command.settings.enabled && command.category === cat.name)
-			.map(command => commands.push({
-				name: `\`${command.settings?.slashOnly === true ? "/" : data.guild.prefix}${command.settings.name} ${command.settings.usage}\``,
+			.map(async command => commands.push({
+				name: `\`/${command.settings.name} ${command.settings.usage})\``,
 				value: command.settings.description,
 				inline: true
 			}));
@@ -101,8 +94,8 @@ async function execute(bot, message, args, command, data) {
 					name: message?.applicationId ? message.user.tag : message.author.tag,
 					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 				})
-				.setTitle("Uh oh!")
-				.setDescription("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**")
+				.setTitle(await message.translate("Uh oh!"))
+				.setDescription(await message.translate("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**"))
 				.setColor("RED");
 		}
 
@@ -114,11 +107,11 @@ async function execute(bot, message, args, command, data) {
 		});
 	}
 
-	bot.categories.map(cat => {
+	bot.categories.map(async cat => {
 		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
 		Selections.push({
-			label: `${cat.name} [${cat.commands.length}]`,
+			label: `${await message.translate(cat.name)} [${cat.commands.length}]`,
 			description: cat.description,
 			value: cat.name,
 			emoji: cat.emoji ? cat.emoji : null,
@@ -131,17 +124,17 @@ async function execute(bot, message, args, command, data) {
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setTitle(await message.translate("**Hi there!**"))
-		.setDescription("I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our [dashboard](https://www.sparkv.tk/dashboard), or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to [Icons by Danu](https://discord.gg/mm5QWaCWF5). They made most of the black and grey icons.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h.")
+		.setDescription(`${await message.translate("I'm a powerful multipurpose meme/chat bot with over")} **100+** ${await message.translate("commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to")} [Icons by Danu](https://discord.gg/mm5QWaCWF5)${await message.translate("They made most of the black and grey icons.\nIf you have any questions, feel free to join our server!")} https://discord.gg/PPtzT8Mu3h.`)
 		.setFooter({
-			text: `SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`,
+			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
 	Selections.push({
-		label: `Menu`,
-		description: "Return to the main menu.",
+		label: await message.translate(`Menu`),
+		description: await message.translate("Return to the main menu."),
 		value: "menu",
 		emoji: bot.config.emojis.leave
 	});

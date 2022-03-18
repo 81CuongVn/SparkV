@@ -8,25 +8,43 @@ async function translateContent(content) {
 	// Native languge
 	if (this.guild.data.language === "en") return content;
 
-	const cache = await this.client.redis.get(`${content}-${this.guild.data.language}`).then(res => JSON.parse(res));
-	let translation;
+	let content1, content2;
 
-	if (cache) { translation = cache; } else {
-		let content1, content2;
-
-		if (content.includes(" | ")) {
-			content1 = content.split(" | ")[0];
-			content2 = content.split(" | ")[1];
-		}
-
-		await translate(content2, {
-			to: this.guild.data.language
-		}).then(res => content.includes(" | ") ? translation = `${content1} | ${res.text}` : translation = res.text).catch(err => bot.logger(err, "error"));
-
-		await this.client.redis.set(`${content}-${this.guild.data.language}`, JSON.stringify(translation));
+	if (content.includes(" | ")) {
+		content1 = content.split(" | ")[0];
+		content2 = content.split(" | ")[1];
 	}
 
-	return await translation;
+	const cache = await this.client.redis.get(`${content2 || content}-${this.guild.data.language}`);
+	let translation;
+
+	if (cache) {
+		console.log("cache");
+		translation = cache;
+
+		return translation;
+	} else {
+		try {
+			await translate(content2 || content, {
+				from: "en",
+				to: this.guild.data.language
+			}).then(res => {
+				if (content.includes(" | ")) {
+					translation = `${content1} | ${res.text}`;
+				} else {
+					translation = res.text;
+				}
+			}).catch(err => bot.logger(err, "error"));
+
+			try {
+				await this.client.redis.set(`${content2 || content}-${this.guild.data.language}`, translation);
+			} catch (err) { }
+
+			return translation;
+		} catch (err) {
+			return content;
+		}
+	}
 }
 
 async function replyTranslate(options) {
@@ -42,36 +60,25 @@ async function replyTranslate(options) {
 		options = newOptions;
 	}
 
+	let data = {
+		fetchReply: true,
+		allowedMentions: {
+			repliedUser: false
+		}
+	};
+
+	data = Object.assign(data, options);
+
 	if (options.content) {
 		const translation = await translateContent(options.content);
-		const data = {
-			content: translation,
-			fetchReply: true,
-			allowedMentions: {
-				repliedUser: false
-			},
-		};
 
-		if (this?.applicationId) {
-			return this.followUp(data);
-		} else {
-			return this.reply(data);
-		}
+		data.content = translation;
+	}
+
+	if (this?.applicationId) {
+		return this.followUp(data);
 	} else {
-		const data = {
-			fetchReply: true,
-			allowedMentions: {
-				repliedUser: false
-			},
-		};
-
-		const correctData = Object.assign(data, options);
-
-		if (this?.applicationId) {
-			return this.followUp(correctData);
-		} else {
-			return this.reply(correctData);
-		}
+		return this.reply(data);
 	}
 }
 
@@ -88,94 +95,27 @@ async function editTranslate(options) {
 		options = newOptions;
 	}
 
+	let data = {
+		fetchReply: true,
+		allowedMentions: {
+			repliedUser: false
+		}
+	};
+
+	data = Object.assign(data, options);
+
 	if (options.content) {
 		const translation = await translateContent(options.content);
-		const data = {
-			content: translation,
-			fetchReply: true,
-			allowedMentions: {
-				repliedUser: false
-			},
-		};
 
-		if (this?.applicationId) {
-			return this.editReply(data);
-		} else {
-			return this.edit(data);
-		}
-	} else {
-		const data = {
-			fetchReply: true,
-			allowedMentions: {
-				repliedUser: false
-			},
-		};
-
-		const correctData = Object.assign(data, options);
-
-		if (this?.applicationId) {
-			return this.editReply(correctData);
-		} else {
-			return this.edit(correctData);
-		}
-	}
-}
-
-async function replySuccess(options) {
-	console.log(this.user);
-	const Embed = new MessageEmbed()
-		.setAuthor({
-			name: (this.user ? this.user : this.author).tag,
-			iconURL: (this.user ? this.user : this.author).displayAvatarURL({ dynamic: true })
-		})
-		.setFooter({
-			text: this.client.config.embed.footer,
-			iconURL: this.client.user.displayAvatarURL({ dynamic: true })
-		})
-		.setImage(options.image)
-		.setColor("GREEN");
-
-	if (options?.title) Embed.setTitle(options.title);
-	if (options?.description) Embed.setDescription(options.description);
-	if (options?.image) Embed.setImage(options.image);
-	if (options?.thumbnail) Embed.setThumbnail(options.thumbnail);
-	if (options?.footer) {
-		Embed.setFooter({
-			text: options.footer,
-			iconURL: this.client.user.displayAvatarURL({ dynamic: true }),
-		});
+		data.content = translation;
 	}
 
 	if (this?.applicationId) {
-		return this.followUp({
-			embeds: [Embed],
-		});
+		return this.editReply(data);
 	} else {
-		return this.reply({
-			embeds: [Embed],
-		});
+		return this.edit(data);
 	}
 }
-
-async function replyError(options) {
-	const Embed = new MessageEmbed()
-		.setAuthor({
-			name: (this.user ? this.user : this.author).tag,
-			iconURL: (this.user ? this.user : this.author).displayAvatarURL({ dynamic: true })
-		})
-		.setFooter(bot.config.embed.footer)
-		.setColor("RED");
-
-	if (options?.title) Embed.setTitle(options.title);
-	if (options?.description) Embed.setDescription(options.description);
-	if (options?.fields) Embed.setFields(options.fields);
-	if (options?.footer) Embed.setFooter(options.footer);
-
-	return await replyTranslate({
-		embeds: [Embed],
-	});
-}
-
 
 Interaction.prototype.replyT = replyTranslate;
 Interaction.prototype.editT = editTranslate;
@@ -184,9 +124,3 @@ Interaction.prototype.translate = translateContent;
 Message.prototype.replyT = replyTranslate;
 Message.prototype.editT = editTranslate;
 Message.prototype.translate = translateContent;
-
-Interaction.prototype.replySuccess = replySuccess;
-Interaction.prototype.replyError = replyError;
-
-Message.prototype.replySuccess = replySuccess;
-Message.prototype.replySuccess = replyError;
