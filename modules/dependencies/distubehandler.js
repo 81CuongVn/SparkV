@@ -29,13 +29,6 @@ module.exports = async bot => {
 		emitAddSongWhenCreatingQueue: false,
 		emptyCooldown: 25,
 		youtubeDL: false,
-		ytdlOptions: {
-			format: "audioonly",
-			quality: "highestaudio",
-			highWaterMark: 1024 * 1024 * 64,
-			liveBuffer: 60 * 1000,
-			dlChunkSize: 1024 * 1024 * 4,
-		},
 		plugins: [
 			new YtDlpPlugin(),
 			new SpotifyPlugin(spotifySettings),
