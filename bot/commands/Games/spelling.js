@@ -4,7 +4,7 @@ const randomWords = require("random-words");
 const cmd = require("../../templates/command");
 
 module.exports = new cmd(async (bot, message, args, command, data) => {
-	const difficulty = parseInt(data.options.getString("difficulty")) || 2;
+	const difficulty = parseInt(data?.options?.getString("difficulty")) || 2;
 	const chosenWord = randomWords({ exactly: 2, wordsPerString: difficulty, join: " " });
 	const gameCreation = Date.now();
 	const Menu = await message.replyT(`📽️ | ${message.user ? message.user : message.author} has started a spelling game!\nYou have 60 seconds to spell the following word correctly.\n> **\`${chosenWord}\`**.`);
