@@ -37,25 +37,36 @@ module.exports = async bot => {
 		youtubeCookie: process.env.YTCOOKIE
 	});
 
-	async function handleMusic(queue, song, embed) {
+	async function handleMusic(queue, song, mEmbed, options) {
 		const TogglePlayingButton = new Discord.MessageButton()
-			.setEmoji("⏯")
+			.setEmoji(bot.config.emojis.pause)
 			.setCustomId("TP")
-			.setStyle("PRIMARY");
+			.setStyle("DANGER");
 
 		const LoopButton = new Discord.MessageButton()
-			.setEmoji("🔁")
+			.setEmoji(bot.config.emojis.loop)
 			.setCustomId("loop")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		const StopButton = new Discord.MessageButton()
-			.setEmoji("⏹️")
+			.setEmoji(bot.config.emojis.music_stop)
 			.setCustomId("stop")
 			.setStyle("DANGER");
 
+		const buttons = [];
+
+		if (options?.includePause === true) buttons.push(TogglePlayingButton);
+		if (options?.includeStop === true) buttons.push(StopButton);
+		if (options?.includeLoop === true) buttons.push(LoopButton);
+
 		const MusicMessage = await queue.textChannel.send({
-			embeds: [embed],
-			components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)],
+			embeds: [mEmbed],
+			components: buttons.length > 0 ? [
+				{
+					type: "ACTION_ROW",
+					components: buttons
+				}
+			] : null,
 			fetchReply: true
 		});
 
@@ -67,7 +78,11 @@ module.exports = async bot => {
 
 			const queue = bot.distube.getQueue(interaction);
 
-			if (!queue) return interaction.editT("There is no music playing.");
+			if (!queue) {
+				await interaction.editT("There is no music playing.");
+
+				collector.stop();
+			}
 
 			const embed = new Discord.MessageEmbed()
 				.setAuthor({
@@ -103,6 +118,8 @@ module.exports = async bot => {
 						.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
 						.setDescription(`Resumed ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
 						.setColor("GREEN");
+
+					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 				} else {
 					queue.pause();
 
@@ -110,7 +127,14 @@ module.exports = async bot => {
 						.setTitle(`${bot.config.emojis.music} | Music Paused!`)
 						.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
 						.setColor("RED");
+
+					TogglePlayingButton.setEmoji(bot.config.emojis.play).setStyle("SUCCESS");
 				}
+
+				MusicMessage.editT({
+					embeds: [mEmbed],
+					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
+				});
 			} else if (interaction.customId === "stop") {
 				queue.stop();
 
@@ -130,24 +154,30 @@ module.exports = async bot => {
 			if (MusicMessage) {
 				try {
 					MusicMessage?.edit({
-						embeds: [SongAddedQueue],
+						embeds: [mEmbed],
 						components: []
 					});
 				} catch (e) { }
 			}
 		});
+
+		return MusicMessage;
 	}
 
 	bot.distube
+		.on("initQueue", queue => {
+			queue.volume = 75;
+		})
 		.on("playSong", async (queue, song) => {
 			const NowPlayingEmbed = new Discord.MessageEmbed()
-				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name} by ${song.uploader.name}`)
+				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name}`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
-				.addField("`⏳` Duration", `\`${song.formattedDuration}\``, true)
-				.addField("`🔉` Volume", `\`${queue.volume}%\``, true)
-				.addField("`🔁` Loop", `\`${queue.repeatMode ? (queue.repeatMode === 2 ? "Server Queue" : "Current Song") : "`❎`"}\``, true)
-				.addField("`🔂` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
+				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${song.uploader?.name}\`\`\``, true)
+				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`${queue.formattedCurrentTime}/${song.formattedDuration}\`\`\``, true)
+				.addField(`${bot.config.emojis.clock} Song Progress`, `\`\`\`${bot.functions.splitBar(queue.currentTime, song.duration, 45)}\`\`\``)
+				.addField(`${bot.config.emojis.volume} Volume`, `\`${queue.volume}%\``, true)
+				.addField(`${bot.config.emojis.loop} Loop`, `${queue.repeatMode ? `${(queue.repeatMode === 2 ? "\`Server Queue\`" : "\`Current Song\`")}` : `${bot.config.emojis.error} \`Disabled\``}`, true)
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 
@@ -165,25 +195,108 @@ module.exports = async bot => {
 					});
 			}
 
-			handleMusic(queue, song, NowPlayingEmbed);
+			const message = await handleMusic(queue, song, NowPlayingEmbed, {
+				includePause: true,
+				includeStop: true,
+				includeLoop: true
+			});
+
+			const updateMusic = setInterval(async () => {
+				if (queue.playing === false && queue.paused === false) return clearInterval(updateMusic);
+
+				if (queue.paused === false) {
+					NowPlayingEmbed.fields = [
+						{
+							name: `${bot.config.emojis.player} Uploader`,
+							value: `\`\`\`${song.uploader?.name}\`\`\``,
+							inline: true
+						},
+						{
+							name: `${bot.config.emojis.clock} Duration`,
+							value: `\`\`\`${queue.formattedCurrentTime}/${song.formattedDuration}\`\`\``,
+							inline: true,
+						},
+						{
+							name: `${bot.config.emojis.clock} Song Progress`,
+							value: `\`\`\`${bot.functions.splitBar(queue.currentTime, song.duration, 45)}\`\`\``,
+							inline: false
+						},
+						{
+							name: `${bot.config.emojis.volume} Volume`,
+							value: `\`${queue.volume}%\``,
+							inline: true
+						},
+						{
+							name: `${bot.config.emojis.loop} Loop`,
+							value: `${queue.repeatMode ? `${bot.config.emojis.success} ${(queue.repeatMode === 2 ? "\`Server Queue\`" : "\`Current Song\`")}` : `${bot.config.emojis.error} \`Disabled\``}`,
+							inline: true
+						}
+					];
+
+					try {
+						await message.edit({
+							embeds: [NowPlayingEmbed]
+						});
+					} catch (e) {
+						clearInterval(updateMusic);
+					}
+				}
+			}, 7.5 * 1000);
 		})
 		.on("addSong", async (queue, song) => {
 			const SongAddedQueue = new Discord.MessageEmbed()
-				.setTitle(`${bot.config.emojis.music} | Added ${song.name} by ${song.uploader.name} to Queue`)
-				.setImage(song.playlist?.thumbnail || song.thumbnail)
-				.addField("`⏳` Duration", `\`${song.formattedDuration}\``, true)
-				.addField("`🔉` Volume", `\`${queue.volume}%\``, true)
-				.addField("`🔁` Loop", `\`${queue.repeatMode ? (queue.repeatMode === 2 ? "🔁 | Server Queue" : "🔂 | Current Song") : "`❎`"}\``, true)
-				.addField("`🔁` AutoPlay", `\`${queue.autoplay ? "`✅`" : "`❎`"}\``, true)
+				.setTitle(`${bot.config.emojis.music} | Added ${song.name} to Queue`)
 				.setURL(song.url)
+				.setImage(song.playlist?.thumbnail || song.thumbnail)
+				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${song.uploader?.name}\`\`\``, true)
+				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`${song.formattedDuration}\`\`\``, true)
+				.addField(`${bot.config.emojis.volume} Volume`, `\`${queue.volume}%\``, true)
+				.addField(`${bot.config.emojis.loop} Loop`, `${queue.repeatMode ? `${(queue.repeatMode === 2 ? "\`Server Queue\`" : "\`Current Song\`")}` : `${bot.config.emojis.error} \`Disabled\``}`, true)
 				.setColor(bot.config.embed.color)
-				.setFooter({
-					text: `Requested by ${song.member.user.tag} • ${bot.config.embed.footer}`,
-					iconURL: song.member.user.displayAvatarURL()
-				})
 				.setTimestamp();
 
-			handleMusic(queue, song, SongAddedQueue);
+			const message = await handleMusic(queue, song, SongAddedQueue, {
+				includeLoop: false,
+				includePause: false,
+				includeStop: false
+			});
+
+			const updateMusic = setInterval(async () => {
+				if (queue.playing === false && queue.paused === false) return clearInterval(updateMusic);
+
+				if (queue.paused === false) {
+					SongAddedQueue.fields = [
+						{
+							name: `${bot.config.emojis.player} Uploader`,
+							value: `\`\`\`${song.uploader?.name}\`\`\``,
+							inline: true
+						},
+						{
+							name: `${bot.config.emojis.clock} Duration`,
+							value: `\`\`\`${song.formattedDuration}\`\`\``,
+							inline: true,
+						},
+						{
+							name: `${bot.config.emojis.volume} Volume`,
+							value: `\`${queue.volume}%\``,
+							inline: true
+						},
+						{
+							name: `${bot.config.emojis.loop} Loop`,
+							value: `${queue.repeatMode ? `${bot.config.emojis.success} ${(queue.repeatMode === 2 ? "\`Server Queue\`" : "\`Current Song\`")}` : `${bot.config.emojis.error} \`Disabled\``}`,
+							inline: true
+						}
+					];
+
+					try {
+						await message.edit({
+							embeds: [SongAddedQueue]
+						});
+					} catch (e) {
+						clearInterval(updateMusic);
+					}
+				}
+			}, 7.5 * 1000);
 		})
 		.on("addList", async (queue, playlist) => {
 			const SongAddedQueue = new Discord.MessageEmbed()
@@ -202,7 +315,11 @@ module.exports = async bot => {
 				})
 				.setTimestamp();
 
-			handleMusic(queue, playlist, SongAddedQueue);
+			handleMusic(queue, playlist, SongAddedQueue, {
+				includePause: false,
+				includeStop: false,
+				includeLoop: false
+			});
 		})
 		// .on("searchResult", (message, results) => {
 		// 	try {
