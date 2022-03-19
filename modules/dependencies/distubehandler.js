@@ -1,4 +1,6 @@
 const Discord = require("discord.js");
+const Genius = require("genius-lyrics");
+const lyricsClient = new Genius.Client(process.env.GENIUS_TOKEN);
 
 const { DisTube } = require("distube");
 const { SpotifyPlugin } = require("@distube/spotify");
@@ -48,6 +50,11 @@ module.exports = async bot => {
 			.setCustomId("loop")
 			.setStyle("SECONDARY");
 
+		const LyricsButton = new Discord.MessageButton()
+			.setEmoji(bot.config.emojis.queue)
+			.setCustomId("lyrics")
+			.setStyle("SECONDARY");
+
 		const StopButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.music_stop)
 			.setCustomId("stop")
@@ -58,6 +65,7 @@ module.exports = async bot => {
 		if (options?.includePause === true) buttons.push(TogglePlayingButton);
 		if (options?.includeStop === true) buttons.push(StopButton);
 		if (options?.includeLoop === true) buttons.push(LoopButton);
+		if (options?.includeLyrics === true) buttons.push(LyricsButton);
 
 		const MusicMessage = await queue.textChannel.send({
 			embeds: [mEmbed],
@@ -70,6 +78,7 @@ module.exports = async bot => {
 			fetchReply: true
 		});
 
+		const lyrics = await (await lyricsClient.songs.search(song.name))[0].lyrics();
 		const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 		collector.on("collect", async interaction => {
 			await interaction.deferReply({
@@ -142,6 +151,11 @@ module.exports = async bot => {
 					.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
 					.setDescription(`Stopped playing ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
 					.setColor("RED");
+			} else if (interaction.customId === "lyrics") {
+				embed
+					.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
+					.setDescription(lyrics)
+					.setColor(bot.config.embed.color);
 			}
 
 			interaction.replyT({
@@ -198,7 +212,8 @@ module.exports = async bot => {
 			const message = await handleMusic(queue, song, NowPlayingEmbed, {
 				includePause: true,
 				includeStop: true,
-				includeLoop: true
+				includeLoop: true,
+				includeLyrics: true
 			});
 
 			const updateMusic = setInterval(async () => {
@@ -258,7 +273,8 @@ module.exports = async bot => {
 			const message = await handleMusic(queue, song, SongAddedQueue, {
 				includeLoop: false,
 				includePause: false,
-				includeStop: false
+				includeStop: false,
+				includeLyrics: false
 			});
 
 			const updateMusic = setInterval(async () => {
@@ -318,22 +334,23 @@ module.exports = async bot => {
 			handleMusic(queue, playlist, SongAddedQueue, {
 				includePause: false,
 				includeStop: false,
-				includeLoop: false
+				includeLoop: false,
+				includeLyrics: false
 			});
 		})
 		// .on("searchResult", (message, results) => {
 		// 	try {
 		// 		const Pages = [];
 
-	// 		results.map(Song => {
-	// 			const NewEmbed = new Discord.MessageEmbed()
-	// 				.setTitle(`${Song.formattedDuration} | ${Song.name}`)
-	// 				.setColor(bot.config.embed.color)
-	// 				.setURL(Song.url)
-	// 				.setImage(Song.thumbnail);
+		// 		results.map(Song => {
+		// 			const NewEmbed = new Discord.MessageEmbed()
+		// 				.setTitle(`${Song.formattedDuration} | ${Song.name}`)
+		// 				.setColor(bot.config.embed.color)
+		// 				.setURL(Song.url)
+		// 				.setImage(Song.thumbnail);
 
-	// 			Pages.push(NewEmbed);
-	// 		});
+		// 			Pages.push(NewEmbed);
+		// 		});
 
 		// 		EasyPages(message, Pages, "SearchResults", {
 		// 			footer: "⚡ - To select this song, send the current page number. For example, to select page 1 send 1.",
