@@ -10,4 +10,5 @@ module.exports = new cmd(null, {
 	perms: [],
 	gname: "akinator",
 	type: "game",
+	slash: true,
 });
