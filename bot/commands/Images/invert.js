@@ -7,5 +7,18 @@ module.exports = new cmd({
 	dirname: __dirname,
 	aliases: ["flipcolor"],
 	usage: `(user: optional default: you)`,
-	effect: "invert",
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to invert their profile picture.",
+		}
+	],
+	generate: async function(bot, message, data) {
+		const user = data.options.getUser("user") || message.user;
+
+		return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
+	}
 });

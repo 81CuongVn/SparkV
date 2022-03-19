@@ -1,39 +1,33 @@
-const Discord = require(`discord.js`);
-const canvacord = require(`canvacord`);
+const Discord = require("discord.js");
+const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("../../templates/imageCommand");
 
-async function execute(bot, message, args, command, data) {
-	if (!args || !args[0]) {
-		return await message.replyT(`Please provide text.`);
-	}
-
-	args = args.join(` `);
-
-	const User = (await bot.functions.fetchUser(args[0])) || message.author;
-	const Image = await canvacord.Canvas.opinion(User.displayAvatarURL({ format: "png" }), args);
-
-	await message.replyT({
-		files: [new Discord.MessageAttachment(Image, "opinion.png")],
-	});
-}
-
-module.exports = new cmd(execute, {
-	description: `lol`,
-	aliases: ["nofact"],
+module.exports = new cmd({
+	description: "Oh my, that's a very bad opinion.",
 	dirname: __dirname,
-	usage: `<text>`,
+	aliases: ["nofact"],
+	usage: `(user) (text)`,
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to show as a father's son saying a very bad opinion.",
+			required: true
+		},
+		{
+			type: 3,
+			name: "text",
+			description: "The very bad opinion that the father is very mad at.",
+			required: true
+		}
+	],
+	generate: async function(bot, message, data) {
+		const user = data.options.getUser("user");
+		const text = data.options.getUser("text");
+
+		return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
+	}
 });
-
-// const Discord = require("discord.js");
-
-// const cmd = require("../../templates/imageCommand");
-
-// module.exports = new cmd({
-// 	description: "Very bad opinion.",
-// 	dirname: __dirname,
-// 	aliases: ["nofact"],
-// 	usage: `(text)`,
-// 	effect: "opinion",
-// 	useTextAndUser: true
-// });
