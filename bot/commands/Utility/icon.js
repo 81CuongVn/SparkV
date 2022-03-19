@@ -4,7 +4,7 @@ const canvacord = require("canvacord");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const state = message.applicationId ? message.options.getSubcommand() : args[0];
+	const state = message.applicationId ? data.options.getSubcommand() : args[0];
 
 	if (!state) return await message.replyT(`Next time, please use this command's proper usage. Usage: \`${data.guild.prefix}icon server (optional: invite default: current server)\` or \`${data.guild.prefix}icon user (optional: user default: you)\`.`);
 
