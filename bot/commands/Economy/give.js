@@ -4,7 +4,7 @@ const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const user = data.options.getMember("user");
-	const money = data.options.getMember("money");
+	const money = data.options.getNumber("money");
 
 	if (user.id === message.author.id) return await message.editT(`${bot.config.emojis.error} | You can't give money to yourself.`);
 
@@ -28,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 module.exports = new cmd(execute, {
 	description: "Give someone some money.",
 	dirname: __dirname,
-	usage: `(user)`,
+	usage: `(user) (money)`,
 	aliases: ["gift"],
 	perms: [],
 	slash: true,
@@ -41,7 +41,7 @@ module.exports = new cmd(execute, {
 			required: true
 		},
 		{
-			type: 3,
+			type: 10,
 			name: "money",
 			description: "The amount of money to give.",
 			required: true
