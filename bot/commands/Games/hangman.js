@@ -54,7 +54,6 @@ async function execute(bot, message) {
 	const collector = await menuEmbed.channel.createMessageCollector({
 		filter: m => m.content,
 		time: 900 * 1000,
-		errors: ["time"],
 	});
 
 	collector.on("collect", async m => {
@@ -64,9 +63,13 @@ async function execute(bot, message) {
 		const guess = m.content.toLowerCase();
 
 		if (guess.length === 1) {
-			if (misses[`\`${guess}\``]) {
-				await m.replyT(`${guess} has already been guessed.`).then(async m => setTimeout(() => m.delete(), 5000));
-			} else if (word.includes(guess)) {
+			if (misses.includes(`\`${guess}\``)) {
+				await m.replyT(`\`${guess}\` has already been guessed. Try again!`).then(async m => setTimeout(() => m.delete(), 5000));
+
+				return setTimeout(() => m.delete(), 5000);
+			}
+
+			if (word.includes(guess)) {
 				for (let i = 0; i < word.length; ++i) {
 					if (word[i] === guess) {
 						progress = `${progress.substring(0, i)}${word[i]}${progress.substring(i + word[i].length)}`;
