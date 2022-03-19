@@ -49,6 +49,27 @@ module.exports = {
 	},
 
 	/**
+	 * Split bar. A nice little progress bar.
+	 * @param {number} current The current progress.
+	 * @param {number} total The total progress.
+	 * @param {number} size The size of the progress bar.
+	 * @param {string} line The line of the progress bar. Default: ▬
+	 * @param {string} slider The slider emoji. Default: 🔘
+	 * @returns {string} The progress bar, as a string.
+	 */
+	splitBar(current, total, size = 40, line = "▬", slider = "🔘") {
+		if (current > total) {
+			return line.repeat(size + 2);
+		} else {
+			const percent = current / total;
+			const progress = Math.round(size * percent);
+			const progLeft = size - progress;
+
+			return line.repeat(progress).replace(/.$/, slider) + line.repeat(progLeft);
+		}
+	},
+
+	/**
 	 * Create Card
 	 * @param {Object} options Options.
 	 * @returns {Promise<Canvas>} Canvas
@@ -111,8 +132,10 @@ module.exports = {
 		context.closePath();
 		context.clip();
 
-		const Avatar = await loadImage(options.avatar);
+		const Avatar = await loadImage(options.user.displayAvatarURL({ format: "png" }));
 		context.drawImage(Avatar, 90, 125, 250, 250);
+
+		return canvas;
 	},
 
 	/**
