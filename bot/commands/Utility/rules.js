@@ -161,5 +161,6 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 	usage: "",
 	aliases: ["TOS"],
 	perms: ["EMBED_LINKS", "MANAGE_MESSAGES"],
+	slash: true
 },
 );
