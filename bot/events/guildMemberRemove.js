@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const Canvas = require("discord-canvas");
 const path = require("path");
 
 const database = require("../../database/handler");
@@ -15,19 +14,14 @@ module.exports = {
 
 		if (!channel) return;
 
-		const image = await new Canvas.Goodbye()
-			.setUsername(member.user.username)
-			.setDiscriminator(member.user.discriminator)
-			.setMemberCount(member.guild.memberCount)
-			.setGuildName(member.guild.name)
-			.setAvatar(member.user.displayAvatarURL({ dynamic: true, format: "png" }))
-			.setColor("border", "#5f9afa")
-			.setColor("username-box", "#5f9afa")
-			.setColor("discriminator-box", "#5f9afa")
-			.setColor("message-box", "#5f9afa")
-			.setColor("title", "#5f9afa")
-			.setColor("avatar", "#5f9afa")
-			.toAttachment();
+		const image = await bot.functions.createCard({
+			user: member.user,
+			text: {
+				title: "Goodbye!",
+				desc: "We hope to see you again soon!",
+				footer: "You're our 5th member!"
+			}
+		});
 
 		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Goodbye-${member.user.tag}.png`);
 		const msg = data.plugins.goodbye.message

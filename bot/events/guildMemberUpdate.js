@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const Canvas = require("discord-canvas");
 const path = require("path");
 
 const database = require("../../database/handler");
