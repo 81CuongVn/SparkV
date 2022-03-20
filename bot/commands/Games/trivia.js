@@ -119,7 +119,7 @@ async function execute(bot, message, args, command, data) {
 				answer2B.setStyle("DANGER");
 			} else if ((parseInt(interaction.customId) - 1) === 2) {
 				answer3B.setStyle("DANGER");
-			} else if ((parseInt(interaction.customId) - 1) === 4) {
+			} else if ((parseInt(interaction.customId) - 1) === 3) {
 				answer4B.setStyle("DANGER");
 			}
 		}
@@ -130,7 +130,7 @@ async function execute(bot, message, args, command, data) {
 			answer2B.setStyle("SUCCESS");
 		} else if (winningNumber === 2) {
 			answer3B.setStyle("SUCCESS");
-		} else if (winningNumber === 4) {
+		} else if (winningNumber === 3) {
 			answer4B.setStyle("SUCCESS");
 		}
 
