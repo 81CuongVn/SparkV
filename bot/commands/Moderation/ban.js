@@ -3,44 +3,31 @@ const { MessageEmbed, Permissions } = require("discord.js");
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const UserToBan = bot.functions.GetMember(message, args);
-	const ReasonForBan = args.join(` `).slice(22) || `No reason provided.`;
+	const user = data.options.getMember("user");
+	const reason = data.options.getString("reason") || "No reason provided.";
 
-	if (!args[0]) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Please mention someone to ban!`);
+	if (user.id === message.author.id) {
+		return message.editT(`${bot.config.emojis.error} | You cannot ban yourself.`);
 	}
 
-	if (!UserToBan) {
-		return message
-			.replyT(`${bot.config.emojis.error} | I cannot find that member!`);
-	}
+	const mPosition = user.roles.highest.position;
+	const bPosition = message.member.roles.highest.position;
 
-	if (UserToBan.id === message.author.id) {
-		return message
-			.replyT(`${bot.config.emojis.error} | You cannot ban yourself.`);
-	}
-
-	if (!UserToBan.bannable) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t ban this user!`);
-	}
+	if (!message.member.ownerID !== message.author.id && !(bPosition > mPosition).bannable) return message.editT(`${bot.config.emojis.error} | Uh oh... you can't ban this user!`);
 
 	message.delete().catch(err => {});
-	UserToBan.send(
-		`${bot.config.emojis.error} | You have been banned from ${message.guild.name}. Reason: ${ReasonForBan}.`,
-	).catch(err => {});
+	user.send(`${bot.config.emojis.error} | You have been banned from ${message.guild.name}. Reason: ${ReasonForBan}.`,).catch(err => {});
 
-	UserToBan.ban({
-		reason: ReasonForBan,
-	}).catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to ban. Error: ${err}`));
+	user.ban({
+		reason,
+	}).catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to ban. Please check my permissions and try again.`));
 
 	const BanEmbed = new MessageEmbed()
 		.setTitle(`${bot.config.emojis.success} | Ban Command`)
-		.setDescription(`${bot.config.emojis.success} | Successfully Banned <@${UserToBan.id}>(${UserToBan.id})!`)
+		.setDescription(`${bot.config.emojis.success} | Successfully Banned ${user} (${user.id})!`)
 		.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
-		.addField(`Moderator/Admin: `, `${message.author.tag}`)
-		.addField(`Reason: `, ReasonForBan)
+		.addField(`Moderator/Admin`, `${message.author.tag}`, true)
+		.addField(`Reason`, reason, true)
 		.setFooter({
 			text: `${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -54,9 +41,25 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: `Is a user bothering you and keep coming back after you kick them? Using this command, they won\'t come back unless they are unbanned.`,
+	description: "Ban a user, effectively removing them from your server never to be seen again. Unless, you unban them.",
 	dirname: __dirname,
-	usage: `(user) <optional reason>`,
-	aliases: [`pban`],
+	usage: "(user) (optional: reason)",
+	aliases: [],
 	perms: ["BAN_MEMBERS"],
+	slash: true,
+	slashOnly: true,
+	ephemeral: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to ban.",
+			required: true
+		},
+		{
+			type: 3,
+			name: "reason",
+			description: "The reason for the ban."
+		}
+	]
 });
