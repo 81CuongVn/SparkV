@@ -36,8 +36,12 @@ module.exports = {
 		}
 
 		// Bot Stats
-		bot.StatClient.post();
-		bot.StatClient.autopost();
+		if (bot?.StatClient) {
+			bot.StatClient.post();
+			bot.StatClient.autopost();
+		} else {
+			bot.logger("WARNING: Statcord is not installed! Statitics will not be posted.", "warning");
+		}
 
 		console.log("-------- SparkV --------");
 		bot.user.setPresence({
@@ -52,11 +56,6 @@ module.exports = {
 			],
 		});
 
-		bot.logger(
-			`Logged into Discord as ${bot.user.tag} (${bot.user.id})\n🏢 | Servers: ${bot.functions.formatNumber(
-				await bot.functions.GetServerCount(),
-			)}\n👥 | Users: ${bot.functions.formatNumber(await bot.functions.GetUserCount())}`,
-			"bot",
-		);
+		bot.logger(`[READY] Logged into Discord as ${bot.user.tag} (${bot.user.id})`);
 	},
 };
