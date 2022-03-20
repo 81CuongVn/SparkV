@@ -39,27 +39,27 @@ module.exports = new cmd(
 		const quickLeft = new Discord.MessageButton()
 			.setEmoji("⬅️")
 			.setCustomId("quickLeft")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		const left = new Discord.MessageButton()
-			.setEmoji("◀️")
+			.setEmoji(bot.config.emojis.arrows.left)
 			.setCustomId("left")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		const number = new Discord.MessageButton()
-			.setEmoji("#️⃣")
+			.setEmoji(bot.config.emojis.channel)
 			.setCustomId("number")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		const right = new Discord.MessageButton()
-			.setEmoji("▶️")
+			.setEmoji(bot.config.emojis.arrows.right)
 			.setCustomId("right")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		const quickRight = new Discord.MessageButton()
 			.setEmoji("➡️")
 			.setCustomId("quickRight")
-			.setStyle("PRIMARY");
+			.setStyle("SECONDARY");
 
 		let PageNumber = 0;
 		const msg = await message.replyT({

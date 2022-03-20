@@ -20,6 +20,7 @@ module.exports = async bot => {
 		};
 	}
 
+	bot.lyricsClient = lyricsClient;
 	bot.distube = new DisTube(bot, {
 		searchSongs: 0,
 		searchCooldown: 30,
@@ -65,7 +66,15 @@ module.exports = async bot => {
 		if (options?.includePause === true) buttons.push(TogglePlayingButton);
 		if (options?.includeStop === true) buttons.push(StopButton);
 		if (options?.includeLoop === true) buttons.push(LoopButton);
-		if (options?.includeLyrics === true) buttons.push(LyricsButton);
+
+		let lyrics;
+		try {
+			lyrics = await (await lyricsClient.songs.search(song.name))[0].lyrics();
+		} catch (e) {
+			lyrics = null;
+		}
+
+		if (lyrics && options?.includeLyrics === true) buttons.push(LyricsButton);
 
 		const MusicMessage = await queue.textChannel.send({
 			embeds: [mEmbed],
@@ -78,7 +87,6 @@ module.exports = async bot => {
 			fetchReply: true
 		});
 
-		const lyrics = await (await lyricsClient.songs.search(song.name))[0].lyrics();
 		const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 		collector.on("collect", async interaction => {
 			await interaction.deferReply({
@@ -137,7 +145,7 @@ module.exports = async bot => {
 						.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
 						.setColor("RED");
 
-					TogglePlayingButton.setEmoji(bot.config.emojis.play).setStyle("SUCCESS");
+					TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
 				}
 
 				MusicMessage.editT({
@@ -338,27 +346,6 @@ module.exports = async bot => {
 				includeLyrics: false
 			});
 		})
-		// .on("searchResult", (message, results) => {
-		// 	try {
-		// 		const Pages = [];
-
-		// 		results.map(Song => {
-		// 			const NewEmbed = new Discord.MessageEmbed()
-		// 				.setTitle(`${Song.formattedDuration} | ${Song.name}`)
-		// 				.setColor(bot.config.embed.color)
-		// 				.setURL(Song.url)
-		// 				.setImage(Song.thumbnail);
-
-		// 			Pages.push(NewEmbed);
-		// 		});
-
-		// 		EasyPages(message, Pages, "SearchResults", {
-		// 			footer: "⚡ - To select this song, send the current page number. For example, to select page 1 send 1.",
-		// 		});
-		// 	} catch (err) {
-		// 		bot.logger(err, "error");
-		// 	}
-		// })
 		.on("searchDone", (message, answer, query) => { })
 		.on("searchCancel", async message => await message.replyT(`Searching canceled.`))
 		.on("searchInvalidAnswer", async message => await message.replyT("Search answer invalid. Make sure you're sending your selected song's page number. For example, if I wanted to play a song on the 5th page, I would send the number 5."))
