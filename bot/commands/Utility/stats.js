@@ -30,7 +30,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
-		return await BotMessage.editT({
+		return await BotMessage.edit({
 			content: `${bot.config.emojis.success} Loading complete!`,
 			embeds: [StatsEmbed]
 		});
