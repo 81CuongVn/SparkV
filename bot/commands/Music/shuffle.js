@@ -9,7 +9,7 @@ async function execute(bot, message, args, command, data) {
 
 	queue.shuffle();
 
-	await message.replyT(`${bot.config.emojis.music} | Okay, I'll shuffle the queue.`);
+	await message.replyT(`${bot.config.emojis.music} | Okay, I shuffled the queue.`);
 }
 
 module.exports = new cmd(execute, {
