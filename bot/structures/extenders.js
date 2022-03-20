@@ -19,7 +19,6 @@ async function translateContent(content) {
 	let translation;
 
 	if (cache) {
-		console.log("cache");
 		translation = cache;
 
 		return translation;
