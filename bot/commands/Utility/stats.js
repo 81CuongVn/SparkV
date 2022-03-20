@@ -15,8 +15,8 @@ module.exports = new cmd(
 
 		const StatsEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: `SparkV Stats`,
-				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+				name: (message.user ? message.user : message.author).tag,
+				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.addField(`${bot.config.emojis.stats} **LATENCY**`, `\`\`\`SparkV: ${new Date().getTime() - message.createdTimestamp}ms\nAPI: ${bot.ws.ping}ms\`\`\``, true)
 			.addField(`${bot.config.emojis.memory} **MEMORY**`, `\`\`\`${(UsedMemory / Math.pow(1024, 3)).toFixed(2)}/${(TotalMemory / Math.pow(1024, 3)).toFixed(2)} (${MemoryPersentage}) MB\`\`\``, true)
@@ -30,7 +30,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
-		return await BotMessage.edit({
+		return await BotMessage.editT({
 			content: `${bot.config.emojis.success} Loading complete!`,
 			embeds: [StatsEmbed]
 		});
