@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/gameCommand");
+const cmd = require("../../templates/command");
 
 function CreateEmojis(level) {
 	const MemoryTypes = [
@@ -30,7 +30,7 @@ function CreateEmojis(level) {
 }
 
 async function execute(bot, message, args, command, data) {
-	const level = args[0] ? parseInt(args[0]) : 3;
+	const level = data.options.getNumber("level") || 5;
 
 	if (level < 1 || level > 20) return await message.replyT(`${bot.config.emojis.error} | You can only select between 1-20.`);
 
@@ -41,9 +41,11 @@ async function execute(bot, message, args, command, data) {
 			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setDescription(Memorize)
-		.setColor(bot.config.embed.color)
-		.setFooter(`You have 15 seconds to remember this pattern! • ${bot.config.embed.footer}`)
-		.setTimestamp();
+		.setFooter({
+			text: `You have 15 seconds to remember this pattern! • ${bot.config.embed.footer}`,
+			iconURL: bot.user.displayAvatarURL()
+		})
+		.setColor(bot.config.embed.color);
 
 	const MemorizeMessage = await message.replyT({
 		embeds: [MemorizeEmbed],
@@ -58,11 +60,19 @@ async function execute(bot, message, args, command, data) {
 	const Guess = await message.channel.awaitMessages(res => messages.author.id === res.author.id, {
 		max: 1,
 		time: 15 * 1000,
-	});
+		errors: ["time"],
+		filter: m => {
+			if (!m?.content) return message.replyT("You didn't send a message!");
+		}
+	}).then(collected => {
+		collected = collected.first();
 
-	if (!Guess.size) return MemorizeMessage.edit(`❔ Times up! The emojis were ${Memorize}.`);
-
-	return MemorizeMessage.edit("🎉 You won!");
+		if (collected.content.toLowerCase() === Memorize.toLowerCase()) {
+			return MemorizeMessage.edit(`🎉 You won! The pattern was: ${Memorize}`);
+		} else {
+			return MemorizeMessage.edit(`💔 You lost. The pattern was: ${Memorize}`);
+		}
+	}).catch(err => MemorizeMessage.edit(`❔ Times up! The emojis were ${Memorize}.`));
 }
 
 module.exports = new cmd(execute, {
@@ -72,4 +82,13 @@ module.exports = new cmd(execute, {
 	aliases: ["memo"],
 	perms: [],
 	cooldown: 5,
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 10,
+			name: "level",
+			description: "The amount of emojis to show for you to remember."
+		}
+	]
 });
