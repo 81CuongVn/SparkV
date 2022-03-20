@@ -3,32 +3,39 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const Channel = message.mentions.channels
-		.filter(channel => channel.type === `text` && channel.guild.id === message.guild.id)
-		.first();
+	const channel = data.options.getChannel("channel");
+	const seconds = data.options.getNumber("seconds");
 
-	if (!Channel) {
-		return await message.replyT(`${bot.config.emojis.error} | You cannot set slowmode in an announcements channel.`);
+	if (seconds > 21600) return await message.replyT(`${bot.config.emojis.error} | That's too high of a number! The maximum I can set that channel to is **6 hours** do to Discord API limits.`);
+
+	try {
+		channel.setRateLimitPerUser(seconds);
+		await message.replyT(`${bot.config.emojis.success} | Slowmode is now ${seconds} seconds.`);
+	} catch (err) {
+		return await message.replyT(`${bot.config.emojis.error} | I cannot set the slowmode for this channel! Please check my permissions and try again.`);
 	}
-
-	if (isNaN(args[0])) {
-		return await message.replyT(`${bot.config.emojis.error} | That's not a nunber.`);
-	}
-
-	if (args[0] > 21600) {
-		return await message.replyT(
-			`${bot.config.emojis.error} | That's too high of a number! This is due to discord limiting slowmode up to 6 hours.`,
-		);
-	}
-
-	message.channel.setRateLimitPerUser(args[0]);
-	await message.replyT(`${bot.config.emojis.success} | Slowmode is now ${args[0]} seconds.`);
 }
 
 module.exports = new cmd(execute, {
-	description: `I will set the channel's slowmode to anything you want.`,
+	description: "Applies a slowmode to a channel.",
 	dirname: __dirname,
 	aliases: ["slow"],
 	usage: `(user) <reason>`,
-	perms: ["MANAGE_CHANNELS", "MANAGE_MESSAGES"],
+	perms: ["MANAGE_CHANNELS"],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 7,
+			name: "channel",
+			description: "The channel to apply a slowmode too.",
+			required: true
+		},
+		{
+			type: 10,
+			name: "seconds",
+			description: "The amount of seconds to set the slowmode to.",
+			required: true
+		}
+	]
 });
