@@ -155,13 +155,13 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setTitle(`${bot.config.emojis.config} | Loading settings...`)
-		.setDescription(`Please wait while I load the settings...`)
+		.setTitle(await message.translate(`${bot.config.emojis.config} | Loading settings...`))
+		.setDescription(await message.translate(`Please wait while I load the settings...`))
 		.setFooter({
 			text: bot.config.embed.footer,
 			icon_url: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("GREY")
+		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
 	const botMessage = await message.replyT({
@@ -177,23 +177,23 @@ async function execute(bot, message, args, command, data) {
 
 	const settings = [
 		{
-			name: "Basic",
+			name: await message.translate("Basic"),
 			emoji: bot.config.emojis.slash,
 			emojiID: "939972618814128159",
-			description: "Basic settings for the bot (prefix, language, chatbot, etc).",
+			description: await message.translate("Basic settings for the bot (prefix, language, chatbot, etc)."),
 			buttons: [
 				{
 					name: "Prefix",
 					data: new MessageButton()
-						.setLabel("Prefix")
+						.setLabel(await message.translate("Prefix"))
 						.setEmoji(bot.config.emojis.slash)
 						.setCustomId("prefix")
 						.setStyle("PRIMARY"),
 					getData: () => data.guild.prefix,
 					setData: async () => {
 						await setNewData(message, {
-							title: `${bot.config.emojis.config} | New Prefix`,
-							description: "Please enter the new prefix for the bot.\n\n**Note:** The prefix cannot be longer than 5 characters.",
+							title: await message.translate(`${bot.config.emojis.config} | New Prefix`),
+							description: await message.translate("Please enter the new prefix for the bot.\n\n**Note:** The prefix cannot be longer than 5 characters."),
 							color: "BLUE",
 							time: 15,
 							filter: async m => {
@@ -217,8 +217,8 @@ async function execute(bot, message, args, command, data) {
 								const newPrefix = collected.content.trim();
 
 								requestMsg
-									.setTitle(`${bot.config.emojis.config} | New Prefix Changed`)
-									.setDescription(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`);
+									.setTitle(await message.translate(`${bot.config.emojis.config} | New Prefix Changed`))
+									.setDescription(await message.translate(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`));
 
 								data.guild.prefix = newPrefix;
 								data.guild.markModified("prefix");
@@ -230,80 +230,84 @@ async function execute(bot, message, args, command, data) {
 						});
 					},
 				},
-				// {
-				// 	name: "Language",
-				// 	data: new MessageButton()
-				// 		.setLabel("Language")
-				// 		.setEmoji(bot.config.emojis.slash)
-				// 		.setCustomId("language")
-				// 		.setDisabled(true)
-				// 		.setStyle("PRIMARY"),
-				// 	getData: () => data.guild.language,
-				// 	setData: async () => {
-				// 		await setNewData(message, {
-				// 			title: `${bot.config.emojis.config} | New Language`,
-				// 			id: "language",
-				// 			description: "Please select the new language for the bot.",
-				// 			dropdownItems: [
-				// 				{
-				// 					label: "English",
-				// 					emoji: "🇺🇸",
-				// 					value: "en"
-				// 				},
-				// 				{
-				// 					label: "Spanish",
-				// 					emoji: "🇪🇸",
-				// 					value: "es"
-				// 				},
-				// 				{
-				// 					label: "French",
-				// 					emoji: "🇫🇷",
-				// 					value: "fr"
-				// 				}
-				// 			],
-				// 			color: "BLUE",
-				// 			time: 15,
-				// 			handleData: async (collected, requestMsg) => {
-				// 				requestMsg
-				// 					.setTitle(`${bot.config.emojis.config} | New Language Changed`)
-				// 					.setDescription(`Successfully changed language from **${data.guild.language}** to **${collected}**.`);
-
-				// 				data.guild.language = collected;
-				// 				data.guild.markModified("language");
-
-				// 				await data.guild.save();
-
-				// 				return true;
-				// 			}
-				// 		});
-				// 	},
-				// },
 				{
-					name: "Chatbot",
+					name: await message.translate("Language"),
 					data: new MessageButton()
-						.setLabel("Chatbot")
+						.setLabel(await message.translate("Language"))
+						.setEmoji(bot.config.emojis.slash)
+						.setCustomId("language")
+						.setStyle("PRIMARY"),
+					getData: () => data.guild.language,
+					setData: async () => {
+						await setNewData(message, {
+							title: await message.translate(`${bot.config.emojis.config} | New Language`),
+							id: "language",
+							description: await message.translate("Please select the new language for the bot."),
+							dropdownItems: [
+								{
+									label: await message.translate("English"),
+									emoji: "🇺🇸",
+									value: "en"
+								},
+								{
+									label: await message.translate("Spanish"),
+									emoji: "🇪🇸",
+									value: "es"
+								},
+								{
+									label: await message.translate("French"),
+									emoji: "🇫🇷",
+									value: "fr"
+								},
+								{
+									label: await message.translate("German"),
+									emoji: "🇩🇪",
+									value: "de"
+								}
+							],
+							color: "BLUE",
+							time: 15,
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(await message.translate(`${bot.config.emojis.config} | New Language Changed`))
+									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.language}**" ${await message.translate("to")} **${collected}**.`);
+
+								data.guild.language = collected;
+								data.guild.markModified("language");
+
+								await data.guild.save();
+
+								return true;
+							}
+						});
+					},
+				},
+				{
+					name: await message.translate("Chatbot"),
+					data: new MessageButton()
+						.setLabel(await message.translate("Chatbot"))
 						.setEmoji(bot.config.emojis.slash)
 						.setCustomId("chatbot")
 						.setStyle("PRIMARY"),
 					getData: () => data.guild.plugins.chatbot,
 					setData: async () => {
 						await setNewData(message, {
-							title: `${bot.config.emojis.config} | New Chatbot Setting`,
+							title: await message.translate(`${bot.config.emojis.config} | New Chatbot Setting`),
 							id: "chatbot",
-							description: "Please select the new chatbot setting for the bot.",
+							description: await message.translate("Please select the new chatbot setting for the bot."),
 							dropdownItems: [
 								{
-									label: "Disabled",
+									label: await message.translate("Disabled"),
 									emoji: bot.config.emojis.error,
 									value: "false"
 								},
 								{
-									label: "Mention",
+									label: await message.translate("Mention"),
 									emoji: bot.config.emojis.mention,
 									value: "mention"
 								},
 								{
-									label: "Message",
+									label: await message.translate("Message"),
 									value: "message"
 								}
 							],
@@ -311,8 +315,8 @@ async function execute(bot, message, args, command, data) {
 							time: 30,
 							handleData: async (collected, requestMsg) => {
 								requestMsg
-									.setTitle(`${bot.config.emojis.config} | New Chatbot Setting Changed`)
-									.setDescription(`Successfully changed Chatbot from **${data.guild.plugins.chatbot}** to **${collected}**.`);
+									.setTitle(await message.translate(`${bot.config.emojis.config} | New Chatbot Setting Changed`))
+									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.plugins.chatbot}**" ${await message.translate("to")} **${collected}**.`);
 
 								data.guild.plugins.chatbot = collected;
 								data.guild.markModified("plugins.chatbot");
