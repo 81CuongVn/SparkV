@@ -159,8 +159,6 @@ module.exports = class bot extends Client {
 								options: command.settings.options || [],
 								type: command.settings.type || 1,
 							});
-						} else {
-							this.logger(`WARNING: ${commandname} is NOT a slash command.`, "warning");
 						}
 
 						if (!command.settings.aliases) return;
@@ -234,13 +232,15 @@ module.exports = class bot extends Client {
 		const updatedCmds = slashCommands.filter(cmd => slashCommands.some(c => c.name === cmd.name));
 		let updatedCount = 0;
 		for (const updatedCmd of updatedCmds) {
+			const newCmd = updatedCmd;
+
 			const previousCmd = currentCmds.find(c => c.name === updatedCmd.name);
 			let modified = false;
 
-			if (previousCmd.description !== updatedCmd.description) modofied = true;
-			if (!ApplicationCommand.optionsEqual(previousCmd?.options || [], updatedCmd?.options || [])) modified = true;
+			if (previousCmd && previousCmd.description !== newCmd.description) modified = true;
+			if (!ApplicationCommand.optionsEqual(previousCmd?.options || [], newCmd?.options || [])) modified = true;
 
-			if (modified) {
+			if (previousCmd && modified) {
 				await previousCmd.edit(updatedCmd);
 				updatedCount++;
 			}
