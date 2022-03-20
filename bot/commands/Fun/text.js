@@ -1,5 +1,6 @@
 const Discord = require(`discord.js`);
 const figlet = require(`figlet`);
+const zalgo = require("to-zalgo");
 
 const cmd = require("../../templates/command");
 
@@ -53,6 +54,8 @@ async function execute(bot, message, args, command, data) {
 		});
 	} else if (type === "clapify") {
 		editedText = text.trim().split(/ +/g).length === 1 ? text.split("").join(" 👏 ") : text.trim().split(/ +/g).join(" 👏 ");
+	} else if (type === "zalgo") {
+		editedText = zalgo(text);
 	}
 
 	await message.replyT(editedText);
@@ -93,6 +96,10 @@ module.exports = new cmd(execute, {
 				{
 					name: "clapify",
 					value: "clapify"
+				},
+				{
+					name: "zalgo",
+					value: "zalgo"
 				}
 			]
 		}

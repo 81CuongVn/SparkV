@@ -3,12 +3,11 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	const queue = await bot.distube.getQueue(message);
+	const position = data.options.getNumber("number");
 
-	if (!queue) return await message.replyT(`${bot.config.emojis.error} | No songs in queue!`);
-	if (!args[0]) return await message.replyT(`${bot.config.emojis.error} | Please provide a position (in seconds) to seek!`);
+	const queue = bot.distube.getQueue(message);
 
-	const position = Number(args[0]);
+	if (!queue) return await message.replyT(`${bot.config.emojis.error} | The queue is empty! Try adding some songs.`);
 
 	if (isNaN(position)) return await message.replyT(`${bot.config.emojis.error} | Please provide a position (in seconds) to seek!`);
 	if (position > queue.songs[0].duration || position < 0) return await message.replyT(`${bot.config.emojis.error} | You cannot seek to a position greater than the duration of the song!`);
@@ -23,4 +22,14 @@ module.exports = new cmd(execute, {
 	usage: "<number>",
 	aliases: [],
 	perms: [],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 10,
+			name: "number",
+			description: "The track position to skip ahead to.",
+			required: true
+		}
+	]
 });

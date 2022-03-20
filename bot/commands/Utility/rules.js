@@ -49,27 +49,27 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 	const quickLeft = new Discord.MessageButton()
 		.setEmoji("⬅️")
 		.setCustomId("quickLeft")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const left = new Discord.MessageButton()
-		.setEmoji("◀️")
+		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("left")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const number = new Discord.MessageButton()
-		.setEmoji("#️⃣")
+		.setEmoji(bot.config.emojis.channel)
 		.setCustomId("number")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const right = new Discord.MessageButton()
-		.setEmoji("▶️")
+		.setEmoji(bot.config.emojis.arrows.right)
 		.setCustomId("right")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const quickRight = new Discord.MessageButton()
 		.setEmoji("➡️")
 		.setCustomId("quickRight")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const msg = await message.replyT({
 		embeds: [pages[0]],
@@ -161,5 +161,6 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 	usage: "",
 	aliases: ["TOS"],
 	perms: ["EMBED_LINKS", "MANAGE_MESSAGES"],
+	slash: true
 },
 );

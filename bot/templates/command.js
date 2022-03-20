@@ -19,36 +19,11 @@ module.exports = class Command {
 	}
 
 	async run(bot, message, args, command, data) {
-		if (this.settings.requireArgs && !args[0]) {
-			const embed = new Discord.MessageEmbed()
-				.setTitle("Missing Arguments")
-				.setDescription(`You need to provide the correct arguments!`)
-				.addFields([
-					{
-						name: "Usage",
-						value: `\`${this.settings.usage}\``,
-						inline: true
-					}
-				])
-				.setFooter(bot.config.embed.footer)
-				.setColor("RED");
-
-			return await message.editT({
-				embeds: [embed],
-				ephemeral: true,
-			});
-		}
-
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
 			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
-				const table = {
-					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
-					ephemeral: true,
-				};
-
-				return message?.applicationId ? await message.editT(table) : await message.replyT(table);
+				return message?.applicationId ? await message.editT(`${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`) : await message.replyT(`${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`);
 			}
 		}
 
@@ -56,12 +31,7 @@ module.exports = class Command {
 
 		for (const perm of this.settings.bot_perms) {
 			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
-				const table = {
-					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
-					ephemeral: true,
-				};
-
-				return message?.applicationId ? await message.editT(table) : await message.replyT(table);
+				return message?.applicationId ? await message.editT(`${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`) : await message.replyT(`${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`);
 			}
 		}
 

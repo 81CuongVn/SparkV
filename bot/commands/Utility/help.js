@@ -13,9 +13,8 @@ async function execute(bot, message, args, command, data) {
 		bot.commands
 			.filter(command => command.settings.enabled && command.category === cat.name)
 			.map(async command => commands.push({
-				name: `\`/${command.settings.name} ${command.settings.usage})\``,
-				value: command.settings.description,
-				inline: true
+				name: `\`\`\`/${command.settings.name} ${command.settings.usage}\`\`\``,
+				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter(option => option.type === 1).map(option => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map(op => `(${op.name})`).join(" ") : null}\``).join("\n")}` : ""}`
 			}));
 
 		const user = message.applicationId ? message.user : message.author;
@@ -124,7 +123,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setTitle(await message.translate("**Hi there!**"))
-		.setDescription(`${await message.translate("I'm a powerful multipurpose meme/chat bot with over")} **100+** ${await message.translate("commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to")} [Icons by Danu](https://discord.gg/mm5QWaCWF5)${await message.translate("They made most of the black and grey icons.\nIf you have any questions, feel free to join our server!")} https://discord.gg/PPtzT8Mu3h.`)
+		.setDescription(`${await message.translate("I'm a powerful multipurpose meme/chat bot with over")} **100+** ${await message.translate("commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to")} [Icons by Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("They made most of the black and grey icons.\nIf you have any questions, feel free to join our server!")} https://discord.gg/PPtzT8Mu3h.`)
 		.setFooter({
 			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })

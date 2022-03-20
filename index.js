@@ -4,11 +4,12 @@
 // Libarys //
 const fs = require("fs");
 const path = require("path");
+
+const discord = require("discord.js");
 const Sentry = require("@sentry/node");
-const { Integrations } = require("@sentry/tracing");
-const { ShardingManager } = require("discord.js");
 const mongoose = require("mongoose");
 const axios = require("axios");
+const figlet = require(`figlet`);
 
 // Varibles //
 const Config = require("./globalconfig.json");
@@ -38,10 +39,7 @@ async function start() {
 	if (process.env.SENTRYTOKEN) {
 		Sentry.init({
 			dsn: process.env.SENTRYTOKEN,
-			release: `${PackageInfo.name}@${PackageInfo.version}`,
-			integrations: [new Integrations.BrowserTracing()],
-			tracesSampleRate: 0.2,
-			tracesSampler: samplingContext => {}
+			release: `${PackageInfo.name}@${PackageInfo.version}`
 		});
 	} else {
 		Logger("WARNING - NO API KEY FOR SENTRY! SPARKV MAY BREAK WITHOUT SENTRY LOGGING KEY.", "warn");
@@ -73,7 +71,7 @@ async function start() {
 	process.env.MainDir = __dirname;
 
 	if (Config.sharding.shardingEnabled === true) {
-		const manager = new ShardingManager("./bot/bot.js", {
+		const manager = new discord.ShardingManager("./bot/bot.js", {
 			token: process.env.TOKEN,
 			totalShards: Config.sharding.totalShards || "auto",
 			shardArgs: [...process.argv, ...["--sharding"]],
@@ -128,7 +126,7 @@ async function start() {
 }
 
 // Start Bot //
-console.log(require("asciiart-logo")(require("./package.json")).render());
+console.log(figlet.textSync("SparkV"));
 
 if (process.argv.includes("--dev") === true) {
 	console.log(require("chalk").grey("----------------------------------------"));

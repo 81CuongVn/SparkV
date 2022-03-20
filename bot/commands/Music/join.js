@@ -13,8 +13,7 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description:
-    "Joins your voice channel.",
+	description: "Joins your voice channel.",
 	dirname: __dirname,
 	usage: "",
 	aliases: [],

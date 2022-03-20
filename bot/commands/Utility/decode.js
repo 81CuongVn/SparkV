@@ -2,25 +2,54 @@ const Discord = require("discord.js");
 
 const cmd = require("../../templates/command");
 
-module.exports = new cmd(
-	async (bot, message, args) => {
-		if (!args) return await message.replyT("Next time, choose the type of decoding and the text to encode. Types: `base64`, `hex` or `url`");
+async function execute(bot, message, args) {
+	const type = data.options.getString("type");
+	const string = data.options.getString("text");
 
-		const [type, ...string] = args;
+	if (type === "base64") {
+		await message.replyT(Buffer.from(string.join(" "), "base64").toString());
+	} else if (type === "hex") {
+		await message.replyT(Buffer.from(string.join(" "), "hex").toString("utf8"));
+	} else if (type === "url") {
+		await message.replyT(decodeURIComponent(string.join(" ")));
+	}
+}
 
-		if (type === "base64") {
-			await message.replyT(Buffer.from(string.join(" "), "base64").toString());
-		} else if (type === "hex") {
-			await message.replyT(Buffer.from(string.join(" "), "hex").toString("utf8"));
-		} else if (type === "url") {
-			await message.replyT(decodeURIComponent(string.join(" ")));
-		}
-	},
-	{
-		description: "decode a string that was encoded",
-		dirname: __dirname,
-		usage: "<type> <string>",
-		aliases: [],
-		perms: []
-	},
+module.exports = new cmd(execute, {
+	description: "Decode a string that was once encoded.",
+	dirname: __dirname,
+	usage: "(text) (type)",
+	aliases: [],
+	perms: [],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 3,
+			name: "text",
+			description: "The text to encode.",
+			required: true
+		},
+		{
+			type: 3,
+			name: "type",
+			description: "The type of encoding to use. Types: `base64`, `hex` or `url`",
+			required: true,
+			choices: [
+				{
+					name: "base64",
+					value: "base64"
+				},
+				{
+					name: "hex",
+					value: "hex"
+				},
+				{
+					name: "url",
+					value: "url"
+				}
+			]
+		},
+	]
+},
 );

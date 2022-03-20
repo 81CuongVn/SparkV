@@ -30,6 +30,8 @@ function timeoutUser(offense, message, data) {
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
 		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
 		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
+
+	message.client.emit("automod", message, offense, data);
 }
 
 module.exports = {
@@ -53,7 +55,7 @@ module.exports = {
 		const botMember = await message.guild.members.fetch(bot.user.id);
 
 		// If the bot cannot send messages, return.
-		if (!botMember.permissionsIn(message.channel).has(Discord.Permissions.FLAGS.SEND_MESSAGES)) return;
+		if (!botMember.permissionsIn(message.channel).has("SEND_MESSAGES")) return;
 
 		// If the guild is part of the guild blacklist, return.
 		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
@@ -130,7 +132,7 @@ module.exports = {
 
 			// Check for profanity (curse words)
 			if (data.guild.plugins.automod.removeProfanity === "true") {
-				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
 					const ignoredWords = ["hello"];
 					let cursed = false;
 
@@ -196,8 +198,8 @@ module.exports = {
 			// Check for links
 			if (data.guild.plugins.automod.removeLinks === "true") {
 				if (
-					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) &&
-					!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR) &&
+					!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") &&
+					!message.channel.permissionsFor(message.member).has("ADMINISTRATOR") &&
 					bot.functions.isURL(message.content)
 				) {
 					++data.member.infractionsCount;
@@ -254,7 +256,7 @@ module.exports = {
 
 			// Check for spam
 			if (data.guild.plugins.automod.removeDuplicateText === "true") {
-				if (!message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES) || !message.channel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") || !message.channel.permissionsFor(message.member).has("ADMINISTRATOR")) {
 					if (!message.channel.name.startsWith(`spam`) && !message.channel.name.endsWith(`spam`)) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
 

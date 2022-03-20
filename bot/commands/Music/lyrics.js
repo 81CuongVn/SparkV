@@ -7,11 +7,16 @@ async function execute(bot, interaction, args, command, data) {
 
 	if (!query) return interaction.replyT(`${bot.config.emojis.error} | Please supply the title of a song to search for.`);
 
-	const Lyrics = await require(`lyrics-finder`)(query);
+	let lyrics;
+	try {
+		lyrics = await (await bot.lyricsClient.songs.search(query))[0].lyrics();
+	} catch (e) {
+		lyrics = null;
+	}
 
-	if (!Lyrics) return await interaction.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
+	if (!lyrics) return await interaction.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
 
-	const LyricsArray = Lyrics.split(`\n`);
+	const LyricsArray = lyrics.split(`\n`);
 	const LyricsSubArray = [];
 	const pages = [];
 
@@ -20,7 +25,7 @@ async function execute(bot, interaction, args, command, data) {
 	let PageNumber = 0;
 
 	for (const line of LyricsArray) {
-		if ((charCount + line.length) < 500) {
+		if ((charCount + line.length) < 650) {
 			LyricsSubArray[curLine] = `${LyricsSubArray[curLine] + line}\n`;
 			charCount += line.length;
 		} else {
@@ -36,7 +41,7 @@ async function execute(bot, interaction, args, command, data) {
 				iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 			})
 			.setTitle(query)
-			.setDescription(i)
+			.setDescription(i.replaceAll(undefined, ""))
 			.setFooter({
 				text: bot.config.embed.footer
 			})
@@ -49,31 +54,26 @@ async function execute(bot, interaction, args, command, data) {
 	const quickLeft = new Discord.MessageButton()
 		.setEmoji("⬅️")
 		.setCustomId("quickLeft")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const left = new Discord.MessageButton()
-		.setEmoji("◀️")
+		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("left")
-		.setStyle("PRIMARY");
-
-	const number = new Discord.MessageButton()
-		.setEmoji("#️⃣")
-		.setCustomId("number")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const right = new Discord.MessageButton()
-		.setEmoji("▶️")
+		.setEmoji(bot.config.emojis.arrows.right)
 		.setCustomId("right")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const quickRight = new Discord.MessageButton()
 		.setEmoji("➡️")
 		.setCustomId("quickRight")
-		.setStyle("PRIMARY");
+		.setStyle("SECONDARY");
 
 	const msg = await interaction.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, number, right, quickRight)],
+		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)],
 		fetchReply: true
 	});
 
@@ -86,64 +86,26 @@ async function execute(bot, interaction, args, command, data) {
 	});
 
 	collector.on("collect", async interaction => {
-		if (interaction.customId) {
-			if (interaction.customId === "quickLeft") {
-				PageNumber = 0;
-			} else if (interaction.customId === "left") {
-				if (PageNumber > 0) {
-					--PageNumber;
-				} else {
-					PageNumber = pages.length - 1;
-				}
-			} else if (interaction.customId === "right") {
-				if (PageNumber + 1 < pages.length) {
-					++PageNumber;
-				} else {
-					PageNumber = 0;
-				}
-			} else if (interaction.customId === "quickRight") {
-				PageNumber = pages.length - 1;
-			} else if (interaction.customId === "number") {
-				const infoMsg = await interaction.replyT("Please send a page number.");
-
-				await interaction.channel.awaitMessages({
-					filter: msg => {
-						if (msg.author.id === msg.client.user.id) return false;
-
-						if (!msg.content) {
-							msg.replyT("Please send a number!");
-
-							return false;
-						}
-
-						if (!parseInt(msg.content) && isNaN(msg.content)) {
-							msg.replyT("Please send a valid number!");
-
-							return false;
-						}
-
-						if (parseInt(msg.content) > pages.length) {
-							msg.replyT("That's a page number higher than the amount of pages there are.");
-
-							return false;
-						}
-
-						return true;
-					}, max: 1, time: 30 * 1000, errors: ["time"]
-				}).then(async collected => {
-					const input = parseInt(collected.first().content);
-
-					PageNumber = input - 1;
-					collected.first().delete().catch(err => { });
-					infoMsg.delete().catch(err => { });
-				}).catch(async collected => await interaction.replyT("Canceled due to no valid response within 30 seconds."));
+		if (interaction.customId === "quickLeft") {
+			PageNumber = 0;
+		} else if (interaction.customId === "left") {
+			if (PageNumber > 0) {
+				--PageNumber;
 			} else {
-				return;
+				PageNumber = pages.length - 1;
 			}
+		} else if (interaction.customId === "right") {
+			if (PageNumber + 1 < pages.length) {
+				++PageNumber;
+			} else {
+				PageNumber = 0;
+			}
+		} else if (interaction.customId === "quickRight") {
+			PageNumber = pages.length - 1;
 		}
 
 		try {
-			interaction.update({
+			interaction.edit({
 				embeds: [
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`

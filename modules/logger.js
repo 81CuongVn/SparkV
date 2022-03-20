@@ -4,7 +4,7 @@ const chalk = require("chalk");
 
 const config = require("../globalconfig.json");
 
-module.exports = async (content, type = "log") => {
+module.exports = async (content, type) => {
 	if (!content) return;
 
 	if (type === "log") {
@@ -62,6 +62,6 @@ module.exports = async (content, type = "log") => {
 	} else if (type === "web") {
 		return console.log(`🖼 | ${content}`);
 	} else {
-		return console.log(`⚠ | Wrong type of logger. Expected: log, warn, error, bot, or web. Instead, got ${type}.`);
+		return console.log(content);
 	}
 };

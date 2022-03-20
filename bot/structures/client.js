@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
-const synchronizeSlashCommands = require("discord-sync-commands");
-const { Client, Collection, Intents, Structures } = require("discord.js");
+const { Client, Collection, Intents, Structures, ApplicationCommand } = require("discord.js");
 const { DiscordTogether } = require("discord-together");
 const Statcord = require("statcord.js");
 
@@ -209,12 +208,44 @@ module.exports = class bot extends Client {
 	}
 
 	async LoadSlashCommands(slashCommands) {
-		const slashSettings = {
-			debug: process.argv.includes("--dev") === true,
-		};
+		const ready = this.readyAt ? Promise.resolve() : new Promise(r => this.once("ready", r));
+		await ready;
 
-		if (process.argv.includes("--dev") === true) slashSettings.guildId = "763803059876397056";
+		const currentCmds = await this.application.commands.fetch(process.argv.includes("--dev") === true && { guildId: "763803059876397056" });
 
-		synchronizeSlashCommands(this, slashCommands, slashSettings);
+		if (process.argv.includes("--dev") === true) this.logger(`Loading commands [${currentCmds.size}]...`, "debug");
+
+		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
+		for (const newCmd of newCmds) {
+			await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
+		}
+
+		if (process.argv.includes("--dev") === true) this.logger(`Created ${newCmds.length} commands.`, "debug");
+
+		const removedCmds = currentCmds.filter(cmd => !slashCommands.some(c => c.name === cmd.name)).toJSON();
+		for (const removedCmd of removedCmds) {
+			await removedCmd.delete();
+		}
+
+		if (process.argv.includes("--dev") === true) this.logger(`Removed ${removedCmds.length} commands.`, "debug");
+
+		const updatedCmds = slashCommands.filter(cmd => slashCommands.some(c => c.name === cmd.name));
+		let updatedCount = 0;
+		for (const updatedCmd of updatedCmds) {
+			const newCmd = updatedCmd;
+
+			const previousCmd = currentCmds.find(c => c.name === updatedCmd.name);
+			let modified = false;
+
+			if (previousCmd && previousCmd.description !== newCmd.description) modified = true;
+			if (!ApplicationCommand.optionsEqual(previousCmd?.options || [], newCmd?.options || [])) modified = true;
+
+			if (previousCmd && modified) {
+				await previousCmd.edit(updatedCmd);
+				updatedCount++;
+			}
+		}
+
+		if (process.argv.includes("--dev") === true) this.logger(`Updated ${updatedCount} commands.`, "debug");
 	}
 };

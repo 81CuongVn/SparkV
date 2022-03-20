@@ -1,7 +1,10 @@
 const Discord = require("discord.js");
+const { createCanvas, loadImage, registerFont } = require("canvas");
+const fs = require("fs");
+const path = require("path");
 
 const Invitergx =
-  /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite|discord.com\/invite)\/+[a-zA-Z0-9]{6,16}/g;
+	/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite|discord.com\/invite)\/+[a-zA-Z0-9]{6,16}/g;
 const URLrgx = /(https?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
 
 let bot;
@@ -17,6 +20,9 @@ module.exports = {
 		}
 
 		bot = client;
+
+		registerFont(`${process.env.MainDir}/assets/fonts/LuckiestGuy-Regular.ttf`, { family: "luckiest guy" });
+		registerFont(`${process.env.MainDir}/assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
 	},
 
 	/**
@@ -40,6 +46,96 @@ module.exports = {
 		});
 
 		return prefix;
+	},
+
+	/**
+	 * Split bar. A nice little progress bar.
+	 * @param {number} current The current progress.
+	 * @param {number} total The total progress.
+	 * @param {number} size The size of the progress bar.
+	 * @param {string} line The line of the progress bar. Default: ▬
+	 * @param {string} slider The slider emoji. Default: 🔘
+	 * @returns {string} The progress bar, as a string.
+	 */
+	splitBar(current, total, size = 40, line = "▬", slider = "🔘") {
+		if (current > total) {
+			return line.repeat(size + 2);
+		} else {
+			const percent = current / total;
+			const progress = Math.round(size * percent);
+			const progLeft = size - progress;
+
+			return line.repeat(progress).replace(/.$/, slider) + line.repeat(progLeft);
+		}
+	},
+
+	/**
+	 * Create Card
+	 * @param {Object} options Options.
+	 * @returns {Promise<Canvas>} Canvas
+	 */
+	async createCard(options) {
+		const canvas = createCanvas(1100, 500);
+		const context = canvas.getContext("2d");
+
+		// Background
+		context.fillStyle = "#3461eb";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		const background = await loadImage(`${process.env.MainDir}/assets/images/background.png`);
+		context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+		context.fillStyle = "#fff719";
+		context.fillRect(canvas.width - 30, 0, 30, canvas.height);
+		context.fillRect(0, 0, 30, canvas.height);
+		context.fillRect(30, canvas.height - 30, canvas.width - 50, 30);
+		context.fillRect(30, 0, canvas.width - 50, 30);
+
+		// Username
+		context.fillStyle = "#5f9afa";
+		context.globalAlpha = 0.4;
+		context.fillRect(canvas.width - 680, canvas.height - 300, 600, 65);
+
+		context.globalAlpha = 1;
+		context.fillStyle = "#ffffff";
+		context.font = "50px Bold",
+		context.fillText(options.user.tag, canvas.width - 660, canvas.height - 248);
+
+		// Server
+		context.fillStyle = "#5f9afa";
+		context.globalAlpha = 0.4;
+		context.fillRect(canvas.width - 680, canvas.height - 200, 600, 65);
+
+		context.globalAlpha = 1;
+		context.fillStyle = "#ffffff";
+		context.font = "35px Bold",
+		context.fillText(options.text.desc, canvas.width - 660, canvas.height - 150);
+
+		// Bottom Text
+		context.font = "30px Bold";
+		context.fillStyle = "#0ea7ed";
+		context.fillText(options.text.footer, 50, canvas.height - 50);
+
+		// Title Text
+		context.font = "80px Bold";
+		context.strokeStyle = "#000000";
+		context.lineWidth = 16;
+		context.strokeText(options.text.title, canvas.width - 620, canvas.height - 375);
+		context.fillStyle = "#0ea7ed";
+		context.fillText(options.text.title, canvas.width - 620, canvas.height - 375);
+
+		// Avatar
+		context.beginPath();
+		context.lineWidth = 10;
+		context.strokeStyle = "#fff";
+		context.arc(215, (canvas.height / 2), 125, 0, Math.PI * 2, true);
+		context.stroke();
+		context.closePath();
+		context.clip();
+
+		const Avatar = await loadImage(options.user.displayAvatarURL({ format: "png" }));
+		context.drawImage(Avatar, 90, 125, 250, 250);
+
+		return canvas;
 	},
 
 	/**
@@ -103,7 +199,7 @@ module.exports = {
 		if (!key || typeof key !== "string") return;
 
 		if (key.match(/^<@!?(\d+)>$/)) {
-			const user = bot.users.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => {});
+			const user = bot.users.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => { });
 
 			if (user) return user;
 		}
@@ -116,7 +212,7 @@ module.exports = {
 			if (user) return user;
 		}
 
-		return await bot.users.fetch(key).catch(() => {});
+		return await bot.users.fetch(key).catch(() => { });
 	},
 
 	/**
@@ -131,7 +227,7 @@ module.exports = {
 		}
 
 		if (key.match(/^<@!?(\d+)>$/)) {
-			const member = guild.members.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => {});
+			const member = guild.members.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => { });
 
 			if (member) {
 				return member;
@@ -147,7 +243,7 @@ module.exports = {
 			}
 		}
 
-		return await guild.members.fetch(key).catch(() => {});
+		return await guild.members.fetch(key).catch(() => { });
 	},
 
 	/**
@@ -250,20 +346,20 @@ module.exports = {
 
 	/*
   Async Debounce(callback, wait, immediate) {
-    let timeout
+	let timeout
 
-    return function() {
-      let context = this,
-        args = args
-      let later = function() {
-        timeout = null
-        if (!immediate) callback.apply(context, args)
-      }
-      let callNow = immediate && !timeout
-      clearTimeout(timeout)
-      timeout = setTimeout(later, wait)
-      if (callNow) callback.apply(context, args)
-    },
+	return function() {
+	  let context = this,
+		args = args
+	  let later = function() {
+		timeout = null
+		if (!immediate) callback.apply(context, args)
+	  }
+	  let callNow = immediate && !timeout
+	  clearTimeout(timeout)
+	  timeout = setTimeout(later, wait)
+	  if (callNow) callback.apply(context, args)
+	},
   },
   */
 

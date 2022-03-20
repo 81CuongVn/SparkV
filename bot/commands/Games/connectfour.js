@@ -43,21 +43,15 @@ function HasWon(board) {
 }
 
 function DisplayBoard(board) {
-	const Map = board
-		.map(row =>
-			row
-				.map(turn => {
-					if (turn === `user`) {
-						return `🟡`;
-					} else if (turn === `opponent`) {
-						return `🔴`;
-					}
+	const Map = board.map(row => row.map(turn => {
+		if (turn === `user`) {
+			return `🟡`;
+		} else if (turn === `opponent`) {
+			return `🔴`;
+		}
 
-					return `⚪`;
-				})
-				.join(``),
-		)
-		.join(`\n`);
+		return `⚪`;
+	}).join(``)).join(`\n`);
 
 	return Map;
 }
@@ -65,38 +59,29 @@ function DisplayBoard(board) {
 async function execute(bot, message, args, command, data) {
 	const Opponent = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
-	if (!Opponent) {
-		return await message.replyT(
-			`${bot.config.emojis.error} | This command doesn't support API yet. Please mention someone to challenge.`,
-		);
-	}
+	if (!Opponent) return await message.replyT(`${bot.config.emojis.error} | This command doesn't support API yet. Please mention someone to challenge.`);
+	if (Opponent.user.bot) return await message.replyT(`${bot.config.emojis.error} | You cannot challenge a bot.`);
+	if (Opponent.user.id === message.author.id) return await message.replyT(`${bot.config.emojis.error} | You cannot play against yourself.`);
 
-	if (Opponent.user.bot) {
-		return await message.replyT(`${bot.config.emojis.error} | That user is a bot lol.`);
-	}
-
-	if (Opponent.user.id === message.author.id) {
-		return await message.replyT(`${bot.config.emojis.error} | You cannot play against yourself lol.`);
-	}
-
-	const VerificationEmbed = new Discord.MessageEmbed()
+	const DuelEmbed = new Discord.MessageEmbed()
 		.setTitle(`⚔ Connect Four Duel`)
-		.setDescription(
-			`${Opponent}, ${message.author} challenged you to a duel! React to this message to accpet or decline.`,
-		)
+		.setDescription(`${Opponent}, ${message.author} challenged you to a duel! React to this message to accept or decline.`)
 		.setFooter({
 			text: `Canceling in 60 seconds. • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color);
 
-	const Array = [];
+	const DuelMessage = await message.reply(DuelEmbed);
 
-	for (let i = 0; i < 6; i++) {
-		Array.push([null, null, null, null, null, null, null]);
-	}
-
-	const Board = Array;
+	const Board = [
+		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null]
+	];
 	const ColLevels = [5, 5, 5, 5, 5, 5, 5];
 
 	let UserTurn = true;
@@ -104,6 +89,10 @@ async function execute(bot, message, args, command, data) {
 	let LastTurnDebounce = false;
 
 	let GameEmbed = new Discord.MessageEmbed()
+		.setAuthor({
+			name: (UserTurn ? message.author : Opponent.user).tag,
+			iconURL: (UserTurn ? message.author : Opponent.user).displayAvatarURL({ dynamic: true })
+		})
 		.setTitle(`**${message.author} V.S ${Opponent}**`)
 		.setDescription(`${DisplayBoard(Board)}`)
 		.setColor(bot.config.embed.color)
@@ -214,4 +203,6 @@ module.exports = new cmd(execute, {
 	usage: "(optional user)",
 	aliases: ["cf"],
 	perms: [],
+	enabled: false,
+	slash: true
 });

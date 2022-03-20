@@ -3,64 +3,29 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const UserToKick = bot.functions.GetMember(message, args);
-	const ReasonForKick = args.join(` `).slice(22) || `No reason provided.`;
+	const user = data.options.getMember("user");
+	const reason = data.options.getString("reason");
 
-	if (!args[0]) return message.replyT(`${bot.config.emojis.error} | Please mention someone to kick!`);
-	if (!UserToKick) return message.replyT(`${bot.config.emojis.error} | I cannot find that member!`);
-	if (UserToKick.id === message.author.id) return message.replyT(`${bot.config.emojis.error} | You cannot kick yourself.`);
-	if (!UserToKick.kickable) return message.replyT(`${bot.config.emojis.error} | Uh oh... I can't kick this user!`);
+	if (user.user.id === message.user.id) return message.replyT(`${bot.config.emojis.error} | You cannot kick yourself.`);
+	if (!user.kickable) return message.replyT(`${bot.config.emojis.error} | Uh oh... I can't kick this user!`);
 
-	const VerificationEmbed = new Discord.MessageEmbed()
-		.setTitle(`Convermination Prompt`)
-		.setDescription(`Are you sure you want to do this?`)
+	user.send(`${bot.config.emojis.warning} | You have been kicked from ${message.guild.name}! Reason: ${reason}.`).catch(err => {});
+	user.kick().catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to kick. Please check my permisions and try again.`));
+
+	const KickEmbend = new Discord.MessageEmbed()
+		.setTitle("Kick Command")
+		.setDescription(`${bot.config.emojis.success} | Successfully kicked ${user} (${user.id})!`)
+		.setThumbnail(user.avatar)
+		.addField(`Moderator/Admin: `, `${message.user.tag}`)
+		.addField(`Reason: `, reason)
 		.setFooter({
-			text: `Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`,
+			text: `${bot.config.prefix}Ban to ban a user. • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		});
+		})
+		.setColor(bot.config.embed.color)
+		.setTimestamp();
 
-	const VerificationMessage = await await message.replyT({
-		embeds: [VerificationEmbed],
-	});
-
-	const Emoji = await bot.PromptMessage(
-		VerificationMessage,
-		message.author,
-		[bot.config.emojis.success, bot.config.emojis.error],
-		60,
-	);
-
-	if (Emoji === bot.config.emojis.success) {
-		// Yes
-		message.delete().catch(err => {});
-
-		UserToKick.kick().catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to kick. Error: ${err}`));
-
-		try {
-			UserToKick.send(
-				`${bot.config.emojis.error} | You have been kicked from ${message.guild.name}. Reason: ${ReasonForKick}.`,
-			);
-		} catch (err) {}
-
-		const KickEmbend = new Discord.MessageEmbed()
-			.setTitle(`Kick Command`)
-			.setDescription(`${bot.config.emojis.success} | Successfully kicked <@${UserToKick.id}>(${UserToKick.id})!`)
-			.setThumbnail(UserToKick.avatar)
-			.addField(`Moderator/Admin: `, `${message.author.tag}`)
-			.addField(`Reason: `, ReasonForKick)
-			.setFooter({
-				text: `${bot.config.prefix}Ban to ban a user. • ${bot.config.embed.footer}`,
-				iconURL: bot.user.displayAvatarURL({ dynamic: true })
-			})
-			.setColor(bot.config.embed.color)
-			.setTimestamp();
-
-		await message.replyT(KickEmbend);
-	} else if (emoji === bot.config.emojis.error) {
-		message.delete().catch(err => {});
-
-		await message.replyT(`${bot.config.emojis.error} | Kick canceled.`).then(m => m.delete({ timeout: 10000 }));
-	}
+	await message.replyT(KickEmbend);
 }
 
 module.exports = new cmd(execute, {
@@ -69,4 +34,19 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	usage: `(user) (reason)`,
 	perms: ["KICK_MEMBERS"],
+	slash: true,
+	slashOnly: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user to kick.",
+			required: true
+		},
+		{
+			type: 3,
+			name: "reason",
+			description: "The reason for kicking the user."
+		}
+	]
 });

@@ -3,76 +3,40 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const User =
-    message.guild.member(message.mentions.users.first()) || message.guild.members.cache.get(args[0]) || `@<${args[0]}>`;
-	const NewNickname = args.join(` `).slice(22);
+	const User = data.options.getMember("user");
+	const NewNickname = data.options.getString("nickname");
 
-	if (!args[0]) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Please mention someone to change their nickname!`);
-	}
+	if (NewNickname.length > 30) return await message.editT(`${bot.config.emojis.error} | That nickname is too long. Please keep it below 30 characters.`);
+	if (User.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) return await message.editT(`Uh oh! I cannot change their nickname. They're a higher role than me!`);
 
-	if (!User) {
-		return message
-			.replyT(`${bot.config.emojis.error} | I cannot find that member!`);
-	}
+	User.setNickname(NewNickname)
+		.then(async () => await message.editT(`${bot.config.emojis.success} | Successfully changed ${User}\`s nickname to ${NewNickname}!`))
+		.catch(async err => {
+			bot.logger(err, "error");
 
-	if (!User.roles) {
-		return message
-			.replyT(`${bot.config.emojis.error} | That\`s not a user! That\`s a role.`);
-	}
-
-	if (!NewNickname) {
-		return message
-			.replyT(`${bot.config.emojis.error} | Please mention their new nickname!`);
-	}
-
-	if (User.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) {
-		return await message.replyT(`Uh oh! I cannot change their nickname. They\`re a higher role than me!`);
-	}
-
-	const VerificationEmbed = new Discord.MessageEmbed()
-		.setTitle(`Convermination Prompt`)
-		.setDescription(`Are you sure you want to do this?`)
-		.setFooter({
-			text: `Canceling in 60 seconds if no emoji reacted. • ${bot.config.embed.footer}`,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			await message.editT(`${bot.config.emojis.error} | Uh oh! I cannot change their nickname. Please check my permissions and try again.`);
 		});
-
-	const VerificationMessage = await await message.replyT({
-		embeds: [VerificationEmbed],
-	});
-
-	const Emoji = await bot.PromptMessage(
-		VerificationMessage,
-		message.author,
-		[bot.config.emojis.success, bot.config.emojis.error],
-		60,
-	);
-
-	if (Emoji === bot.config.emojis.success) {
-		// Yes
-		message.delete().catch(err => {});
-		Verificationmessage.delete().catch(err => {});
-
-		User.setNickname(NewNickname)
-			.then(async () => await message.replyT(`${bot.config.emojis.success} | I successfully changed ${User}\`s nickname to ${NewNickname}!`))
-			.catch(async err => {
-				await message.replyT(`${bot.config.emojis.error} | Uh oh! I cannot change their nickname.`).then(() => {
-					bot.logger(err, "error");
-				});
-			});
-	} else if (emoji === bot.config.emojis.error) {
-		message.delete().catch(err => {});
-
-		await message.replyT(`${bot.config.emojis.error} | Nickname change canceled.`).then(m => m.delete({ timeout: 10000 }));
-	}
 }
 
 module.exports = new cmd(execute, {
-	description: `I\'ll change a user\'s nickname to your choice.`,
+	description: "I'll change a user's nickname to your choice.",
 	dirname: __dirname,
 	aliases: ["setnick"],
-	usage: `(user) <reason>`,
+	usage: `(user) (nickname)`,
 	perms: ["CHANGE_NICKNAME"],
+	slash: true,
+	slashOnly: true,
+	ephemeral: true,
+	options: [
+		{
+			type: 6,
+			name: "user",
+			description: "The user who I should change the nickname of.",
+		},
+		{
+			type: 3,
+			name: "nickname",
+			description: "The user's new nickname.",
+		}
+	]
 });

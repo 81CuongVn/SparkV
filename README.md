@@ -1,26 +1,48 @@
 <img src="https://www.sparkv.tk/assets/images/SparkV.png" alt="SparkV Logo" style="float: left; margin: 0 10px 0 0;" align="left" height="150" width="150">
 
-## SparkV
+### 🤖 SparkV
 
-Meet SparkV. The most POWERFUL multipurpose bot with NO PAYWALL! Start powering your server without spending a dime. SparkV is also an open sourced Discord bot using Discord.js coded in JavaScript by Ch1ll Studio.
-> SparkV is loved by more than 110k Discord users and more than 140 servers.
+SparkV is a powerful multipurpose meme/chatbot that features Music, Currency, Memes, Games, Utility, a dope dashboard, and more! With 24/7 uptime, you can ensure your server is the best.
+> SparkV is loved by over 200+ servers and 124k+ users.
 
-### Features
+If you want to learn more about SparkV (Information, commands, etc), run the command `\help` in any server. If you need help, then you should 100% join [Ch1ll Studios](https://discord.gg/PPtzT8Mu3h), our community/support server for SparkV and other amazing projects by us.
 
-SparkV offers your server:
+### ⚙️ Setup
 
-* 🌐 **Text translation**! SparkV can translate most text sent by SparkV into the language you want for your server.
-* 🤖 **A Smart AI**! A smart chat bot that can help boost the activity in your server!
-* ⚙ **Customization**! SparkV is very customizable. (Prefix and etc)
-* 🗳️ **Voting Rewards**! Vote for SparkV and recive 25k virual coins that can be spent using our currency commands!
-* 💸 **No Paywall**! SparkV will NEVER have a paywall. Here at Ch1ll Studio, we believe our products should be perfect and accessible. However, in the future you will be able to donate to us if you like our bot. For now, we'd really like you to vote for our bot!
+To personalize your server, visit our [dashboard](https://www.sparkv.tk/dashboard) or use our new `/settings` command.
 
-#### Wow... That's a Lot of Commands
+`⚠️` `/settings` IS IN BETA, AND NOT ALL SETTINGS HAS BEEN ADDED. FOR MORE CONFIGURATION, VISIT [SPARKV'S DASHBOARD](https://www.sparkv.tk/dashboard).
 
-SparkV offers over 100+ commands with **13 categories**!
+#### 🎵 Music
+
+Rock out to our high quality music service! The quality of SparkV's music is beautiful, not to mention the UI that comes along with it.
+
+<img src="https://www.sparkv.tk/assets/images/features/music_plain.webp" style="border-radius:6px;height: 480px;" alt="SparkV Music">
+
+#### 🎲 Games
+
+Play games with your server!
+
+<img src="https://www.sparkv.tk/assets/images/features/hangman_plain.webp" style="border-radius:6px;height: 450px;" alt="SparkV Games">
+
+#### 😂 Memes
+
+Laugh with your fellow server members at some memes!
+
+<img src="https://www.sparkv.tk/assets/images/features/meme_plain.webp" style="border-radius:6px;height: 480px;" alt="SparkV Memes">
+
+#### 💰 Economy
+
+Get rich, or rob rich people!
+
+<img src="https://www.sparkv.tk/assets/images/features/economy_plain.webp" style="border-radius:6px;height: 225px;" alt="SparkV Economy">
+
+#### And many more!
+
+SparkV offers over **130+ commands** with **13 categories**!
 
 [See the full list by clicking here!](https://docs.sparkv.tk/)
 
-### Help!
+### What are you waiting for?!
 
-If you need help, please join our [community/support server by clicking here](https://discord.gg/PPtzT8Mu3h) and going to the channel named support.
+Level up your server today! [Get SparkV](https://www.sparkv.tk/invite).
