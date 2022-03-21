@@ -19,7 +19,7 @@ async function execute(bot, message, args, command, data) {
 		.addField(`Moderator/Admin: `, `${message.user.tag}`)
 		.addField(`Reason: `, reason)
 		.setFooter({
-			text: `${bot.config.prefix}Ban to ban a user. • ${bot.config.embed.footer}`,
+			text: `/Ban to ban a user. • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)

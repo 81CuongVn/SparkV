@@ -26,7 +26,7 @@ module.exports = class RedditCommand {
 	async run(bot, message, args, command, data) {
 		let endpoint = this.settings.endpoint;
 
-		if (data?.options?.getString("type") || args[0]) endpoint = data?.options?.getString("type") || (this.settings.options[0].choices.find(c => c.name === args[0])?.value);
+		if (data?.options?.getString("type")) endpoint = data?.options?.getString("type");
 
 		let res;
 		const cache = await bot.redis.get(endpoint).then(res => JSON.parse(res));

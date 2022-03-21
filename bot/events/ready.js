@@ -48,9 +48,7 @@ module.exports = {
 			status: "online",
 			activities: [
 				{
-					name: `${bot.config.prefix}Help | ${bot.functions.formatNumber(
-						await bot.functions.GetServerCount(),
-					)} servers`,
+					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
 					type: "PLAYING",
 				},
 			],

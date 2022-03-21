@@ -29,7 +29,7 @@ async function execute(bot, message, args, command, data) {
 		.addField(`Moderator/Admin`, `${message.author.tag}`, true)
 		.addField(`Reason`, reason, true)
 		.setFooter({
-			text: `${bot.config.prefix}Kick to kick a user. • ${bot.config.embed.footer}`,
+			text: `/Kick to kick a user. • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)

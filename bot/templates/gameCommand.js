@@ -39,14 +39,7 @@ module.exports = class ModCommand {
 		if (this.settings.type === "activity") {
 			let type;
 
-			if (data?.options?.getString("type") || args[0]) type = data?.options?.getString("type") || this.settings.options[0].choices.find(c => c.name === args[0]).value;
-
-			const invalidArgs = {
-				content: `${bot.config.emojis.error} | The game type must be one of the following: ${this.settings.options[0].choices.map(g => `${g.name}`).join(", ")}`,
-				ephemeral: true
-			};
-
-			if (!type && args[0]) return message.applicationId ? await message.editT(invalidArgs) : await message.replyT(invalidArgs);
+			if (data?.options?.getString("type")) type = data?.options?.getString("type");
 
 			const notVC = {
 				content: `${bot.config.emojis.error} | You must be in a __**voice channel**__ to play this game!`,

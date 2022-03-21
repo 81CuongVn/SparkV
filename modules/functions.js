@@ -33,8 +33,7 @@ module.exports = {
    */
 	getPrefix(message, data) {
 		const acceptedPrefixes = [
-			"sv!",
-			process.argv.includes("--dev") === true ? "_" : data.guild.prefix,
+			process.argv.includes("--dev") === true ? "_" : "sv!",
 		];
 
 		let prefix = null;
@@ -215,69 +214,6 @@ module.exports = {
 		return await bot.users.fetch(key).catch(() => { });
 	},
 
-	/**
-   *
-   * @param {string} key The search quarry.
-   * @param {string} guild The Discord.js Guild ID.
-   * @returns {Object} Member if found.
-   */
-	async fetchMember(key, guild) {
-		if (!key || typeof key !== "string") {
-			return;
-		}
-
-		if (key.match(/^<@!?(\d+)>$/)) {
-			const member = guild.members.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => { });
-
-			if (member) {
-				return member;
-			}
-		}
-
-		if (key.match(/^!?(\w+)#(\d+)$/)) {
-			guild = await guild.fetch();
-			const member = guild.members.cache.find(m => m.user.tag === key);
-
-			if (member) {
-				return member;
-			}
-		}
-
-		return await guild.members.fetch(key).catch(() => { });
-	},
-
-	/**
-   *
-   * @param {Object} message Discord message.
-   * @param {Object} args Arguments.
-   * @returns {Object} Member. If the member is not found, the value will be null.
-   */
-	async GetMember(message, args) {
-		let member;
-
-		const checkCache = bot.users.cache.get(args.slice(0).join(" "));
-		const checkCache2 = bot.users.cache.get(args[0]);
-		const checkGuildCache = message.guild.members.cache.find(
-			u => u.user.username.toLowerCase() === args.slice(0).join(" ") || u.user.username === args[0],
-		);
-
-		if (message?.mentions?.members?.first()) {
-			member = message.mentions.members.first();
-		} else if (message.guild.members.cache.get(args[0])) {
-			member = message.guild.members.cache.get(args[0]);
-		} else if (checkCache) {
-			member = checkCache;
-		} else if (checkGuildCache) {
-			member = checkGuildCache;
-		} else if (checkCache2) {
-			member = checkCache2;
-		} else {
-			member = null;
-		}
-
-		return member;
-	},
-
 	// Plugins //
 
 	/**
@@ -298,32 +234,11 @@ module.exports = {
 	},
 
 	/**
-   *
-   * @param {string} mention The mention
-   * @returns {Object} The user object found. If not found, it will be null.
-   */
-	async GetUserFromMention(mention) {
-		if (!mention) return;
-
-		if (mention.startsWith("<@") && mention.endsWith(">")) {
-			mention = mention.slice(2, -1);
-
-			if (mention.startsWith("!")) {
-				mention = mention.slice(1);
-			}
-
-			return bot.users.cache.get(mention);
-		}
-	},
-
-	/**
    * Get's all of the bot's guilds and counts them up.
    * @returns {string} Server count
    */
 	async GetServerCount() {
-		if (bot.config.sharding.shardingEnabled === false) {
-			return bot.guilds.cache.size;
-		}
+		if (bot.config.sharding.shardingEnabled === false) return bot.guilds.cache.size;
 
 		const promises = [bot.shard.fetchClientValues("guilds.cache.size")];
 

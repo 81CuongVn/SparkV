@@ -7,11 +7,8 @@ const Schema = new mongoose.Schema({
 	registrationDate: { type: Number, default: Date.now() },
 
 	// Data //
-	prefix: { type: String, required: true, trim: true, default: config.prefix || "^" },
 	language: { type: String, default: "en" },
 	casesCount: { type: Number, default: 0 },
-	autoRemoveCommands: { type: Boolean, default: "false" },
-
 	plugins: { type: Object, default: {
 		welcome: {
 			enabled: "false",
@@ -48,7 +45,10 @@ const Schema = new mongoose.Schema({
 			level: "info"
 		},
 		chatbot: "false"
-	} }
+	} },
+	tickets: {
+		category: { type: String, default: null },
+	}
 });
 
 module.exports = new mongoose.model("Guild", Schema);

@@ -183,54 +183,6 @@ async function execute(bot, message, args, command, data) {
 			description: await message.translate("Basic settings for the bot (prefix, language, chatbot, etc)."),
 			buttons: [
 				{
-					name: "Prefix",
-					data: new MessageButton()
-						.setLabel(await message.translate("Prefix"))
-						.setEmoji(bot.config.emojis.slash)
-						.setCustomId("prefix")
-						.setStyle("PRIMARY"),
-					getData: () => data.guild.prefix,
-					setData: async () => {
-						await setNewData(message, {
-							title: await message.translate(`${bot.config.emojis.config} | New Prefix`),
-							description: await message.translate("Please enter the new prefix for the bot.\n\n**Note:** The prefix cannot be longer than 5 characters."),
-							color: "BLUE",
-							time: 15,
-							filter: async m => {
-								if (m.author.id === m.client.user.id) return false;
-
-								if (m.content) {
-									if (m.content.length >= 5) {
-										await m.replyT(`${bot.config.emojis.error} | The new prefix cannot be longer than 5 characters. Try again.`);
-
-										return false;
-									}
-
-									return true;
-								} else {
-									await m.replyT(`${bot.config.emojis.error} | Dude... I need you to send a message. Not a picture.`);
-
-									return false;
-								}
-							},
-							handleData: async (collected, requestMsg) => {
-								const newPrefix = collected.content.trim();
-
-								requestMsg
-									.setTitle(await message.translate(`${bot.config.emojis.config} | New Prefix Changed`))
-									.setDescription(await message.translate(`Successfully changed prefix from **${data.guild.prefix}** to **${newPrefix}**.`));
-
-								data.guild.prefix = newPrefix;
-								data.guild.markModified("prefix");
-
-								await data.guild.save();
-
-								return true;
-							}
-						});
-					},
-				},
-				{
 					name: await message.translate("Language"),
 					data: new MessageButton()
 						.setLabel(await message.translate("Language"))

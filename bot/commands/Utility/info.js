@@ -11,9 +11,7 @@ function handleAnimated(url) {
 }
 
 async function execute(bot, message, args, command, data) {
-	const state = message.applicationId ? message.options.getSubcommand() : args[0];
-
-	if (!state) return await message.replyT(`Next time, please use this command's proper usage. Usage: \`${data.guild.prefix}info server (optional: invite default: current server)\` or \`${data.guild.prefix}info user (optional: user default: you)\`.`);
+	const state = message.options.getSubcommand();
 
 	if (state === "user") {
 		const statuses = {
@@ -30,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 			DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>",
 		};
 
-		let user = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
+		let user = data.options.getMember("user");
 		const member = message.channel.guild.members.cache.get(user.id);
 
 		const userdata = await bot.database.getUser(user.id);
