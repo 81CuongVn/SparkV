@@ -1,11 +1,37 @@
 const logger = require("../../modules/logger");
 const Discord = require("discord.js");
 
+async function GetTicketOpen(bot, member) {
+	const ticket = await bot.channels.cache.filter(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map(c => c);
+
+	return ticket;
+}
+
 const cooldowns = [];
 
 module.exports = {
 	once: false,
 	async execute(bot, interaction) {
+		const data = {};
+
+		// Get the Guild
+		if (interaction.inGuild()) {
+			const guild = await bot.database.getGuild(interaction.guild.id);
+
+			data.guild = guild;
+			data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
+
+			interaction.guild.data = data.guild;
+		}
+
+		// User data
+		data.user = await bot.database.getUser(interaction.user.id);
+
+		// Data Old Options
+		data.options = interaction.options;
+
+		if (!data) return;
+
 		if (interaction.isCommand()) {
 			// Get the command
 			const command = bot.commands.get(interaction.commandName);
@@ -43,26 +69,6 @@ module.exports = {
 			}
 
 			cooldowns[interaction.user.id][command.settings.name] = Date.now() + command.settings.cooldown;
-
-			const data = {};
-
-			// Get the Guild
-			if (interaction.inGuild()) {
-				const guild = await bot.database.getGuild(interaction.guild.id);
-
-				data.guild = guild;
-				data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
-
-				interaction.guild.data = data.guild;
-			}
-
-			// User data
-			data.user = await bot.database.getUser(interaction.user.id);
-
-			// Data Old Options
-			data.options = interaction.options;
-
-			if (!data) return;
 
 			// Get the command's args
 			const args = [];
@@ -104,6 +110,186 @@ module.exports = {
 					embeds: [ErrorEmbed],
 					ephemeral: true,
 				});
+			}
+		} else if (interaction.isButton()) {
+			if (interaction.customId.startsWith("ticket")) {
+				if (interaction.customId === "ticket_create") {
+					await interaction.deferReply({
+						ephemeral: true
+					});
+
+					const allChannels = await bot.channels.cache.filter(c => c.name.includes("ticket")).map(c => c);
+					const already = await bot.channels.cache.some(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(interaction.member.user.tag));
+
+					if (already === true) return await interaction.followUp(`You already have a ticket open in ${await GetTicketOpen(bot, interaction.member)}`);
+
+					let category;
+
+					try {
+						category = await interaction.guild.channels.cache.find(c => c.id === data.guild.plugins.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
+							type: "GUILD_CATEGORY"
+						});
+					} catch (err) {
+						return interaction.followUp(`${bot.config.emojis.error} | I couldn't create the ticket category. Please make sure I have the correct permissions.`);
+					}
+
+					const ticketChannel = await interaction.guild.channels.create(`ticket-${allChannels.length}`, {
+						type: "text",
+						topic: `${interaction.member.user.tag}'s Ticket | ${interaction.member.id}`,
+						parent: category.id,
+						permissionOverwrites: [
+							{
+								id: bot.user.id,
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+							},
+							{
+								id: interaction.member.id,
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+							},
+							{
+								id: interaction.guild.roles.everyone,
+								deny: ["VIEW_CHANNEL"]
+							},
+							// {
+							// 	id: "",
+							// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+							// },
+						]
+					});
+
+					const supportEmbed = new Discord.MessageEmbed()
+						.setTitle(`Support Awaits!`)
+						.setDescription(`Support will be with you shortly.\n\nTicket Creator: ${interaction.member.user}`)
+						.setFooter({
+							text: "To close this ticket tap the 🔒 below.",
+							iconURL: bot.user.displayAvatarURL()
+						})
+						.setColor("BLUE")
+						.setTimestamp();
+
+					const lockButton = new Discord.MessageButton()
+						.setEmoji("🔒")
+						.setStyle("SECONDARY")
+						.setCustomId(`ticket_close_${interaction.channel.id}`);
+
+					ticketChannel.send({
+						embeds: [supportEmbed],
+						components: [
+							new Discord.MessageActionRow().addComponents(lockButton)
+						]
+					});
+
+					interaction.followUp(`Your ticket has been created. ${ticketChannel}`);
+				} else if (interaction.customId.startsWith(`ticket_close`)) {
+					const closedEmbed = new Discord.MessageEmbed()
+						.setColor("#ffffff")
+						.setDescription(
+							`Ticket closed by ${interaction.user}\n🔓 Reopen Ticket\n📛 Delete Ticket`
+						);
+
+					const reopen = new Discord.MessageButton()
+						.setLabel("")
+						.setCustomId(`ticket_reopen_${interaction.channel.id}`)
+						.setEmoji("🔓")
+						.setStyle("SUCCESS");
+
+					const deleteinteraction = new Discord.MessageButton()
+						.setLabel("")
+						.setCustomId(`ticket_delete_${interaction.channel.id}`)
+						.setEmoji("📛")
+						.setStyle("DANGER");
+
+					interaction.channel
+						.edit({
+							name: `${interaction.channel.name}-closed`,
+							permissionOverwrites: [
+								{
+									id: bot.user.id,
+									allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+								},
+								{
+									id: interaction.member.id,
+									deny: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+								},
+								{
+									id: interaction.guild.roles.everyone,
+									deny: ["VIEW_CHANNEL"],
+								},
+								// {
+								// 	id: bot.config.services.support.roleID,
+								// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+								// },
+							],
+						})
+						.catch(err => { });
+
+					interaction.reply({
+						embeds: [closedEmbed],
+						components: [
+							new Discord.MessageActionRow().addComponents(reopen, deleteinteraction)
+						]
+					}).catch(err => { });
+				} else if (interaction.customId === `ticket_reopen_${interaction.channel.id}`) {
+					const createdBy = interaction.channel.topic.replace("'s Ticket", "");
+					console.log(interaction.channel.topic.split(" | ")[1]);
+
+					interaction.channel.edit({
+						name: interaction.channel.name.toString().replace("-closed", ""),
+						permissionOverwrites: [
+							{
+								id: bot.user.id,
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+							},
+							{
+								id: interaction.channel.topic.split(" | ")[1],
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+							},
+							{
+								id: interaction.guild.roles.everyone,
+								deny: ["VIEW_CHANNEL"],
+							},
+							// {
+							// 	id: bot.config.services.support.roleID,
+							// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+							// },
+						],
+					});
+
+					interaction.reply(`This ticket has been reopened. Welcome back!`);
+				} else if (interaction.customId.startsWith("ticket_delete")) {
+					const deleteEmbed = new Discord.MessageEmbed()
+						.setColor("#ffffff")
+						.setDescription("Ticket will be deleted in 5 seconds.");
+
+					interaction.reply({
+						embeds: [deleteEmbed]
+					});
+
+					try {
+						setTimeout(() => {
+							interaction.channel.delete().catch(err => { });
+						}, 5000);
+					} catch (err) {
+						console.log("Attempted to delete a channel that didn't exist.");
+					}
+				}
+			} else if (interaction.customId.startsWith("role")) {
+				await interaction.deferReply({
+					ephemeral: true
+				});
+
+				const roleID = interaction.customId.slice(5);
+				const role = await interaction.guild.roles.cache.get(roleID) || await interaction.guild.roles.fetch(roleID);
+
+				if (!interaction.member.roles.cache.get(roleID)) {
+					await interaction.member.roles.add(roleID);
+
+					interaction.followUp(`The role <@&${roleID}> was successfully added to you!`);
+				} else {
+					await interaction.member.roles.remove(roleID);
+
+					interaction.followUp(`The role <@&${roleID}> was successfully removed from you.`);
+				}
 			}
 		}
 	},
