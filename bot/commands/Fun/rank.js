@@ -7,7 +7,7 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
-	const Target = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
+	const Target = data.options.getMember("user");
 	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);
 
 	const User = await Levels.fetch(Target.user ? Target.user.id : Target.id, message.guild.id, true);

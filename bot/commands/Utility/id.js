@@ -4,32 +4,22 @@ const canvacord = require("canvacord");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const state = message.applicationId ? message.options.getSubcommand() : args[0];
-
-	if (!state) return await message.editT(`Next time, please use this command's proper usage. Usage: \`${data.guild.prefix}id server (optional: invite default: current server)\` or \`${data.guild.prefix}id user (optional: user default: you)\`.`);
+	const state = message.options.getSubcommand();
 
 	if (state === "user") {
-		const user = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
-
-		if (!user) return await message.editT("Please mention a user to get the id of.");
+		const user = data.options.getMember("user") || message.user;
 
 		return await message.editT(`The id of **${user.user ? user.user.tag : user.tag}** is **${user.user ? user.user.id : user.id}**.`);
 	} else if (state === "server") {
-		const server = message?.applicationId ? data.options.getString("server") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
-
-		if (!user) return await message.editT("Please mention a user to get the id of.");
+		const server = data.options.getString("server");
 
 		return await message.editT(`The id of **${user.user ? user.user.tag : user.tag}** is **${user.user ? user.user.id : user.id}**.`);
 	} else if (state === "role") {
-		const role = message?.applicationId ? data.options.getRole("role") : message.mentions.roles.first();
-
-		if (!role) return message.editT("Please mention a valid role to get the id of.");
+		const role = data.options.getRole("role");
 
 		await message.editT(`The id of the role **${role}** is **${role.id}**.`);
 	} else if (state === "channel") {
-		const channel = message?.applicationId ? data.options.getChannel("channel") : message.mentions.channels.first();
-
-		if (!channel) return message.editT("Please mention a valid channel to get the id of.");
+		const channel = data.options.getChannel("channel");
 
 		await message.editT(`The id of the channel **${channel}** is **${channel.id}**.`);
 	}

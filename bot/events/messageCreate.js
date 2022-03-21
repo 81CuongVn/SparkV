@@ -162,35 +162,6 @@ module.exports = {
 						message.replyT(`🔨 | ${message.author}, please stop cursing. If you continue, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
 						timeoutUser("cursing", message, data);
-
-						// If (data.member.infractionsCount === 12) {
-						// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
-
-						// 	try {
-						// 		message.member.ban({
-						// 			reason:
-						// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-						// 		});
-						// 	} catch (err) {
-						// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-						// 	}
-						// }
-
-						// if (data.member.infractionsCount === 6) {
-						// 	message.member
-						// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-						// 		.catch(err => { });
-						// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
-
-						// 	try {
-						// 		message.member.kick({
-						// 			reason:
-						// 				"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-						// 		});
-						// 	} catch (err) {
-						// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-						// 	}
-						// }
 					}
 				}
 			}
@@ -222,35 +193,6 @@ module.exports = {
 					message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
 					timeoutUser("sending links", message, data);
-
-					// If (data.member.infractionsCount === 12) {
-					// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
-
-					// 	try {
-					// 		message.member.ban({
-					// 			reason:
-					// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-					// 		});
-					// 	} catch (err) {
-					// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-					// 	}
-					// }
-
-					// if (data.member.infractionsCount === 6) {
-					// 	message.member
-					// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-					// 		.catch(err => { });
-					// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
-
-					// 	try {
-					// 		message.member.kick({
-					// 			reason:
-					// 				"Continued to curse after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-					// 		});
-					// 	} catch (err) {
-					// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-					// 	}
-					// }
 				}
 			}
 
@@ -293,56 +235,6 @@ module.exports = {
 							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
 							timeoutUser("spamming", message, data);
-
-							// If (data.member.infractionsCount === 12) {
-							// 	deleteMessages(bot, matches);
-							// 	await message.replyT(`You've been **BANNED** for passing **${data.member.infractionsCount}** warning(s).`);
-
-							// 	try {
-							// 		message.member.ban({
-							// 			reason:
-							// 				"Continued to break SparkV's auto mod rules after 12 warnings. The 3rd was a mute, the 6th was a kick from the server and now the 12th is being banned.",
-							// 		});
-							// 	} catch (err) {
-							// 		return await message.replyT("Failed to ban user. Make sure I have the correct permisions!");
-							// 	}
-							// }
-
-							// if (data.member.infractionsCount === 6) {
-							// 	deleteMessages(bot, matches);
-							// 	message.member
-							// 		.send(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`)
-							// 		.catch(err => { });
-							// 	await message.replyT(`You've been **KICKED** for getting **${data.member.infractionsCount}** warning(s).`);
-
-							// 	try {
-							// 		message.member.kick({
-							// 			reason:
-							// 				"Continued to spam after 6 warnings. The 3rd was a mute and now this punishment is a kick from the server. The next punishment, at 12 warnings, will be a ban.",
-							// 		});
-							// 	} catch (err) {
-							// 		return await message.replyT("Failed to kick user. Make sure I have the correct permisions!");
-							// 	}
-							// }
-
-							// if (data.member.infractionsCount === 3) {
-							// 	deleteMessages(bot, matches);
-							// 	const mutedRole = message.guild.roles.cache.find(
-							// 		role => role.name.toLowerCase().includes("muted") || role.name.toLowerCase().includes("mute"),
-							// 	);
-
-							// 	if (!mutedRole) {
-							// 		await message.replyT("Unable to find the muted role.");
-							// 	} else {
-							// 		message.member.roles.add(mutedRole);
-
-							// 		setTimeout(() => {
-							// 			message.member.roles.remove(mutedRole);
-							// 		}, 300 * 1000);
-							// 	}
-
-							// 	await message.replyT(`You've been muted for getting **${data.member.infractionsCount}** warning(s).`);
-							// }
 						}
 					}
 				}
@@ -350,15 +242,6 @@ module.exports = {
 
 			// Leveling!
 			if (data.guild.plugins.leveling.enabled === "true") {
-				/*
-				Max & Min XP Config
-				let MaxXP = data.guild.plugins.leveling.max;
-				let MinXP = data.guild.plugins.leveling.min;
-
-				if (isNaN(MaxXP)) MaxXP = 15;
-				if (isNaN(MinXP)) MinXP = 5;
-				*/
-
 				const RandomXP = Math.floor(Math.random() * 15) + 5;
 				const HasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, RandomXP);
 
@@ -403,44 +286,10 @@ module.exports = {
 
 		if (!commandfile) return;
 
-		if (!cooldowns[message.author.id]) cooldowns[message.author.id] = [];
-
-		const userCooldown = cooldowns[message.author.id];
-		const time = userCooldown[commandfile.settings.name] || 0;
-
-		if (time && (time > Date.now())) {
-			const cooldownEmbed = new Discord.MessageEmbed()
-				.setAuthor({
-					name: message.author.tag,
-					iconURL: message.author.displayAvatarURL({ dynamic: true }),
-				})
-				.setTitle(`${bot.config.emojis.error} | Whoa there ${message.author.username}!`)
-				.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
-				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-				.setColor("RED")
-				.setFooter({
-					text: bot.config.embed.footer,
-					iconURL: bot.user.displayAvatarURL()
-				});
-
-			return await message.replyT({
-				embeds: [cooldownEmbed],
-			});
-		}
-
-		cooldowns[message.author.id][commandfile.settings.name] = Date.now() + commandfile.settings.cooldown;
-
-		if (commandfile.settings.enabled === false) return await message.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
-		if (commandfile.settings.guildOnly && !message.guild) return await message.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
-		if (commandfile.settings.ownerOnly && message.author.id !== bot.config.ownerID) return await message.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
-		if (commandfile.settings.slashOnly) return await message.replyT(`${bot.config.emojis.slash} | This command is restricted for slash commands only. Please use the command with a slash (\`/\`) in front of it.`);
+		if (message.author.id !== bot.config.ownerID) return;
 
 		try {
-			await commandfile.run(bot, message, args, command, data).then(async () => {
-				if (data.guild.autoRemoveCommands === true) message.delete().catch(() => { });
-
-				bot.StatClient.postCommand(command, message.author.id);
-			});
+			await commandfile.run(bot, message, args, command, data);
 		} catch (err) {
 			const { tag, id } = message.author;
 			sentry.configureScope(scope => {

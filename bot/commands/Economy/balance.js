@@ -3,7 +3,7 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const User = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[0]) || message.author);
+	const User = data.options.getMember("user");
 
 	if (!User) return message.replyT("Please mention a valid user to get the balance of.");
 

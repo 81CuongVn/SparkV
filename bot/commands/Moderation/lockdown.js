@@ -3,10 +3,8 @@ const Discord = require("discord.js");
 const cmd = require("../../templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const state = (message?.applicationId ? data.options.getString("state") : args[0]) || null;
-	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ").slice(state.toLowerCase() === "on" ? 2 : 3)) || "No reason provided.";
-
-	if (!state === "on" || !state === "off") return message.replyT(`${bot.config.emojis.error} | Invalid command usage. Please specify a valid state (on/off).`);
+	const state = data.options.getString("state");
+	const reason = data.options.getString("reason");
 
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({

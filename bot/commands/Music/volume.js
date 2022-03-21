@@ -3,7 +3,7 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
-	let volume = message?.applicationId ? data.options.getString("volume") : args[0];
+	let volume = data.options.getString("volume");
 	volume = parseInt(volume);
 
 	const queue = bot.distube.getQueue(message);

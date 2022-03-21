@@ -4,9 +4,7 @@ const canvacord = require("canvacord");
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const state = message.applicationId ? data.options.getSubcommand() : args[0];
-
-	if (!state) return await message.replyT(`Next time, please use this command's proper usage. Usage: \`${data.guild.prefix}icon server (optional: invite default: current server)\` or \`${data.guild.prefix}icon user (optional: user default: you)\`.`);
+	const state = data.options.getSubcommand();
 
 	const embed = new Discord.MessageEmbed()
 		.setColor(bot.config.embed.color)
@@ -16,7 +14,7 @@ async function execute(bot, message, args, command, data) {
 		});
 
 	if (state === "user") {
-		const User = message?.applicationId ? data.options.getMember("user") || message.user : (await bot.functions.fetchUser(args[1]) || message.author);
+		const User = data.options.getMember("user") || message.user;
 		const avatar = User.displayAvatarURL({ dynamic: true, format: "png" });
 
 		const pngType = avatar.replace(".gif", ".png");

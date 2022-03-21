@@ -61,8 +61,8 @@ async function execute(bot, message, args, command, data) {
 		.setLabel(await message.translate("Website"))
 		.setStyle("LINK");
 
-	if (data?.options?.getString("search") || args[0]) {
-		const name = message?.applicationId ? data.options.getString("search").toString().toLowerCase() : args[0].toString().toLowerCase();
+	if (data.options.getString("search")) {
+		const name = data.options.getString("search").toString().toLowerCase();
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 		const category = bot.categories.get(name.charAt(0).toUpperCase() + name.slice(1));
 
@@ -74,14 +74,14 @@ async function execute(bot, message, args, command, data) {
 					name: message?.applicationId ? message.user.tag : message.author.tag,
 					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 				})
-				.setTitle(`\`\`\`${cmd.settings.slash === true ? "/" : data.guild.prefix}${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
+				.setTitle(`\`\`\`/${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
 				.setDescription(await message.translate(cmd.settings.description))
 				.addField(await message.translate("Category"), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
 				.addField(await message.translate("Aliases"), cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``, true)
 				.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
 				.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
 				.setFooter({
-					text: await message.translate(`${data.guild.prefix}Help to get a list of all commands • ${bot.config.embed.footer}`),
+					text: await message.translate(`/Help to get a list of all commands • ${bot.config.embed.footer}`),
 					iconURL: bot.user.displayAvatarURL()
 				})
 				.setColor(bot.config.embed.color);

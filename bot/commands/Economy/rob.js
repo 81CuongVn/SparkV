@@ -3,7 +3,7 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const User = message?.applicationId ? data.options.getMember("user") : (await bot.functions.fetchUser(args[0]));
+	const User = data.options.getMember("user");
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please say a person to rob.`);
 
