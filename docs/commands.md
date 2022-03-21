@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **94 commands**!
+SparkV's Command List! SparkV contains more than **95 commands**!
 
 ## Economy
 
@@ -56,11 +56,11 @@ SparkV's Command List! SparkV contains more than **94 commands**!
 
 ## Images
 
-| Name               | Description                | Usage                      | Cooldown  |
-| ------------------ | -------------------------- | -------------------------- | --------- |
-| **color**          | Hex to color.              | (hex)                      | 2 seconds |
-| **image**          | Generate images with ease. | (image type)               | 3 seconds |
-| **youtubecomment** | YouTube comment lol.       | (user default: you) {text} | 3 seconds |
+| Name               | Description                     | Usage                      | Cooldown  |
+| ------------------ | ------------------------------- | -------------------------- | --------- |
+| **color**          | No description for this command | {command}                  | 2 seconds |
+| **image**          | Generate images with ease.      | (image type)               | 3 seconds |
+| **youtubecomment** | YouTube comment lol.            | (user default: you) {text} | 3 seconds |
 
 ## Moderation
 
@@ -126,6 +126,7 @@ SparkV's Command List! SparkV contains more than **94 commands**!
 | **id**           | Grab the ID of the server or a user.                                           | (type (user/server/role/channel)) (user/invite/role/channel) | 2 seconds |
 | **info**         | See information about a user or server.                                        | (user)                                                       | 2 seconds |
 | **invite**       | Displays links.                                                                |                                                              | 2 seconds |
+| **panel**        | Set up a feature. (tickets, roles, embed)                                      | (tickets|roles|embed) (title|description|color)              | 2 seconds |
 | **permissions**  | Displays SparkV's permissions in the current guild.                            |                                                              | 2 seconds |
 | **roleall**      | Give all users a role.                                                         | (@role)                                                      | 2 seconds |
 | **rules**        | Follow the rules or else you will be banned from SparkV.                       |                                                              | 2 seconds |
