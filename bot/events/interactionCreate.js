@@ -2,7 +2,7 @@ const logger = require("../../modules/logger");
 const Discord = require("discord.js");
 
 async function GetTicketOpen(bot, member) {
-	const ticket = await bot.channels.cache.filter(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map(c => c);
+	const ticket = await member.guild.channels.cache.filter(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map(c => c);
 
 	return ticket;
 }
