@@ -3,14 +3,14 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const user = data.options.getMember("user");
+	const user = data.options.getUser("user");
 	const money = data.options.getNumber("money");
 
-	if (user.id === message.author.id) return await message.editT(`${bot.config.emojis.error} | You can't give money to yourself.`);
+	if (user.id === message.user.id) return await message.editT(`${bot.config.emojis.error} | You can't give money to yourself.`);
 
 	const userData = await bot.database.getUser(user.id);
 
-	if (amount === 0) return await message.editT(`${bot.config.emojis.error} | Please supply a valid amount of money to give this person.`);
+	if (money === 0) return await message.editT(`${bot.config.emojis.error} | Please supply a valid amount of money to give this person.`);
 	if (data.user.money.balance < money) return await message.editT(`${bot.config.emojis.error} | You don't have that much money!`);
 
 	userData.money.balance += parseInt(money);
