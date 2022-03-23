@@ -7,10 +7,10 @@ const cmd = require("../../templates/command");
 async function execute(bot, message, args, command, data) {
 	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
-	const Target = data.options.getMember("user");
-	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);
+	const Target = data.options.getMember("user") || message.member;
+	const TargetMember = await message.guild.members.fetch(Target.user.id);
 
-	const User = await Levels.fetch(Target.user ? Target.user.id : Target.id, message.guild.id, true);
+	const User = await Levels.fetch(Target.user.id, message.guild.id, true);
 	const NeededXP = Levels.xpFor(parseInt(User.level) + 1);
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | This user hasn't earned any XP yet!`);
