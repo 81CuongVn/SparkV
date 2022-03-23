@@ -56,6 +56,8 @@ async function execute(bot, message, args, command, data) {
 		editedText = text.trim().split(/ +/g).length === 1 ? text.split("").join(" 👏 ") : text.trim().split(/ +/g).join(" 👏 ");
 	} else if (type === "zalgo") {
 		editedText = zalgo(text);
+	} else if (type === "char_count") {
+		editedText = `That text has **${text.length} characters**.`;
 	}
 
 	await message.replyT(editedText);
@@ -100,6 +102,10 @@ module.exports = new cmd(execute, {
 				{
 					name: "zalgo",
 					value: "zalgo"
+				},
+				{
+					name: "char_count",
+					value: "char_count"
 				}
 			]
 		}
