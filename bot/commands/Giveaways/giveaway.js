@@ -119,9 +119,9 @@ module.exports = new cmd(execute, {
 			description: "Create a giveaway.",
 			options: [
 				{
-					type: 4,
-					name: "winners",
-					description: "How many people can win the giveaway. ",
+					type: 7,
+					name: "channel",
+					description: "The channel to create the giveaway in.",
 					required: true
 				},
 				{
@@ -137,9 +137,9 @@ module.exports = new cmd(execute, {
 					required: true
 				},
 				{
-					type: 7,
-					name: "channel",
-					description: "The channel to create the giveaway in.",
+					type: 10,
+					name: "winners",
+					description: "How many people can win the giveaway.",
 					required: true
 				}
 			]

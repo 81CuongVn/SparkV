@@ -8,7 +8,7 @@ async function execute(bot, message, args, command, data) {
 	if (text.length >= 100) return await message.replyT("Please keep the text under 100 characters.");
 	if (text.includes("@everyone") || text.includes("@here")) return await message.replyT("Nice try kid. No pings for you.");
 
-	await message.replyT(`${text}\n*-${message.author.tag}*`);
+	await message.replyT(`${text}\n*-${message.user.tag}*`);
 	message.delete().catch(_ => {});
 }
 
