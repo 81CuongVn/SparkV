@@ -12,26 +12,6 @@ const cooldowns = [];
 module.exports = {
 	once: false,
 	async execute(bot, interaction) {
-		const data = {};
-
-		// Get the Guild
-		if (interaction.inGuild()) {
-			const guild = await bot.database.getGuild(interaction.guild.id);
-
-			data.guild = guild;
-			data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
-
-			interaction.guild.data = data.guild;
-		}
-
-		// User data
-		data.user = await bot.database.getUser(interaction.user.id);
-
-		// Data Old Options
-		data.options = interaction.options;
-
-		if (!data) return;
-
 		if (interaction.isCommand()) {
 			// Get the command
 			const command = bot.commands.get(interaction.commandName);
@@ -41,6 +21,26 @@ module.exports = {
 			await interaction.deferReply({
 				ephemeral: command.settings.ephemeral || false,
 			});
+
+			const data = {};
+
+			// Get the Guild
+			if (interaction.inGuild()) {
+				const guild = await bot.database.getGuild(interaction.guild.id);
+
+				data.guild = guild;
+				data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
+
+				interaction.guild.data = data.guild;
+			}
+
+			// User data
+			data.user = await bot.database.getUser(interaction.user.id);
+
+			// Data Old Options
+			data.options = interaction.options;
+
+			if (!data) return;
 
 			// Cooldown System
 			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
@@ -118,6 +118,8 @@ module.exports = {
 						ephemeral: true
 					});
 
+					const guild = await bot.database.getGuild(interaction.guild.id);
+
 					const allChannels = await interaction.guild.channels.cache.filter(c => c.name.includes("ticket")).map(c => c);
 					const already = await interaction.guild.channels.cache.some(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(interaction.member.user.tag));
 
@@ -126,7 +128,7 @@ module.exports = {
 					let category;
 
 					try {
-						category = await interaction.guild.channels.cache.find(c => c.id === data.guild.plugins.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
+						category = await interaction.guild.channels.cache.find(c => c.id === guild.plugins.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
 							type: "GUILD_CATEGORY"
 						});
 					} catch (err) {

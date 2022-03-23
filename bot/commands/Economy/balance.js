@@ -3,16 +3,14 @@ const Discord = require(`discord.js`);
 const cmd = require("../../templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const User = data.options.getMember("user");
+	const User = data.options.getUser("user") || message.user;
 
-	if (!User) return message.replyT("Please mention a valid user to get the balance of.");
-
-	const UserData = await bot.database.getUser(User.user ? User.user.id : User.id);
+	const UserData = await bot.database.getUser(User.id);
 
 	const BalanceEmbed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: `${User.user ? User.user.tag : User.tag}'s Balance`,
-			iconURL: User.user ? User.user.displayAvatarURL({ dynamic: true }) : User.displayAvatarURL({ dynamic: true })
+			name: `${User.tag}'s Balance`,
+			iconURL: User.displayAvatarURL({ dynamic: true })
 		})
 		.addField(`${bot.config.emojis.coin} Wallet`, `⏣${bot.functions.formatNumber(UserData.money.balance)}`, true)
 		.addField(`${bot.config.emojis.bank} Bank`, ` ⏣${bot.functions.formatNumber(UserData.money.bank)} / ${bot.functions.formatNumber(UserData.money.bankMax)}`, true)
