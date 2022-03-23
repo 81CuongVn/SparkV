@@ -12,8 +12,8 @@ module.exports = class Command {
 			},
 			sett,
 			{
-				perms: ["SEND_MESSAGES"].concat(sett.perms || []),
-				bot_perms: ["EMBED_LINKS"].concat(sett.bot_perms || []),
+				perms: ["SEND_MESSAGES"].concat(sett?.perms || []),
+				bot_perms: ["EMBED_LINKS"].concat(sett?.bot_perms || []),
 			},
 		);
 	}
