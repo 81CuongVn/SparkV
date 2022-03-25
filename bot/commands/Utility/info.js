@@ -28,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 			DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>",
 		};
 
-		let user = data.options.getUser("user");
+		let user = data.options.getUser("user") || message.user;
 		const member = message.channel.guild.members.cache.get(user.id);
 
 		const userdata = await bot.database.getUser(user.id);
