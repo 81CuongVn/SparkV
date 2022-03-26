@@ -48,6 +48,7 @@ const Schema = new mongoose.Schema({
 	} },
 	tickets: {
 		category: { type: String, default: null },
+		roles: { type: Array, default: [] },
 	}
 });
 

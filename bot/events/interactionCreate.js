@@ -135,28 +135,35 @@ module.exports = {
 						return interaction.followUp(`${bot.config.emojis.error} | I couldn't create the ticket category. Please make sure I have the correct permissions.`);
 					}
 
+					const permissionOverwrites = [
+						{
+							id: bot.user.id,
+							allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+						},
+						{
+							id: interaction.member.id,
+							allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+						},
+						{
+							id: interaction.guild.roles.everyone,
+							deny: ["VIEW_CHANNEL"]
+						},
+					];
+
+					if (guild?.tickets?.roles.length > 0) {
+						guild.tickets.roles.forEach(role => {
+							permissionOverwrites.push({
+								id: role,
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+							});
+						});
+					}
+
 					const ticketChannel = await interaction.guild.channels.create(`ticket-${allChannels.length}`, {
 						type: "text",
 						topic: `${interaction.member.user.tag}'s Ticket | ${interaction.member.id}`,
 						parent: category.id,
-						permissionOverwrites: [
-							{
-								id: bot.user.id,
-								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
-							},
-							{
-								id: interaction.member.id,
-								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-							},
-							{
-								id: interaction.guild.roles.everyone,
-								deny: ["VIEW_CHANNEL"]
-							},
-							// {
-							// 	id: "",
-							// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-							// },
-						]
+						permissionOverwrites
 					});
 
 					const supportEmbed = new Discord.MessageEmbed()

@@ -16,6 +16,18 @@ const cFilter = async m => {
 	}
 };
 
+const rFilter = async m => {
+	if (m.author.id === m.client.user.id) return false;
+
+	if (m.mentions.roles.first()) {
+		return true;
+	} else {
+		await m.replyT("That's not a role. Try again.");
+
+		return false;
+	}
+};
+
 const numFilter = async m => {
 	if (m.author.id === m.client.user.id) return false;
 
@@ -215,6 +227,26 @@ async function execute(bot, message, args, command, data) {
 									label: await message.translate("German"),
 									emoji: "🇩🇪",
 									value: "de"
+								},
+								{
+									label: await message.translate("Italian"),
+									emoji: "🇮🇹",
+									value: "it"
+								},
+								{
+									label: await message.translate("Dutch"),
+									emoji: "🇳🇱",
+									value: "nl"
+								},
+								{
+									label: await message.translate("Portuguese"),
+									emoji: "🇵🇹",
+									value: "pt"
+								},
+								{
+									label: await message.translate("Russian"),
+									emoji: "🇷🇺",
+									value: "ru"
 								}
 							],
 							color: "BLUE",
@@ -281,7 +313,109 @@ async function execute(bot, message, args, command, data) {
 					},
 				},
 			],
-			stateDisabled: true,
+			stateDisabled: true
+		},
+		{
+			name: await message.translate("Tickets"),
+			emoji: bot.config.emojis.ticket,
+			emojiID: "955241708935864320",
+			description: "Allow users to tap a button to get support. To use this feature, **you must have a ticket panel set up (/panel tickets).**",
+			buttons: [
+				{
+					name: await message.translate("Category"),
+					required: true,
+					data: new MessageButton()
+						.setLabel(await message.translate("Category"))
+						.setEmoji(bot.config.emojis.channel)
+						.setCustomId("category")
+						.setStyle("SECONDARY"),
+					getData: () => {
+						if (data.guild?.tickets?.category) {
+							return `<#${data.guild.plugins.tickets.category}>`;
+						} else {
+							return "None";
+						}
+					},
+					setData: async () => {
+						await setNewData(message, {
+							title: await message.translate(`${bot.config.emojis.config} | Tickets Category Setup`),
+							description: await message.translate("Please send a category ID to setup the starboard in. **You can automaticly skip this step if you run the `/panel tickets` command. **You have 60 seconds to send a category ID."),
+							color: "BLUE",
+							time: 60,
+							filter: async m => {
+								if (m.author.id === m.client.user.id) return false;
+
+								if (!m?.content) {
+									m.replyT("Please send a valid category ID to setup the tickets system in.");
+									return false;
+								}
+
+								if (m?.content.length > 24) {
+									m.replyT("The category ID must be 24 characters or less.");
+									return false;
+								}
+
+								if (!m.guild.channels.cache.has(m.content)) {
+									m.replyT("That is not a valid channel ID!");
+
+									return false;
+								}
+
+								return true;
+							},
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(await message.translate(`${bot.config.emojis.config} | Tickets Channel Setup`))
+									.setDescription(await message.translate(`Successfully setup tickets channel to ${collected.content}.`));
+
+								data.guild.tickets.category = collected.content;
+								data.guild.markModified("tickets.category");
+
+								await data.guild.save();
+							},
+						});
+					},
+				},
+				{
+					name: "Roles",
+					required: true,
+					data: new MessageButton()
+						.setLabel("Support Roles")
+						.setEmoji(bot.config.emojis.special)
+						.setCustomId("roles")
+						.setStyle("SECONDARY"),
+					getData: () => {
+						if (data.guild?.tickets?.roles) {
+							return data.guild?.tickets?.roles.map(r => `<@&${r}>`).join(", ");
+						} else {
+							return "None";
+						}
+					},
+					setData: async () => {
+						await setNewData(message, {
+							title: await message.translate(`${bot.config.emojis.config} | Support Roles Setup`),
+							description: await message.translate("Please mention support role(s). Support roles are roles that will grant users access to see tickets. You have 60 seconds to send a channel."),
+							color: "BLUE",
+							time: 60,
+							filter: rFilter,
+							handleData: async (collected, requestMsg) => {
+								const roles = [];
+								collected.mentions.roles.forEach(r => roles.push(r.id));
+
+								requestMsg
+									.setTitle(`${bot.config.emojis.config} | Support Roles Setup`)
+									.setDescription(`Successfully setup support roles to ${collected.content}.`);
+
+								data.guild.tickets.roles = roles;
+								data.guild.markModified("tickets.roles");
+
+								await data.guild.save();
+							},
+						});
+					},
+				},
+			],
+			stateDisabled: true
 		},
 		{
 			name: "Starboard",
@@ -628,13 +762,15 @@ async function execute(bot, message, args, command, data) {
 
 	const collector = botMessage.createMessageComponentCollector({
 		filter: async interaction => {
-			if (!interaction.deferred) interaction.deferUpdate();
-
-			if (interaction.user.id !== (message.user ? message.user : message.author).id) {
-				await message.replyT({
-					content: `Only ${message.author} can edit these settings!`,
+			if (!interaction.deferred && interaction.isButton()) interaction.deferUpdate();
+			if (!interaction.deferred) {
+				interaction.deferReply({
 					ephemeral: true
 				});
+			}
+
+			if (interaction.user.id !== message.user.id) {
+				await interaction.replyT(`Only ${message.user} can edit these settings!`);
 
 				return false;
 			}
@@ -712,9 +848,7 @@ async function execute(bot, message, args, command, data) {
 					embeds: [ErrorEmbed],
 					ephemeral: true
 				});
-			} catch (err) {
-
-			}
+			} catch (err) {}
 		}
 	});
 
