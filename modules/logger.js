@@ -2,39 +2,31 @@ const Discord = require("discord.js");
 const { withScope, captureException, Severity } = require("@sentry/node");
 const chalk = require("chalk");
 
-const config = require("../globalconfig.json");
-
 module.exports = async (content, type) => {
 	if (!content) return;
 
 	if (type === "log") {
-		return console.log(`📋 | ${content}`);
+		return console.log(`[Info] ${content}`);
 	} else if (type === "warn") {
-		await withScope(scope => {
-			scope.setLevel(Severity.Warning);
-		});
-
 		if (process.argv.includes("--dev") === false) {
 			try {
+				await withScope(scope => scope.setLevel(Severity.Warning));
 				await captureException(content);
 			} catch (err) {
-				console.log(`⛔ | Failed to capture exception warning (${content}) to Sentry. ${err}`);
+				console.log(`[Sentry Error] | Failed to capture exception warning (${content}) to Sentry. ${err}`);
 			}
 		}
 
-		return console.log(`⚠ | ${chalk.yellow(content)}`);
+		return console.log(chalk.yellow(`[Warning] ${content}`));
 	} else if (type === "debug") {
-		return console.log(`🐛 | ${chalk.green(content)}`);
+		return console.log(chalk.green(`[Debug] ${content}`));
 	} else if (type === "error") {
-		await withScope(scope => {
-			scope.setLevel(Severity.Error);
-		});
-
 		if (process.argv.includes("--dev") === false) {
 			try {
+				await withScope(scope => scope.setLevel(Severity.Error));
 				await captureException(content);
 			} catch (err) {
-				console.log(`⛔ | Failed to capture exception (${content}) to Sentry. ${err}`);
+				console.log(`[ERROR] Failed to capture exception (${content}) to Sentry. ${err}`);
 			}
 		}
 
@@ -56,11 +48,11 @@ module.exports = async (content, type) => {
 			}
 		}
 
-		return console.log(`⛔ | ${chalk.red(content)}`);
+		return console.log(`[Error] ${chalk.red(content)}`);
 	} else if (type === "bot") {
-		return console.log(`🤖 | ${content}`);
+		return console.log(`[App] | ${content}`);
 	} else if (type === "web") {
-		return console.log(`🖼 | ${content}`);
+		return console.log(`[Web] | ${content}`);
 	} else {
 		return console.log(content);
 	}
