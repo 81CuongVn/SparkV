@@ -762,24 +762,20 @@ async function execute(bot, message, args, command, data) {
 
 	const collector = botMessage.createMessageComponentCollector({
 		filter: async interaction => {
-			if (!interaction.deferred && interaction.isButton()) interaction.deferUpdate();
-			if (!interaction.deferred) {
-				interaction.deferReply({
+			if (interaction.user.id !== message.user.id) {
+				await interaction.reply({
+					content: `Only ${message.user} can edit these settings!`,
 					ephemeral: true
 				});
 			}
 
-			if (interaction.user.id !== message.user.id) {
-				await interaction.replyT(`Only ${message.user} can edit these settings!`);
-
-				return false;
-			}
-
-			return true;
+			return interaction.user.id === message.user.id;
 		}, time: 300 * 1000
 	});
 
 	collector.on("collect", async interaction => {
+		if (!interaction.deferred) interaction.deferUpdate();
+
 		try {
 			buttons = [];
 
