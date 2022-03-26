@@ -9,7 +9,7 @@ async function execute(bot, message, args, command, data) {
 
 	if (state === "create") {
 		const channel = data.options.getChannel("channel");
-		const duration = data.options.getString("time");
+		const duration = ms(data.options.getString("time"));
 		const winnerCount = data.options.getNumber("winners");
 		const prize = data.options.getString("prize");
 
@@ -31,7 +31,7 @@ async function execute(bot, message, args, command, data) {
 				dropMessage: `🎉 Be the first to react with 🎉 to enter! 🎉`,
 				inviteToParticipate: `🎉 React to enter! 🎉`,
 				winMessage: `⚡ Congrats, {winners}! You won just **{this.prize}**!\n{this.messageURL} ⚡`,
-				noWinner: `${bot.config.emojis.error} |  Couldn't determine a winner. Please do ^Reroll.`,
+				noWinner: `${bot.config.emojis.error} |  Nobody entered the giveaway!`,
 				hostedBy: `❔ Giveaway hosted by {this.hostedBy}!`,
 				embedFooter: `SparkV - Making your Server Better`,
 				winners: `${this.winnerCount} winner(s)`,
