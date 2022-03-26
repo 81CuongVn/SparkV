@@ -1,6 +1,44 @@
 // KingCh1ll //
 // 4/22/2021 //
 
+async function loader(callback) {
+	const loading = ["\\", "|", "/", "-"];
+	let num = 0;
+
+	const loader = setInterval(async () => {
+		process.stdout.write(`\r${loading[num++]} [App] Loading...`);
+		num %= loading.length;
+	}, 250);
+
+	setTimeout(async () => {
+		clearInterval(loader);
+		process.stdout.write(`\r${loading[3]} [App] Loading...`);
+		callback();
+	}, 5000);
+}
+
+loader(async () => {
+	console.log(require("chalk").grey("​"));
+	console.log(figlet.textSync("SparkV"));
+
+	if (process.argv.includes("--dev") === true) {
+		console.log(require("chalk").grey("----------------------------------------"));
+		Logger("[DEV] - Developer mode enabled. Some features may not work right on this mode.");
+		console.log(require("chalk").grey("----------------------------------------"));
+	}
+
+	checkForUpdate();
+
+	if (process.version.slice(1, 3) - 0 < 16) {
+		console.log(require("chalk").grey("----------------------------------------"));
+		Logger("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
+		console.log(require("chalk").grey("----------------------------------------"));
+		return;
+	}
+
+	start();
+});
+
 // Libarys //
 const fs = require("fs");
 const path = require("path");
@@ -124,23 +162,3 @@ async function start() {
 		await require("./bot/bot");
 	}
 }
-
-// Start Bot //
-console.log(figlet.textSync("SparkV"));
-
-if (process.argv.includes("--dev") === true) {
-	console.log(require("chalk").grey("----------------------------------------"));
-	Logger("DEV - ENABLED -> Some features may not work on this mode.");
-	console.log(require("chalk").grey("----------------------------------------"));
-}
-
-checkForUpdate();
-
-if (process.version.slice(1, 3) - 0 < 16) {
-	console.log(require("chalk").grey("----------------------------------------"));
-	Logger("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
-	console.log(require("chalk").grey("----------------------------------------"));
-	return;
-}
-
-start();

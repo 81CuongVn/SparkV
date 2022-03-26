@@ -28,23 +28,23 @@ module.exports = async (content, type) => {
 			} catch (err) {
 				console.log(`[ERROR] Failed to capture exception (${content}) to Sentry. ${err}`);
 			}
-		}
 
-		if (global?.bot?.isReady() === true) {
-			const errorChannel = await global.bot.channels.fetch("948686231892545547");
-
-			if (errorChannel) {
-				const ErrorEmbed = new Discord.MessageEmbed()
-					.setTitle("Uh oh!")
-					.setDescription(`**An error occured!**`)
-					.addField("**Error**", `\`\`\`${content}\`\`\``)
-					.setColor("RED");
-
-				if (content?.stack && process.argv.includes("--dev") !== true) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
-
-				await errorChannel.send({
-					embeds: [ErrorEmbed],
-				});
+			if (global?.bot?.isReady() === true) {
+				const errorChannel = await global.bot.channels.fetch("948686231892545547");
+	
+				if (errorChannel) {
+					const ErrorEmbed = new Discord.MessageEmbed()
+						.setTitle("Uh oh!")
+						.setDescription(`**An error occured!**`)
+						.addField("**Error**", `\`\`\`${content}\`\`\``)
+						.setColor("RED");
+	
+					if (content?.stack) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
+	
+					await errorChannel.send({
+						embeds: [ErrorEmbed],
+					});
+				}
 			}
 		}
 
