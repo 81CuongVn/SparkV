@@ -190,6 +190,7 @@ async function execute(bot, message, args, command, data) {
 	const settings = [
 		{
 			name: await message.translate("Basic"),
+			id: "basic",
 			emoji: bot.config.emojis.slash,
 			emojiID: "939972618814128159",
 			description: await message.translate("Basic settings for the bot (prefix, language, chatbot, etc)."),
@@ -317,6 +318,7 @@ async function execute(bot, message, args, command, data) {
 		},
 		{
 			name: await message.translate("Tickets"),
+			id: "tickets",
 			emoji: bot.config.emojis.ticket,
 			emojiID: "955241708935864320",
 			description: "Allow users to tap a button to get support. To use this feature, **you must have a ticket panel set up (/panel tickets).**",
@@ -419,6 +421,7 @@ async function execute(bot, message, args, command, data) {
 		},
 		{
 			name: "Starboard",
+			id: "starboard",
 			emoji: bot.config.emojis.star,
 			emojiID: "948013324216434718",
 			description: "The channel to setup the starboard in. Leave blank to disable.",
@@ -556,6 +559,7 @@ async function execute(bot, message, args, command, data) {
 		},
 		{
 			name: "Logging",
+			id: "logging",
 			emoji: bot.config.emojis.stats,
 			emojiID: "947990408657518652",
 			description: "Log actions in your server!",
@@ -721,7 +725,7 @@ async function execute(bot, message, args, command, data) {
 			const SettingButton = new MessageButton()
 				.setLabel(setting.name)
 				.setEmoji(setting.emoji)
-				.setCustomId(setting.name)
+				.setCustomId(setting.id)
 				.setStyle("PRIMARY")
 				.setDisabled(setting?.disabled ? setting.disabled : false);
 
@@ -776,6 +780,8 @@ async function execute(bot, message, args, command, data) {
 	collector.on("collect", async interaction => {
 		if (!interaction.deferred) interaction.deferUpdate();
 
+		console.log(interaction.customId)
+
 		try {
 			buttons = [];
 
@@ -794,13 +800,11 @@ async function execute(bot, message, args, command, data) {
 					components: buttons,
 					ephemeral: true
 				});
-			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.name.toLowerCase() === "toggle")) {
+			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.data.customId.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
 
 				if (newState === "true") {
 					await curSetting.setState("enable");
-
-					if (curSetting?.enabledText) message.replyT(curSetting.enabledText);
 
 					curSetting.buttons.forEach(async button => {
 						if (button?.required === true) {
@@ -809,21 +813,16 @@ async function execute(bot, message, args, command, data) {
 					});
 				} else {
 					await curSetting.setState("disable");
-
-					if (curSetting?.disabledText) message.replyT(curSetting.disabledText);
 				}
 
 				refreshSetting(curSetting);
-			} else if (curSetting && curSetting?.buttons.find(button => button.name.toLowerCase() === interaction.customId.toLowerCase())) {
-				const button = curSetting.buttons.find(button => button.name.toLowerCase() === interaction.customId.toLowerCase());
+			} else if (curSetting && curSetting?.buttons.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase())) {
+				const button = curSetting.buttons.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase());
 
 				await button.setData();
-
-				if (button.enabledText) message.replyT(button.enabledText);
-
 				refreshSetting(curSetting);
 			} else {
-				curSetting = settings.find(setting => setting.name.toLowerCase() === interaction.customId.toLowerCase());
+				curSetting = settings.find(setting => setting.id.toLowerCase() === interaction.customId.toLowerCase());
 
 				if (curSetting) refreshSetting(curSetting);
 			}
