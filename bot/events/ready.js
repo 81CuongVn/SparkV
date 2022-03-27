@@ -5,11 +5,18 @@ const { Client } = require("statcord.js");
 module.exports = {
 	once: true,
 	async execute(bot) {
-		// Start Loading
 		bot.user.setPresence({
-			status: "dnd",
-			activities: [{ name: "Loading SparkV (100%)" }],
+			status: "online",
+			activities: [
+				{
+					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
+					type: "PLAYING",
+				},
+			],
 		});
+
+		bot.logger(`[App] Connected to Discord as ${bot.user.tag}.`);
+		bot.logger(`[App] Playing with ${bot.functions.formatNumber(await bot.functions.GetServerCount())} guilds and ${bot.functions.formatNumber(await bot.functions.GetUserCount())}.`);
 
 		// Bot Lists //
 		if (process.argv.includes("--dev") === false) {
@@ -22,38 +29,31 @@ module.exports = {
 			if (process.env.DBGGKEY) apiKeys.discordbotsgg = process.env.DBGGKEY;
 			if (process.env.DBL3KEY) apiKeys.DiscordBotlistEU = process.env.DBL3KEY;
 
-			const poster = new dbots.Poster({
-				client: bot,
-				apiKeys,
-				clientLibrary: "discord.js",
-				serverCount: async () => await bot.functions.GetServerCount(),
-				userCount: async () => await bot.functions.GetUserCount(),
-			});
+			if (apiKeys.length > 0) {
+				const poster = new dbots.Poster({
+					client: bot,
+					apiKeys,
+					clientLibrary: "discord.js",
+					serverCount: async () => await bot.functions.GetServerCount(),
+					userCount: async () => await bot.functions.GetUserCount(),
+				});
 
-			// Start Posting to Bot Lists
-			poster.post();
-			poster.startInterval();
+				// Start Posting to Bot Lists
+				poster.post();
+				poster.startInterval();
+
+				bot.logger(`[App] Botlist statistics posting started.`);
+			}
 		}
 
 		// Bot Stats
 		if (bot?.StatClient) {
 			bot.StatClient.post();
 			bot.StatClient.autopost();
+
+			bot.logger("[Statcord] Statcord ready, now posting statistics.");
 		} else {
-			bot.logger("WARNING: Statcord is not installed! Statitics will not be posted.", "warning");
+			bot.logger("[Statcord] WARNING: Statcord is not installed! Statitics will not be posted.", "warning");
 		}
-
-		console.log("-------- SparkV --------");
-		bot.user.setPresence({
-			status: "online",
-			activities: [
-				{
-					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
-					type: "PLAYING",
-				},
-			],
-		});
-
-		bot.logger(`[READY] Logged into Discord as ${bot.user.tag} (${bot.user.id})`);
 	},
 };

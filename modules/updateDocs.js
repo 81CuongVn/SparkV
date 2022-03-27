@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const logger = require("./logger");
+
 module.exports = {
 	/**
    * Update the docs
@@ -67,7 +69,7 @@ module.exports = {
 						info.push([
 							`**${cmd.settings.name || "Command name invalid."}**`,
 							cmd.settings.description || "No description for this command",
-							cmd.settings.usage.replaceAll("<", "{").replaceAll(">", "}") || "",
+							cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
 							`${Math.ceil(cmd.settings.cooldown / 1000)} seconds`,
 						]);
 					});
@@ -76,6 +78,5 @@ module.exports = {
 			});
 
 		fs.writeFileSync(path.join(`${MainDir}/docs/commands.md`), baseText);
-		console.log("📋 | Successfully updated commands!");
 	},
 };
