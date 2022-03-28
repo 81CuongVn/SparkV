@@ -34,12 +34,7 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 			.setTitle(`Rule #${RuleNumber} - ${RuleTitle}`)
 			.setDescription(`\`\`\`${RuleDescription}\`\`\``)
 			.setColor(bot.config.embed.color)
-			.setThumbnail(
-				Message.author.displayAvatarURL({
-					dynamic: true,
-					format: "gif",
-				}),
-			);
+			.setThumbnail(Message.user.displayAvatarURL({ dynamic: true }));
 
 		pages.push(NewEmbed);
 	};
