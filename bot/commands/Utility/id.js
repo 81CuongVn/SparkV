@@ -7,13 +7,33 @@ async function execute(bot, message, args, command, data) {
 	const state = message.options.getSubcommand();
 
 	if (state === "user") {
-		const user = data.options.getMember("user") || message.user;
+		const user = data.options.getUser("user") || message.user;
 
-		return await message.editT(`The id of **${user.user ? user.user.tag : user.tag}** is **${user.user ? user.user.id : user.id}**.`);
+		return await message.editT(`The id of **${user.tag}** is **${user.id}**.`);
 	} else if (state === "server") {
-		const server = data.options.getString("server");
+		let server = data.options.getString("server");
 
-		return await message.editT(`The id of **${user.user ? user.user.tag : user.tag}** is **${user.user ? user.user.id : user.id}**.`);
+		if (server) {
+			invite = invite.match(/(?:https?:\/\/)?(?:\w+\.)?discord(?:(?:app)?\.com\/invite|\.gg)\/([A-Za-z0-9-]+)/);
+
+			let fixedInvite;
+			if (!invite?.[0]) fixedInvite = invite;
+			else fixedInvite = invite[1];
+
+			if (!fixedInvite) return await message.replyT("Please enter a valid invite.");
+
+			const serverinfo = await axios
+				.get(`https://discord.com/api/v8/invites/${fixedInvite}?with_counts=1&with_expiration=1`)
+				.then(res => res.data);
+
+			if (serverinfo.code === 400) return message.replyT("Invalid invite.");
+
+			server = serverinfo?.guild;
+		} else {
+			server = message?.guild;
+		}
+
+		return await message.editT(`The id of **${server.name}** is **${server.id}**.`);
 	} else if (state === "role") {
 		const role = data.options.getRole("role");
 

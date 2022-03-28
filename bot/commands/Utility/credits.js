@@ -21,7 +21,7 @@ module.exports = new cmd(
 			.setTitle(await message.translate("Credits"))
 			.setDescription(await message.translate(`Here's the list of people who've helped SparkV on his path to success!`))
 			.setColor(bot.config.embed.color)
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
+			.setThumbnail(message.user.displayAvatarURL({ dynamic: true, format: "gif" }))
 			.addFields(Credits);
 
 		return await message.replyT({

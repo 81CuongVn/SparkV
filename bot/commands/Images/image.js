@@ -280,7 +280,7 @@ module.exports = new cmd({
 
 			return await canvacord.Canvas.bed(user.displayAvatarURL({ format: "png" }), user2.displayAvatarURL({ format: "png" }));
 		} else if (state === "changemymind") {
-			const text = data.options.getUser("text");
+			const text = data.options.getString("text");
 
 			return await canvacord.Canvas.changemymind(text);
 		} else if (state === "invert") {
@@ -288,12 +288,12 @@ module.exports = new cmd({
 
 			return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
 		} else if (state === "ohno") {
-			const user = data.options.getUser("text");
+			const user = data.options.getString("text");
 
 			return await canvacord.Canvas.ohno(text);
 		} else if (state === "opinion") {
 			const user = data.options.getUser("user");
-			const text = data.options.getUser("text");
+			const text = data.options.getString("text");
 
 			return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
 		} else if (state === "rainbow") {
