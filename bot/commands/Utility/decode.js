@@ -2,16 +2,16 @@ const Discord = require("discord.js");
 
 const cmd = require("../../templates/command");
 
-async function execute(bot, message, args) {
+async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
 	const string = data.options.getString("text");
 
 	if (type === "base64") {
-		await message.replyT(Buffer.from(string.join(" "), "base64").toString());
+		await message.replyT(Buffer.from(string, "base64").toString());
 	} else if (type === "hex") {
-		await message.replyT(Buffer.from(string.join(" "), "hex").toString("utf8"));
+		await message.replyT(Buffer.from(string, "hex").toString("utf8"));
 	} else if (type === "url") {
-		await message.replyT(decodeURIComponent(string.join(" ")));
+		await message.replyT(decodeURIComponent(string));
 	}
 }
 

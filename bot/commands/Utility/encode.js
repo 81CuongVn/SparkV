@@ -7,14 +7,14 @@ async function execute(bot, message, args, command, data) {
 	const string = data.options.getString("text");
 
 	if (type === "base64") {
-		await message.replyT(Buffer.from(string.join(" ")).toString("base64"));
+		await message.replyT(Buffer.from(string).toString("base64"));
 	} else if (type === "hex") {
-		const h = Buffer.from(string.join(" ")).toString("base64");
+		const h = Buffer.from(string).toString("base64");
 		const e = Buffer.from(h, "base64");
 
 		await message.replyT(e.toString("hex"));
 	} else if (type === "url") {
-		await message.replyT(encodeURIComponent(string.join(" ")));
+		await message.replyT(encodeURIComponent(string));
 	}
 }
 
