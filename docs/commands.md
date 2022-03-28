@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **95 commands**!
+SparkV's Command List! SparkV contains more than **96 commands**!
 
 ## Economy
 
@@ -60,7 +60,7 @@ SparkV's Command List! SparkV contains more than **95 commands**!
 | ------------------ | ------------------------------- | -------------------------- | --------- |
 | **color**          | No description for this command | {command}                  | 2 seconds |
 | **image**          | Generate images with ease.      | (image type)               | 3 seconds |
-| **youtubecomment** | YouTube comment lol.            | (user default: you) {text} | 3 seconds |
+| **youtubecomment** | YouTube comment lol.            | (user default: you) (text) | 3 seconds |
 
 ## Moderation
 
@@ -70,12 +70,12 @@ SparkV's Command List! SparkV contains more than **95 commands**!
 | **clear**    | I'll delete messages for you!                                                                       | (# of messages) (Optional: Type (all, user only, pinned only)) | 2 seconds |
 | **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                     | (user) (reason)                                                | 2 seconds |
 | **lock**     | I'll lock the current channel.                                                                      |                                                                | 2 seconds |
-| **lockdown** | I'll put the server in lockdown, or disable a previous lockdown.                                    | {on | off}                                                     | 2 seconds |
+| **lockdown** | I'll put the server in lockdown, or disable a previous lockdown.                                    | (on | off)                                                     | 2 seconds |
 | **nickname** | I'll change a user's nickname to your choice.                                                       | (user) (nickname)                                              | 2 seconds |
-| **slowmode** | Applies a slowmode to a channel.                                                                    | (user) {reason}                                                | 2 seconds |
+| **slowmode** | Applies a slowmode to a channel.                                                                    | (user) (reason)                                                | 2 seconds |
 | **timeout**  | Timeout a user.                                                                                     | (user) (optional: reason)                                      | 2 seconds |
 | **unlock**   | I'll unlock the current channel.                                                                    |                                                                | 2 seconds |
-| **warn**     | I will warn a user                                                                                  | (user) {optional reason}                                       | 2 seconds |
+| **warn**     | I will warn a user                                                                                  | (user) (optional reason)                                       | 2 seconds |
 | **warnings** | I'll display a user's warnings.                                                                     | (user)                                                         | 2 seconds |
 
 ## Music
@@ -84,17 +84,17 @@ SparkV's Command List! SparkV contains more than **95 commands**!
 | -------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
 | **filter**     | Change what the song sounds like! Requires administrator to prevent abuse. | (filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off) | 5 seconds |
 | **join**       | Joins your voice channel.                                                  |                                                             | 5 seconds |
-| **jump**       | I will jump to a certain song in the queue.                                | {number}                                                    | 5 seconds |
+| **jump**       | I will jump to a certain song in the queue.                                | (number)                                                    | 5 seconds |
 | **leave**      | Joins your voice channel.                                                  |                                                             | 5 seconds |
 | **lyrics**     | Get any song's lyrics!                                                     | (song title or URL)                                         | 2 seconds |
 | **nowplaying** | I will display the currently playing song.                                 |                                                             | 5 seconds |
 | **pause**      | Pauses the current song playing.                                           |                                                             | 5 seconds |
-| **play**       | Plays a song with the given name or URL.                                   | {song title or URL}                                         | 5 seconds |
-| **previous**   | Change the current track's position.                                       | {number}                                                    | 5 seconds |
-| **queue**      | Shows the songs in queue.                                                  | {number}                                                    | 5 seconds |
-| **repeat**     | Replays the currently playing song.                                        | {song or queue: leave empty to deactivate}                  | 5 seconds |
+| **play**       | Plays a song with the given name or URL.                                   | (song title or URL)                                         | 5 seconds |
+| **previous**   | Change the current track's position.                                       | (number)                                                    | 5 seconds |
+| **queue**      | Shows the songs in queue.                                                  | (number)                                                    | 5 seconds |
+| **repeat**     | Replays the currently playing song.                                        | (song or queue: leave empty to deactivate)                  | 5 seconds |
 | **resume**     | Resume playing the current song.                                           |                                                             | 5 seconds |
-| **seek**       | Change the current track's position.                                       | {number}                                                    | 5 seconds |
+| **seek**       | Change the current track's position.                                       | (number)                                                    | 5 seconds |
 | **shuffle**    | Shuffles the queue.                                                        |                                                             | 5 seconds |
 | **skip**       | Skip to the next song in the queue.                                        |                                                             | 5 seconds |
 | **stop**       | Disconnects me from the voice channel and removes all songs in queue.      |                                                             | 5 seconds |
