@@ -28,10 +28,12 @@ module.exports = class ModCommand {
 				})
 				.setColor("GREEN");
 
-			await ImageLoading.edit({
-				embeds: [ImageEmbed],
-				files: [Image]
-			});
+			try {
+				await ImageLoading.edit({
+					embeds: [ImageEmbed],
+					files: [Image]
+				});
+			} catch (err) { }
 		} catch (err) {
 			bot.logger(err, "error");
 
@@ -40,9 +42,11 @@ module.exports = class ModCommand {
 				.setDescription("An error occured while creating the image. Please try again later!")
 				.setColor("RED");
 
-			await ImageLoading.edit({
-				embeds: [ImageEmbed]
-			});
+			try {
+				await ImageLoading?.edit({
+					embeds: [ImageEmbed]
+				});
+			} catch (err) { }
 		}
 	}
 };
