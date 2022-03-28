@@ -76,7 +76,7 @@ async function execute(bot, message, args, command, data) {
 				iconURL: (user.user ? user.user : user).displayAvatarURL({ dynamic: true }),
 			})
 			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
-			.addField(`${statuses[member?.presence?.status || "offline"]} Presence`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : member?.presence?.status ? capFirstLetter(member?.presence?.status) || "None"}\`\`\``, true)
+			.addField(`${statuses[member?.presence?.status || "offline"]} Presence`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? capFirstLetter(member?.presence?.status) : "None")}\`\`\``, true)
 			.addField(`${bot.config.emojis.clock} Join Position`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
 			.setFooter({
 				text: bot.config.embed.footer,
