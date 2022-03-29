@@ -7,6 +7,7 @@ async function execute(bot, message, args, command, data) {
 	let website = data.options.getString("website");
 
 	if (!website.includes("https://")) website = `https://${website}/`;
+	if (website.length > 200) return await message.replyT(`${bot.config.emojis.error} | Please keep the text under 100 characters.`);
 
 	const ImageLoading = await message.replyT(`${bot.config.emojis.stats} | Screenshoting site (this could take a few minutes)...`);
 
