@@ -10,7 +10,7 @@ module.exports = new cmd(
 		if (user) {
 			if (user.bot) return await message.editT("You cannot check the inventory of a bot.");
 
-			userData = await bot.database.getuser(user.id);
+			userData = await bot.database.getUser(user.id);
 		} else {
 			user = message.user;
 			userData = data.user;
