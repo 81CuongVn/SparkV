@@ -13,13 +13,8 @@ module.exports = class ModCommand {
 
 		const perms = message.channel.permissionsFor(message.guild.me);
 
-	// 	if (
-	// 		!perms.has(Permissions.FLAGS.SPEAK) ||
-    //   !perms.has(Permissions.FLAGS.CONNECT) ||
-    //   !perms.has(Permissions.FLAGS.USE_VAD)
-	// 	) {
-	// 		return await message.replyT("Make sure I have speak, connect and use voice activity perms.");
-	// 	}
+		// eslint-disable-next-line capitalized-comments
+		// if (!perms.has(Permissions.FLAGS.SPEAK) || !perms.has(Permissions.FLAGS.CONNECT) || !perms.has(Permissions.FLAGS.USE_VAD)) return await message.replyT("Make sure I have speak, connect and use voice activity perms.");
 
 		if (this.execute) {
 			return this.execute(bot, message, args, command, data);
