@@ -213,21 +213,15 @@ module.exports = class bot extends Client {
 
 		const currentCmds = await this.application.commands.fetch(process.argv.includes("--dev") === true && { guildId: "763803059876397056" });
 
-		if (process.argv.includes("--dev") === true) this.logger(`Loading commands [${currentCmds.size}]...`, "debug");
-
 		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
 		for (const newCmd of newCmds) {
 			await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
 		}
 
-		if (process.argv.includes("--dev") === true) this.logger(`Created ${newCmds.length} commands.`, "debug");
-
 		const removedCmds = currentCmds.filter(cmd => !slashCommands.some(c => c.name === cmd.name)).toJSON();
 		for (const removedCmd of removedCmds) {
 			await removedCmd.delete();
 		}
-
-		if (process.argv.includes("--dev") === true) this.logger(`Removed ${removedCmds.length} commands.`, "debug");
 
 		const updatedCmds = slashCommands.filter(cmd => slashCommands.some(c => c.name === cmd.name));
 		let updatedCount = 0;
@@ -246,6 +240,6 @@ module.exports = class bot extends Client {
 			}
 		}
 
-		if (process.argv.includes("--dev") === true) this.logger(`Updated ${updatedCount} commands.`, "debug");
+		// this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
 	}
 };
