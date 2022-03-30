@@ -32,6 +32,7 @@ async function execute(bot, message, args, command, data) {
 
 	if (user) messages = messages.filter(m => m.author.id === user.user.id);
 	if (type === "pinned") messages = messages.filter(m => !m.pinned);
+	if (data.options.getString("content")) messages = messages.filter(m => m.content.toLowerCase().includes(data.options.getString("content").toLowerCase()));
 
 	if (messages.length > number) messages.length = parseInt(number, 10);
 
@@ -80,6 +81,11 @@ module.exports = new cmd(execute, {
 			type: 6,
 			name: "user",
 			description: "The user to delete the messages of.",
+		},
+		{
+			type: 3,
+			name: "content",
+			description: "Only delete messages that contain this content.",
 		}
 	]
 });
