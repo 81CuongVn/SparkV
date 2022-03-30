@@ -1,6 +1,6 @@
 {
   "name": "spark.v",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "...",
   "main": "index.js",
   "private": true,
@@ -18,7 +18,7 @@
   "author": "KingCh1ll",
   "license": "MIT",
   "engines": {
-    "node": "16.13.x",
+    "node": "16.14.x",
     "npm": "8.x"
   },
   "dependencies": {
@@ -27,7 +27,7 @@
     "@distube/soundcloud": "^1.1.0",
     "@distube/spotify": "^1.2.1",
     "@distube/yt-dlp": "^1.0.2",
-    "@sentry/node": "^6.18.2",
+    "@sentry/node": "^6.19.2",
     "@vitalets/google-translate-api": "^8.0.0",
     "axios": "^0.26.1",
     "canvacord": "^5.2.3",
@@ -36,19 +36,19 @@
     "dbots": "^11.0.0",
     "discord-giveaways": "^5.1.1",
     "discord-tictactoe": "^3.0.0",
-    "discord-together": "^1.3.25",
+    "discord-together": "^1.3.3",
     "discord-xp": "^1.1.16",
     "discord.js": "^13.6.0",
     "discord.js-akinator": "^3.4.2",
-    "distube": "^3.3.2",
+    "distube": "^3.3.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "ffmpeg-static": "^5.0.0",
     "figlet": "^1.5.2",
     "genius-lyrics": "^4.3.6",
-    "libsodium-wrappers": "^0.7.9",
+    "libsodium-wrappers": "^0.7.10",
     "markdown-table": "^2.0.0",
-    "mongoose": "^6.2.7",
+    "mongoose": "^6.2.8",
     "ms": "^2.1.3",
     "os": "^0.1.2",
     "random-words": "^1.1.2",
@@ -57,8 +57,8 @@
     "to-zalgo": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^8.11.0",
+    "eslint": "^8.12.0",
     "eslint-plugin-import": "^2.25.4",
-    "prettier": "2.6.0"
+    "prettier": "2.6.1"
   }
 }
