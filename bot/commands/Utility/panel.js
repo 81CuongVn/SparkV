@@ -57,47 +57,47 @@ async function execute(bot, message, args, command, data) {
 		buttons.push(button1);
 
 		if (data.options.getRole("role2") && data.options.getString("role2_text")) {
-			const button2 = new Discord.MessageButton()
+			const button = new Discord.MessageButton()
 				.setLabel(data.options.getString("role2_text") || "React to get a role")
 				.setStyle("SECONDARY")
 				.setCustomId(`role_${await data.options.getRole("role2").id}`);
 
-			if (data.options.getString("role2_emoji")) button1.setEmoji(data.options.getString("role2_emoji"));
+			if (data.options.getString("role2_emoji")) button.setEmoji(data.options.getString("role2_emoji"));
 
-			buttons.push(button2);
+			buttons.push(button);
 		}
 
 		if (data.options.getRole("role3") && data.options.getString("role3_text")) {
-			const button2 = new Discord.MessageButton()
+			const button = new Discord.MessageButton()
 				.setLabel(data.options.getString("role3_text") || "React to get a role")
 				.setStyle("SECONDARY")
 				.setCustomId(`role_${await data.options.getRole("role3").id}`);
 
-			if (data.options.getString("role3_emoji")) button1.setEmoji(data.options.getString("role3_emoji"));
+			if (data.options.getString("role3_emoji")) button.setEmoji(data.options.getString("role3_emoji"));
 
-			buttons.push(button2);
+			buttons.push(button);
 		}
 
 		if (data.options.getRole("role4") && data.options.getString("role4_text")) {
-			const button2 = new Discord.MessageButton()
+			const button = new Discord.MessageButton()
 				.setLabel(data.options.getString("role4_text") || "React to get a role")
 				.setStyle("SECONDARY")
 				.setCustomId(`role_${await data.options.getRole("role4").id}`);
 
-			if (data.options.getString("role4_emoji")) button1.setEmoji(data.options.getString("role4_emoji"));
+			if (data.options.getString("role4_emoji")) button.setEmoji(data.options.getString("role4_emoji"));
 
-			buttons.push(button2);
+			buttons.push(button);
 		}
 
 		if (data.options.getRole("role5") && data.options.getString("role5_text")) {
-			const button2 = new Discord.MessageButton()
+			const button = new Discord.MessageButton()
 				.setLabel(data.options.getString("role5_text") || "React to get a role")
 				.setStyle("SECONDARY")
 				.setCustomId(`role_${await data.options.getRole("role5").id}`);
 
-			if (data.options.getString("role5_emoji")) button1.setEmoji(data.options.getString("role5_emoji"));
+			if (data.options.getString("role5_emoji")) button.setEmoji(data.options.getString("role5_emoji"));
 
-			buttons.push(button2);
+			buttons.push(button);
 		}
 
 		await message.channel.send({
