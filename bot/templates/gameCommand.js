@@ -41,21 +41,7 @@ module.exports = class ModCommand {
 
 			if (data?.options?.getString("type")) type = data?.options?.getString("type");
 
-			const notVC = {
-				content: `${bot.config.emojis.error} | You must be in a __**voice channel**__ to play this game!`,
-				ephemeral: true
-			};
-
-			if (!message.member.voice.channel) return message.applicationId ? await message.editT(notVC) : await message.replyT(notVC);
-
-			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => {
-				const done = {
-					content: `${bot.config.emojis.success} | Click the following invite to start playing the selected game! ${invite.code}`,
-					ephemeral: true
-				};
-
-				await message.applicationId ? await message.editT(done) : await message.replyT(done);
-			});
+			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}**.`));
 		} else if (this.settings.type === "game") {
 			if (this.settings.gname === "akinator") {
 				message.replyT("What type of game would you like to play? (animal, character or object)").then(async () => {
