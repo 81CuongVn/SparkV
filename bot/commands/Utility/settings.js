@@ -332,8 +332,8 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("category")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild?.tickets?.category) {
-							return `<#${data.guild.plugins.tickets.category}>`;
+						if (data?.guild?.tickets?.category) {
+							return `<#${data.guild.tickets.category}>`;
 						} else {
 							return "None";
 						}
