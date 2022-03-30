@@ -56,7 +56,7 @@ async function execute(bot, message, args, command, data) {
 
 		buttons.push(button1);
 
-		if (data.options.getString("role2") && data.options.getString("role2_text")) {
+		if (data.options.getRole("role2") && data.options.getString("role2_text")) {
 			const button2 = new Discord.MessageButton()
 				.setLabel(data.options.getString("role2_text") || "React to get a role")
 				.setStyle("SECONDARY")
@@ -67,7 +67,7 @@ async function execute(bot, message, args, command, data) {
 			buttons.push(button2);
 		}
 
-		if (data.options.getString("role3") && data.options.getString("role3_text")) {
+		if (data.options.getRole("role3") && data.options.getString("role3_text")) {
 			const button2 = new Discord.MessageButton()
 				.setLabel(data.options.getString("role3_text") || "React to get a role")
 				.setStyle("SECONDARY")
@@ -78,7 +78,7 @@ async function execute(bot, message, args, command, data) {
 			buttons.push(button2);
 		}
 
-		if (data.options.getString("role4") && data.options.getString("role4_text")) {
+		if (data.options.getRole("role4") && data.options.getString("role4_text")) {
 			const button2 = new Discord.MessageButton()
 				.setLabel(data.options.getString("role4_text") || "React to get a role")
 				.setStyle("SECONDARY")
@@ -89,7 +89,7 @@ async function execute(bot, message, args, command, data) {
 			buttons.push(button2);
 		}
 
-		if (data.options.getString("role5") && data.options.getString("role5_text")) {
+		if (data.options.getRole("role5") && data.options.getString("role5_text")) {
 			const button2 = new Discord.MessageButton()
 				.setLabel(data.options.getString("role5_text") || "React to get a role")
 				.setStyle("SECONDARY")
