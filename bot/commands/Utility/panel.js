@@ -67,6 +67,39 @@ async function execute(bot, message, args, command, data) {
 			buttons.push(button2);
 		}
 
+		if (data.options.getString("role3")) {
+			const button2 = new Discord.MessageButton()
+				.setLabel(data.options.getString("role3_text") || "React to get a role")
+				.setStyle("SECONDARY")
+				.setCustomId(`role_${await data.options.getRole("role3").id}`);
+
+			if (data.options.getString("role3_emoji")) button1.setEmoji(data.options.getString("role3_emoji"));
+
+			buttons.push(button2);
+		}
+
+		if (data.options.getString("role4")) {
+			const button2 = new Discord.MessageButton()
+				.setLabel(data.options.getString("role4_text") || "React to get a role")
+				.setStyle("SECONDARY")
+				.setCustomId(`role_${await data.options.getRole("role4").id}`);
+
+			if (data.options.getString("role4_emoji")) button1.setEmoji(data.options.getString("role4_emoji"));
+
+			buttons.push(button2);
+		}
+
+		if (data.options.getString("role5")) {
+			const button2 = new Discord.MessageButton()
+				.setLabel(data.options.getString("role5_text") || "React to get a role")
+				.setStyle("SECONDARY")
+				.setCustomId(`role_${await data.options.getRole("role5").id}`);
+
+			if (data.options.getString("role5_emoji")) button1.setEmoji(data.options.getString("role5_emoji"));
+
+			buttons.push(button2);
+		}
+
 		await message.channel.send({
 			embeds: [embed],
 			components: [
@@ -248,6 +281,66 @@ module.exports = new cmd(execute, {
 					type: 3,
 					name: "role1_emoji",
 					description: "The emoji to use for the first role button.",
+				},
+				{
+					type: 8,
+					name: "role2",
+					description: "The second role button."
+				},
+				{
+					type: 3,
+					name: "role2_text",
+					description: "The second role button's text."
+				},
+				{
+					type: 3,
+					name: "role2_emoji",
+					description: "The emoji to use for the second role button.",
+				},
+				{
+					type: 8,
+					name: "role3",
+					description: "The third role button."
+				},
+				{
+					type: 3,
+					name: "role3_text",
+					description: "The third role button's text."
+				},
+				{
+					type: 3,
+					name: "role3_emoji",
+					description: "The emoji to use for the third role button.",
+				},
+				{
+					type: 8,
+					name: "role4",
+					description: "The fourth role button."
+				},
+				{
+					type: 3,
+					name: "role4_text",
+					description: "The fourth role button's text."
+				},
+				{
+					type: 3,
+					name: "role4_emoji",
+					description: "The emoji to use for the fourth role button.",
+				},
+				{
+					type: 8,
+					name: "role5",
+					description: "The fifth role button."
+				},
+				{
+					type: 3,
+					name: "role5_text",
+					description: "The fifth role button's text."
+				},
+				{
+					type: 3,
+					name: "role5_emoji",
+					description: "The emoji to use for the fifth role button.",
 				},
 				{
 					type: 3,
