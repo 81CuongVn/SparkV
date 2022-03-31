@@ -119,13 +119,13 @@ module.exports = async bot => {
 				];
 
 				const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
-				const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
+				const loopMode = nextLoopMode === 0 ? `${bot.config.emojis.error} Disabled` : `${bot.config.emojis.success} ${nextLoopMode === 1 ? "\`Server Queue\`" : "\`Current Song\`"}`;
 
 				queue.setRepeatMode(nextLoopMode);
 
 				embed
 					.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)
-					.setDescription(`Looping is now ${loopMode}`)
+					.setDescription(`Looping is now ${loopMode}.`)
 					.setColor(bot.config.embed.color);
 			} else if (interaction.customId === "TP") {
 				if (queue.paused) {
