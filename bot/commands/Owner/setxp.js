@@ -1,5 +1,4 @@
 const Discord = require(`discord.js`);
-const Levels = require(`discord-xp`);
 
 const cmd = require("../../templates/command");
 
@@ -9,8 +8,14 @@ async function execute(bot, message, args, command, data) {
 
 	if (!Leveling === true) return await message.replyT(`${bot.config.emojis.error} | Leveling is not enabled for this server. Please enable it by doing \`(prefix)Leveling on\`!`);
 
+	const userData = await bot.database.getMember(User.id);
+
 	try {
-		await Levels.setXp(User.id, message.guild.id, args[1]).then(async () => await message.replyT(`${bot.config.emojis.success} | Successfully set ${User}'s XP to ${bot.functions.formatNumber(args[1])}!`));
+		userData.xp = xp;
+		userData.level = Math.floor(0.1 * Math.sqrt(user.xp));
+
+		await userData.save();
+		await message.replyT(`${bot.config.emojis.success} | Successfully set ${User}'s XP to ${bot.functions.formatNumber(args[1])}!`);
 	} catch (err) {
 		bot.logger(err, "error");
 
