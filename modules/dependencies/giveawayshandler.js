@@ -1,11 +1,9 @@
 const { GiveawaysManager } = require("discord-giveaways");
-const Levels = require("discord-xp");
 
 const GiveawaysSchema = require("../../database/schemas/giveaways");
-const logger = require("../../modules/logger");
+const logger = require("@modules/logger");
 
 module.exports = async bot => {
-	Levels.setURL(process.env.MONGOOSEURL);
 	class GiveawayManagerWithOwnDatabase extends GiveawaysManager {
 		async getAllGiveaways() {
 			return await GiveawaysSchema.find().lean().exec();
