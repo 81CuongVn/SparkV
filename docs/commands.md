@@ -1,6 +1,12 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **96 commands**!
+SparkV's Command List! SparkV contains more than **97 commands**!
+
+## Chatbot
+
+| Name        | Description | Usage | Cooldown  |
+| ----------- | ----------- | ----- | --------- |
+| **chatbot** | Talk to me! |       | 2 seconds" |
 
 ## Economy
 
@@ -20,7 +26,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **shop**       | Displays the shop!                                       |                             | 2 seconds |
 | **slots**      | Don't gamble kids!                                       | (amount)                    | 2 seconds |
 | **use**        | Use an item in your inventory.                           | (item) (optional: quantity) | 2 seconds |
-| **withdraw**   | Withdraw any amount of your bank money into your wallet. | (amount)                    | 2 seconds |
+| **withdraw**   | Withdraw any amount of your bank money into your wallet. | (amount)                    | 2 seconds" |
 
 ## Fun
 
@@ -33,7 +39,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **rank**        | View a users rank!                                                                                  | (optional user)    | 2 seconds |
 | **say**         | I will say whatever you want me to say.                                                             | (message)          | 1 seconds |
 | **text**        | I will change the text depending on what you want to do.                                            | (text)             | 2 seconds |
-| **uselessfact** | I will get a useless fact! You're better off with the advice command...                             |                    | 2 seconds |
+| **uselessfact** | I will get a useless fact! You're better off with the advice command...                             |                    | 2 seconds" |
 
 ## Games
 
@@ -46,13 +52,13 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **memory**      | Pratice your memory!                                                | (level default: 5)                                                                                                                               | 1 seconds  |
 | **spelling**    | Challenge your friends to a spelling game!                          |                                                                                                                                                  | 2 seconds  |
 | **tictactoe**   | Play a game of Tic Tac Toe with me or mention someone to play with! |                                                                                                                                                  | 2 seconds  |
-| **trivia**      | Play a game of trivia!                                              |                                                                                                                                                  | 2 seconds  |
+| **trivia**      | Play a game of trivia!                                              |                                                                                                                                                  | 2 seconds " |
 
 ## Giveaways
 
 | Name         | Description                                                  | Usage | Cooldown  |
 | ------------ | ------------------------------------------------------------ | ----- | --------- |
-| **giveaway** | Create, delete, pause, resume, reroll, or reroll a giveaway. |       | 2 seconds |
+| **giveaway** | Create, delete, pause, resume, reroll, or reroll a giveaway. |       | 2 seconds" |
 
 ## Images
 
@@ -60,7 +66,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | ------------------ | ------------------------------- | -------------------------- | --------- |
 | **color**          | No description for this command | {command}                  | 2 seconds |
 | **image**          | Generate images with ease.      | (image type)               | 3 seconds |
-| **youtubecomment** | YouTube comment lol.            | (user default: you) (text) | 3 seconds |
+| **youtubecomment** | YouTube comment lol.            | (user default: you) (text) | 3 seconds" |
 
 ## Moderation
 
@@ -76,7 +82,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **timeout**  | Timeout a user.                                                                                     | (user) (optional: reason)                                      | 2 seconds |
 | **unlock**   | I'll unlock the current channel.                                                                    |                                                                | 2 seconds |
 | **warn**     | I will warn a user                                                                                  | (user) (optional reason)                                       | 2 seconds |
-| **warnings** | I'll display a user's warnings.                                                                     | (user)                                                         | 2 seconds |
+| **warnings** | I'll display a user's warnings.                                                                     | (user)                                                         | 2 seconds" |
 
 ## Music
 
@@ -98,7 +104,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **shuffle**    | Shuffles the queue.                                                        |                                                             | 5 seconds |
 | **skip**       | Skip to the next song in the queue.                                        |                                                             | 5 seconds |
 | **stop**       | Disconnects me from the voice channel and removes all songs in queue.      |                                                             | 5 seconds |
-| **volume**     | Sets the volume of the currently playing track.                            |                                                             | 5 seconds |
+| **volume**     | Sets the volume of the currently playing track.                            |                                                             | 5 seconds" |
 
 ## Reddit
 
@@ -110,7 +116,7 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **doseofinternet** | I'll send a dose of the internet.                                                                   |                                                                                                       | 2 seconds |
 | **food**           | I will send some mouth-watering food selected from multible subreddits. Yum!                        |                                                                                                       | 2 seconds |
 | **meme**           | Funny internet memes from reddit.                                                                   | (subreddit (dankmeme, memeeconomy, prequelmemes, me_irl, gocommitdie, comedycemetery, animalsadvice)) | 2 seconds |
-| **showerthought**  | You know that momment where you think/realize something crazy in the shower? Well, there is a wh... |                                                                                                       | 2 seconds |
+| **showerthought**  | You know that momment where you think/realize something crazy in the shower? Well, there is a wh... |                                                                                                       | 2 seconds" |
 
 ## Utility
 
@@ -134,4 +140,4 @@ SparkV's Command List! SparkV contains more than **96 commands**!
 | **settings**     | Personalize SparkV to suit your server!                                        |                                                              | 1 seconds |
 | **stats**        | SparkV's stats.                                                                |                                                              | 2 seconds |
 | **votereminder** | Want to be reminded to vote for SparkV? We'll give you ⏣25,000 coins per vote. | (on/off)                                                     | 2 seconds |
-| **website**      | I'll send my website!                                                          |                                                              | 2 seconds |
+| **website**      | I'll send my website!                                                          |                                                              | 2 seconds" |
