@@ -43,24 +43,11 @@ global.bot = SparkV;
 
 async function Start() {
 	await SparkV.LoadModules({
-		sharding: process.execArgv.includes("--sharding"),
-		docsPath: process.env.MainDir
+		sharding: process.execArgv.includes("--sharding")
 	});
 
 	await SparkV.LoadEvents(__dirname);
 	await SparkV.LoadCommands(__dirname);
-
-	// SparkV.SocketioClient = require("socket.io-client").connect(
-	// 	`https://${process.env.BASEURL}/api/communication?token=8010405464675`,
-	// 	{
-	// 		reconnection: true,
-	// 		reconnectionDelay: 2000,
-	// 		reconnectionDelayMax: 5000,
-	// 		reconnectionAttempts: Infinity,
-	// 	},
-	// );
-
-	// SparkV.SocketioClient.on("connect", () => console.log("Website connected successfully."));
 }
 
 Start();
