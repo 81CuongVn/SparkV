@@ -1,5 +1,4 @@
 const sentry = require("@sentry/node");
-const Levels = require("discord-xp");
 const Discord = require("discord.js");
 const fetch = require("axios");
 
@@ -242,24 +241,44 @@ module.exports = {
 
 			// Leveling!
 			if (data.guild.plugins.leveling.enabled === "true") {
-				const RandomXP = Math.floor(Math.random() * 15) + 5;
-				const HasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, RandomXP);
+				const oldXP = require("@database/schemas/levels.js");
+				const oldData = await oldXP.findOne({
+					guildID: message.guild.id,
+					userID: message.author.id
+				});
 
-				if (HasLeveledUp) {
-					const User = await Levels.fetch(message.author.id, message.guild.id);
+				if (oldData) {
+					data.member.xp += oldData.xp;
+					data.member.level = oldData.level;
+
+					await data.member.save();
+					await oldXP.findOneAndDelete({
+						guildID: message.guild.id,
+						userID: message.author.id
+					});
+				}
+
+				const RandomXP = Math.floor(Math.random() * 15) + 5;
+
+				data.member.xp += parseInt(RandomXP, 10);
+				data.member.level = Math.floor(0.1 * Math.sqrt(data.member.xp));
+
+				await data.member.save();
+
+				if ((Math.floor(0.1 * Math.sqrt(data.member.xp -= RandomXP)) < data.member.level)) {
 					const levelMsg = data.guild.plugins.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
 					if (data.guild.plugins.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling?.channel)) {
 						const channel = message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling.channel);
 
 						try {
-							await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+							await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
 						} catch (err) {
 							await message.replyT("Uh oh! I don't have access to the channel you've setup for leveling messages. If you need help fixing this, you can always contact support. Support Server: https://discord.gg/PPtzT8Mu3h");
-							await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+							await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
 						}
 					} else {
-						await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(User.level)));
+						await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
 					}
 				}
 			}
@@ -268,19 +287,15 @@ module.exports = {
 		// Check for a prefix
 		const prefix = bot.functions.getPrefix(message, data);
 
-		if (!prefix) {
-			if (message.mentions.has(bot.user)) {
-				if (data.guild.plugins.chatbot === "mention") return chatbot(message, true);
-			} else if (data.guild.plugins.chatbot === "message") { return chatbot(message, false); }
-
-			return;
-		}
+		if (!prefix && message.mentions.has(bot.user)) return message.replyT("Hi! Please run `/help` to see what I can do. If you're trying to use SparkV's chatbot feature, please run `/chatbot start` to get started.");
 
 		// If the user is part of the user blacklist, return.
 		if (bot.config.blacklist.users[message.author.id]) return await message.replyT(`You have been blacklisted. Reason: ${bot.config.blacklist.users[message.author.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
+		if (!prefix) return;
+
 		// Command Handler
-		const args = message.content.slice(prefix.length).trim().split(/ +/g);
+		const args = message.content.slice(prefix?.length).trim().split(/ +/g);
 		const command = args.shift().toLowerCase();
 		const commandfile = bot.commands.get(command) || bot.aliases.get(command);
 
@@ -319,60 +334,3 @@ module.exports = {
 		}
 	},
 };
-
-async function chatbot(message, wasMentioned) {
-	let SlicedMessage;
-
-	if (message.content.slice(21) === "") {
-		// If the user replies to SparkV instead of mentioning him.
-
-		SlicedMessage = message.content;
-	} else {
-		SlicedMessage = message.content.slice(21);
-	}
-
-	await fetch.get(
-		`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(
-			process.env.CHAT_KEY,
-		)}&uid=${encodeURIComponent(message.author.id)}&msg=${encodeURIComponent(
-			wasMentioned === true ? SlicedMessage : message,
-		)}`,
-	)
-		.then(async response => {
-			const APIEmbed = new Discord.MessageEmbed();
-
-			if (response?.data?.cnt) {
-				APIEmbed
-					.setAuthor({
-						name: message.author.tag,
-						iconURL: message.author.displayAvatarURL({ dynamic: true })
-					})
-					.setTitle("SparkV")
-					.setDescription(response.data.cnt)
-					.setFooter({
-						text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
-						iconURL: message.client.user.displayAvatarURL()
-					})
-					.setColor(message.client.config.embed.color);
-			} else {
-				const APIEmbed = new Discord.MessageEmbed()
-					.setAuthor({
-						name: message.author.tag,
-						iconURL: message.author.displayAvatarURL({ dynamic: true })
-					})
-					.setTitle("SparkV - ERROR!")
-					.setDescription("Sorry, SparkV is unable to process your message. Please try again later.")
-					.setFooter({
-						text: `Never send personal information to SparkV. • ${message.client.config.embed.footer}`,
-						iconURL: message.client.user.displayAvatarURL()
-					})
-					.setColor("RED");
-			}
-
-			message.client.StatClient.postCommand(`ChatBot`, message.author.id);
-
-			await message.replyT({
-				embeds: [APIEmbed],
-			});
-		});
-}
