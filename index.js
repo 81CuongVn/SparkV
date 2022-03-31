@@ -1,5 +1,6 @@
 // KingCh1ll //
 // 4/22/2021 //
+require("module-alias/register");
 
 async function loader(callback) {
 	const loading = ["\\", "|", "/", "-"];
