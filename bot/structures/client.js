@@ -52,11 +52,6 @@ module.exports = class bot extends Client {
 	}
 
 	async LoadModules(settings) {
-		// Update Docs
-		if (process.argv.includes("--dev") === true) {
-			setTimeout(() => updateDocs.update(this, settings.docsPath), 30 * 1000);
-		}
-
 		// Functions
 		this.database.init(this);
 		Distube(this);
@@ -90,13 +85,15 @@ module.exports = class bot extends Client {
 
 		this.discordTogether = new DiscordTogether(this);
 
-		if (!process.env.REDIS_URL) return this.logger("error", "Redis URI not found in environment variables. Please add it to your secrets manager so that commands that require a cache (Animals, Memes, Etc) can function.");
+		if (process.env.REDIS_URL) {
+			this.redis = require("redis").createClient({
+				url: process.env.REDIS_URL
+			});
 
-		this.redis = require("redis").createClient({
-			url: process.env.REDIS_URL
-		});
-
-		await this.redis.connect();
+			await this.redis.connect();
+		} else {
+			return this.logger("Redis URI not found in environment variables. Please add it to your secrets manager so that commands that require a cache (Animals, Memes, Etc) can function.", "warning");
+		}
 	}
 
 	async LoadEvents(MainPath) {
@@ -239,6 +236,8 @@ module.exports = class bot extends Client {
 				updatedCount++;
 			}
 		}
+
+		updateDocs.update(this, process.env.MainDir);
 
 		// this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
 	}
