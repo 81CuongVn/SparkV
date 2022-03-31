@@ -47,7 +47,7 @@
     "figlet": "^1.5.2",
     "genius-lyrics": "^4.3.6",
     "libsodium-wrappers": "^0.7.10",
-    "markdown-table": "^2.0.0",
+    "module-alias": "^2.2.2",
     "mongoose": "^6.2.8",
     "ms": "^2.1.3",
     "os": "^0.1.2",
@@ -60,5 +60,10 @@
     "eslint": "^8.12.0",
     "eslint-plugin-import": "^2.25.4",
     "prettier": "2.6.1"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@database": "./database",
+    "@modules": "./modules"
   }
 }

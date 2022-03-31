@@ -1,4 +1,4 @@
-const logger = require("../../modules/logger");
+const logger = require("@modules/logger");
 const Discord = require("discord.js");
 
 async function GetTicketOpen(bot, member) {

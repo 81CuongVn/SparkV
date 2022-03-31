@@ -6,34 +6,34 @@ const { Client, Collection, Intents, Structures, ApplicationCommand } = require(
 const { DiscordTogether } = require("discord-together");
 const Statcord = require("statcord.js");
 
-const Distube = require("../../modules/dependencies/distubehandler");
-const giveawayshandler = require("../../modules/dependencies/giveawayshandler");
-const updateDocs = require("../../modules/updateDocs");
+const Distube = require("@modules/dependencies/distubehandler");
+const giveawayshandler = require("@modules/dependencies/giveawayshandler");
+const updateDocs = require("@modules/updateDocs");
 
 const shopdata = require("../shopdata.json");
 
-const GuildSchema = require("../../database/schemas/guild");
-const MemberSchema = require("../../database/schemas/member");
-const UserSchema = require("../../database/schemas/user");
+const GuildSchema = require("@database/schemas/guild");
+const MemberSchema = require("@database/schemas/member");
+const UserSchema = require("@database/schemas/user");
 
 module.exports = class bot extends Client {
 	constructor(settings) {
 		super(settings);
 
 		// Config
-		this.config = require("../../globalconfig.json");
+		this.config = require("@root/globalconfig.json");
 
 		// Utils
-		this.logger = require("../../modules/logger");
-		this.functions = require("../../modules/functions");
+		this.logger = require("@modules/logger");
+		this.functions = require("@modules/functions");
 		this.wait = util.promisify(setTimeout);
 
 		// Database
-		this.database = require("../../database/handler");
+		this.database = require("@database/handler");
 
-		this.GuildSchema = require("../../database/schemas/guild");
-		this.MemberSchema = require("../../database/schemas/member");
-		this.UserSchema = require("../../database/schemas/user");
+		this.GuildSchema = require("@database/schemas/guild");
+		this.MemberSchema = require("@database/schemas/member");
+		this.UserSchema = require("@database/schemas/user");
 
 		// Collections
 		this.categories = new Collection();
@@ -46,7 +46,7 @@ module.exports = class bot extends Client {
 		this.slashCommands = [];
 
 		// Start functions
-		require("../../modules/functions").init(this);
+		require("@modules/functions").init(this);
 
 		return this;
 	}

@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const logger = require("../modules/logger");
+const logger = require("@modules/logger");
 
 exports.run = async error => {
 	// Cannot find the message
