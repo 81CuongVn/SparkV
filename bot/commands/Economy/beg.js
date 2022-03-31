@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 const YesReplies = [
 	"Mr. Beast felt bad for you.",

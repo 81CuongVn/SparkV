@@ -1,4 +1,4 @@
-const RedditCommand = require("../../templates/redditCommand");
+const RedditCommand = require("@templates/redditCommand");
 
 module.exports = new RedditCommand({
 	description: "I will send some mouth-watering food selected from multible subreddits. Yum!",

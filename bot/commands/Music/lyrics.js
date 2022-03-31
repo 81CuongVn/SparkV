@@ -1,6 +1,6 @@
 const Discord = require(`discord.js`);
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, interaction, args, command, data) {
 	const query = data.options.getString("search");

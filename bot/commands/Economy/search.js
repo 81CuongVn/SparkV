@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { parse } = require("dotenv");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 const places = [
 	"Tree",

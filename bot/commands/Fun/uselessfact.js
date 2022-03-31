@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const request = require("axios");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message) {
 	request.get("https://uselessfacts.jsph.pl/random.json?language=en").then(async response => {

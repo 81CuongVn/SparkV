@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const randomWords = require("random-words");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 module.exports = new cmd(async (bot, message, args, command, data) => {
 	const difficulty = parseInt(data?.options?.getString("difficulty")) || 2;

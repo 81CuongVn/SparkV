@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");

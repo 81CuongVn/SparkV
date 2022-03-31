@@ -63,6 +63,7 @@
   "_moduleAliases": {
     "@root": ".",
     "@database": "./database",
-    "@modules": "./modules"
+    "@modules": "./modules",
+    "@templates": "./bot/templates"
   }
 }

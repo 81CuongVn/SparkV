@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/gameCommand");
+const cmd = require("@templates/gameCommand");
 
 module.exports = new cmd(null, {
 	description: "Play a Discord VC activity!",

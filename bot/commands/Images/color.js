@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const canvacord = require("canvacord");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 module.exports = new cmd({
 	description: `Hex to color.`,

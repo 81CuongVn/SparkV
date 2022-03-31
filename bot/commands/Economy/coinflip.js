@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 const Replies = ["heads", "tails"];
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const Side = data.options.getString("side");

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const axios = require("axios");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message) {
 	axios.get("https://api.adviceslip.com/advice").then(async response => {

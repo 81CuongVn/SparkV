@@ -1,6 +1,6 @@
 const Discord = require(`discord.js`);
 
-const cmd = require("../../templates/modCommand");
+const cmd = require("@templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
 	const channel = data.options.getChannel("channel");

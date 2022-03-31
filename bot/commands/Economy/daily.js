@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	if (43200000 - (Date.now() - data.user.cooldowns.daily) > 0) {

@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 function capFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);

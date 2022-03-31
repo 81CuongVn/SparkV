@@ -1,7 +1,7 @@
 const os = require("os");
 const Discord = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {

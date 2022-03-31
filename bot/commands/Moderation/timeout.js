@@ -1,7 +1,7 @@
 const Discord = require(`discord.js`);
 const ms = require("ms");
 
-const cmd = require("../../templates/modCommand");
+const cmd = require("@templates/modCommand");
 
 async function execute(bot, interaction, args, command, data) {
 	const user = data.options.getMember("user");

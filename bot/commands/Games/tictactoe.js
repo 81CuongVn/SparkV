@@ -1,7 +1,7 @@
 const TicTacToe = require("discord-tictactoe");
 const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 const game = new TicTacToe({
 	language: "en",

@@ -2,7 +2,7 @@ const Discord = require(`discord.js`);
 const figlet = require(`figlet`);
 const zalgo = require("to-zalgo");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 const chars = {
 	0: ":zero:",

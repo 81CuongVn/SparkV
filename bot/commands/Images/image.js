@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const canvacord = require("canvacord");
 
-const cmd = require("../../templates/imageCommand");
+const cmd = require("@templates/imageCommand");
 
 module.exports = new cmd({
 	description: "Generate images with ease.",

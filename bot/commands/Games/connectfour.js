@@ -1,6 +1,6 @@
 const Discord = require(`discord.js`);
 
-const cmd = require("../../templates/gameCommand");
+const cmd = require("@templates/gameCommand");
 
 function CheckLine(a, b, c, d) {
 	return a !== null && a === b && a === c && a === d;

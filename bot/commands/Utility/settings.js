@@ -1,6 +1,6 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Options } = require("discord.js");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 const cFilter = async m => {
 	if (m.author.id === m.client.user.id) {
@@ -779,8 +779,6 @@ async function execute(bot, message, args, command, data) {
 
 	collector.on("collect", async interaction => {
 		if (!interaction.deferred) interaction.deferUpdate();
-
-		console.log(interaction.customId)
 
 		try {
 			buttons = [];

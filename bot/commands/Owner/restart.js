@@ -1,7 +1,7 @@
 const Discord = require(`discord.js`);
 let restarting = false;
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	if (restarting === true) return;

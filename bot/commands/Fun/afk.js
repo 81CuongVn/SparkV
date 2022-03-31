@@ -2,7 +2,7 @@ const Discord = require(`discord.js`);
 
 const user = require("../../../database/schemas/user");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const reason = data.options.getString("reason") || "No reason specified.";

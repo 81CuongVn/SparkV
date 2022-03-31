@@ -1,6 +1,6 @@
 const Discord = require(`discord.js`);
 
-const cmd = require("../../templates/musicCommand");
+const cmd = require("@templates/musicCommand");
 
 async function execute(bot, message, args, command, data) {
 	const Queue = bot.distube.getQueue(message);

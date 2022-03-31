@@ -1,4 +1,4 @@
-const RedditCommand = require("../../templates/redditCommand");
+const RedditCommand = require("@templates/redditCommand");
 
 module.exports = new RedditCommand({
 	description: "Funny internet memes from reddit.",

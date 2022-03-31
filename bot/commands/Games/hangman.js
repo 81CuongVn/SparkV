@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const RandomWord = require("random-words");
 
-const cmd = require("../../templates/gameCommand");
+const cmd = require("@templates/gameCommand");
 
 async function execute(bot, message) {
 	const word = RandomWord();

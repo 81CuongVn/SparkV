@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const axios = require("axios");
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 function shuffle(array) {
 	let currentIndex = array.length, randomIndex;
