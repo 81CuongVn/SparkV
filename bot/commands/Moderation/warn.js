@@ -3,29 +3,17 @@ const { MessageEmbed } = require(`discord.js`);
 const cmd = require("@templates/modCommand");
 
 async function execute(bot, interaction, args, command, data) {
-	const user = data.options.getMember("user") || interaction.member;
-	const reason = (interaction?.applicationId ? data.options.getString("reason") : args.join(" ").slice(22)) || "No reason provided.";
+	const user = data.options.getMember("user");
+	const reason = data.options.getString("reason") || "No reason provided.";
 
-	if (!user) {
-		return await interaction.editT({
-			content: `${bot.config.emojis.error} | Please mention someone to warn!`,
-			ephemeral: true
-		});
-	}
-
-	if (user.id === interaction.user.id) {
-		return await interaction.editT({
-			content: `${bot.config.emojis.error} | You cannot warn yourself lmfao.`,
-			ephemeral: true
-		});
-	}
+	if ((user.user ? user.user : user).id === interaction.user.id) return await interaction.editT(`${bot.config.emojis.error} | You cannot warn yourself.`);
 
 	const MemberPosition = interaction.member.roles.highest.position;
 	const ModerationPosition = interaction.member.roles.highest.position;
 
 	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 
-	const memberData = await bot.database.getMember(user.id, interaction.guild.id);
+	const memberData = await bot.database.getMember((user.user ? user.user : user).id, interaction.guild.id);
 
 	++memberData.infractionsCount;
 	memberData.infractions.push({
