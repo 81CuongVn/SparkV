@@ -19,7 +19,7 @@ module.exports = class Command {
 	}
 
 	async run(bot, message, args, command, data) {
-		const perms = message.channel.permissionsFor(message.user);
+		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
 			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
