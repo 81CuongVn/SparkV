@@ -6,14 +6,12 @@ async function execute(bot, message, args, command, data) {
 	const user = data.options.getMember("user");
 	const reason = data.options.getString("reason") || "No reason provided.";
 
-	if (user.id === message.author.id) {
-		return message.editT(`${bot.config.emojis.error} | You cannot ban yourself.`);
-	}
+	if ((user.user ? user.user : user).id === interaction.user.id) return await interaction.editT(`${bot.config.emojis.error} | You cannot warn yourself.`);
 
-	const mPosition = user.roles.highest.position;
-	const bPosition = message.member.roles.highest.position;
+	const MemberPosition = interaction.member.roles.highest.position;
+	const ModerationPosition = interaction.member.roles.highest.position;
 
-	if (!message.member.ownerID !== message.author.id && !(bPosition > mPosition).bannable) return message.editT(`${bot.config.emojis.error} | Uh oh... you can't ban this user!`);
+	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 
 	message.delete().catch(err => {});
 	user.send(`${bot.config.emojis.error} | You have been banned from ${message.guild.name}. Reason: ${ReasonForBan}.`,).catch(err => {});
@@ -22,26 +20,26 @@ async function execute(bot, message, args, command, data) {
 		reason,
 	}).catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to ban. Please check my permissions and try again.`));
 
-	const BanEmbed = new MessageEmbed()
-		.setTitle(`${bot.config.emojis.success} | Ban Command`)
-		.setDescription(`${bot.config.emojis.success} | Successfully Banned ${user} (${user.id})!`)
-		.setThumbnail(message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
-		.addField(`Moderator/Admin`, `${message.author.tag}`, true)
-		.addField(`Reason`, reason, true)
-		.setFooter({
-			text: `/Kick to kick a user. • ${bot.config.embed.footer}`,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+	const WarnEmbed = new MessageEmbed()
+		.setAuthor({
+			name: `${interaction.user.tag} (${interaction.user.id})`,
+			iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 		})
-		.setColor(bot.config.embed.color)
-		.setTimestamp();
+		.setTitle(`${bot.config.emojis.success} Ban Successful`)
+		.setDescription(`I successfully banned ${user} (${user.id}).`)
+		.setFooter({
+			text: bot.config.embed.footer,
+			iconURL: bot.user.displayAvatarURL()
+		})
+		.setColor(bot.config.embed.color);
 
-	await message.replyT({
-		embeds: [BanEmbed],
+	await interaction.replyT({
+		embeds: [WarnEmbed],
 	});
 }
 
 module.exports = new cmd(execute, {
-	description: "Ban a user, effectively removing them from your server never to be seen again. Unless, you unban them.",
+	description: "Ban a user, effectively removing them permanently from your server.",
 	dirname: __dirname,
 	usage: "(user) (optional: reason)",
 	aliases: [],
