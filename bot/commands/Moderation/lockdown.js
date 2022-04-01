@@ -12,7 +12,7 @@ async function execute(bot, message, args, command, data) {
 			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
 		.setFooter({
-			name: bot.config.embed.footer,
+			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		});
 

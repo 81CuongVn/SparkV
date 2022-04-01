@@ -11,7 +11,7 @@ async function execute(bot, message, args, command, data) {
 		})
 		.setDescription(`This channel has been locked. Reason: ${reason}`)
 		.setFooter({
-			name: bot.config.embed.footer,
+			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor("RED");

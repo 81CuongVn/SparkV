@@ -10,7 +10,7 @@ async function execute(bot, message, args, command, data) {
 		})
 		.setDescription(`This channel has been unlocked!`)
 		.setFooter({
-			name: bot.config.embed.footer,
+			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor("GREEN");
