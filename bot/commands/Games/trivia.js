@@ -147,16 +147,6 @@ async function execute(bot, message, args, command, data) {
 			embeds: [embed]
 		});
 	});
-
-	collector.on("end", async () => {
-		try {
-			await trivia?.edit({
-				components: []
-			});
-		} catch (err) {
-			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
-		}
-	});
 }
 
 module.exports = new cmd(execute, {
