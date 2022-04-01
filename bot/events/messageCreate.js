@@ -248,7 +248,7 @@ module.exports = {
 				});
 
 				if (oldData) {
-					data.member.xp += oldData.xp;
+					data.member.xp = oldData.xp;
 					data.member.level = oldData.level;
 
 					await data.member.save();
