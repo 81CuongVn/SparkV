@@ -2,30 +2,30 @@ const { MessageEmbed } = require(`discord.js`);
 
 const cmd = require("@templates/modCommand");
 
-async function execute(bot, message, args, command, data) {
-	const user = message.applicationId ? data.options.getMember("user").user : message.mentions.users.first();
-	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ").slice(22)) || "No reason provided.";
+async function execute(bot, interaction, args, command, data) {
+	const user = data.options.getMember("user") || interaction.member;
+	const reason = (interaction?.applicationId ? data.options.getString("reason") : args.join(" ").slice(22)) || "No reason provided.";
 
 	if (!user) {
-		return await message.editT({
+		return await interaction.editT({
 			content: `${bot.config.emojis.error} | Please mention someone to warn!`,
 			ephemeral: true
 		});
 	}
 
-	if (user.id === message.author.id) {
-		return await message.editT({
+	if (user.id === interaction.user.id) {
+		return await interaction.editT({
 			content: `${bot.config.emojis.error} | You cannot warn yourself lmfao.`,
 			ephemeral: true
 		});
 	}
 
-	const MemberPosition = message.member.roles.highest.position;
-	const ModerationPosition = message.member.roles.highest.position;
+	const MemberPosition = interaction.member.roles.highest.position;
+	const ModerationPosition = interaction.member.roles.highest.position;
 
-	if (message.guild.ownerId !== message.author.id && !ModerationPosition > MemberPosition) return await message.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
+	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 
-	const memberData = await bot.database.getMember(user.id, message.guild.id);
+	const memberData = await bot.database.getMember(user.id, interaction.guild.id);
 
 	++memberData.infractionsCount;
 	memberData.infractions.push({
@@ -37,14 +37,14 @@ async function execute(bot, message, args, command, data) {
 	memberData.markModified("infractions");
 	await memberData.save();
 
-	user.send(`You were warned in **${message.guild.name}**. Reason: ${reason}`).catch(async err => {
-		await message.replyT(`${user}, you were warned in **${message.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${reason}.`);
+	user.send(`You were warned in **${interaction.guild.name}**. Reason: ${reason}`).catch(async err => {
+		await interaction.replyT(`${user}, you were warned in **${interaction.guild.name}**. I would've sent this to you in your DMs, but they were off. Reason: ${reason}.`);
 	});
 
 	const WarnEmbed = new MessageEmbed()
 		.setAuthor({
-			name: `${message.author.tag} (${message.author.id})`,
-			iconURL: message.author.displayAvatarURL({ dynamic: true }),
+			name: `${interaction.user.tag} (${interaction.user.id})`,
+			iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 		})
 		.setTitle(`Warn Successful`)
 		.setDescription(`I successfully warned ${user} (${user.id}).`)
@@ -54,7 +54,7 @@ async function execute(bot, message, args, command, data) {
 		})
 		.setColor(bot.config.embed.color);
 
-	await message.replyT({
+	await interaction.replyT({
 		embeds: [WarnEmbed],
 	});
 }

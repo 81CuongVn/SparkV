@@ -18,9 +18,17 @@ module.exports = {
 
 			if (!command) return;
 
-			await interaction.deferReply({
-				ephemeral: command.settings.ephemeral || false,
-			});
+			try {
+				if (interaction) {
+					await interaction.deferReply({
+						ephemeral: command.settings.ephemeral || false,
+					});
+				} else {
+					return;
+				}
+			} catch (err) {
+				return;
+			}
 
 			const data = {};
 
