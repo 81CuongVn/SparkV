@@ -36,6 +36,8 @@ module.exports = new cmd(
 			pages.push(itemEmbed);
 		});
 
+		if (pages.length < 1) return await message.editT("This user does not have any items in their inventory.");
+
 		const quickLeft = new Discord.MessageButton()
 			.setEmoji("⬅️")
 			.setCustomId("quickLeft")
