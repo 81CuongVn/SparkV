@@ -70,19 +70,19 @@ SparkV's Command List! SparkV contains more than **97 commands**!
 
 ## Moderation
 
-| Name         | Description                                                                                         | Usage                                                          | Cooldown  |
-| ------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------- |
-| **ban**      | Ban a user, effectively removing them from your server never to be seen again. Unless, you unban... | (user) (optional: reason)                                      | 2 seconds |
-| **clear**    | I'll delete messages for you!                                                                       | (# of messages) (Optional: Type (all, user only, pinned only)) | 2 seconds |
-| **kick**     | Is a user bothering you? Using this command, you can kick them from the server!                     | (user) (reason)                                                | 2 seconds |
-| **lock**     | I'll lock the current channel.                                                                      |                                                                | 2 seconds |
-| **lockdown** | I'll put the server in lockdown, or disable a previous lockdown.                                    | (on | off)                                                     | 2 seconds |
-| **nickname** | I'll change a user's nickname to your choice.                                                       | (user) (nickname)                                              | 2 seconds |
-| **slowmode** | Applies a slowmode to a channel.                                                                    | (user) (reason)                                                | 2 seconds |
-| **timeout**  | Timeout a user.                                                                                     | (user) (optional: reason)                                      | 2 seconds |
-| **unlock**   | I'll unlock the current channel.                                                                    |                                                                | 2 seconds |
-| **warn**     | I will warn a user                                                                                  | (user) (optional reason)                                       | 2 seconds |
-| **warnings** | I'll display a user's warnings.                                                                     | (user)                                                         | 2 seconds" |
+| Name         | Description                                                                     | Usage                                                          | Cooldown  |
+| ------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------- |
+| **ban**      | Ban a user, effectively removing them permanently from your server.             | (user) (optional: reason)                                      | 2 seconds |
+| **clear**    | I'll delete messages for you!                                                   | (# of messages) (Optional: Type (all, user only, pinned only)) | 2 seconds |
+| **kick**     | Is a user bothering you? Using this command, you can kick them from the server! | (user) (reason)                                                | 2 seconds |
+| **lock**     | I'll lock the current channel.                                                  |                                                                | 2 seconds |
+| **lockdown** | I'll put the server in lockdown, or disable a previous lockdown.                | (on | off)                                                     | 2 seconds |
+| **nickname** | I'll change a user's nickname to your choice.                                   | (user) (nickname)                                              | 2 seconds |
+| **slowmode** | Applies a slowmode to a channel.                                                | (user) (reason)                                                | 2 seconds |
+| **timeout**  | Timeout a user.                                                                 | (user) (optional: reason)                                      | 2 seconds |
+| **unlock**   | I'll unlock the current channel.                                                |                                                                | 2 seconds |
+| **warn**     | I will warn a user                                                              | (user) (optional reason)                                       | 2 seconds |
+| **warnings** | I'll display a user's warnings.                                                 | (user)                                                         | 2 seconds" |
 
 ## Music
 
