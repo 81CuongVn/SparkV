@@ -41,6 +41,8 @@ module.exports = class ModCommand {
 
 			if (data?.options?.getString("type")) type = data?.options?.getString("type");
 
+			if (!message.member.voice.channel) return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
+
 			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}**.`));
 		} else if (this.settings.type === "game") {
 			if (this.settings.gname === "akinator") {
