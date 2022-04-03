@@ -49,11 +49,7 @@ module.exports = {
 		if (guild.systemChannel) {
 			const WelcomeEmbed = new Discord.MessageEmbed()
 				.setTitle("Thanks for adding me!")
-				.setDescription(`
-					I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\n
-					Simply use the command \`/help\` to get a list of my commands.\n
-					Want to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\n
-					If you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h`)
+				.setDescription(`I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\nSimply type the command \`/help\` to get a list of my commands.\nWant to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h`)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
 				.setFooter({
