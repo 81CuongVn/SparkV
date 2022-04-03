@@ -1,15 +1,28 @@
-const os = require("os");
 const Discord = require("discord.js");
+const os = require("os");
 
 const cmd = require("@templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const BotMessage = await message.replyT(`${bot.config.emojis.stats} | Fetching stats...`);
+		const loadingEmbed = new Discord.MessageEmbed()
+			.setAuthor({
+				name: message.user.tag,
+				iconURL: message.user.displayAvatarURL({ dynamic: true })
+			})
+			.setTitle(await message.translate(`${bot.config.emojis.config} | Loading stats...`))
+			.setDescription(await message.translate(`Please wait while I load my statistics...`))
+			.setFooter({
+				text: bot.config.embed.footer,
+				icon_url: bot.user.displayAvatarURL({ dynamic: true })
+			})
+			.setColor(bot.config.embed.color)
+			.setTimestamp();
 
-		const UsedMemory = os.totalmem() - os.freemem();
-		const TotalMemory = os.totalmem();
-		const MemoryPersentage = `${((UsedMemory / TotalMemory) * 100).toFixed(2)}%`;
+		const BotMessage = await message.replyT({
+			embeds: [loadingEmbed],
+			fetchReply: true
+		});
 
 		// RamData = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)
 
@@ -18,11 +31,8 @@ module.exports = new cmd(
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
-			.addField(`${bot.config.emojis.stats} **LATENCY**`, `\`\`\`SparkV: ${new Date().getTime() - message.createdTimestamp}ms\nAPI: ${bot.ws.ping}ms\`\`\``, true)
-			.addField(`${bot.config.emojis.memory} **MEMORY**`, `\`\`\`${(UsedMemory / Math.pow(1024, 3)).toFixed(2)}/${(TotalMemory / Math.pow(1024, 3)).toFixed(2)} (${MemoryPersentage}) MB\`\`\``, true)
-			.addField(`${bot.config.emojis.servers} **SERVERS**`, `\`\`\`${bot.functions.formatNumber(await bot.functions.GetServerCount())}\`\`\``, true)
-			.addField(`${bot.config.emojis.player} **USERS**`, `\`\`\`${bot.functions.formatNumber(await bot.functions.GetUserCount())}\`\`\``, true)
-			.addField(`${bot.config.emojis.clock} **UPTIME**`, `\`\`\`${bot.functions.MSToTime(bot.uptime)}\`\`\``, true)
+			.addField(`**Server**`, `${bot.config.emojis.rocket} CPU: **${(process.cpuUsage().user / 1024 / 1024).toFixed(2)}%**\n${bot.config.emojis.stats} Memory: **${(((os.totalmem() - os.freemem()) / (os.totalmem())) * 100).toFixed(2)}%**`, true)
+			.addField(`**Bot Statistics**`, `${bot.config.emojis.globe} Servers: **${bot.functions.formatNumber(await bot.functions.GetServerCount())}**\n${bot.config.emojis.player} Users: **${bot.functions.formatNumber(await bot.functions.GetUserCount())}**`, true)
 			.setFooter({
 				text: `SparkV's Stats • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -31,7 +41,6 @@ module.exports = new cmd(
 			.setTimestamp();
 
 		return await BotMessage.edit({
-			content: `${bot.config.emojis.success} Loading complete!`,
 			embeds: [StatsEmbed]
 		});
 	},
