@@ -287,7 +287,7 @@ module.exports = {
 		// Check for a prefix
 		const prefix = bot.functions.getPrefix(message, data);
 
-		if (!prefix && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do.\nMy ping is ${new Date().getTime() - message.createdTimestamp}ms.`);
+		if (!prefix && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do.\nMy ping is ${new Date().getTime() - message.createdTimestamp}ms and I've been online for ${bot.functions.MSToTime(bot.uptime)}.`);
 
 		// If the user is part of the user blacklist, return.
 		if (bot.config.blacklist.users[message.author.id]) return await message.replyT(`You have been blacklisted. Reason: ${bot.config.blacklist.users[message.author.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
