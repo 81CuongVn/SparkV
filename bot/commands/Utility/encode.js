@@ -6,16 +6,18 @@ async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
 	const string = data.options.getString("text");
 
+	let encoded;
 	if (type === "base64") {
-		await message.replyT(Buffer.from(string).toString("base64"));
+		encoded = Buffer.from(string).toString("base64");
 	} else if (type === "hex") {
-		const h = Buffer.from(string).toString("base64");
-		const e = Buffer.from(h, "base64");
-
-		await message.replyT(e.toString("hex"));
+		encoded = (Buffer.from(Buffer.from(string).toString("base64"), "base64")).toString("hex");
 	} else if (type === "url") {
-		await message.replyT(encodeURIComponent(string));
+		encoded = encodeURIComponent(string);
 	}
+
+	if (!encoded) return message.replyT(`${bot.config.emojis.error} Uh oh! An error occured while trying to encode the text. Please try again, but with a different string.`);
+
+	await message.replyT(encoded);
 }
 
 module.exports = new cmd(execute, {
