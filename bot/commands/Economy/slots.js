@@ -8,7 +8,7 @@ const SlotItems = [
 	"🍑",
 ];
 
-const cmd = require("../../templates/command");
+const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const bet = data.options.getNumber("amount");
@@ -21,7 +21,7 @@ async function execute(bot, message, args, command, data) {
 	const number = [];
 	let amountWon = 0;
 
-	for (i = 0; i < 9; i++) {
+	for (i = 0; i < 3; i++) {
 		number[i] = Math.floor(Math.random() * SlotItems.length);
 	}
 
@@ -31,18 +31,8 @@ async function execute(bot, message, args, command, data) {
 		win = true;
 	}
 
-	if (number[3] === number[4] && number[4] === number[5] && number[5] === number[6]) {
-		amountWon = bet * 4;
-		win = true;
-	}
-
-	if (number[6] === number[7] && number[7] === number[8] && number[8] === number[9]) {
-		amountWon = bet * 4;
-		win = true;
-	}
-
 	// Two the same in each row
-	if (number[0] === number[1] || number[0] === number[2] || number[1] === number[2]) {
+	if (number[0] === number[1] || number[1] === number[2]) {
 		amountWon = bet * 2;
 		win = true;
 	}
@@ -69,7 +59,7 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.addField("Slot Machine", `${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}\n${SlotItems[number[3]]} | ${SlotItems[number[4]]} | ${SlotItems[number[5]]}\n${SlotItems[number[6]]} | ${SlotItems[number[7]]} | ${SlotItems[number[8]]}`)
+		.addField("Slot Machine", `${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}`)
 		.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true)
 		.setFooter({
 			text: bot.config.embed.footer,
