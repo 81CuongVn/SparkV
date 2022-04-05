@@ -5,7 +5,6 @@ const cmd = require("@templates/modCommand");
 const emojis = [
 	"⬅️",
 	bot.config.emojis.arrows.left,
-	bot.config.emojis.channel,
 	bot.config.emojis.arrows.right,
 	"➡️"
 ];
@@ -66,11 +65,6 @@ async function execute(bot, message, args, command, data) {
 		.setCustomId("left")
 		.setStyle("SECONDARY");
 
-	const number = new Discord.MessageButton()
-		.setEmoji(emojis[2])
-		.setCustomId("number")
-		.setStyle("SECONDARY");
-
 	const right = new Discord.MessageButton()
 		.setEmoji(emojis[3])
 		.setCustomId("right")
@@ -83,7 +77,7 @@ async function execute(bot, message, args, command, data) {
 
 	const msg = await message.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, number, right, quickRight)],
+		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)],
 		fetchReply: true
 	});
 
@@ -113,40 +107,6 @@ async function execute(bot, message, args, command, data) {
 				}
 			} else if (interaction.customId === "quickRight") {
 				PageNumber = pages.length - 1;
-			} else if (interaction.customId === "number") {
-				const infoMsg = await interaction.replyT("Please send a page number.");
-
-				await interaction.channel.awaitMessages({
-					filter: msg => {
-						if (msg.author.id === msg.client.user.id) return false;
-
-						if (!msg.content) {
-							msg.replyT("Please send a number!");
-
-							return false;
-						}
-
-						if (!parseInt(msg.content) && isNaN(msg.content)) {
-							msg.replyT("Please send a valid number!");
-
-							return false;
-						}
-
-						if (parseInt(msg.content) > pages.length) {
-							msg.replyT("That's a page number higher than the amount of pages there are.");
-
-							return false;
-						}
-
-						return true;
-					}, max: 1, time: 30 * 1000, errors: ["time"]
-				}).then(async collected => {
-					const input = parseInt(collected.first().content);
-
-					PageNumber = input - 1;
-					collected.first().delete().catch(err => { });
-					infoMsg.delete().catch(err => { });
-				}).catch(async collected => await interaction.replyT("Canceled due to no valid response within 30 seconds."));
 			} else {
 				return;
 			}

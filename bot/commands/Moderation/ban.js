@@ -2,7 +2,7 @@ const { MessageEmbed, Permissions } = require("discord.js");
 
 const cmd = require("@templates/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot, interaction, args, command, data) {
 	const user = data.options.getMember("user");
 	const reason = data.options.getString("reason") || "No reason provided.";
 
