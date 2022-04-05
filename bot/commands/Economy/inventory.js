@@ -96,26 +96,26 @@ module.exports = new cmd(
 			} else if (interaction.customId === "quickRight") {
 				PageNumber = pages.length - 1;
 			} else if (interaction.customId === "number") {
-				const infoMsg = await interaction.replyT("Please send a page number.");
+				const infoMsg = await interaction.reply("Please send a page number.");
 
 				await interaction.channel.awaitMessages({
 					filter: msg => {
 						if (msg.author.id === msg.client.user.id) return false;
 
 						if (!msg.content) {
-							msg.replyT("Please send a number!");
+							msg.reply("Please send a number!");
 
 							return false;
 						}
 
 						if (!parseInt(msg.content) && isNaN(msg.content)) {
-							msg.replyT("Please send a valid number!");
+							msg.reply("Please send a valid number!");
 
 							return false;
 						}
 
 						if (parseInt(msg.content) > pages.length) {
-							msg.replyT("That's a page number higher than the amount of pages there are.");
+							msg.reply("That's a page number higher than the amount of pages there are.");
 
 							return false;
 						}

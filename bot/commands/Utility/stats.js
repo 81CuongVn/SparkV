@@ -31,7 +31,7 @@ module.exports = new cmd(
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
-			.addField(`**Server**`, `${bot.config.emojis.rocket} CPU: **${(process.cpuUsage().user / 1024 / 1024).toFixed(2)}%**\n${bot.config.emojis.stats} Memory: **${(((os.totalmem() - os.freemem()) / (os.totalmem())) * 100).toFixed(2)}%**`, true)
+			.addField(`**Server**`, `${bot.config.emojis.rocket} CPU: **${(process.cpuUsage().user / 1024 * 2 / 100).toFixed(0)}%**\n${bot.config.emojis.stats} Memory: **${(((os.totalmem() - os.freemem()) / (os.totalmem())) * 100).toFixed(2)}%**`, true)
 			.addField(`**Bot Statistics**`, `${bot.config.emojis.globe} Servers: **${bot.functions.formatNumber(await bot.functions.GetServerCount())}**\n${bot.config.emojis.player} Users: **${bot.functions.formatNumber(await bot.functions.GetUserCount())}**`, true)
 			.setFooter({
 				text: `SparkV's Stats • ${bot.config.embed.footer}`,
