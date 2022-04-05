@@ -15,14 +15,14 @@ async function execute(bot, message, args, command, data) {
 	}).then(async data => {
 		data = Buffer.from(data.data, "base64");
 
-		const Image = new Discord.MessageAttachment(data, `${website.split(".")[0]}.png`);
+		const Image = new Discord.MessageAttachment(data, `website.png`);
 		const ImageEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ format: "png" })
 			})
 			.setTitle(`Screenshot of ${website}`)
-			.setImage(`attachment://${website.split(".")[0]}.png`)
+			.setImage(`attachment://website.png`)
 			.setFooter({
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ format: "png" })
