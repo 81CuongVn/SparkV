@@ -353,9 +353,5 @@ module.exports = async bot => {
 		.on("finish", queue => queue.textChannel.send("No songs left in queue."))
 		.on("noRelated", async message => await message.replyT("I cannot find a related video to play. I am stopping the music."))
 		.on("empty", queue => queue.textChannel.send("Voice chat is empty. I'm going to leave the voice chat now."))
-		.on("error", (channel, err) => {
-			bot.logger(err, "error");
-
-			channel.textChannel?.send(`❎︱Uh oh! An error occured. Please try again later. ${err}`);
-		});
+		.on("error", (channel, err) => channel.textChannel?.send(`${bot.config.emojis.error}︱Uh oh! An error occured. ${err}`));
 };
