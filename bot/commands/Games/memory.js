@@ -42,7 +42,7 @@ async function execute(bot, message, args, command, data) {
 		})
 		.setDescription(Memorize)
 		.setFooter({
-			text: `You have 15 seconds to remember this pattern! • ${bot.config.embed.footer}`,
+			text: `${await message.translate("You have 15 seconds to remember this pattern!")} • ${bot.config.embed.footer}`,
 			iconURL: bot.user.displayAvatarURL()
 		})
 		.setColor(bot.config.embed.color);
@@ -54,7 +54,7 @@ async function execute(bot, message, args, command, data) {
 	await bot.wait(15 * 1000);
 
 	MemorizeMessage.edit({
-		embeds: [MemorizeEmbed.setDescription("Send the pattern!").setFooter(`You have 15 seconds to send the pattern you just saw. • ${bot.config.embed.footer}`)]
+		embeds: [MemorizeEmbed.setDescription(await message.translate("Send the pattern!")).setFooter(`${await message.translate("You have 15 seconds to send the pattern you just saw.")} • ${bot.config.embed.footer}`)]
 	});
 
 	const Guess = await message.channel.awaitMessages(res => messages.author.id === res.author.id, {
@@ -64,15 +64,15 @@ async function execute(bot, message, args, command, data) {
 		filter: m => {
 			if (!m?.content) return message.replyT("You didn't send a message!");
 		}
-	}).then(collected => {
+	}).then(async collected => {
 		collected = collected.first();
 
 		if (collected.content.toLowerCase() === Memorize.toLowerCase()) {
-			return MemorizeMessage.edit(`🎉 You won! The pattern was: ${Memorize}`);
+			return MemorizeMessage.edit(`${await message.translate("🎉 You won! The pattern was: ")}${Memorize}`);
 		} else {
-			return MemorizeMessage.edit(`💔 You lost. The pattern was: ${Memorize}`);
+			return MemorizeMessage.edit(`${await message.translate("💔 You lost. The pattern was: ")}${Memorize}`);
 		}
-	}).catch(err => MemorizeMessage.edit(`❔ Times up! The emojis were ${Memorize}.`));
+	}).catch(async err => MemorizeMessage.edit(`${await message.translate("❔ Times up! The emojis were ")}${Memorize}.`));
 }
 
 module.exports = new cmd(execute, {

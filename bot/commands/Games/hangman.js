@@ -23,7 +23,7 @@ async function execute(bot, message) {
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
-			.setTitle("Hangman")
+			.setTitle(await message.translate("Hangman"))
 			.setDescription(`\`\`\`
         +--+
         |  |
@@ -32,10 +32,10 @@ async function execute(bot, message) {
         | ${lives < 2 ? "/" : " "} ${lives < 1 ? "\\" : " "}
         |
     ---------
-        \`\`\`\n${gameOver ? `${(gameStatus === "won" ? "You won!" : "You lost. Better luck next time.")} The word was \`${word}\`` : "You got this!"}`)
-			.addField("Word", `\`${progress}\``, false)
-			.addField("Guesses", `${misses.join(", ") || "None."}`, true)
-			.addField("Lives", `${"❤️".repeat(lives >= 0 ? lives : 0)}${"🖤".repeat(6 - lives)}`, true)
+			\`\`\`\n${gameOver ? `${(gameStatus === await message.translate("won") ? await message.translate("You won!") : await message.translate("You lost. Better luck next time."))} ${await message.translate("The word was")} \`${word}\`` : await message.translate("You got this!")}`)
+			.addField(await message.translate("Word"), `\`${progress}\``, false)
+			.addField(await message.translate("Guesses"), `${misses.join(", ") || "None."}`, true)
+			.addField(await message.translate("Lives"), `${"❤️".repeat(lives >= 0 ? lives : 0)}${"🖤".repeat(6 - lives)}`, true)
 			.setColor(gameOver ? (gameStatus === "won" ? "GREEN" : "RED") : "BLUE");
 
 		if (menuEmbed) {
@@ -64,7 +64,7 @@ async function execute(bot, message) {
 
 		if (guess.length === 1) {
 			if (misses.includes(`\`${guess}\``)) {
-				await m.replyT(`\`${guess}\` has already been guessed. Try again!`).then(async m => setTimeout(() => m.delete(), 5000));
+				await m.replyT(`\`${guess}\` ${await message.translate("has already been guessed. Try again!")}`).then(async m => setTimeout(() => m.delete(), 5000));
 
 				return setTimeout(() => m.delete(), 5000);
 			}

@@ -15,7 +15,7 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 			if (m.content.toLowerCase() === chosenWord.toLowerCase()) {
 				return true;
 			} else {
-				m.reply("Nice try, but you didn't spell the word correctly!");
+				m.replyT("Nice try, but you didn't spell the word correctly!");
 
 				return false;
 			}
@@ -29,7 +29,7 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 		const seconds = (time % 60).toFixed(2);
 		const WPM = (colMessage.content.toLowerCase().trim().length / 5 / (time / 60)).toFixed(2);
 
-		await Menu.edit(`${Menu.content}\n\n🎉 | ${colMessage.author} has won the game in **${seconds} seconds** with a WPM of **${WPM}**!`);
+		await Menu.edit(`${Menu.content}\n\n${await message.translate("🎉 | ")}${colMessage.author}${await message.translate(" has won the game in ")}**${seconds} ${await message.translate("seconds")}** ${await message.translate("with a WPM of ")}**${WPM}**!`);
 		await message.replyT(`🥇 ${colMessage.author} got it right in **${seconds} seconds** with a WPM of **${WPM}**!`);
 	}).catch(err => {
 		bot.logger(err, "error");

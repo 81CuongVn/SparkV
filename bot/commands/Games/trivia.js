@@ -27,21 +27,21 @@ async function execute(bot, message, args, command, data) {
 					name: message.user.tag,
 					iconURL: message.user.displayAvatarURL({ dynamic: true })
 				})
-				.setTitle(`${bot.config.emojis.config} | Loading...`)
-				.setDescription(`Please wait...`)
+				.setTitle(await message.translate(`${bot.config.emojis.config} | Loading...`))
+				.setDescription(await message.translate(`Please wait...`))
 				.setFooter({
 					text: bot.config.embed.footer,
 					icon_url: bot.user.displayAvatarURL({ dynamic: true })
 				})
-				.setColor("GREY")
+				.setColor("BLUE")
 		]
 	});
 
 	const triviaData = await axios.get(`https://opentdb.com/api.php?amount=1&type=multiple&difficulty=${difficulty}`).then(res => res.data.results[0]);
 
 	const choices = [];
-	triviaData.incorrect_answers.forEach(answer => choices.push(answer));
-	choices.push(triviaData.correct_answer);
+	triviaData.incorrect_answers.forEach(async answer => choices.push(await message.translate(answer)));
+	choices.push(await message.translate(triviaData.correct_answer));
 
 	shuffle(choices);
 
@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`${bot.config.emojis.question} | **${triviaData.question.replaceAll("&quot;", "\"")}**\nYou only have **1 minute** to guess the answer!\n\n${choices.map(choice => {
+		.setDescription(`${bot.config.emojis.question} | **${triviaData.question.replaceAll("&quot;", "\"")}**\n${await message.translate("You only have ")}**${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
 			number++;
 			return `**${number}**) ${choice}`;
 		}).join("\n")}`)
@@ -59,22 +59,22 @@ async function execute(bot, message, args, command, data) {
 
 	const answer1B = new Discord.MessageButton()
 		.setEmoji("1️⃣")
-		.setCustomId(`1`)
+		.setCustomId("1")
 		.setStyle("SECONDARY");
 
 	const answer2B = new Discord.MessageButton()
 		.setEmoji(bot.config.emojis.numbers.two)
-		.setCustomId(`2`)
+		.setCustomId("2")
 		.setStyle("SECONDARY");
 
 	const answer3B = new Discord.MessageButton()
 		.setEmoji("3️⃣")
-		.setCustomId(`3`)
+		.setCustomId("3")
 		.setStyle("SECONDARY");
 
 	const answer4B = new Discord.MessageButton()
 		.setEmoji("4️⃣")
-		.setCustomId(`4`)
+		.setCustomId("4")
 		.setStyle("SECONDARY");
 
 	await trivia.edit({
@@ -106,11 +106,11 @@ async function execute(bot, message, args, command, data) {
 
 		if ((parseInt(interaction.customId) - 1) === winningNumber) {
 			embed
-				.setDescription(`${bot.config.emojis.success} | Great job! The answer was **${triviaData.correct_answer}**!`)
+				.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}**${triviaData.correct_answer}**!`)
 				.setColor("GREEN");
 		} else {
 			embed
-				.setDescription(`${bot.config.emojis.error} | That's not right... better luck next time. The answer was **${triviaData.correct_answer}**.`)
+				.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The answer was ")}**${triviaData.correct_answer}**.`)
 				.setColor("RED");
 
 			if ((parseInt(interaction.customId) - 1) === 0) {
