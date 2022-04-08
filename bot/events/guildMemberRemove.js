@@ -19,7 +19,7 @@ module.exports = {
 			text: {
 				title: "Goodbye!",
 				desc: "We hope to see you again soon!",
-				footer: "You're our 5th member!"
+				footer: `You're our ${member.guild.memberCount}${member.guild.memberCount === 1 ? "st" : (member.guild.memberCount === 2 ? "nd" : (member.guild.memberCount >= 3 ? "th" : "th"))} member!`
 			}
 		});
 

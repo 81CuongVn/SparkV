@@ -31,11 +31,9 @@ module.exports = {
 			text: {
 				title: "Welcome!",
 				desc: "Welcome to the server!",
-				footer: "You're our 5th member!"
+				footer: `You're our ${member.guild.memberCount}${member.guild.memberCount === 1 ? "st" : (member.guild.memberCount === 2 ? "nd" : (member.guild.memberCount >= 3 ? "th" : "th"))} member!`
 			}
 		});
-
-		console.log("working");
 
 		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Welcome-${member.user.tag}.png`);
 		const msg = data.plugins.welcome.message
