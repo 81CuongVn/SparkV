@@ -79,13 +79,13 @@ module.exports = new cmd({
 				{
 					type: 6,
 					name: "user2",
-					description: "The brother, who is being called a monster.",
+					description: "The user on the top of the bed, who calls his brother a monster.",
 					required: true
 				},
 				{
 					type: 6,
 					name: "user",
-					description: "The user on the top of the bed, who calls his brother a monster."
+					description: "The brother, who is being called a monster."
 				}
 			]
 		},
