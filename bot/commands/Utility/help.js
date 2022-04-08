@@ -14,7 +14,7 @@ async function execute(bot, message, args, command, data) {
 			.filter(command => command.settings.enabled && command.category === cat.name)
 			.map(async command => commands.push({
 				name: `\`\`\`/${command.settings.name} ${command.settings.usage}\`\`\``,
-				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter(option => option.type === 1).map(option => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map(op => `(${op.name})`).join(" ") : null}\``).join("\n")}` : ""}`
+				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter(option => option.type === 1).map(option => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map(op => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
 			}));
 
 		const user = message.applicationId ? message.user : message.author;
