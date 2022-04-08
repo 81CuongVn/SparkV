@@ -8,6 +8,8 @@ async function execute(bot, message, args, command, data) {
 
 	const Queue = bot.distube.getQueue(message);
 
+	if (!Queue) return message.replyT(`${bot.config.emojis.error} | There is nothing playing right now.`);
+
 	if (state === "off" && Queue.filter) {
 		bot.distube.setFilter(message, Queue.filter);
 
