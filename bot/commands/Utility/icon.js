@@ -39,7 +39,7 @@ async function execute(bot, message, args, command, data) {
 
 		embed
 			.setAuthor({
-				name: `${message.guild.name}'s Server Icon`,
+				name: `${message.guild.name}'s ${await message.translate("Server Icon")}`,
 				iconURL: guildIcon
 			})
 			.setDescription(`[32px](${guildIcon}?size=32) | [64px](${guildIcon}?size=64) | [128px](${guildIcon}?size=128) | [256px](${guildIcon}?size=256) | [512px](${guildIcon}?size=512) | [1024px](${guildIcon}?size=1024)\n[png](${pngType}) | [jpg](${jpgType}) | [gif](${gifType})`)

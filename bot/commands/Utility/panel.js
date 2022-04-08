@@ -7,8 +7,8 @@ async function execute(bot, message, args, command, data) {
 	const state = data.options.getSubcommand();
 
 	if (state === "tickets") {
-		const title = data.options.getString("title") || `${bot.config.emojis.ticket} | Get Support`;
-		const description = data.options.getString("description") || "Need help? Click the button below to create a support ticket.";
+		const title = data.options.getString("title") || await message.translate(`${bot.config.emojis.ticket} | Get Support`);
+		const description = data.options.getString("description") || await message.translate("Need help? Click the button below to create a support ticket.");
 		const color = data.options.getString("color") || bot.config.embed.color;
 
 		const ticketEmbed = new Discord.MessageEmbed()
@@ -17,7 +17,7 @@ async function execute(bot, message, args, command, data) {
 			.setColor(color);
 
 		const ticketCreateButton = new Discord.MessageButton()
-			.setLabel("Create Ticket")
+			.setLabel(await message.translate("Create Ticket"))
 			.setEmoji(bot.config.emojis.ticket)
 			.setStyle("SECONDARY")
 			.setCustomId("ticket_create");

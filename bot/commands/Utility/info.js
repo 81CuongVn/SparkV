@@ -72,23 +72,23 @@ async function execute(bot, message, args, command, data) {
 
 		const InfoEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: `${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? "Robot" : "Human"})`,
+				name: `${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? await message.translate("Robot") : await message.translate("Human")})`,
 				iconURL: (user.user ? user.user : user).displayAvatarURL({ dynamic: true }),
 			})
 			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
-			.addField(`${statuses[member?.presence?.status || "offline"]} Presence`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? capFirstLetter(member?.presence?.status) : "None")}\`\`\``, true)
-			.addField(`${bot.config.emojis.clock} Join Position`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
+			.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? capFirstLetter(member?.presence?.status) : "None")}\`\`\``, true)
+			.addField(`${bot.config.emojis.clock} ${await message.translate("Join Position")}`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
 			.setFooter({
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(roleColor || bot.config.embed.color);
 
-		if (user.flags.toArray().length > 0) InfoEmbed.addField(`${bot.config.emojis.award} Badges`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
+		if (user.flags.toArray().length > 0) InfoEmbed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
 
 		InfoEmbed
-			.addField(`${bot.config.emojis.plus} Registered`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
-			.addField(`${bot.config.emojis.join} Joined Server`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
+			.addField(`${bot.config.emojis.plus} ${await message.translate("Registered")}`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
+			.addField(`${bot.config.emojis.join} ${await message.translate("Joined Server")}`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
 
 		if (roles) InfoEmbed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
 
@@ -168,7 +168,7 @@ async function execute(bot, message, args, command, data) {
 
 			const serverEmbed = new Discord.MessageEmbed()
 				.setAuthor({
-					name: `Server Info`,
+					name: await message.translate(`Server Info`),
 					iconURL: bot.user.displayAvatarURL({ format: "png" }),
 				})
 				.setTitle(serverinfo.guild.name)
@@ -210,13 +210,13 @@ async function execute(bot, message, args, command, data) {
 		if (message.guild?.vanity_url_code) Basic.setURL(`https://discord.gg/${message.guild.vanityURLCode}`);
 
 		const serverIcon = new Discord.MessageButton()
-			.setLabel("Server Icon")
+			.setLabel(await message.translate("Server Icon"))
 			.setEmoji("🖼️")
 			.setStyle("LINK")
 			.setURL(message.guild.iconURL({ dynamic: true }) || "https://cdn.discordapp.com/embed/avatars/1.png");
 
 		const bannerButton = new Discord.MessageButton()
-			.setLabel("Banner")
+			.setLabel(await message.translate("Banner"))
 			.setEmoji("🏳️")
 			.setStyle("LINK")
 			.setURL(`https://cdn.discordapp.com/banners/${message.guild.id}/${message.guild.banner}.png?size=1024`);

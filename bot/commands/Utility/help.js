@@ -81,7 +81,7 @@ async function execute(bot, message, args, command, data) {
 				.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
 				.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
 				.setFooter({
-					text: await message.translate(`/Help to get a list of all commands • ${bot.config.embed.footer}`),
+					text: await message.translate(`Type /help to get a list of all commands • ${bot.config.embed.footer}`),
 					iconURL: bot.user.displayAvatarURL()
 				})
 				.setColor(bot.config.embed.color);
