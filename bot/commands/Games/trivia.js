@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`${bot.config.emojis.question} | **${triviaData.question.replaceAll("&quot;", "\"")}**\n${await message.translate("You only have ")}**${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
+		.setDescription(`${bot.config.emojis.question} | **${await message.translate(triviaData.question.replaceAll("&quot;", "\""))}**\n${await message.translate("You only have")} **${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
 			number++;
 			return `**${number}**) ${choice}`;
 		}).join("\n")}`)
