@@ -32,11 +32,13 @@ module.exports = new cmd(execute, {
 			type: 6,
 			name: "user",
 			description: "The user who I should change the nickname of.",
+			required: true
 		},
 		{
 			type: 3,
 			name: "nickname",
 			description: "The user's new nickname.",
+			required: true
 		}
 	]
 });
