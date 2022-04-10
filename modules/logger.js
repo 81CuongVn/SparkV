@@ -31,16 +31,16 @@ module.exports = async (content, type) => {
 
 			if (global?.bot?.isReady() === true) {
 				const errorChannel = await global.bot.channels.fetch("948686231892545547");
-	
+
 				if (errorChannel) {
 					const ErrorEmbed = new Discord.MessageEmbed()
 						.setTitle("Uh oh!")
 						.setDescription(`**An error occured!**`)
 						.addField("**Error**", `\`\`\`${content}\`\`\``)
 						.setColor("RED");
-	
+
 					if (content?.stack) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
-	
+
 					await errorChannel.send({
 						embeds: [ErrorEmbed],
 					});
@@ -48,7 +48,7 @@ module.exports = async (content, type) => {
 			}
 		}
 
-		return console.log(`[Error] ${chalk.red(content)}`);
+		return console.log(`[Error] ${chalk.red(process.argv.includes("--dev") === true ? (content?.stack || content) : content)}`);
 	} else if (type === "bot") {
 		return console.log(`[App] | ${content}`);
 	} else if (type === "web") {
