@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **97 commands**!
+SparkV's Command List! SparkV contains more than **83 commands**!
 
 ## Chatbot
 
@@ -86,25 +86,11 @@ SparkV's Command List! SparkV contains more than **97 commands**!
 
 ## Music
 
-| Name           | Description                                                                | Usage                                                       | Cooldown  |
-| -------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
-| **filter**     | Change what the song sounds like! Requires administrator to prevent abuse. | (filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off) | 5 seconds |
-| **join**       | Joins your voice channel.                                                  |                                                             | 5 seconds |
-| **jump**       | I will jump to a certain song in the queue.                                | (number)                                                    | 5 seconds |
-| **leave**      | Joins your voice channel.                                                  |                                                             | 5 seconds |
-| **lyrics**     | Get any song's lyrics!                                                     | (song title or URL)                                         | 2 seconds |
-| **nowplaying** | I will display the currently playing song.                                 |                                                             | 5 seconds |
-| **pause**      | Pauses the current song playing.                                           |                                                             | 5 seconds |
-| **play**       | Plays a song with the given name or URL.                                   | (song title or URL)                                         | 5 seconds |
-| **previous**   | Change the current track's position.                                       | (number)                                                    | 5 seconds |
-| **queue**      | Shows the songs in queue.                                                  | (number)                                                    | 5 seconds |
-| **repeat**     | Replays the currently playing song.                                        | (song or queue: leave empty to deactivate)                  | 5 seconds |
-| **resume**     | Resume playing the current song.                                           |                                                             | 5 seconds |
-| **seek**       | Change the current track's position.                                       | (number)                                                    | 5 seconds |
-| **shuffle**    | Shuffles the queue.                                                        |                                                             | 5 seconds |
-| **skip**       | Skip to the next song in the queue.                                        |                                                             | 5 seconds |
-| **stop**       | Disconnects me from the voice channel and removes all songs in queue.      |                                                             | 5 seconds |
-| **volume**     | Sets the volume of the currently playing track.                            |                                                             | 5 seconds" |
+| Name       | Description                                                                | Usage                                                       | Cooldown  |
+| ---------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
+| **filter** | Change what the song sounds like! Requires administrator to prevent abuse. | (filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off) | 5 seconds |
+| **lyrics** | Get any song's lyrics!                                                     | (song title or URL)                                         | 2 seconds |
+| **music**  | Play music in your server!                                                 |                                                             | 5 seconds" |
 
 ## Reddit
 
