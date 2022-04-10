@@ -28,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 	const text = data.options.getString("text");
 
 	if (!text) return await message.replyT(`${bot.config.emojis.error} | Please supply text.`);
-	if (text.length > 100) return await message.replyT(`${bot.config.emojis.error} | Please keep the text under 100 characters.`);
+	if (text.length > 500) return await message.replyT(`${bot.config.emojis.error} | Please keep the text under 500 characters.`);
 
 	let editedText;
 
@@ -60,7 +60,7 @@ async function execute(bot, message, args, command, data) {
 		editedText = `That text has **${text.length} characters**.`;
 	}
 
-	await message.replyT(editedText);
+	await message.replyT(editedText.length >= 2000 ? `${editedText.slice(0, 1990)}...` : editedText);
 }
 
 module.exports = new cmd(execute, {
