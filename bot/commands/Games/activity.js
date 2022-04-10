@@ -8,6 +8,7 @@ module.exports = new cmd(null, {
 	dirname: __dirname,
 	aliases: [],
 	perms: ["START_EMBEDDED_ACTIVITIES"],
+	bot_perms: ["START_EMBEDDED_ACTIVITIES"],
 	type: "activity",
 	slash: true,
 	ephemeral: true,
