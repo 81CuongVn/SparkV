@@ -16,7 +16,7 @@ module.exports = class RedditCommand {
 				{
 					cooldown: 2 * 1000,
 					slash: true,
-					perms: ["EMBED_LINKS"],
+					bot_perms: ["EMBED_LINKS"],
 				},
 				sett,
 			),

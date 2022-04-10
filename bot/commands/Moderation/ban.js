@@ -44,6 +44,7 @@ module.exports = new cmd(execute, {
 	usage: "(user) (optional: reason)",
 	aliases: [],
 	perms: ["BAN_MEMBERS"],
+	bot_perms: ["BAN_MEMBERS"],
 	slash: true,
 	slashOnly: true,
 	ephemeral: true,

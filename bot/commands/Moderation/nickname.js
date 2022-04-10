@@ -24,6 +24,7 @@ module.exports = new cmd(execute, {
 	aliases: ["setnick"],
 	usage: `(user) (nickname)`,
 	perms: ["CHANGE_NICKNAME"],
+	bot_perms: ["CHANGE_NICKNAME"],
 	slash: true,
 	slashOnly: true,
 	ephemeral: true,

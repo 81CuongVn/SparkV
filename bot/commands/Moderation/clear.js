@@ -53,6 +53,7 @@ module.exports = new cmd(execute, {
 	usage: `(# of messages) (Optional: Type (all, user only, pinned only))`,
 	aliases: [`purge`, `clr`],
 	perms: ["MANAGE_MESSAGES"],
+	bot_perms: ["MANAGE_MESSAGES"],
 	slash: true,
 	slashOnly: true,
 	options: [

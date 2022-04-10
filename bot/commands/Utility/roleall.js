@@ -20,6 +20,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["rall"],
 	perms: ["MANAGE_ROLES"],
+	bot_perms: ["MANAGE_ROLES"],
 	usage: `(@role)`,
 	slash: true,
 	slashOnly: true,

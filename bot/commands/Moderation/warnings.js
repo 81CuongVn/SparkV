@@ -131,7 +131,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["infractions"],
 	usage: `(user)`,
-	perms: ["KICK_MEMBERS"],
+	perms: ["MODERATE_MEMBERS"],
+	bot_perms: ["MODERATE_MEMBERS"],
 	slash: true,
 	options: [
 		{
