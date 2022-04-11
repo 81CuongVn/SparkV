@@ -29,21 +29,19 @@ module.exports = {
 			if (process.env.DBGGKEY) apiKeys.discordbotsgg = process.env.DBGGKEY;
 			if (process.env.DBL3KEY) apiKeys.DiscordBotlistEU = process.env.DBL3KEY;
 
-			if (apiKeys.length > 0) {
-				const poster = new dbots.Poster({
-					client: bot,
-					apiKeys,
-					clientLibrary: "discord.js",
-					serverCount: async () => await bot.functions.GetServerCount(),
-					userCount: async () => await bot.functions.GetUserCount(),
-				});
+			const poster = new dbots.Poster({
+				client: bot,
+				apiKeys,
+				clientLibrary: "discord.js",
+				serverCount: async () => await bot.functions.GetServerCount(),
+				userCount: async () => await bot.functions.GetUserCount(),
+			});
 
-				// Start Posting to Bot Lists
-				poster.post();
-				poster.startInterval();
+			// Start Posting to Bot Lists
+			poster.post();
+			poster.startInterval();
 
-				bot.logger(`[App] Botlist statistics posting started.`);
-			}
+			bot.logger(`[App] Botlist statistics posting started.`);
 		}
 
 		// Bot Stats
