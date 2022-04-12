@@ -288,7 +288,7 @@ module.exports = new cmd({
 
 			return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
 		} else if (state === "ohno") {
-			const user = data.options.getString("text");
+			const text = data.options.getString("text");
 
 			return await canvacord.Canvas.ohno(text);
 		} else if (state === "opinion") {

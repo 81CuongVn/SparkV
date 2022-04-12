@@ -13,12 +13,12 @@ async function execute(bot, interaction, args, command, data) {
 
 	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.replyT(`${bot.config.emojis.error} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 
-	message.delete().catch(err => {});
-	user.send(`${bot.config.emojis.error} | You have been banned from ${message.guild.name}. Reason: ${ReasonForBan}.`,).catch(err => {});
+	interaction.deleteReply().catch(err => {});
+	user.send(`${bot.config.emojis.error} | You have been banned from ${interaction.guild.name}. Reason: ${ReasonForBan}.`).catch(err => {});
 
 	user.ban({
 		reason,
-	}).catch(async err => await message.replyT(`${bot.config.emojis.error} | Failed to ban. Please check my permissions and try again.`));
+	}).catch(async err => await interaction.replyT(`${bot.config.emojis.error} | Failed to ban. Please check my permissions and try again.`));
 
 	const WarnEmbed = new MessageEmbed()
 		.setAuthor({
