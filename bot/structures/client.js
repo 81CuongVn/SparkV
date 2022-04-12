@@ -70,7 +70,7 @@ module.exports = class bot extends Client {
 				postCpuStatistics: true,
 				postMemStatistics: true,
 				postNetworkStatistics: true,
-				autopost: true,
+				autopost: true
 			});
 		} else {
 			this.StatClient = await new Statcord.Client({
@@ -79,9 +79,11 @@ module.exports = class bot extends Client {
 				postCpuStatistics: true,
 				postMemStatistics: true,
 				postNetworkStatistics: true,
-				autopost: true,
+				autopost: true
 			});
 		}
+
+		this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size ?? 0);
 
 		this.discordTogether = new DiscordTogether(this);
 
