@@ -27,6 +27,7 @@
     "@distube/soundcloud": "^1.1.0",
     "@distube/spotify": "^1.2.1",
     "@distube/yt-dlp": "^1.0.2",
+    "@distube/ytdl-core": "^4.11.2",
     "@sentry/node": "^6.19.6",
     "@vitalets/google-translate-api": "^8.0.0",
     "axios": "^0.26.1",
