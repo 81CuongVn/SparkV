@@ -162,7 +162,7 @@ module.exports = async bot => {
 			} else if (interaction.customId === "lyrics") {
 				embed
 					.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
-					.setDescription(lyrics)
+					.setDescription(lyrics.length >= 4000 ? `${lyrics.slice(0, 2000)}...\nView more lyrics by typing /lyrics.` : lyrics)
 					.setColor(bot.config.embed.color);
 			}
 
