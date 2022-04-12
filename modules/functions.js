@@ -172,19 +172,28 @@ module.exports = {
 	/**
    *
    * @param {number} ms The ms to convert to a time.
+   * @param {string} type The type of formatted time. (long/short)
    * @returns {string} The time.
    */
-	MSToTime(ms) {
+	MSToTime(ms, type = "long") {
 		const RoundNumber = ms > 0 ? Math.floor : Math.ceil;
 		const Days = RoundNumber(ms / 86400000);
 		const Hours = RoundNumber(ms / 3600000) % 24;
 		const Mins = RoundNumber(ms / 60000) % 60;
 		const Secs = RoundNumber(ms / 1000) % 60;
 
-		let time = Days > 0 ? `${Days} Day${Days === 1 ? "" : "s"}, ` : "";
-		time += Hours > 0 ? `${Hours} Hour${Hours === 1 ? "" : "s"}, ` : "";
-		time += Mins > 0 ? `${Mins} Minute${Mins === 1 ? "" : "s"} & ` : "";
-		time += Secs > 0 ? `${Secs} Second${Secs === 1 ? "" : "s"}.` : "0 Seconds.";
+		let time;
+		if (type === "long") {
+			time = Days > 0 ? `${Days} Day${Days === 1 ? "" : "s"}, ` : "";
+			time += Hours > 0 ? `${Hours} Hour${Hours === 1 ? "" : "s"}, ` : "";
+			time += Mins > 0 ? `${Mins} Minute${Mins === 1 ? "" : "s"} & ` : "";
+			time += Secs > 0 ? `${Secs} Second${Secs === 1 ? "" : "s"}.` : "0 Seconds.";
+		} else if (type === "short") {
+			time = Days > 0 ? `${Days}d ` : "";
+			time += Hours > 0 ? `${Hours}h ` : "";
+			time += Mins > 0 ? `${Mins}m ` : "";
+			time += Secs > 0 ? `${Secs}s` : "0s";
+		}
 
 		return time;
 	},
