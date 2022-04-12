@@ -83,7 +83,7 @@ module.exports = class bot extends Client {
 			});
 		}
 
-		this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size ?? 0);
+		this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size.toString() ?? "0");
 
 		this.discordTogether = new DiscordTogether(this);
 
@@ -241,6 +241,6 @@ module.exports = class bot extends Client {
 
 		updateDocs.update(this, process.env.MainDir);
 
-		// this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
+		this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
 	}
 };
