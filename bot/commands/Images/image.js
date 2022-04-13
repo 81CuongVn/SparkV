@@ -25,13 +25,13 @@ module.exports = new cmd({
 		},
 		{
 			type: 1,
-			name: "shit",
-			description: "Ewww! I stept in shit!!",
+			name: "garbage",
+			description: "Ewww! I stept in garbage!!",
 			options: [
 				{
 					type: 6,
 					name: "user",
-					description: "The user to show as shit."
+					description: "The user to show as garbage."
 				}
 			]
 		},
@@ -258,7 +258,7 @@ module.exports = new cmd({
 			const user = data.options.getUser("user") || message.user;
 
 			return await canvacord.Canvas.jail(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "shit") {
+		} else if (state === "garbage") {
 			const user = data.options.getUser("user") || message.user;
 
 			return await canvacord.Canvas.shit(user.displayAvatarURL({ format: "png" }));
