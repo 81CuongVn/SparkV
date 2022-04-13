@@ -10,7 +10,8 @@ async function execute(bot, message, args, command, data) {
 
 	Leaderboard = Leaderboard
 		.sort((a, b) => b.money.balance - a.money.balance)
-		.filter(user => bot.users.cache.has(user.id));
+		.filter(user => bot.users.cache.has(user.id))
+		.slice(0, 15);
 
 	if (global === false) Leaderboard = Leaderboard.filter(user => message.guild.members.cache.has(user.id));
 
