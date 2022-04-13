@@ -31,7 +31,7 @@ module.exports = new cmd(
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
-			.addField(`**${await message.translate("Server")}**`, `${bot.config.emojis.rocket} ${await message.translate("CPU")}: **${(process.cpuUsage().system / 1000 / 1000 / 10).toFixed(2)}%**\n${bot.config.emojis.clock} Uptime: **${bot.functions.MSToTime(bot.uptime, "short")}**`, true)
+			.addField(`**${await message.translate("Server")}**`, `${bot.config.emojis.rocket} ${await message.translate("CPU")}: **${(process.cpuUsage().system / 1000 / 1000 / 10).toFixed(2)}%**\n${bot.config.emojis.stats} Memory: **${(((os.totalmem() - os.freemem()) / (os.totalmem())) * 100).toFixed(2)}%**\n${bot.config.emojis.clock} Uptime: **${bot.functions.MSToTime(bot.uptime, "short")}**`, true)
 			.addField(`**${await message.translate("Bot Statistics")}**`, `${bot.config.emojis.globe} ${await message.translate("Servers")}: **${bot.functions.formatNumber(await bot.functions.GetServerCount())}**\n${bot.config.emojis.player} Users: **${bot.functions.formatNumber(await bot.functions.GetUserCount())}**`, true)
 			.setImage("https://dblstatistics.com/bot/884525761694933073/widget/servers?width=1500&height=700&titleFontSize=20&labelFontSize=40&fillColor=0a1227?&lineColor=4752cc&backgroundColor=00000000")
 			.setFooter({
