@@ -23,11 +23,10 @@ module.exports = {
 			const apiKeys = {};
 
 			if (process.env.DBLKEY) apiKeys.topgg = process.env.DBLKEY;
-			if (process.env.DBL2KEY) apiKeys.discordbotlist = process.env.DBL2KEY;
 			if (process.env.VBLKEY) apiKeys.voidbots = process.env.VBLKEY;
 			if (process.env.DLBLKEY) apiKeys.discordlabs = process.env.DLBLKEY;
 			if (process.env.DBGGKEY) apiKeys.discordbotsgg = process.env.DBGGKEY;
-			if (process.env.DBL3KEY) apiKeys.DiscordBotlistEU = process.env.DBL3KEY;
+			if (process.env.DBLEUKEY) apiKeys.DiscordBotlistEU = process.env.DBLEUKEY;
 
 			const poster = new dbots.Poster({
 				client: bot,
