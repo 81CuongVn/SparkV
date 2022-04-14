@@ -12,8 +12,6 @@ module.exports = {
 
 		if (member.pending === false) {
 			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
-				const roles = data.plugins.welcome.roles.map(r => member.guild.roles.cache.get(r));
-
 				data.plugins.welcome.roles.forEach(async r => {
 					if (await member.guild.roles.fetch(r)) {
 						await member.roles.add(await member.guild.roles.fetch(r));

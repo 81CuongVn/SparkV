@@ -12,8 +12,6 @@ module.exports = {
 
 		if (oldMember.pending === true && newMember.pending === false) {
 			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
-				const roles = data.plugins.welcome.roles.map(r => newMember.guild.roles.cache.get(r));
-
 				data.plugins.welcome.roles.forEach(async r => {
 					if (await newMember.guild.roles.fetch(r)) {
 						await newMember.roles.add(await newMember.guild.roles.fetch(r));
