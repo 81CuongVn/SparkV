@@ -9,7 +9,7 @@ async function execute(bot, message, args, command, data) {
 	if (text.includes("@everyone") || text.includes("@here")) return await message.replyT("Nice try kid. No pings for you.");
 
 	await message.replyT(`${text}\n*-${message.user.tag}*`);
-	message.delete().catch(_ => {});
+	message.deleteReply().catch(_ => {});
 }
 
 module.exports = new cmd(execute, {
