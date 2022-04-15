@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **75 commands**!
+SparkV's Command List! SparkV contains more than **74 commands**!
 
 ## Chatbot
 
