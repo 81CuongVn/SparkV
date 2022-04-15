@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **79 commands**!
+SparkV's Command List! SparkV contains more than **75 commands**!
 
 ## Chatbot
 
@@ -38,6 +38,7 @@ SparkV's Command List! SparkV contains more than **79 commands**!
 | **levelboard**  | Just a little fun.                                                                                  |                    | 2 seconds |
 | **rank**        | View a users rank!                                                                                  | (optional user)    | 2 seconds |
 | **say**         | I will say whatever you want me to say.                                                             | (message)          | 1 seconds |
+| **screenshot**  | Screenshot a site!                                                                                  | (website URL)      | 2 seconds |
 | **text**        | I will change the text depending on what you want to do.                                            | (text)             | 2 seconds |
 | **uselessfact** | I will get a useless fact! You're better off with the advice command...                             |                    | 2 seconds" |
 
@@ -46,13 +47,10 @@ SparkV's Command List! SparkV contains more than **79 commands**!
 | Name            | Description                                                         | Usage                                                                                                                                            | Cooldown   |
 | --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
 | **activity**    | Play a Discord VC activity!                                         | (type (youtube, poker, chess, checkers, betrayal, fishing, lettertile, wordsnack, doodlecrew, spellcast, awkword, puttparty, sketchheads, ocho)) | 20 seconds |
-| **akinator**    | Play a guessing game of akinator!                                   |                                                                                                                                                  | 20 seconds |
 | **connectfour** | Play a game of ConnectFour with me or mention someone to play with! | (optional user)                                                                                                                                  | 20 seconds |
-| **hangman**     | Challenge your friends to a game of hangman!                        |                                                                                                                                                  | 20 seconds |
+| **game**        | Play a game with SparkV.                                            |                                                                                                                                                  | 20 seconds |
 | **memory**      | Pratice your memory!                                                | (level default: 5)                                                                                                                               | 1 seconds  |
-| **spelling**    | Challenge your friends to a spelling game!                          |                                                                                                                                                  | 2 seconds  |
-| **tictactoe**   | Play a game of Tic Tac Toe with me or mention someone to play with! |                                                                                                                                                  | 2 seconds  |
-| **trivia**      | Play a game of trivia!                                              |                                                                                                                                                  | 2 seconds " |
+| **tictactoe**   | Play a game of Tic Tac Toe with me or mention someone to play with! |                                                                                                                                                  | 2 seconds " |
 
 ## Giveaways
 
@@ -109,7 +107,6 @@ SparkV's Command List! SparkV contains more than **79 commands**!
 | Name             | Description                                                                    | Usage                                                        | Cooldown  |
 | ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------ | --------- |
 | **bot**          | Information for SparkV.                                                        |                                                              | 2 seconds |
-| **date**         | Gets the current date.                                                         |                                                              | 2 seconds |
 | **decode**       | Decode a string that was once encoded.                                         | (text) (type)                                                | 2 seconds |
 | **encode**       | Encode a string.                                                               | (string) (type)                                              | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                   | (optional: search)                                           | 2 seconds |
@@ -119,7 +116,6 @@ SparkV's Command List! SparkV contains more than **79 commands**!
 | **invite**       | Displays links.                                                                |                                                              | 2 seconds |
 | **panel**        | Set up a feature. (tickets, roles, embed)                                      | (tickets|roles|embed) (title|description|color)              | 2 seconds |
 | **roleall**      | Give all users a role.                                                         | (@role)                                                      | 2 seconds |
-| **screenshot**   | Screenshot a site!                                                             | (website URL)                                                | 2 seconds |
 | **settings**     | Personalize SparkV to suit your server!                                        |                                                              | 1 seconds |
 | **stats**        | SparkV's stats.                                                                |                                                              | 2 seconds |
 | **votereminder** | Want to be reminded to vote for SparkV? We'll give you ⏣25,000 coins per vote. | (on/off)                                                     | 2 seconds" |
