@@ -4,7 +4,6 @@ const RandomWord = require("random-words");
 const akinator = require("discord.js-akinator");
 
 const cmd = require("@templates/gameCommand");
-const { default: DiscordExtremeList } = require("dbots/lib/Interface/Lists/DiscordExtremeList");
 
 function shuffle(array) {
 	let currentIndex = array.length, randomIndex;
