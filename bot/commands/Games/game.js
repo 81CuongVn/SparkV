@@ -212,7 +212,7 @@ async function execute(bot, message, args, command, data) {
 			]
 		});
 
-		const triviaData = await axios.get(`https://opentdb.com/api.php?amount=1&type=multiple&"easy"=${"easy"}`).then(res => res.data.results[0]);
+		const triviaData = await axios.get(`https://opentdb.com/api.php?amount=1&type=multiple`).then(res => res.data.results[0]);
 
 		const choices = [];
 		triviaData.incorrect_answers.forEach(async answer => choices.push(await message.translate(answer)));
@@ -226,9 +226,9 @@ async function execute(bot, message, args, command, data) {
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ dynamic: true })
 			})
-			.setDescription(`${bot.config.emojis.question} | **${await message.translate(triviaData.question.replaceAll("&quot;", "\""))}**\n${await message.translate("You only have")} **${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
+			.setDescription(`${bot.config.emojis.question} | **${await message.translate(triviaData.question.replaceAll("&quot;", "\"").replaceAll("&#039", "\'"))}**\n${await message.translate("You only have")} **${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
 				number++;
-				return `**${number}**) ${choice}`;
+				return `**${number}**) ${choice.replaceAll("&quot;", "\"").replaceAll("&#039", "\'")}`;
 			}).join("\n")}`)
 			.setColor(bot.config.embed.color);
 
