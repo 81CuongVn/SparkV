@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 module.exports = {
 	once: false,
 	async execute(bot, oldM, newM) {
+		await bot.emit("messageCreate", newM);
+
 		if (!newM.editedAt) return;
 		if (newM.author.bot) return;
 		if (!oldM.content || !newM.content) return;
