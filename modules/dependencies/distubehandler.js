@@ -128,7 +128,7 @@ module.exports = async bot => {
 					.setDescription(`Looping is now ${loopMode}.`)
 					.setColor(bot.config.embed.color);
 			} else if (interaction.customId === "TP") {
-				if (queue?.paused) {
+				if (queue?.paused ?? null) {
 					queue.resume();
 
 					embed
