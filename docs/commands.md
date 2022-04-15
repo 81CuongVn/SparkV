@@ -107,8 +107,6 @@ SparkV's Command List! SparkV contains more than **74 commands**!
 | Name             | Description                                                                    | Usage                                                        | Cooldown  |
 | ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------ | --------- |
 | **bot**          | Information for SparkV.                                                        |                                                              | 2 seconds |
-| **decode**       | Decode a string that was once encoded.                                         | (text) (type)                                                | 2 seconds |
-| **encode**       | Encode a string.                                                               | (string) (type)                                              | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                   | (optional: search)                                           | 2 seconds |
 | **icon**         | Grab the icon of the server or a user.                                         | (type (user/server)) (user/invite)                           | 2 seconds |
 | **id**           | Grab the ID of the server or a user.                                           | (type (user/server/role/channel)) (user/invite/role/channel) | 2 seconds |
