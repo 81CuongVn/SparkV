@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **83 commands**!
+SparkV's Command List! SparkV contains more than **79 commands**!
 
 ## Chatbot
 
@@ -108,8 +108,7 @@ SparkV's Command List! SparkV contains more than **83 commands**!
 
 | Name             | Description                                                                    | Usage                                                        | Cooldown  |
 | ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------ | --------- |
-| **credits**      | Look at everyone who helped make SparkV!                                       |                                                              | 2 seconds |
-| **dashboard**    | I'll send my dashboard!                                                        | (user)                                                       | 2 seconds |
+| **bot**          | Information for SparkV.                                                        |                                                              | 2 seconds |
 | **date**         | Gets the current date.                                                         |                                                              | 2 seconds |
 | **decode**       | Decode a string that was once encoded.                                         | (text) (type)                                                | 2 seconds |
 | **encode**       | Encode a string.                                                               | (string) (type)                                              | 2 seconds |
@@ -119,11 +118,8 @@ SparkV's Command List! SparkV contains more than **83 commands**!
 | **info**         | See information about a user or server.                                        | (user)                                                       | 2 seconds |
 | **invite**       | Displays links.                                                                |                                                              | 2 seconds |
 | **panel**        | Set up a feature. (tickets, roles, embed)                                      | (tickets|roles|embed) (title|description|color)              | 2 seconds |
-| **permissions**  | Displays SparkV's permissions in the current guild.                            |                                                              | 2 seconds |
 | **roleall**      | Give all users a role.                                                         | (@role)                                                      | 2 seconds |
-| **rules**        | Follow the rules or else you will be banned from SparkV.                       |                                                              | 2 seconds |
 | **screenshot**   | Screenshot a site!                                                             | (website URL)                                                | 2 seconds |
 | **settings**     | Personalize SparkV to suit your server!                                        |                                                              | 1 seconds |
 | **stats**        | SparkV's stats.                                                                |                                                              | 2 seconds |
-| **votereminder** | Want to be reminded to vote for SparkV? We'll give you ⏣25,000 coins per vote. | (on/off)                                                     | 2 seconds |
-| **website**      | I'll send my website!                                                          |                                                              | 2 seconds" |
+| **votereminder** | Want to be reminded to vote for SparkV? We'll give you ⏣25,000 coins per vote. | (on/off)                                                     | 2 seconds" |
