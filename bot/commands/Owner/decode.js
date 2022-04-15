@@ -25,36 +25,5 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "(text) (type)",
 	aliases: [],
-	perms: [],
-	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 3,
-			name: "text",
-			description: "The text to encode.",
-			required: true
-		},
-		{
-			type: 3,
-			name: "type",
-			description: "The type of encoding to use. Types: `base64`, `hex` or `url`",
-			required: true,
-			choices: [
-				{
-					name: "base64",
-					value: "base64"
-				},
-				{
-					name: "hex",
-					value: "hex"
-				},
-				{
-					name: "url",
-					value: "url"
-				}
-			]
-		},
-	]
-},
-);
+	perms: []
+});
