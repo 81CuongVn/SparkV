@@ -66,12 +66,12 @@ async function execute(bot, message, args, command, data) {
 		.setStyle("SECONDARY");
 
 	const right = new Discord.MessageButton()
-		.setEmoji(emojis[3])
+		.setEmoji(emojis[2])
 		.setCustomId("right")
 		.setStyle("SECONDARY");
 
 	const quickRight = new Discord.MessageButton()
-		.setEmoji(emojis[4])
+		.setEmoji(emojis[3])
 		.setCustomId("quickRight")
 		.setStyle("SECONDARY");
 
