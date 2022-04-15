@@ -3,27 +3,27 @@ const Discord = require("discord.js");
 const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
-	const type = data.options.getString("type");
-	const string = data.options.getString("text");
+	const type = args[0];
+	const string = args.join(" ").slice(type.length + 1);
 
-	let encoded;
+	let decoded;
 	if (type === "base64") {
-		encoded = Buffer.from(string).toString("base64");
+		decoded = Buffer.from(string, "base64").toString();
 	} else if (type === "hex") {
-		encoded = (Buffer.from(Buffer.from(string).toString("base64"), "base64")).toString("hex");
+		decoded = Buffer.from(string, "hex").toString("utf8");
 	} else if (type === "url") {
-		encoded = encodeURIComponent(string);
+		decoded = decodeURIComponent(string);
 	}
 
-	if (!encoded) return message.replyT(`${bot.config.emojis.error} Uh oh! An error occured while trying to encode the text. Please try again, but with a different string.`);
+	if (!decoded) return message.replyT(`${bot.config.emojis.error} Uh oh! An error occured while trying to decode the text. Please try again, but with a different string.`);
 
-	await message.replyT(encoded);
+	await message.replyT(decoded);
 }
 
 module.exports = new cmd(execute, {
-	description: "Encode a string.",
+	description: "Decode a string that was once encoded.",
 	dirname: __dirname,
-	usage: "(string) (type)",
+	usage: "(text) (type)",
 	aliases: [],
 	perms: [],
 	slash: true,
@@ -56,4 +56,5 @@ module.exports = new cmd(execute, {
 			]
 		},
 	]
-});
+},
+);
