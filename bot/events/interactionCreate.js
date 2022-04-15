@@ -129,7 +129,7 @@ module.exports = {
 					const guild = await bot.database.getGuild(interaction.guild.id);
 
 					const allChannels = await interaction.guild.channels.cache.filter(c => c.name.includes("ticket")).map(c => c);
-					const already = await interaction.guild.channels.cache.some(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(interaction.member.user.tag));
+					const already = await interaction.guild.channels.cache.some(c => (c.name ?? "unknown").includes("ticket") && !(c.name ?? "unknown").includes("closed") && (c.topic ?? "unknown").includes(interaction.member.user.tag));
 
 					if (already === true) return await interaction.followUp(`You already have a ticket open in ${await GetTicketOpen(bot, interaction.member)}`);
 
