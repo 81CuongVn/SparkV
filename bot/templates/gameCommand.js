@@ -44,24 +44,6 @@ module.exports = class ModCommand {
 			if (!message.member.voice.channel) return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
 
 			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}**.`));
-		} else if (this.settings.type === "game") {
-			if (this.settings.gname === "akinator") {
-				message.replyT("What type of game would you like to play? (animal, character or object)").then(async () => {
-					await message.channel.awaitMessages({ filter, max: 1, time: 30 * 1000, errors: ["time"] }).then(async collected => {
-						const gameType = collected.first().content.toLowerCase();
-
-						await message.replyT(`Alright, let's play akinator ${gameType}! Loading...`).then(async () => {
-							akinator(message, {
-								gameType,
-								useButtons: true,
-								language: data.guild.languge
-							});
-						});
-					}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
-				});
-			} else {
-				await message.replyT(`Invalid game name: \`${this.settings.gname}\``);
-			}
 		} else if (this.settings.type === "multiplayerGame") {
 			const playersEmbed = new discord.MessageEmbed()
 				.setAuthor({
