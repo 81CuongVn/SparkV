@@ -83,6 +83,7 @@ module.exports = new cmd(execute, {
 			type: 3,
 			name: "type",
 			description: "The type of leaderboard to view.",
+			required: true,
 			choices: [
 				{
 					name: "leveling",
