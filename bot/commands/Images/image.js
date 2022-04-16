@@ -278,7 +278,7 @@ module.exports = new cmd({
 			const user = data.options.getUser("user") || message.user;
 			const user2 = data.options.getUser("user2");
 
-			return await canvacord.Canvas.bed(user.displayAvatarURL({ format: "png" }), user2.displayAvatarURL({ format: "png" }));
+			return await canvacord.Canvas.bed(user2.displayAvatarURL({ format: "png" }), user.displayAvatarURL({ format: "png" }));
 		} else if (state === "changemymind") {
 			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
 
