@@ -44,6 +44,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: "(action) (amount)",
+	slash: true,
 	ephemeral: true,
 	options: [
 		{
