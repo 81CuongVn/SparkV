@@ -13,117 +13,102 @@ module.exports = new cmd({
 	options: [
 		{
 			type: 1,
-			name: "jail",
-			description: "Show someone's avatar in jail.",
+			name: "text",
+			description: "Generate an image using text.",
 			options: [
 				{
-					type: 6,
-					name: "user",
-					description: "The user to show in jail."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "garbage",
-			description: "Ewww! I stept in garbage!!",
-			options: [
+					type: 3,
+					name: "type",
+					description: "The type of text image to generate.",
+					required: true,
+					choices: [
+						{
+							name: "ohno",
+							value: "ohno"
+						},
+						{
+							name: "changemymind",
+							value: "changemymind"
+						},
+						{
+							name: "clyde",
+							value: "clyde"
+						}
+					]
+				},
 				{
-					type: 6,
-					name: "user",
-					description: "The user to show as garbage."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "facepalm",
-			description: "Bro, seriously?",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to facepalm."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "affect",
-			description: "This won't affect my child at all!",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "beautiful",
-			description: "Oh this- this is beautiful!",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "bed",
-			description: "Why do you hate me, brother?",
-			options: [
-				{
-					type: 6,
-					name: "user2",
-					description: "The user on the top of the bed, who calls his brother a monster.",
+					type: 3,
+					name: "text",
+					description: "The text for the image.",
 					required: true
+				}
+			]
+		},
+		{
+			type: 1,
+			name: "user",
+			description: "Generate an image using a user.",
+			options: [
+				{
+					type: 3,
+					name: "type",
+					description: "The type of user image to generate.",
+					required: true,
+					choices: [
+						{
+							name: "jail",
+							value: "jail"
+						},
+						{
+							name: "garbage",
+							value: "garbage"
+						},
+						{
+							name: "facepalm",
+							value: "facepalm"
+						},
+						{
+							name: "affect",
+							value: "affect"
+						},
+						{
+							name: "beautiful",
+							value: "beautiful"
+						},
+						{
+							name: "invert",
+							value: "invert"
+						},
+						{
+							name: "rainbow",
+							value: "rainbow"
+						},
+						{
+							name: "rip",
+							value: "rip"
+						},
+						{
+							name: "trash",
+							value: "trash"
+						},
+						{
+							name: "trigger",
+							value: "trigger"
+						},
+						{
+							name: "wanted",
+							value: "wanted"
+						},
+						{
+							name: "wasted",
+							value: "wasted"
+						}
+					]
 				},
 				{
 					type: 6,
 					name: "user",
-					description: "The brother, who is being called a monster."
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "changemymind",
-			description: "The \"Change my mind\" meme.",
-			options: [
-				{
-					type: 3,
-					name: "text",
-					description: "The text to change my mind about.",
-					required: true
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "invert",
-			description: "Invert the colors on somebody's avatar.",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to invert their profile picture.",
-					required: true
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "ohno",
-			description: "Oh no! He's stupid!!",
-			options: [
-				{
-					type: 3,
-					name: "text",
-					description: "The text to make the dog in the meme say.",
+					description: "The user to show in the image.",
 					required: true
 				}
 			]
@@ -149,25 +134,19 @@ module.exports = new cmd({
 		},
 		{
 			type: 1,
-			name: "rainbow",
-			description: "Damn, you really like rainbows.",
+			name: "bed",
+			description: "Why do you hate me, brother?",
 			options: [
 				{
 					type: 6,
-					name: "user",
-					description: "The user to show a rainbow over.",
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "rip",
-			description: "Rest In Peace.",
-			options: [
+					name: "user2",
+					description: "The user on the top of the bed, who calls his brother a monster.",
+					required: true
+				},
 				{
 					type: 6,
 					name: "user",
-					description: "The user to put on a tombstone.",
+					description: "The user to show in the bed."
 				}
 			]
 		},
@@ -188,147 +167,49 @@ module.exports = new cmd({
 					description: "The user who is slapping the other user. Leave blank to be you.",
 				},
 			]
-		},
-		{
-			type: 1,
-			name: "trash",
-			description: "Compare someone to trash.",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to trash.",
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "trigger",
-			description: "Dude, calm down.",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to show that they are triggered.",
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "clyde",
-			description: "Clyde from Discord lol.",
-			options: [
-				{
-					type: 3,
-					name: "text",
-					description: "The text clyde will say.",
-					required: true
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "wanted",
-			description: "Wow, you have a wanted poster.",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to show on the wanted poster.",
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "wasted",
-			description: "Dang, you're wasted.",
-			options: [
-				{
-					type: 6,
-					name: "user",
-					description: "The user to show wasted."
-				}
-			]
-		},
+		}
 	],
 	generate: async function(bot, message, data) {
 		const state = data.options.getSubcommand();
 
-		if (state === "jail") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.jail(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "garbage") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.shit(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "facepalm") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.facepalm(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "affect") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.affect(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "beautiful") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.beautiful(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "bed") {
-			const user = data.options.getUser("user") || message.user;
-			const user2 = data.options.getUser("user2");
-
-			return await canvacord.Canvas.bed(user2.displayAvatarURL({ format: "png" }), user.displayAvatarURL({ format: "png" }));
-		} else if (state === "changemymind") {
+		if (state === "text") {
+			const type = data.options.getString("type");
 			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
 
-			return await canvacord.Canvas.changemymind(text);
-		} else if (state === "invert") {
+			if (type === "changemymind") return await canvacord.Canvas.changemymind(text);
+			else if (type === "ohno") return await canvacord.Canvas.ohno(text);
+			else if (type === "clyde") return await canvacord.Canvas.clyde(text);
+		} else if (state === "user") {
+			const type = data.options.getString("type");
 			const user = data.options.getUser("user") || message.user;
 
-			return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "ohno") {
-			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
-
-			return await canvacord.Canvas.ohno(text);
-		} else if (state === "opinion") {
-			const user = data.options.getUser("user");
-			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
-
-			return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
-		} else if (state === "rainbow") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.rainbow(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "rip") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.rip(user.displayAvatarURL({ format: "png" }));
+			if (type === "jail") return await canvacord.Canvas.jail(user.displayAvatarURL({ format: "png" }));
+			else if (type === "garbage") return await canvacord.Canvas.shit(user.displayAvatarURL({ format: "png" }));
+			else if (type === "facepalm") return await canvacord.Canvas.facepalm(user.displayAvatarURL({ format: "png" }));
+			else if (type === "affect") return await canvacord.Canvas.affect(user.displayAvatarURL({ format: "png" }));
+			else if (type === "beautiful") return await canvacord.Canvas.beautiful(user.displayAvatarURL({ format: "png" }));
+			else if (type === "invert") return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
+			else if (type === "rainbow") return await canvacord.Canvas.rainbow(user.displayAvatarURL({ format: "png" }));
+			else if (type === "rip") return await canvacord.Canvas.rip(user.displayAvatarURL({ format: "png" }));
+			else if (type === "trash") return await canvacord.Canvas.trash(user.displayAvatarURL({ format: "png" }));
+			else if (type === "trigger") return await canvacord.Canvas.trigger(user.displayAvatarURL({ format: "png" }));
+			else if (type === "wasted") return await canvacord.Canvas.wasted(user.displayAvatarURL({ format: "png" }));
+			else if (type === "wanted") return await canvacord.Canvas.wanted(user.displayAvatarURL({ format: "png" }));
 		} else if (state === "slap") {
 			const user = data.options.getUser("user") || message.user;
 			const user2 = data.options.getUser("user2") || message.user;
 
 			return await canvacord.Canvas.slap(user.displayAvatarURL({ format: "png" }), user2.displayAvatarURL({ format: "png" }));
-		} else if (state === "trash") {
+		} else if (state === "bed") {
 			const user = data.options.getUser("user") || message.user;
+			const user2 = data.options.getUser("user2");
 
-			return await canvacord.Canvas.trash(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "trigger") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.trigger(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "clyde") {
+			return await canvacord.Canvas.bed(user2.displayAvatarURL({ format: "png" }), user.displayAvatarURL({ format: "png" }));
+		} else if (state === "opinion") {
+			const user = data.options.getUser("user");
 			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
 
-			return await canvacord.Canvas.clyde(text);
-		} else if (state === "wanted") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.wanted(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "wasted") {
-			const user = data.options.getUser("user") || message.user;
-
-			return await canvacord.Canvas.wasted(user.displayAvatarURL({ format: "png" }));
+			return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
 		}
 	}
 });
