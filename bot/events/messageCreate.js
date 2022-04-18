@@ -1,6 +1,6 @@
 const sentry = require("@sentry/node");
 const Discord = require("discord.js");
-const fetch = require("axios");
+const axios = require("axios");
 
 const cursewords = require("../cursewords.json");
 
@@ -37,19 +37,19 @@ module.exports = {
 	once: false,
 	async execute(bot, message) {
 		// If the application owner isn't ready yet, wait for it.
-		if (!bot.application?.owner) await bot.application?.fetch().catch(() => {});
+		if (!bot.application?.owner) await bot.application?.fetch().catch(() => { });
 
 		// If the channel is a partial, wait for the channel to fetch.
-		if (message.channel?.partial) await message.channel.fetch().catch(() => {});
+		if (message.channel?.partial) await message.channel.fetch().catch(() => { });
 
 		// If the message is a partial, wait for the message to fetch.
-		if (message?.partial) await message.fetch().catch(() => {});
+		if (message?.partial) await message.fetch().catch(() => { });
 
 		// If the message's author is a bot, return. This prevents SparkV from responding to himself.
-		if (message.author.bot) return;
+		if (message?.author?.bot) return;
 
 		// If the message is from a DM, return. This prevents SparkV from responding to DMs.
-		if (message.channel.type === "dm") return;
+		if (message?.channel?.type === "dm") return;
 
 		const botMember = await message.guild.members.fetch(bot.user.id);
 
@@ -157,7 +157,6 @@ module.exports = {
 						data.member.markModified("infractionsCount");
 						data.member.markModified("infractions");
 
-						message.delete().catch(err => { });
 						message.replyT(`🔨 | ${message.author}, please stop cursing. If you continue, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
 						timeoutUser("cursing", message, data);
@@ -231,6 +230,7 @@ module.exports = {
 							data.member.markModified("infractions");
 							await data.member.save();
 
+							deleteMessages(bot, matches);
 							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
 							timeoutUser("spamming", message, data);
@@ -287,10 +287,17 @@ module.exports = {
 		// Check for a prefix
 		const prefix = bot.functions.getPrefix(message, data);
 
-		if (!prefix && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do.\nMy ping is ${new Date().getTime() - message.createdTimestamp}ms and I've been online for ${bot.functions.MSToTime(bot.uptime)}`);
+		if (!prefix && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do.\It took me ${new Date().getTime() - message.createdTimestamp}ms to send this message.`);
 
 		// If the user is part of the user blacklist, return.
 		if (bot.config.blacklist.users[message.author.id]) return await message.replyT(`You have been blacklisted. Reason: ${bot.config.blacklist.users[message.author.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
+
+		// eslint-disable-next-line capitalized-comments
+		// if (!prefix && data.guild.plugins.chatbot !== null) {
+		// 	const chatmsg = await axios.get(`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(process.env.CHAT_KEY)}&uid=${encodeURIComponent(message.author.id)}&msg=${encodeURIComponent(message.cleanContent)}`).then(res => res?.data?.cnt || "Sorry, I have encountered an error! Please try again later.");
+
+		// 	return message.replyT(chatmsg);
+		// }
 
 		if (!prefix) return;
 

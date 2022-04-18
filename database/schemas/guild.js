@@ -49,7 +49,8 @@ const Schema = new mongoose.Schema({
 	tickets: {
 		category: { type: String, default: null },
 		roles: { type: Array, default: [] },
-	}
+	},
+	tags: { type: Array, default: [] }
 });
 
 module.exports = new mongoose.model("Guild", Schema);
