@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 				})
 				.then(async () => {
 					bot.login(process.env.TOKEN);
-					RestartStatus.edit("⚡ | Restart comeplete!");
+					RestartStatus.edit("⚡ | Restart complete!");
 				});
 		}
 	}, 1 * 1000);
