@@ -172,6 +172,12 @@ async function execute(bot, message, args, command, data) {
 		.setCustomId("toggle")
 		.setStyle("DANGER");
 
+	const channelButton = new MessageButton()
+		.setLabel(await message.translate("Category"))
+		.setEmoji(bot.config.emojis.channel)
+		.setCustomId("category")
+		.setStyle("SECONDARY");
+
 	const settings = [
 		{
 			name: await message.translate("Basic"),
@@ -265,17 +271,10 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: await message.translate("Category"),
 					required: true,
-					data: new MessageButton()
-						.setLabel(await message.translate("Category"))
-						.setEmoji(bot.config.emojis.channel)
-						.setCustomId("category")
-						.setStyle("SECONDARY"),
+					data: channelButton,
 					getData: () => {
-						if (data?.guild?.tickets?.category) {
-							return `<#${data.guild.tickets.category}>`;
-						} else {
-							return "None";
-						}
+						if (data?.guild?.tickets?.category) return `<#${data.guild.tickets.category}>`;
+						else return "None";
 					},
 					setData: async () => {
 						await setNewData(message, {
@@ -298,7 +297,6 @@ async function execute(bot, message, args, command, data) {
 
 								if (!m.guild.channels.cache.has(m.content)) {
 									m.replyT("That is not a valid channel ID!");
-
 									return false;
 								}
 
@@ -326,11 +324,8 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("roles")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild?.tickets?.roles) {
-							return data.guild?.tickets?.roles.map(r => `<@&${r}>`).join(", ");
-						} else {
-							return "None";
-						}
+						if (data.guild?.tickets?.roles) return data.guild?.tickets?.roles.map(r => `<@&${r}>`).join(", ");
+						else return "None";
 					},
 					setData: async () => {
 						await setNewData(message, {
@@ -380,11 +375,8 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("channel")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild.starboard?.channel) {
-							return `<#${data.guild.starboard.channel}>`;
-						} else {
-							return "None";
-						}
+						if (data.guild.starboard?.channel) return `<#${data.guild.starboard.channel}>`;
+						else return "None";
 					},
 					setData: async () => {
 						await setNewData(message, {
@@ -426,14 +418,12 @@ async function execute(bot, message, args, command, data) {
 								if (m.content) {
 									if (m.content.length >= 100) {
 										await m.replyT(`${bot.config.emojis.error} | The new emoji cannot be longer than 100 characters. If it was any higher, it wouldn't be an emoji. Try again.`);
-
 										return false;
 									}
 
 									return true;
 								} else {
 									await m.replyT("Dude... I need you to send a emoji. Not a picture.");
-
 									return false;
 								}
 							},
@@ -485,11 +475,8 @@ async function execute(bot, message, args, command, data) {
 			],
 			getState: () => data.guild.starboard?.enabled,
 			setState: async type => {
-				if (type === "enable") {
-					data.guild.starboard.enabled = "true";
-				} else if (type === "disable") {
-					data.guild.starboard.enabled = "false";
-				}
+				if (type === "enable") data.guild.starboard.enabled = "true";
+				else if (type === "disable") data.guild.starboard.enabled = "false";
 
 				data.guild.markModified("starboard.enabled");
 
@@ -513,17 +500,10 @@ async function execute(bot, message, args, command, data) {
 					name: "Channel",
 					required: true,
 					enabledText: "Successfully setup channel!",
-					data: new MessageButton()
-						.setLabel("Channel")
-						.setEmoji(bot.config.emojis.channel)
-						.setCustomId("channel")
-						.setStyle("SECONDARY"),
+					data: channelButton,
 					getData: () => {
-						if (data.guild.logging?.channel) {
-							return `<#${data.guild.logging.channel}>`;
-						} else {
-							return "None";
-						}
+						if (data.guild.logging?.channel) return `<#${data.guild.logging.channel}>`;
+						else return "None";
 					},
 					setData: async () => {
 						await setNewData(message, {
@@ -548,11 +528,8 @@ async function execute(bot, message, args, command, data) {
 			],
 			getState: () => data.guild.logging?.enabled,
 			setState: async type => {
-				if (type === "enable") {
-					data.guild.logging.enabled = "true";
-				} else if (type === "disable") {
-					data.guild.logging.enabled = "false";
-				}
+				if (type === "enable") data.guild.logging.enabled = "true";
+				else if (type === "disable") data.guild.logging.enabled = "false";
 
 				data.guild.markModified("logging.enabled");
 
@@ -619,8 +596,15 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
+	const ExitButton = new MessageButton()
+		.setLabel("Exit")
+		.setEmoji(bot.config.emojis.leave)
+		.setCustomId("exit")
+		.setStyle("DANGER");
+
 	const BackButton = new MessageButton()
-		.setLabel("⬅️ Back")
+		.setLabel("Back")
+		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("back")
 		.setStyle("SECONDARY");
 
@@ -691,7 +675,7 @@ async function execute(bot, message, args, command, data) {
 
 	buttons.push({
 		type: 1,
-		components: [DashButton, SupportButton],
+		components: [ExitButton, DashButton, SupportButton],
 	});
 
 	await bot.wait(750);
@@ -727,7 +711,7 @@ async function execute(bot, message, args, command, data) {
 
 				buttons.push({
 					type: 1,
-					components: [DashButton, SupportButton],
+					components: [ExitButton, DashButton, SupportButton],
 				});
 
 				curSetting = null;
@@ -737,6 +721,21 @@ async function execute(bot, message, args, command, data) {
 					components: buttons,
 					ephemeral: true
 				});
+			} else if (interaction.customId === "exit") {
+				const exitEmbed = new MessageEmbed()
+					.setAuthor({
+						name: interaction.user.tag,
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+					})
+					.setDescription("Saved changes and exited the settings menu.")
+					.setColor(bot.config.embed.color);
+
+				try {
+					return await botMessage.edit({
+						embeds: [exitEmbed],
+						components: []
+					});
+				} catch (err) {}
 			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.data.customId.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
 
@@ -795,9 +794,7 @@ async function execute(bot, message, args, command, data) {
 				components: [],
 				ephemeral: true
 			});
-		} catch (err) {
-			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
-		}
+		} catch (err) {}
 	});
 }
 
