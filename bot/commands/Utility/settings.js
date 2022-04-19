@@ -429,7 +429,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: "Toggle",
 					data: ToggleButton,
-					getData: () => data.guild.plugins?.starboard?.enabled || "false",
+					getData: () => data.guild.starboard?.enabled || "false",
 				},
 				{
 					name: "Channel",
@@ -441,7 +441,7 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("channel")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild.plugins?.starboard?.channel) {
+						if (data.guild.starboard?.channel) {
 							return `<#${data.guild.starboard.channel}>`;
 						} else {
 							return "None";
@@ -474,7 +474,7 @@ async function execute(bot, message, args, command, data) {
 						.setEmoji(bot.config.emojis.star)
 						.setCustomId("emoji")
 						.setStyle("SECONDARY"),
-					getData: () => data.guild.plugins?.starboard?.emoji || "⭐",
+					getData: () => data.guild.starboard?.emoji || "⭐",
 					setData: async () => {
 						await setNewData(message, {
 							title: `${bot.config.emojis.config} | Changing Starboard Emoji`,
@@ -520,7 +520,7 @@ async function execute(bot, message, args, command, data) {
 						.setEmoji(bot.config.emojis.numbers.two)
 						.setCustomId("minimum")
 						.setStyle("SECONDARY"),
-					getData: () => data.guild.plugins?.starboard?.min || 2,
+					getData: () => data.guild.starboard?.min || 2,
 					setData: async () => {
 						await setNewData(message, {
 							title: `${bot.config.emojis.config} | Changing Starboard Minimum`,
@@ -544,7 +544,7 @@ async function execute(bot, message, args, command, data) {
 					},
 				},
 			],
-			getState: () => data.guild.plugins?.starboard?.enabled,
+			getState: () => data.guild.starboard?.enabled,
 			setState: async type => {
 				if (type === "enable") {
 					data.guild.starboard.enabled = "true";
@@ -568,7 +568,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: "Toggle",
 					data: ToggleButton,
-					getData: () => data.guild.plugins?.logging?.enabled || "false",
+					getData: () => data.guild.logging?.enabled || "false",
 				},
 				{
 					name: "Channel",
@@ -580,7 +580,7 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("channel")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild.plugins?.logging?.channel) {
+						if (data.guild.logging?.channel) {
 							return `<#${data.guild.logging.channel}>`;
 						} else {
 							return "None";
@@ -607,7 +607,7 @@ async function execute(bot, message, args, command, data) {
 					},
 				},
 			],
-			getState: () => data.guild.plugins?.logging?.enabled,
+			getState: () => data.guild.logging?.enabled,
 			setState: async type => {
 				if (type === "enable") {
 					data.guild.logging.enabled = "true";

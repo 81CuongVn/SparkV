@@ -10,7 +10,7 @@ module.exports = {
 
 		if (data.goodbye.enabled === "false") return;
 
-		const channel = channel?.guild?.channels?.cache.get(data.plugins?.goodbye?.channel);
+		const channel = channel?.guild?.channels?.cache.get(data.goodbye?.channel);
 
 		if (!channel) return;
 

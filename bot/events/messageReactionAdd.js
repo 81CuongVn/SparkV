@@ -10,11 +10,11 @@ module.exports = {
 
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (!data.plugins?.starboard?.enabled === "true") return;
-		if (!(reaction.emoji.name === (data.plugins?.starboard?.emoji || "⭐"))) return;
-		if ((reaction.count >= (parseInt(data.plugins?.starboard?.min) || 2)) === false) return;
+		if (!data.starboard?.enabled === "true") return;
+		if (!(reaction.emoji.name === (data.starboard?.emoji || "⭐"))) return;
+		if ((reaction.count >= (parseInt(data.starboard?.min) || 2)) === false) return;
 
-		const channel = message.guild.channels.cache.find(c => c.id === data.plugins?.starboard?.channel);
+		const channel = message.guild.channels.cache.find(c => c.id === data.starboard?.channel);
 
 		if (!channel) return;
 
@@ -36,7 +36,7 @@ module.exports = {
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
 				})
-				.setDescription(`[${message.channel.name}](${message.url}) | ${data.plugins?.starboard?.emoji} **${reaction.count}**${foundStar?.description.includes("\n\n") ? `\n\n${foundStar?.description.split(`\n\n`)[1]}` : ""}`, true)
+				.setDescription(`[${message.channel.name}](${message.url}) | ${data.starboard?.emoji} **${reaction.count}**${foundStar?.description.includes("\n\n") ? `\n\n${foundStar?.description.split(`\n\n`)[1]}` : ""}`, true)
 				.setImage(message.attachments.first()?.url || null)
 				.setColor(foundStar.color)
 				.setTimestamp();
@@ -52,7 +52,7 @@ module.exports = {
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
 				})
-				.setDescription(`[${message.channel.name}](${message.url}) | ${data.plugins?.starboard?.emoji} **${reaction.count}**${message?.content ? `\n\n${message?.content}` : ""}`)
+				.setDescription(`[${message.channel.name}](${message.url}) | ${data.starboard?.emoji} **${reaction.count}**${message?.content ? `\n\n${message?.content}` : ""}`)
 				.setImage(message.attachments.first()?.url || null)
 				.setColor("BLUE")
 				.setTimestamp();

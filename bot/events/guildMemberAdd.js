@@ -12,7 +12,7 @@ module.exports = {
 
 		if (member.pending === false) {
 			if ((data.welcome?.roles?.length || 0) > 0) {
-				data.plugins?.welcome?.roles?.forEach(async r => {
+				data.welcome?.roles?.forEach(async r => {
 					if (await member.guild.roles.fetch(r)) {
 						await member.roles.add(await member.guild.roles.fetch(r));
 					}
@@ -20,7 +20,7 @@ module.exports = {
 			}
 		}
 
-		const channel = channel?.guild?.channels?.cache.get(data.plugins?.welcome?.channel);
+		const channel = channel?.guild?.channels?.cache.get(data.welcome?.channel);
 
 		if (!channel) return;
 

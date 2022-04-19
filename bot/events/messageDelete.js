@@ -21,9 +21,9 @@ module.exports = {
 
 		const data = await bot.database.getGuild(message.guildId);
 
-		if (!data?.plugins?.logging?.enabled === "true") return;
+		if (!data?.logging?.enabled === "true") return;
 
-		const channel = message.channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel);
+		const channel = message.channel?.guild?.channels?.cache.get(data.logging?.channel);
 
 		if (!channel) return;
 
