@@ -136,7 +136,7 @@ module.exports = {
 					let category;
 
 					try {
-						category = await interaction.guild.channels.cache.find(c => c.id === guild.plugins.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
+						category = await interaction.guild.channels.cache.find(c => c.id === guild.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
 							type: "GUILD_CATEGORY"
 						});
 					} catch (err) {

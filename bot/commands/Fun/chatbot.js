@@ -18,7 +18,7 @@ async function execute(bot, message, args, command, data) {
 	// 	const chatmsg = await axios.get(`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(process.env.CHAT_KEY)}&uid=${encodeURIComponent(message.user.id)}&msg=${encodeURIComponent(text)}`).then(res => res?.data?.cnt || "Sorry, I have encountered an error! Please try again later.");
 
 	// 	data.guild.chatbot = message.channel.id;
-	// 	data.guild.markModified("plugins.chatbot");
+	// 	data.guild.markModified("chatbot");
 	// 	await data.guild.save();
 
 	// 	const msg = await message.replyT(chatmsg);
@@ -26,7 +26,7 @@ async function execute(bot, message, args, command, data) {
 	// 	if (data.guild.chatbot === null) return message.replyT(`${bot.config.emojis.error} | There is't an active conversation with SparkV going on. You can start talking to SparkV by typing \`/chatbot start\`.`);
 
 	// 	data.guild.chatbot = null;
-	// 	data.guild.markModified("plugins.chatbot");
+	// 	data.guild.markModified("chatbot");
 	// 	await data.guild.save();
 
 	// 	const msg = await message.replyT(`${bot.config.emojis.error} | I have stopped the conversation with SparkV.`);

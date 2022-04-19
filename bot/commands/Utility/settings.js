@@ -304,7 +304,7 @@ async function execute(bot, message, args, command, data) {
 									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.chatbot}**" ${await message.translate("to")} **${collected}**.`);
 
 								data.guild.chatbot = collected;
-								data.guild.markModified("plugins.chatbot");
+								data.guild.markModified("chatbot");
 
 								await data.guild.save();
 
@@ -460,7 +460,7 @@ async function execute(bot, message, args, command, data) {
 									.setDescription(`Successfully setup starboard channel to ${collected.content}.`);
 
 								data.guild.starboard.channel = collected.content.slice(2, -1);
-								data.guild.markModified("plugins.starboard.channel");
+								data.guild.markModified("starboard.channel");
 
 								await data.guild.save();
 							},
@@ -506,7 +506,7 @@ async function execute(bot, message, args, command, data) {
 									.setDescription(`Successfully changed starboard emoji from ${data.guild.starboard.emoji} to ${newEmoji}.`);
 
 								data.guild.starboard.emoji = newEmoji;
-								data.guild.markModified("plugins.starboard.emoji");
+								data.guild.markModified("starboard.emoji");
 
 								await data.guild.save();
 							},
@@ -536,7 +536,7 @@ async function execute(bot, message, args, command, data) {
 									.setDescription(`Successfully changed starboard minimum from ${data.guild.starboard.min} to ${min}.`);
 
 								data.guild.starboard.min = parseInt(min);
-								data.guild.markModified("plugins.starboard.min");
+								data.guild.markModified("starboard.min");
 
 								await data.guild.save();
 							},
@@ -552,7 +552,7 @@ async function execute(bot, message, args, command, data) {
 					data.guild.starboard.enabled = "false";
 				}
 
-				data.guild.markModified("plugins.starboard.enabled");
+				data.guild.markModified("starboard.enabled");
 
 				await data.guild.save();
 			}
@@ -599,7 +599,7 @@ async function execute(bot, message, args, command, data) {
 									.setDescription(`Successfully setup logging channel to ${collected.content}.`);
 
 								data.guild.logging.channel = collected.content.slice(2, -1);
-								data.guild.markModified("plugins.logging.channel");
+								data.guild.markModified("logging.channel");
 
 								await data.guild.save();
 							},
@@ -615,7 +615,7 @@ async function execute(bot, message, args, command, data) {
 					data.guild.logging.enabled = "false";
 				}
 
-				data.guild.markModified("plugins.logging.enabled");
+				data.guild.markModified("logging.enabled");
 
 				await data.guild.save();
 			}
