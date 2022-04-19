@@ -142,19 +142,13 @@ async function start() {
 			});
 
 			Shard.on("death", event => {
-				Logger("Fatal", err, {
+				Logger(err, "error", {
 					shard: Shard.id,
 				});
 
-				console.log(
-					require("chalk").red(
-						`SHARD CLOSED - SHARD ${Shard.id}/${manager.totalShards} UNEXPECTEDLY CLOSED!\nPID: ${event.pid}\nExit Code: ${event.exitCode}.`,
-					),
-				);
+				console.log(require("chalk").red(`SHARD CLOSED - SHARD ${Shard.id}/${manager.totalShards} UNEXPECTEDLY CLOSED! PID: ${event.pid} Code: ${event.exitCode}.`));
 
-				if (!event.exitCode) {
-					console.warn(`WARNING: SHARD ${Shard.id}/${manager.totalShards} EXITED DUE TO LACK OF AVAILABLE MEMORY.`);
-				}
+				if (!event.exitCode) console.warn(`WARNING: SHARD ${Shard.id}/${manager.totalShards} EXITED DUE TO LACK OF AVAILABLE MEMORY.`);
 			});
 		});
 
