@@ -36,7 +36,7 @@ const Schema = new mongoose.Schema({
 		enabled: { type: String, default: "false" },
 		channel: { type: String, default: null },
 		emoji: { type: String, default: "⭐" },
-		min: { type: Number, default: 2 }
+		min: { type: Number, default: 1 }
 	},
 	logging: {
 		enabled: { type: String, default: "false" },
