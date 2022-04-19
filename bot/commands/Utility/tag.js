@@ -58,7 +58,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: "(create) (name) (content)",
-	slash: true,
+	slash: false,
+	enabled: false,
 	options: [
 		{
 			type: 1,
