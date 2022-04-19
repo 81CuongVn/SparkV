@@ -12,7 +12,7 @@ module.exports = {
 
 		if (member.pending === false) {
 			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
-				data.plugins.welcome.roles.forEach(async r => {
+				data.plugins?.welcome?.roles?.forEach(async r => {
 					if (await member.guild.roles.fetch(r)) {
 						await member.roles.add(await member.guild.roles.fetch(r));
 					}
