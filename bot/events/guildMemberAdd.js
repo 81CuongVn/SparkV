@@ -8,10 +8,10 @@ module.exports = {
 	async execute(bot, member) {
 		const data = await database.getGuild(member.guild.id);
 
-		if (data.plugins.welcome.enabled === "false") return;
+		if (data.welcome.enabled === "false") return;
 
 		if (member.pending === false) {
-			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
+			if ((data.welcome?.roles?.length || 0) > 0) {
 				data.plugins?.welcome?.roles?.forEach(async r => {
 					if (await member.guild.roles.fetch(r)) {
 						await member.roles.add(await member.guild.roles.fetch(r));
@@ -34,7 +34,7 @@ module.exports = {
 		});
 
 		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Welcome-${member.user.tag}.png`);
-		const msg = data.plugins.welcome.message
+		const msg = data.welcome.message
 			.replaceAll("{mention}", `${member}`)
 			.replaceAll("{tag}", `${member.user.tag}`)
 			.replaceAll("{username}", `${member.user.username}`)

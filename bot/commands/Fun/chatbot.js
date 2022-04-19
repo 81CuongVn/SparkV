@@ -12,7 +12,7 @@ async function execute(bot, message, args, command, data) {
 	// const state = message.options.getSubcommand();
 
 	// if (state === "start") {
-	// 	if (data.guild.plugins.chatbot !== null) return message.replyT(`${bot.config.emojis.error} | There is already an active conversation with SparkV going on in <#${data.guild.plugins.chatbot}>.`);
+	// 	if (data.guild.chatbot !== null) return message.replyT(`${bot.config.emojis.error} | There is already an active conversation with SparkV going on in <#${data.guild.chatbot}>.`);
 
 	// 	const text = data.options?.getString("text");
 	// 	const chatmsg = await axios.get(`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(process.env.CHAT_KEY)}&uid=${encodeURIComponent(message.user.id)}&msg=${encodeURIComponent(text)}`).then(res => res?.data?.cnt || "Sorry, I have encountered an error! Please try again later.");
@@ -23,9 +23,9 @@ async function execute(bot, message, args, command, data) {
 
 	// 	const msg = await message.replyT(chatmsg);
 	// } else if (state === "stop") {
-	// 	if (data.guild.plugins.chatbot === null) return message.replyT(`${bot.config.emojis.error} | There is't an active conversation with SparkV going on. You can start talking to SparkV by typing \`/chatbot start\`.`);
+	// 	if (data.guild.chatbot === null) return message.replyT(`${bot.config.emojis.error} | There is't an active conversation with SparkV going on. You can start talking to SparkV by typing \`/chatbot start\`.`);
 
-	// 	data.guild.plugins.chatbot = null;
+	// 	data.guild.chatbot = null;
 	// 	data.guild.markModified("plugins.chatbot");
 	// 	await data.guild.save();
 

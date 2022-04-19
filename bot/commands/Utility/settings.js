@@ -274,7 +274,7 @@ async function execute(bot, message, args, command, data) {
 						.setEmoji(bot.config.emojis.slash)
 						.setCustomId("chatbot")
 						.setStyle("PRIMARY"),
-					getData: () => data.guild.plugins.chatbot,
+					getData: () => data.guild.chatbot,
 					setData: async () => {
 						await setNewData(message, {
 							title: await message.translate(`${bot.config.emojis.config} | New Chatbot Setting`),
@@ -301,9 +301,9 @@ async function execute(bot, message, args, command, data) {
 							handleData: async (collected, requestMsg) => {
 								requestMsg
 									.setTitle(await message.translate(`${bot.config.emojis.config} | New Chatbot Setting Changed`))
-									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.plugins.chatbot}**" ${await message.translate("to")} **${collected}**.`);
+									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.chatbot}**" ${await message.translate("to")} **${collected}**.`);
 
-								data.guild.plugins.chatbot = collected;
+								data.guild.chatbot = collected;
 								data.guild.markModified("plugins.chatbot");
 
 								await data.guild.save();
@@ -442,7 +442,7 @@ async function execute(bot, message, args, command, data) {
 						.setStyle("SECONDARY"),
 					getData: () => {
 						if (data.guild.plugins?.starboard?.channel) {
-							return `<#${data.guild.plugins.starboard.channel}>`;
+							return `<#${data.guild.starboard.channel}>`;
 						} else {
 							return "None";
 						}
@@ -459,7 +459,7 @@ async function execute(bot, message, args, command, data) {
 									.setTitle(`${bot.config.emojis.config} | Sarboard Channel Setup`)
 									.setDescription(`Successfully setup starboard channel to ${collected.content}.`);
 
-								data.guild.plugins.starboard.channel = collected.content.slice(2, -1);
+								data.guild.starboard.channel = collected.content.slice(2, -1);
 								data.guild.markModified("plugins.starboard.channel");
 
 								await data.guild.save();
@@ -503,9 +503,9 @@ async function execute(bot, message, args, command, data) {
 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Changing Starboard Emoji`)
-									.setDescription(`Successfully changed starboard emoji from ${data.guild.plugins.starboard.emoji} to ${newEmoji}.`);
+									.setDescription(`Successfully changed starboard emoji from ${data.guild.starboard.emoji} to ${newEmoji}.`);
 
-								data.guild.plugins.starboard.emoji = newEmoji;
+								data.guild.starboard.emoji = newEmoji;
 								data.guild.markModified("plugins.starboard.emoji");
 
 								await data.guild.save();
@@ -533,9 +533,9 @@ async function execute(bot, message, args, command, data) {
 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Changing Starboard Minimum`)
-									.setDescription(`Successfully changed starboard minimum from ${data.guild.plugins.starboard.min} to ${min}.`);
+									.setDescription(`Successfully changed starboard minimum from ${data.guild.starboard.min} to ${min}.`);
 
-								data.guild.plugins.starboard.min = parseInt(min);
+								data.guild.starboard.min = parseInt(min);
 								data.guild.markModified("plugins.starboard.min");
 
 								await data.guild.save();
@@ -547,9 +547,9 @@ async function execute(bot, message, args, command, data) {
 			getState: () => data.guild.plugins?.starboard?.enabled,
 			setState: async type => {
 				if (type === "enable") {
-					data.guild.plugins.starboard.enabled = "true";
+					data.guild.starboard.enabled = "true";
 				} else if (type === "disable") {
-					data.guild.plugins.starboard.enabled = "false";
+					data.guild.starboard.enabled = "false";
 				}
 
 				data.guild.markModified("plugins.starboard.enabled");
@@ -581,7 +581,7 @@ async function execute(bot, message, args, command, data) {
 						.setStyle("SECONDARY"),
 					getData: () => {
 						if (data.guild.plugins?.logging?.channel) {
-							return `<#${data.guild.plugins.logging.channel}>`;
+							return `<#${data.guild.logging.channel}>`;
 						} else {
 							return "None";
 						}
@@ -598,7 +598,7 @@ async function execute(bot, message, args, command, data) {
 									.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
 									.setDescription(`Successfully setup logging channel to ${collected.content}.`);
 
-								data.guild.plugins.logging.channel = collected.content.slice(2, -1);
+								data.guild.logging.channel = collected.content.slice(2, -1);
 								data.guild.markModified("plugins.logging.channel");
 
 								await data.guild.save();
@@ -610,9 +610,9 @@ async function execute(bot, message, args, command, data) {
 			getState: () => data.guild.plugins?.logging?.enabled,
 			setState: async type => {
 				if (type === "enable") {
-					data.guild.plugins.logging.enabled = "true";
+					data.guild.logging.enabled = "true";
 				} else if (type === "disable") {
-					data.guild.plugins.logging.enabled = "false";
+					data.guild.logging.enabled = "false";
 				}
 
 				data.guild.markModified("plugins.logging.enabled");

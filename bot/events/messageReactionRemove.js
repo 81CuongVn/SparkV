@@ -13,7 +13,7 @@ module.exports = {
 		if (!data.plugins?.starboard?.enabled === "true") return;
 		if (!(reaction.emoji.name === (data.plugins?.starboard?.emoji || "⭐"))) return;
 
-		const channel = message.guild.channels.cache.find(c => c.id === data.plugins.starboard?.channel);
+		const channel = message.guild.channels.cache.find(c => c.id === data.starboard?.channel);
 
 		if (!channel) return;
 

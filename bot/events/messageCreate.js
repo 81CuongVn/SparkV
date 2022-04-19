@@ -130,7 +130,7 @@ module.exports = {
 			});
 
 			// Check for profanity (curse words)
-			if (data.guild.plugins.automod.removeProfanity === "true") {
+			if (data.guild.automod.removeProfanity === "true") {
 				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
 					const ignoredWords = ["hello"];
 					let cursed = false;
@@ -165,7 +165,7 @@ module.exports = {
 			}
 
 			// Check for links
-			if (data.guild.plugins.automod.removeLinks === "true") {
+			if (data.guild.automod.removeLinks === "true") {
 				if (
 					!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") &&
 					!message.channel.permissionsFor(message.member).has("ADMINISTRATOR") &&
@@ -195,7 +195,7 @@ module.exports = {
 			}
 
 			// Check for spam
-			if (data.guild.plugins.automod.removeDuplicateText === "true") {
+			if (data.guild.automod.removeDuplicateText === "true") {
 				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") || !message.channel.permissionsFor(message.member).has("ADMINISTRATOR")) {
 					if (!message.channel.name.startsWith(`spam`) && !message.channel.name.endsWith(`spam`)) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
@@ -240,7 +240,7 @@ module.exports = {
 			}
 
 			// Leveling!
-			if (data.guild.plugins.leveling.enabled === "true") {
+			if (data.guild.leveling.enabled === "true") {
 				const oldXP = require("@database/schemas/levels.js");
 				const oldData = await oldXP.findOne({
 					guildID: message.guild.id,
@@ -266,10 +266,10 @@ module.exports = {
 				await data.member.save();
 
 				if ((Math.floor(0.1 * Math.sqrt(data.member.xp -= RandomXP)) < data.member.level)) {
-					const levelMsg = data.guild.plugins.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
+					const levelMsg = data.guild.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
-					if (data.guild.plugins.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling?.channel)) {
-						const channel = message.guild.channels.cache.find(c => c.id === data.guild.plugins.leveling.channel);
+					if (data.guild.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.leveling?.channel)) {
+						const channel = message.guild.channels.cache.find(c => c.id === data.guild.leveling.channel);
 
 						try {
 							await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
@@ -293,7 +293,7 @@ module.exports = {
 		if (bot.config.blacklist.users[message.author.id]) return await message.replyT(`You have been blacklisted. Reason: ${bot.config.blacklist.users[message.author.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
 		// eslint-disable-next-line capitalized-comments
-		// if (!prefix && data.guild.plugins.chatbot !== null) {
+		// if (!prefix && data.guild.chatbot !== null) {
 		// 	const chatmsg = await axios.get(`http://api.brainshop.ai/get?bid=${encodeURIComponent(process.env.CHAT_BID)}&key=${encodeURIComponent(process.env.CHAT_KEY)}&uid=${encodeURIComponent(message.author.id)}&msg=${encodeURIComponent(message.cleanContent)}`).then(res => res?.data?.cnt || "Sorry, I have encountered an error! Please try again later.");
 
 		// 	return message.replyT(chatmsg);

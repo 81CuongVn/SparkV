@@ -4,7 +4,7 @@ const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const User = await bot.functions.fetchUser(args[0]);
-	const Leveling = await bot.database.getGuild(message.guild.id).plugins.leveling.enabled;
+	const Leveling = await bot.database.getGuild(message.guild.id).leveling.enabled;
 
 	if (!Leveling === true) return await message.replyT(`${bot.config.emojis.error} | Leveling is not enabled for this server. Please enable it by doing \`(prefix)Leveling on\`!`);
 

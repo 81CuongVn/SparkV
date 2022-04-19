@@ -9,43 +9,41 @@ const Schema = new mongoose.Schema({
 	// Data //
 	language: { type: String, default: "en" },
 	casesCount: { type: Number, default: 0 },
-	plugins: { type: Object, default: {
-		welcome: {
-			enabled: "false",
-			message: "Welcome {mention} to **{server}**! You're our **{members}th member**!",
-			roles: [],
-			channel: null
-		},
-		goodbye: {
-			enabled: "false",
-			message: "Bye {mention}! We're really sad to see you go. Without you, we're now **{members} members**.",
-			channel: null
-		},
-		automod: {
-			removeLinks: "false",
-			removeProfanity: "false",
-			removeDuplicateText: "false"
-		},
-		leveling: {
-			enabled: "false",
-			message: "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!",
-			channel: null,
-			max: 25,
-			min: 5
-		},
-		starboard: {
-			enabled: "false",
-			channel: null,
-			emoji: "⭐",
-			min: 1
-		},
-		logging: {
-			enabled: "false",
-			channel: null,
-			level: "info"
-		},
-		chatbot: "false"
-	} },
+	welcome: {
+		enabled: { type: String, default: "false" },
+		message: { type: String, default: "{mention} just joined the server. Welcome!" },
+		roles: { type: Array, default: [] },
+		channel: { type: String, default: null }
+	},
+	goodbye: {
+		enabled: { type: String, default: "false" },
+		message: { type: String, default: "Bye {mention}! We're really sad to see you go. Without you, we're now **{members} members**." },
+		channel: { type: String, default: null }
+	},
+	automod: {
+		removeLinks: { type: String, default: "false" },
+		removeProfanity: { type: String, default: "false" },
+		removeDuplicateText: { type: String, default: "false" }
+	},
+	leveling: {
+		enabled: { type: String, default: "false" },
+		message: { type: String, default: "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!" } ,
+		channel: { type: String, default: null },
+		max: { type: Number, default: 25 },
+		min: { type: Number, default: 5 }
+	},
+	starboard: {
+		enabled: { type: String, default: "false" },
+		channel: { type: String, default: null },
+		emoji: { type: String, default: "⭐" },
+		min: { type: Number, default: 1 }
+	},
+	logging: {
+		enabled: { type: String, default: "false" },
+		channel: { type: String, default: null },
+		level: { type: String, default: "info" }
+	},
+	chatbot: { type: String, default: null },
 	tickets: {
 		category: { type: String, default: null },
 		roles: { type: Array, default: [] },

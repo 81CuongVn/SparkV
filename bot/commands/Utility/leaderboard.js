@@ -8,7 +8,7 @@ async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
 
 	if (type === "leveling") {
-		if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
+		if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 		let TopMembers = await bot.MemberSchema.find({ guildID: message.guild.id }).sort([["xp", "descending"]]).exec();
 		TopMembers = TopMembers.slice(0, 10);

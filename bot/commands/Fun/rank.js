@@ -4,7 +4,7 @@ const canvacord = require("canvacord");
 const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (data.guild.plugins.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
+	if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 	const Target = data.options.getMember("user") || message.member;
 	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);

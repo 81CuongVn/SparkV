@@ -8,10 +8,10 @@ module.exports = {
 	async execute(bot, oldMember, newMember) {
 		const data = await database.getGuild(newMember.guild.id);
 
-		if (data.plugins.welcome.enabled === "false") return;
+		if (data.welcome.enabled === "false") return;
 
 		if (oldMember.pending === true && newMember.pending === false) {
-			if ((data.plugins.welcome?.roles?.length || 0) > 0) {
+			if ((data.welcome?.roles?.length || 0) > 0) {
 				data.plugins?.welcome?.roles?.forEach(async r => {
 					if (await newMember.guild.roles.fetch(r)) {
 						await newMember.roles.add(await newMember.guild.roles.fetch(r));

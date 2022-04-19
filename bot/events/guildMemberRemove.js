@@ -8,7 +8,7 @@ module.exports = {
 	async execute(bot, member) {
 		const data = await database.getGuild(member.guild.id);
 
-		if (data.plugins.goodbye.enabled === "false") return;
+		if (data.goodbye.enabled === "false") return;
 
 		const channel = channel?.guild?.channels?.cache.get(data.plugins?.goodbye?.channel);
 
@@ -24,7 +24,7 @@ module.exports = {
 		});
 
 		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Goodbye-${member.user.tag}.png`);
-		const msg = data.plugins.goodbye.message
+		const msg = data.goodbye.message
 			.replaceAll("{mention}", `${member}`)
 			.replaceAll("{tag}", `${member.user.tag}`)
 			.replaceAll("{username}", `${member.user.username}`)
