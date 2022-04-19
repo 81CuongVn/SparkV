@@ -16,7 +16,7 @@ module.exports = {
 
 		if (!data?.plugins?.logging?.enabled === "true") return;
 
-		const channel = newM.guild.channels.cache.find(c => c.id === data.plugins?.logging?.channel);
+		const channel = channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel) || await channel?.guild?.channels?.fetch(data.plugins?.welcome?.channel);
 
 		if (!channel) return;
 

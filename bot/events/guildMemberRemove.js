@@ -10,7 +10,7 @@ module.exports = {
 
 		if (data.plugins.goodbye.enabled === "false") return;
 
-		const channel = member.guild.channels.cache.find(ch => ch.id === data.plugins.goodbye.channel);
+		const channel = channel?.guild?.channels?.cache.get(data.plugins?.goodbye?.channel) || await channel?.guild?.channels?.fetch(data.plugins?.goodbye?.channel);
 
 		if (!channel) return;
 
