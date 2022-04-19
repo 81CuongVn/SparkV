@@ -3,15 +3,10 @@ const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Option
 const cmd = require("@templates/command");
 
 const cFilter = async m => {
-	if (m.author.id === m.client.user.id) {
-		return false;
-	}
+	if (m.author.id === m.client.user.id) return false;
 
-	if (m.mentions.channels.first()) {
-		return true;
-	} else {
+	if (m.mentions.channels.first()) { return true; } else {
 		await m.replyT("That's not a channel. Try again.");
-
 		return false;
 	}
 };
@@ -19,11 +14,8 @@ const cFilter = async m => {
 const rFilter = async m => {
 	if (m.author.id === m.client.user.id) return false;
 
-	if (m.mentions.roles.first()) {
-		return true;
-	} else {
+	if (m.mentions.roles.first()) { return true; } else {
 		await m.replyT("That's not a role. Try again.");
-
 		return false;
 	}
 };
@@ -34,14 +26,12 @@ const numFilter = async m => {
 	if (m.content) {
 		if (isNaN(m.content) || parseInt(m.content) < 1) {
 			await m.replyT(`${bot.config.emojis.error} | Please provide a valid __number__. Try again.`);
-
 			return false;
 		}
 
 		return true;
 	} else {
 		await m.replyT("Please reply with a __number__. Not an image. Try again.");
-
 		return false;
 	}
 };
@@ -87,7 +77,6 @@ async function setNewData(message, options) {
 			if (interaction.customId.split("_")[1] === options.id) {
 				try {
 					await options.handleData(interaction.values[0], requestMsg);
-
 					await channelMsg.edit({
 						embeds: [requestMsg],
 						components: []
@@ -97,9 +86,7 @@ async function setNewData(message, options) {
 						setTimeout(() => {
 							channelMsg.delete();
 						}, 5 * 1000);
-					} catch (err) {
-						// Do nothing. Most likely the message was deleted.
-					}
+					} catch (err) {}
 				} catch (err) {
 					const ErrorEmbed = new MessageEmbed()
 						.setAuthor({
@@ -140,9 +127,7 @@ async function setNewData(message, options) {
 						channelMsg.delete();
 						collected.first().delete();
 					}, 5 * 1000);
-				} catch (err) {
-					// Do nothing. Most likely the message was deleted.
-				}
+				} catch (err) {}
 			} catch (err) {
 				const ErrorEmbed = new MessageEmbed()
 					.setAuthor({
@@ -266,53 +251,7 @@ async function execute(bot, message, args, command, data) {
 							}
 						});
 					},
-				},
-				{
-					name: await message.translate("Chatbot"),
-					data: new MessageButton()
-						.setLabel(await message.translate("Chatbot"))
-						.setEmoji(bot.config.emojis.slash)
-						.setCustomId("chatbot")
-						.setStyle("PRIMARY"),
-					getData: () => data.guild.chatbot,
-					setData: async () => {
-						await setNewData(message, {
-							title: await message.translate(`${bot.config.emojis.config} | New Chatbot Setting`),
-							id: "chatbot",
-							description: await message.translate("Please select the new chatbot setting for the bot."),
-							dropdownItems: [
-								{
-									label: await message.translate("Disabled"),
-									emoji: bot.config.emojis.error,
-									value: "false"
-								},
-								{
-									label: await message.translate("Mention"),
-									emoji: bot.config.emojis.mention,
-									value: "mention"
-								},
-								{
-									label: await message.translate("Message"),
-									value: "message"
-								}
-							],
-							color: "BLUE",
-							time: 30,
-							handleData: async (collected, requestMsg) => {
-								requestMsg
-									.setTitle(await message.translate(`${bot.config.emojis.config} | New Chatbot Setting Changed`))
-									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.chatbot}**" ${await message.translate("to")} **${collected}**.`);
-
-								data.guild.chatbot = collected;
-								data.guild.markModified("chatbot");
-
-								await data.guild.save();
-
-								return true;
-							}
-						});
-					},
-				},
+				}
 			],
 			stateDisabled: true
 		},
