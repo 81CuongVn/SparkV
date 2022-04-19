@@ -1,0 +1,104 @@
+@use "./config" as *;
+
+.navbar {
+    display: flex;
+    list-style: none;
+    padding: 1rem 0 0;
+    flex-direction: row;
+    background: $primary;
+
+    .navbar-toggler {
+      border-color: transparent !important;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+      &:hover {
+        background-color: var(--sparkv-color-2);
+      }
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    li {
+      position: relative;
+      margin-right: 10px;
+      padding: 14px 0;
+
+      a {
+        color: #fff;
+        padding: 0 0.7rem;
+        text-transform: capitalize;
+        font-weight: 600;
+
+        i {
+          font-size: 25px;
+          vertical-align: bottom;
+          margin-inline-end: 5px;
+        }
+      }
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    li > a {
+      display: flex;
+      padding: 0 20px 0 10px;
+      height: 100%;
+    }
+}
+
+.nav-tabs {
+  .nav-item {
+    &:hover {
+      background: #111b35;
+      border: none;
+    }
+
+    .active {
+      background: #111b35;
+      border: none;
+
+      &:hover {
+        background: #111b35;
+        border: none;
+      }
+    }
+  }
+
+  .nav-link {
+    &:hover {
+      background: #111b35;
+      border: none;
+    }
+
+    .active {
+      background: #111b35;
+      border: none;
+
+      &:hover {
+        background: #111b35;
+        border: none;
+      }
+    }
+  }
+}
+
+.navbar-no-scroll {
+  margin-top: 10px;
+  -webkit-transition: 0.4s all;
+  transition: 0.4s all;
+}
+
+.navbar-scroll {
+  margin-top: 10px;
+  padding: 8px 0px;
+  margin-inline-start: 24px;
+  margin-inline-end: 24px;
+  background: var(--sparkv-dark);
+  box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -1px #0000000f;
+  border-radius: 12px;
+  transition: all 0.4s ease 0s;
+}

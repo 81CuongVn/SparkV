@@ -1,0 +1,34 @@
+<footer class="footer">
+  <div class="container mt-5">
+    <div class="row text-white justify-content-center mt-3 pb-3">
+      <% Object.entries(footerTable).forEach((footerTableItem) => { %>
+        <div class="col-12 col-sm-6 col-lg-2 mb-4 mx-auto">
+          <h5 class="text-capitalize fw-bold"><%- footerTableItem[0] %></h5>
+          <hr class="bg-white d-inline-block mb-4" style="width: 60px; height: 2px;">
+          <ul class="list-inline campany-list">
+            <% Object.entries(footerTableItem[1]).forEach((footerTTItem) => { %>
+              <li><a href="<%- footerTTItem[1].href %>"><%- footerTTItem[0] %></a></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% }) %>
+    </div>
+    <hr style="color: gray;">
+    <div class="py-4 text-center text-white" style="display: flex;justify-content: space-between;">
+      <div style="text-align: start;">
+        © 2021-2022 <a href="https://ch1lls.tk/">Ch1ll Studios</a>. Illustrations by <a href="https://storyset.com/technology">Storyset</a> and <a href="https://undraw.co/">Undraw</a>
+      </div>
+      <div style="justify-content: space-evenly;display: flex;width: 100px;">
+        <!-- <a href="#"><i class="fab fa-facebook"></i></a> -->
+        <a href="https://twitter.com/Ch1llStudio">
+          <i class="fab fa-twitter" style="font-size: 22px;"></i>
+        </a>
+        <a href="https://github.com/Ch1ll-Studio">
+          <i class="fab fa-github" style="font-size: 22px;"></i>
+        </a>
+        <!-- <a href="https://linkedin.com/KingCh1ll"><i class="fab fa-linkedin"></i></a> -->
+        <!-- <a href="https://instagram.com/Ch1llStudio"><i class="fab fa-instagram"></i></a> -->
+      </div>
+    </div>
+  </div>
+</footer>

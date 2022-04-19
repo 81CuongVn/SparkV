@@ -1,0 +1,12 @@
+          <div class="col-5 m-3" style="background: var(--sparkv-dark);border-radius: 10px;padding: 20px;width: 300px;">
+            <h3 class="fw-bold pb-2"><%- name %></h1>
+
+            <select class="selectpicker show-tick" name="<%- id %>" id="<%- id %>" aria-label="<%- value %>" style="max-width: 280px;" data-live-search="true" <% if (multiple) { %>multiple<% } %>>
+              <option value="[]" <% if (!value || value === []) { %>selected<% } %>>Disabled</option>
+              <% guild.roles.cache.each(r => { %>
+                <option value="<%- r.id %>" <% if (value && value?.join(" ").includes(r.id)) { %>selected<% } %>><%- r.name %></option>
+              <% }) %>
+            </select>
+
+            <p class="text-muted"><%- desc %></p>
+          </div>

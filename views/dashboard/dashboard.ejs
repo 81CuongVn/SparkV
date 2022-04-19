@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("components/head", {
+    title: "SparkV - The Powerful Multipurpose Discord Bot",
+    desc: "SparkV is the most POWERFUL multipurpose Discord bot with NO PAYWALL! Start powering your Discord server without spending a dime.",
+    keywords: "SparkV, Spark, Powerful, Bot, Multipurpose, Free, Free Bot, Free Discord Bot, King, Ch1ll, KingChill, Chill, Discord"
+  }) %>
+</head>
+
+<body style="background-color: #111b35;" data-aos-duration="600" data-aos-delay="0">
+  <%- include("components/load") %>
+
+  <%- include("components/navbar", {
+      title: "SparkV",
+      logoURL: "/assets/images/SparkV.webp",
+      navItems: {
+        Welcome: {
+          type: "link",
+          href: "#welcome",
+        },
+        Guilds: {
+          type: "link",
+          href: "#guild_select"
+        }
+      },
+      buttons: {
+        Login: {
+          href: "/api/login",
+          icon: "fab fa-discord"
+        }
+      }
+    }) %>
+
+  <!-- Hero -->
+  <section id="welcome" class="hero aos-init aos-animate" style="padding-bottom: 5rem;">
+    <div class="pb-5 text-white">
+      <div class="heroContainer text-center">
+          <h1 class="display-2">
+            <span class="display-2 animate__animated animate__rotateIn">Hi, <%- user.username %>!</span>
+            <br/>
+            <span class="display-2_desc lh-base animate__animated animate__zoomInUp">Welcome to SparkV's dashboard. Select a guild below!</span>
+          </h1>
+
+          <div class="row justify-content-center" style="width: 100%;">
+            <a type="button" class="col-5 rounded-pill btn-rounded" href="/dashboard">
+            Back to Guild Select
+            <span><i class="fas fa-arrow-right"></i></span>
+            </a>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  
+<!--   <div class="pb-5" style="background-color: transparent;margin-top: -150px;">
+    <div class="row mx-auto justify-content-center pt-5 text-center">
+      <div class="col-lg col-10 m-2 aos-init aos-animate" style="background: #111b35;border-radius: 10px;position: relative;padding: 20px 20px 20px 12px;font-family: Rubik, sans-serif;max-width: 400px;border-style: solid;border-color: var(--bs-primary);">
+        <div style="font-size: 42px;margin-bottom: 15px;color: var(--bs-secondary);">
+          <i class="fas fa-server"></i>
+        </div>
+        <h5 class="text-white counter" style="font-size: 42px;font-weight: 700;">Servers Information</h5>
+        <h5 style="padding-top: 10px;font-size: 20px;color: #666;">Total Servers: <%- user.guilds.length %></h5>
+
+        <h5 style="padding-top: 10px;font-size: 20px;color: #666;">Servers with MANAGE_GUILD: <%- guilds.length %></h5>
+    </div>
+  </div> -->
+
+  <!-- Guild Select -->
+  <section id="guild_select">
+    <div class="container">
+    <div class="container row justify-content-center text-center pb-5 mx-auto">
+      <div class="row" style="padding-top: 100px;padding-bottom: 100px;width: 750px;">
+        <% ownedGuilds.forEach(guild => { %>
+          <div class="col-4 m-2 row aos-init aos-animate" style="width: 100%; background: rgb(0, 10, 35, .3); border-radius: 20px; padding: 20px;" data-aos="zoom-in">
+          <div class="col-2">
+            <img defer src="<%- guild.icon ? `https:\//cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp` : `https:\//support.discord.com/hc/user_images/l12c7vKVRCd-XLIdDkLUDg.webp` %>" alt="<%- guild.name %>" style="border-radius: 8px;max-height: 100px;" class="d-block mx-lg-auto img-fluid aos-init aos-animate"/>
+          </div>
+          <div style="font-family: Rubik, sans-serif;margin-left: 20px;" class="col">
+            <h1 style="text-align: left; font-size: xx-large; font-weight: 600;color: rgb(255, 255, 255);"><%- guild.name %></h1>
+            <div style="text-align: left;">
+              <% if (bot.guilds.cache.has(guild.id)) { %>
+                <a href="/dashboard/<%- guild.id %>" class="btn text-white fw-bold" onclick="spinner(this)" style="background: var(--sparkv-color-2);">
+                  <i class="fa-solid fa-gear"></i>
+                  Manage
+                </a>
+              <% } else { %>
+                <a href="/invite/<%- guild.id %>" class="btn text-white fw-bold" style="background: var(--sparkv-color-2);" onclick="spinner(this)">
+                  Setup
+                </a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+
+      <div class="row" style="width: 750px;">
+      <% guilds.filter(g => !g.owner).forEach(guild => { %>
+        <div class="col-4 m-2 row aos-init aos-animate" style="width: 100%; background: rgb(0, 10, 35, .3);  border-radius: 20px; padding: 20px;" data-aos="zoom-in">
+          <div class="col-2">
+            <img defer src="<%- guild.icon ? `https:\//cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp` : `https:\//support.discord.com/hc/user_images/l12c7vKVRCd-XLIdDkLUDg.webp` %>" alt="<%- guild.name %>" style="border-radius: 8px;max-height: 100px;" class="d-block mx-lg-auto img-fluid aos-init aos-animate"/>
+          </div>
+          <div style="font-family: Rubik, sans-serif;margin-left: 20px;" class="col">
+            <h1 style="text-align: left; font-size: xx-large; font-weight: 600;color: rgb(255, 255, 255);"><%- guild.name %></h1>
+            <div style="text-align: left;">
+              <% if (bot.guilds.cache.has(guild.id)) { %>
+                <a href="/dashboard/<%- guild.id %>" class="btn text-white fw-bold" onclick="spinner(this)" style="background: var(--sparkv-color-2);">
+                  <i class="fa-solid fa-gear"></i>
+                  Manage
+                </a>
+              <% } else { %>
+                <a href="/invite/<%- guild.id %>" class="btn text-white fw-bold" style="background: var(--sparkv-color-2);" onclick="spinner(this)">Setup</a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+      </div>
+      </div>
+
+      <div class="justify-content-center text-center pb-5 mx-auto">
+      <a href="/api/logout?r=/dashboard" class="btn btn-secondary text-white fw-bold" style="width: 25%;" onclick="spinner(this)">Refresh</a>
+      </div>
+    </div>
+  </section>
+
+  <%- include("components/footer", {
+    title: "SparkV - The Powerful Multipurpose Discord Bot",
+    desc: "SparkV is the most POWERFUL multipurpose Discord bot with NO PAYWALL! Start powering your Discord server without spending a dime.",
+    footerTable: {
+      Company: {
+        "Terms of Service": {
+          href: "/tos"
+        },
+        "Privacy Policy": {
+          href: "/privacy"
+        }
+      }
+    }
+  }) %>
+  
+  <a href="#" class="back-to-top shadow btn-secondary rounded-circle" id="back-to-top">
+    <i class="fa fa-angle-up"></i>
+  </a>
+
+  <%- include("components/scripts") %>
+</body>
+
+</html>

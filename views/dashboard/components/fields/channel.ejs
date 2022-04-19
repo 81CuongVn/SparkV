@@ -1,0 +1,15 @@
+          <div class="col-5 m-3" style="background: var(--sparkv-dark);border-radius: 10px;padding: 20px;width: 300px;">
+            <h3 class="fw-bold pb-2"><%- name %></h1>
+
+            <select class="selectpicker show-tick" name="<%- id %>" id="<%- id %>" aria-label="<%- value %>" style="max-width: 280px;" data-live-search="true">
+              <option value="null" <% if (value === null) { %>selected<% } %>>Disabled</option>
+
+              <% guild.channels.cache.each(c => { %>
+                <% if (c.type === "GUILD_TEXT") { %>
+                  <option value="<%- c.id %>" <% if (c.id === value) { %>selected<% } %>><%- c.name %></option>
+                <% } %>
+              <% }) %>
+            </select>
+
+            <p class="text-muted"><%- desc %></p>
+          </div>

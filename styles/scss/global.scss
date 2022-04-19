@@ -1,0 +1,44 @@
+@use "./config" as *;
+
+//-- Components --//
+@use "components/buttons";
+@use "components/mixins";
+@use "components/text";
+@use "components/dropdowns";
+@use "components/icons";
+@use "components/gradients";
+
+:root {
+  --sparkv-dark: #0a1227;
+  --sparkv-color: fff;
+  --sparkv-color-2: rgba(255,255,255, 0.05);
+  --sparkv-yellow: #dee03b;
+}
+
+body {
+  background: var(--sparkv-dark);
+  font-family: Satoshi-Regular, sans-serif;
+}
+
+a {
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+a:hover {
+  color: white;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background: $primary;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $secondary;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $secondary;
+}

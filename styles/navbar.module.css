@@ -1,0 +1,89 @@
+/*!
+ * Ch1llest Site v1.0.0 (https://ch1llest.ch1ll.tk/)
+ * Copyright 2021 KingCh1ll
+ */
+.navbar {
+  display: flex;
+  list-style: none;
+  padding: 1rem 0 0;
+  flex-direction: row;
+  background: #0a1227;
+}
+.navbar .navbar-toggler {
+  border-color: transparent !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+.navbar .navbar-toggler:hover {
+  background-color: var(--sparkv-color-2);
+}
+.navbar .navbar-toggler:focus {
+  box-shadow: none;
+}
+.navbar li {
+  position: relative;
+  margin-right: 10px;
+  padding: 14px 0;
+}
+.navbar li a {
+  color: #fff;
+  padding: 0 0.7rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+.navbar li a i {
+  font-size: 25px;
+  vertical-align: bottom;
+  margin-inline-end: 5px;
+}
+.navbar li:hover {
+  color: #fff;
+}
+.navbar li > a {
+  display: flex;
+  padding: 0 20px 0 10px;
+  height: 100%;
+}
+
+.nav-tabs .nav-item:hover {
+  background: #111b35;
+  border: none;
+}
+.nav-tabs .nav-item .active {
+  background: #111b35;
+  border: none;
+}
+.nav-tabs .nav-item .active:hover {
+  background: #111b35;
+  border: none;
+}
+.nav-tabs .nav-link:hover {
+  background: #111b35;
+  border: none;
+}
+.nav-tabs .nav-link .active {
+  background: #111b35;
+  border: none;
+}
+.nav-tabs .nav-link .active:hover {
+  background: #111b35;
+  border: none;
+}
+
+.navbar-no-scroll {
+  margin-top: 10px;
+  -webkit-transition: 0.4s all;
+  transition: 0.4s all;
+}
+
+.navbar-scroll {
+  margin-top: 10px;
+  padding: 8px 0px;
+  margin-inline-start: 24px;
+  margin-inline-end: 24px;
+  background: var(--sparkv-dark);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1019607843), 0 2px 4px -1px rgba(0, 0, 0, 0.0588235294);
+  border-radius: 12px;
+  transition: all 0.4s ease 0s;
+}
+
+/*# sourceMappingURL=navbar.module.css.map */

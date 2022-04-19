@@ -1,0 +1,15 @@
+          <div class="col-5 m-3" style="background: var(--sparkv-dark);border-radius: 10px;padding: 20px;width: 300px;">
+            <h3 class="fw-bold pb-2"><%- name %></h1>
+
+            <select class="selectpicker show-tick" name="<%- id %>" id="<%- id %>" aria-label="<%- value %>" style="max-width: 280px;" data-live-search="true">
+              <% Object.entries(values).forEach(v => { %>
+                <% if (value === v[1].id) { %>
+                  <option selected value="<%- v[1].id %>"><%- v[0] %></option>
+                <% } else { %>
+                  <option value="<%- v[1].id %>"><%- v[0] %></option>
+                <% } %>
+              <% }) %>
+            </select>
+
+            <p class="text-muted"><%- desc %></p>
+          </div>

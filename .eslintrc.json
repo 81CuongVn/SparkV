@@ -1,0 +1,8 @@
+{
+    "extends": "next/core-web-vitals",
+    "ignorePatterns": ["handle.js", "sw.js"],
+    "rules": {
+      "react/jsx-key": "off",
+      "react/no-unescaped-entities": "off"
+    }
+  }

@@ -1,0 +1,27 @@
+/*!
+ * Ch1llest Site v1.0.0 (https://ch1llest.ch1ll.tk/)
+ * Copyright 2021 KingCh1ll
+ */
+.dots span {
+  animation-name: dots;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+@keyframes dots {
+  50% {
+    opacity: 0;
+    transform: scale(0.7) translateY(10px);
+  }
+}
+
+/*# sourceMappingURL=loader.module.css.map */
