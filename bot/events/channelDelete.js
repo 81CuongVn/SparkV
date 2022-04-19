@@ -13,7 +13,7 @@ module.exports = {
 
 		if (!data?.plugins?.logging?.enabled === "true") return;
 
-		const logChannel = channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel) || await channel?.guild?.channels?.fetch(data.plugins?.logging?.channel);
+		const logChannel = channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel);
 
 		if (!logChannel) return;
 

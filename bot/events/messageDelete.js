@@ -23,7 +23,7 @@ module.exports = {
 
 		if (!data?.plugins?.logging?.enabled === "true") return;
 
-		const channel = message.channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel) || await message.channel?.guild?.channels?.fetch(data.plugins?.welcome?.channel);
+		const channel = message.channel?.guild?.channels?.cache.get(data.plugins?.logging?.channel);
 
 		if (!channel) return;
 

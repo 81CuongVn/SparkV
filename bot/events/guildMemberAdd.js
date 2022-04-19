@@ -20,7 +20,7 @@ module.exports = {
 			}
 		}
 
-		const channel = channel?.guild?.channels?.cache.get(data.plugins?.welcome?.channel) || await channel?.guild?.channels?.fetch(data.plugins?.welcome?.channel);
+		const channel = channel?.guild?.channels?.cache.get(data.plugins?.welcome?.channel);
 
 		if (!channel) return;
 
