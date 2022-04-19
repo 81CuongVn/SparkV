@@ -8,13 +8,13 @@ module.exports = class Command {
 				usage: "{command}",
 				cooldown: 2 * 1000,
 				ownerOnly: false,
-				enabled: true,
+				enabled: true
 			},
 			sett,
 			{
 				perms: ["SEND_MESSAGES"].concat(sett?.perms || []),
-				bot_perms: ["EMBED_LINKS"].concat(sett?.bot_perms || []),
-			},
+				bot_perms: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"].concat(sett?.bot_perms || [])
+			}
 		);
 	}
 
