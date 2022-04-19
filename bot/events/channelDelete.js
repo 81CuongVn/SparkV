@@ -29,5 +29,5 @@ module.exports = {
 		await logChannel.send({
 			embeds: [embed]
 		}).catch(() => {});
-	},
+	}
 };

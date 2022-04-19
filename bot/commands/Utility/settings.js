@@ -119,7 +119,7 @@ async function setNewData(message, options) {
 				await options.handleData(collected.first(), requestMsg);
 
 				await channelMsg.edit({
-					embeds: [requestMsg],
+					embeds: [requestMsg]
 				});
 
 				try {
@@ -163,7 +163,7 @@ async function execute(bot, message, args, command, data) {
 
 	const botMessage = await message.replyT({
 		embeds: [loadingEmbed],
-		ephemeral: true,
+		ephemeral: true
 	});
 
 	const ToggleButton = new MessageButton()
@@ -256,7 +256,7 @@ async function execute(bot, message, args, command, data) {
 								return true;
 							}
 						});
-					},
+					}
 				}
 			],
 			stateDisabled: true
@@ -311,9 +311,9 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("tickets.category");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
+					}
 				},
 				{
 					name: "Roles",
@@ -346,10 +346,10 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("tickets.roles");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
-				},
+					}
+				}
 			],
 			stateDisabled: true
 		},
@@ -363,7 +363,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: "Toggle",
 					data: ToggleButton,
-					getData: () => data.guild.starboard?.enabled || "false",
+					getData: () => data.guild.starboard?.enabled || "false"
 				},
 				{
 					name: "Channel",
@@ -394,9 +394,9 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("starboard.channel");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
+					}
 				},
 				{
 					name: "Emoji",
@@ -438,9 +438,9 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("starboard.emoji");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
+					}
 				},
 				{
 					name: "Minimum",
@@ -468,10 +468,10 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("starboard.min");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
-				},
+					}
+				}
 			],
 			getState: () => data.guild.starboard?.enabled,
 			setState: async type => {
@@ -494,7 +494,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: "Toggle",
 					data: ToggleButton,
-					getData: () => data.guild.logging?.enabled || "false",
+					getData: () => data.guild.logging?.enabled || "false"
 				},
 				{
 					name: "Channel",
@@ -521,10 +521,10 @@ async function execute(bot, message, args, command, data) {
 								data.guild.markModified("logging.channel");
 
 								await data.guild.save();
-							},
+							}
 						});
-					},
-				},
+					}
+				}
 			],
 			getState: () => data.guild.logging?.enabled,
 			setState: async type => {
@@ -567,12 +567,12 @@ async function execute(bot, message, args, command, data) {
 
 		buttons.push({
 			type: 1,
-			components: [BackButton, DashButton, SupportButton],
+			components: [BackButton, DashButton, SupportButton]
 		});
 
 		await botMessage.edit({
 			embeds: [
-				pages.find(page => page.author.name.includes(curSetting.name)),
+				pages.find(page => page.author.name.includes(curSetting.name))
 			],
 			components: buttons,
 			ephemeral: true
@@ -675,7 +675,7 @@ async function execute(bot, message, args, command, data) {
 
 	buttons.push({
 		type: 1,
-		components: [ExitButton, DashButton, SupportButton],
+		components: [ExitButton, DashButton, SupportButton]
 	});
 
 	await bot.wait(750);
@@ -684,7 +684,7 @@ async function execute(bot, message, args, command, data) {
 		embeds: [Menu],
 		components: buttons,
 		fetchReply: true,
-		ephemeral: true,
+		ephemeral: true
 	});
 
 	const collector = botMessage.createMessageComponentCollector({
@@ -711,7 +711,7 @@ async function execute(bot, message, args, command, data) {
 
 				buttons.push({
 					type: 1,
-					components: [ExitButton, DashButton, SupportButton],
+					components: [ExitButton, DashButton, SupportButton]
 				});
 
 				curSetting = null;
@@ -806,5 +806,5 @@ module.exports = new cmd(execute, {
 	perms: ["MANAGE_GUILD"],
 	slash: true,
 	slashOnly: true,
-	cooldown: 30,
+	cooldown: 30
 });

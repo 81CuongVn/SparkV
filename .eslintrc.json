@@ -118,7 +118,7 @@
         "ignoreConsecutiveComments": true
       }
     ],
-    "comma-dangle": "off",
+    "comma-dangle": ["error", "never"],
     "comma-spacing": "error",
     "comma-style": "error",
     "computed-property-spacing": "error",
