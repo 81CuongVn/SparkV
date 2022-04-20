@@ -29,8 +29,6 @@ function timeoutUser(offense, message, data) {
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
 		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
 		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
-
-	message.client.emit("automod", message, offense, data);
 }
 
 module.exports = {
@@ -128,6 +126,47 @@ module.exports = {
 					);
 				}
 			});
+
+			// Check for scam links.
+			if (data.guild?.antiScam.enabled === "true") {
+				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
+					let scamLinks = await bot.redis.get("bot_scamlinks").then(res => JSON.parse(res));
+
+					if (!scamLinks) {
+						scamLinks = await axios.get("https://phish.sinking.yachts/v2/all").then(res => res.data).catch(() => message.replyT("Failed to fetch scam links."));
+
+						await bot.redis.set("bot_scamlinks", JSON.stringify(scamLinks), {
+							EX: 172800
+						});
+					}
+
+					const httpsRegex = /(https?:\/\/)?(www\.)?/g;
+					let cleanMessage = message.cleanContent.toLowerCase().replaceAll(httpsRegex, "");
+					cleanMessage.endsWith("/") && (cleanMessage = cleanMessage.slice(0, -1));
+					console.log(cleanMessage, scamLinks.includes(cleanMessage));
+
+					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
+						await message.delete();
+
+						if (data.guild?.antiScam?.action === "timeout") {
+							timeoutUser("scamLink", message, data);
+							bot.emit("scamLinkSent", message, data);
+						} else if (data.guild?.antiScam?.action === "kick") {
+							message.member.kick({
+								reason: `Sent a scam link. (${cleanMessage})`
+							});
+
+							bot.emit("scamLinkSent", message, data);
+						} else if (data.guild?.antiScam?.action === "ban") {
+							message.member.ban({
+								reason: `Sent a scam link. (${cleanMessage})`
+							});
+
+							bot.emit("scamLinkSent", message, data);
+						}
+					}
+				}
+			}
 
 			// Check for profanity (curse words)
 			if (data.guild.automod.removeProfanity === "true") {
