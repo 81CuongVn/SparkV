@@ -13,12 +13,17 @@ const Schema = new mongoose.Schema({
 		enabled: { type: String, default: "false" },
 		message: { type: String, default: "{mention} just joined the server. Welcome!" },
 		roles: { type: Array, default: [] },
-		channel: { type: String, default: null }
+		channel: { type: String, default: "null" }
 	},
 	goodbye: {
 		enabled: { type: String, default: "false" },
 		message: { type: String, default: "Bye {mention}! We're really sad to see you go. Without you, we're now **{members} members**." },
-		channel: { type: String, default: null }
+		channel: { type: String, default: "null" }
+	},
+	antiScam: {
+		enabled: { type: String, default: "false" },
+		custom: { type: String, default: [] },
+		action: { type: String, default: "timeout" }
 	},
 	automod: {
 		removeLinks: { type: String, default: "false" },
@@ -27,26 +32,24 @@ const Schema = new mongoose.Schema({
 	},
 	leveling: {
 		enabled: { type: String, default: "false" },
-		message: { type: String, default: "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!" } ,
-		channel: { type: String, default: null },
-		max: { type: Number, default: 25 },
-		min: { type: Number, default: 5 }
+		message: { type: String, default: "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!" },
+		channel: { type: String, default: "null" }
 	},
 	starboard: {
 		enabled: { type: String, default: "false" },
-		channel: { type: String, default: null },
+		channel: { type: String, default: "null" },
 		emoji: { type: String, default: "⭐" },
 		min: { type: Number, default: 1 }
 	},
 	logging: {
 		enabled: { type: String, default: "false" },
-		channel: { type: String, default: null },
+		channel: { type: String, default: "null" },
 		level: { type: String, default: "info" }
 	},
-	chatbot: { type: String, default: null },
+	chatbot: { type: String, default: "null" },
 	tickets: {
-		category: { type: String, default: null },
-		roles: { type: Array, default: [] },
+		category: { type: String, default: "null" },
+		roles: { type: Array, default: [] }
 	},
 	tags: { type: Array, default: [] }
 });
