@@ -21,10 +21,12 @@ export default function Navbar({ title, logo, items, user }) {
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark ${scrolled ? " navbar-scroll" : "navbar-no-scroll"}`} style={{ padding: "5px", position: "sticky", top: "1rem", zIndex: "100", transition: "all 0.4s ease 0s" }}>
       <div className="container">
-        <a className="navbar-brand" style={{ fontFamily: "\'Poppins\', sans-serif", fontWeight: "700" }} href="/">
-          <Image src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}></Image>
-          {title}
-        </a>
+        <Link className="navbar-brand" style={{ fontFamily: "\'Poppins\', sans-serif", fontWeight: "700" }} href="/">
+          <span>
+            <Image src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}></Image>
+            {title}
+          </span>
+        </Link>
 
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +37,7 @@ export default function Navbar({ title, logo, items, user }) {
           <div className="mx-auto">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" href="/">test</a>
+                <Link className="nav-link" aria-current="page" href="/">test</Link>
               </li>
               {console.log(items)}
               {items?.forEach(item => {
@@ -65,7 +67,7 @@ export default function Navbar({ title, logo, items, user }) {
             <div className="dropdown user-dropdown my-menu">
               <button className="btn dropdown-toggle px-2 text-white" style={{ textTransform: none }} type="button" id="dropdown_user" data-bs-toggle="dropdown" aria-expanded="false">
                 <span>
-                  <img src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp<%- user.picture -%>`} height="38" width="38" style={{ marginRight: "5px", borderRadius: "8px" }} className="rounded" alt="Profile Icon" />
+                  <Image src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp<%- user.picture -%>`} height="38" width="38" style={{ marginRight: "5px", borderRadius: "8px" }} className="rounded" alt="Profile Icon" />
                 </span>
                 <p style={{ alignSelf: "center", fontSize: "16px", fontWeight: "600", marginBottom: "0" }}>
                   <span>{user.username}</span>
@@ -97,9 +99,9 @@ export default function Navbar({ title, logo, items, user }) {
               </ul>
             </div>
           ) : (
-            <a type="button" className="btn btn-primary btn-rounded" href="/api/auth/login" role="button">
+            <Link type="button" className="btn btn-primary btn-rounded" href="/api/auth/login" role="button">
               <span><i className="fab fa-discord"></i>Login</span>
-            </a>
+            </Link>
           )}
         </div>
       </div>
