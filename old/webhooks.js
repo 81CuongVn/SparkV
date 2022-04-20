@@ -5,7 +5,7 @@ const Router = Express.Router();
 
 const webhook = require("../../utils/voteWebhook").webhook;
 const SparkV = require("../../utils/voteWebhook").getBot();
-const database = require("../../database/handler")
+const database = require("../database/handler")
 
 const voteUrls = {
   ["botlabs"]: {
