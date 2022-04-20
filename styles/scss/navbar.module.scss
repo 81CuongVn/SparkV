@@ -48,6 +48,27 @@
       padding: 0 20px 0 10px;
       height: 100%;
     }
+
+  .nav-item {
+    border-radius: 7px;
+    transition-property: color, background-color, border-color, stroke, fill, opacity, transform, box-shadow;
+    transition-duration: 200ms;
+    padding: 10px 0;
+    height: 40px;
+    min-width: 40px;
+
+    &:hover {
+      background: var(--sparkv-color-2);
+    }
+
+    a {
+      font-size: 16px;
+
+      i {
+        font-size: 16px;
+      }
+    }
+  }
 }
 
 .nav-tabs {
@@ -57,7 +78,7 @@
       border: none;
     }
 
-    .active {
+    .navlink .active {
       background: #111b35;
       border: none;
 

@@ -2,6 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import config from '../config';
 
+import "../styles/footer.module.css";
+
+
 export default function Navbar({ name, description, banner, servers }) {
   return (
     <section id="home" style={{ paddingTop: "8rem", paddingBottom: "10rem;" }}>

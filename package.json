@@ -22,6 +22,7 @@
     "npm": "8.x"
   },
   "dependencies": {
+    "@chakra-ui/toast": "^1.5.9",
     "@sentry/node": "^6.19.6",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
@@ -30,7 +31,8 @@
     "nookies": "^2.5.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-icons": "^4.3.1"
+    "react-icons": "^4.3.1",
+    "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
     "eslint": "^8.13.0",
