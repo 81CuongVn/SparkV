@@ -21,7 +21,7 @@ module.exports = {
 			try {
 				if (interaction) {
 					await interaction.deferReply({
-						ephemeral: command.settings.ephemeral || false,
+						ephemeral: command.settings.ephemeral || false
 					});
 				} else {
 					return;
@@ -60,7 +60,7 @@ module.exports = {
 				const cooldownEmbed = new Discord.MessageEmbed()
 					.setAuthor({
 						name: interaction.user.tag,
-						iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					})
 					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
 					.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
@@ -72,7 +72,7 @@ module.exports = {
 					});
 
 				return await interaction.replyT({
-					embeds: [cooldownEmbed],
+					embeds: [cooldownEmbed]
 				});
 			}
 
@@ -94,7 +94,7 @@ module.exports = {
 			// }
 
 			if (command.settings.enabled === false) return await interaction.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
-			if (command.settings.guildOnly && !interaction.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.",);
+			if (command.settings.guildOnly && !interaction.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.");
 			if (command.settings.ownerOnly && interaction.user.id !== bot.config.ownerID) return await interaction.replyT("This command is restricted. Only the owner (KingCh1ll) can use this command.");
 
 			bot.StatClient.postCommand(command.settings.name, interaction.user.id);
@@ -116,7 +116,7 @@ module.exports = {
 
 				await interaction.replyT({
 					embeds: [ErrorEmbed],
-					ephemeral: true,
+					ephemeral: true
 				});
 			}
 		} else if (interaction.isButton()) {
@@ -146,7 +146,7 @@ module.exports = {
 					const permissionOverwrites = [
 						{
 							id: bot.user.id,
-							allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+							allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
 						},
 						{
 							id: interaction.member.id,
@@ -155,7 +155,7 @@ module.exports = {
 						{
 							id: interaction.guild.roles.everyone,
 							deny: ["VIEW_CHANNEL"]
-						},
+						}
 					];
 
 					if (guild?.tickets?.roles.length > 0) {
@@ -222,21 +222,21 @@ module.exports = {
 							permissionOverwrites: [
 								{
 									id: bot.user.id,
-									allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+									allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
 								},
 								{
 									id: interaction.member.id,
-									deny: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+									deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
 								},
 								{
 									id: interaction.guild.roles.everyone,
-									deny: ["VIEW_CHANNEL"],
-								},
+									deny: ["VIEW_CHANNEL"]
+								}
 								// {
 								// 	id: bot.config.services.support.roleID,
 								// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
 								// },
-							],
+							]
 						})
 						.catch(err => { });
 
@@ -255,21 +255,21 @@ module.exports = {
 						permissionOverwrites: [
 							{
 								id: bot.user.id,
-								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
 							},
 							{
 								id: interaction.channel.topic.split(" | ")[1],
-								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+								allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
 							},
 							{
 								id: interaction.guild.roles.everyone,
-								deny: ["VIEW_CHANNEL"],
-							},
+								deny: ["VIEW_CHANNEL"]
+							}
 							// {
 							// 	id: bot.config.services.support.roleID,
 							// 	allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
 							// },
-						],
+						]
 					});
 
 					interaction.reply(`This ticket has been reopened. Welcome back!`);
@@ -309,5 +309,5 @@ module.exports = {
 				}
 			}
 		}
-	},
+	}
 };
