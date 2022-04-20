@@ -124,7 +124,7 @@ module.exports = {
 					await message.replyT(
 						bot.config.responses.AFKMessage.toString()
 							.replaceAll(`{userMentioned}`, u.username)
-							.replaceAll(`{reason}`, mentionedUserData.afk || "Reason data not found!"),
+							.replaceAll(`{reason}`, mentionedUserData.afk || "Reason data not found!")
 					);
 				}
 			});
@@ -151,7 +151,7 @@ module.exports = {
 						++data.member.infractionsCount;
 						data.member.infractions.push({
 							type: "cursing",
-							date: Date.now(),
+							date: Date.now()
 						});
 
 						data.member.markModified("infractionsCount");
@@ -174,7 +174,7 @@ module.exports = {
 					++data.member.infractionsCount;
 					data.member.infractions.push({
 						type: "links",
-						date: Date.now(),
+						date: Date.now()
 					});
 
 					data.member.markModified("infractionsCount");
@@ -206,13 +206,13 @@ module.exports = {
 							authorID: message.author.id,
 							channelID: message.channel.id,
 							content: message.content,
-							sendTimestamp: message.createdTimestamp,
+							sendTimestamp: message.createdTimestamp
 						};
 
 						messages.push(currentMessage);
 
 						const foundMatches = messages.filter(
-							msg => msg.authorID === message.author.id && msg.guildID === message.guild.id,
+							msg => msg.authorID === message.author.id && msg.guildID === message.guild.id
 						);
 
 						if (!foundMatches) return;
@@ -223,7 +223,7 @@ module.exports = {
 							++data.member.infractionsCount;
 							data.member.infractions.push({
 								type: "spam",
-								date: Date.now(),
+								date: Date.now()
 							});
 
 							data.member.markModified("infractionsCount");
@@ -336,8 +336,8 @@ module.exports = {
 				.setColor("RED");
 
 			await message.replyT({
-				embeds: [ErrorEmbed],
+				embeds: [ErrorEmbed]
 			});
 		}
-	},
+	}
 };
