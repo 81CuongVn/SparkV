@@ -22,7 +22,7 @@ const Schema = new mongoose.Schema({
 	},
 	antiScam: {
 		enabled: { type: String, default: "false" },
-		custom: { type: String, default: [] },
+		custom: { type: Array, default: [] },
 		action: { type: String, default: "timeout" }
 	},
 	automod: {
