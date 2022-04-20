@@ -19,7 +19,7 @@
   "license": "MIT",
   "engines": {
     "node": "14.x",
-    "npm": "7.x"
+    "npm": "8.x"
   },
   "dependencies": {
     "@sentry/node": "^6.19.6",
