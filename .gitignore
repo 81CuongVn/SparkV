@@ -47,6 +47,7 @@ node_modules/
 
 # environment variables
 .env
+.env.local
 
 # Next.js build output
 .next
