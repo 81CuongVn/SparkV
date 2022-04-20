@@ -23,7 +23,7 @@ export default function Navbar({ title, logo, items, user }) {
       <div className="container">
         <Link className="navbar-brand" style={{ fontFamily: "\'Poppins\', sans-serif", fontWeight: "700" }} href="/">
           <span>
-            <img src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}></Image>
+            <img src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}/>
             {title}
           </span>
         </Link>

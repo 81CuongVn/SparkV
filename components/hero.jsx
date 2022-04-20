@@ -34,7 +34,7 @@ export default function Navbar({ name, description, banner, servers }) {
           <div className="col-lg-7 col-md-6">
             {servers?.forEach(s => {
               <a href="<%- s.link %>" style={{ marginInlineEnd: "10px" }}>
-                <img defer className="animate__animated animate__fadeInUp" src="<%- s.icon %>" alt="<%- s.name %>" title="<%- s.name %>" style={{ borderRadius: "10px" }} height="60" width="60"></Image>
+                <img defer className="animate__animated animate__fadeInUp" src="<%- s.icon %>" alt="<%- s.name %>" title="<%- s.name %>" style={{ borderRadius: "10px" }} height="60" width="60"/>
               </a>
             })}
           </div>
