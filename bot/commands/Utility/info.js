@@ -25,7 +25,7 @@ async function execute(bot, message, args, command, data) {
 			HOUSE_BRAVERY: "<:house_bravery:941439956528803860>",
 			HOUSE_BRILLIANCE: "<:house_brilliance:941439956507840543>",
 			HOUSE_BALANCE: "<:house_balance:941440238486691921>",
-			DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>",
+			DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>"
 		};
 
 		let user = data.options.getUser("user") || message.user;
@@ -73,7 +73,7 @@ async function execute(bot, message, args, command, data) {
 		const InfoEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: `${user.user ? user.user.tag : user.tag} (${(user.user ? user.user.bot : user.bot) ? await message.translate("Robot") : await message.translate("Human")})`,
-				iconURL: (user.user ? user.user : user).displayAvatarURL({ dynamic: true }),
+				iconURL: (user.user ? user.user : user).displayAvatarURL({ dynamic: true })
 			})
 			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
 			.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? capFirstLetter(member?.presence?.status) : "None")}\`\`\``, true)
@@ -95,48 +95,48 @@ async function execute(bot, message, args, command, data) {
 		if (user.user ? user.user.banner : user.banner) InfoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
 		await message.replyT({
-			embeds: [InfoEmbed],
+			embeds: [InfoEmbed]
 		});
 	} else if (state === "server") {
 		const VerificationLevels = {
 			NONE: {
 				emoji: "🔓",
-				desc: "None.",
+				desc: "None."
 			},
 			LOW: {
 				emoji: "🟢",
-				desc: "must have verified email on account",
+				desc: "must have verified email on account"
 			},
 			MEDIUM: {
 				emoji: "🟡",
-				desc: "must be registered on Discord for longer than 5 minutes",
+				desc: "must be registered on Discord for longer than 5 minutes"
 			},
 			HIGH: {
 				emoji: "🟠",
-				desc: "must be a member of the server for longer than 10 minutes",
+				desc: "must be a member of the server for longer than 10 minutes"
 			},
 			VERY_HIGH: {
 				emoji: "🔴",
-				desc: "must have a verified phone number",
+				desc: "must have a verified phone number"
 			}
 		};
 
 		const premiumTier = {
 			NONE: {
 				emoji: bot.config.emojis.error,
-				desc: "None.",
+				desc: "None."
 			},
 			TIER_1: {
 				emoji: "🟢",
-				desc: "Tier 1",
+				desc: "Tier 1"
 			},
 			TIER_2: {
 				emoji: "🟡",
-				desc: "Tier 2",
+				desc: "Tier 2"
 			},
 			TIER_3: {
 				emoji: "🟠",
-				desc: "Tier 3",
+				desc: "Tier 3"
 			}
 		};
 
@@ -169,7 +169,7 @@ async function execute(bot, message, args, command, data) {
 			const serverEmbed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: await message.translate(`Server Info`),
-					iconURL: bot.user.displayAvatarURL({ format: "png" }),
+					iconURL: bot.user.displayAvatarURL({ format: "png" })
 				})
 				.setTitle(serverinfo.guild.name)
 				.addField("**Members**", `${serverinfo.approximate_member_count}`, true)
@@ -186,14 +186,14 @@ async function execute(bot, message, args, command, data) {
 			if (serverinfo.guild?.vanity_url_code) serverEmbed.addField("**Vanity URL**", `https://discord.gg/${serverinfo.guild.vanity_url_code}`, true);
 
 			return await message.replyT({
-				embeds: [serverEmbed],
+				embeds: [serverEmbed]
 			});
 		}
 
 		const Basic = new Discord.MessageEmbed()
 			.setAuthor({
 				name: `${message.guild.name}`,
-				iconURL: `${message?.guild?.iconURL({ dynamic: true }) || "https://cdn.discordapp.com/embed/avatars/1.png"}`,
+				iconURL: `${message?.guild?.iconURL({ dynamic: true }) || "https://cdn.discordapp.com/embed/avatars/1.png"}`
 			})
 			.setDescription(`${bot.config.emojis.owner} **Server Owner**: ${await message.guild?.fetchOwner() || "❗UNKNOWN"}\n${bot.config.emojis.plus} **Server Created**: <t:${~~(message.guild.createdAt / 1000)}:R>\n${bot.config.emojis.player} **Total Members**: ${message.guild.memberCount}\n\`🌿\` **Channels**: 📂 ${message.guild.channels.cache.filter(c => c.type === "GUILD_CATEGORY").size} | ${bot.config.emojis.channel} ${message.guild.channels.cache.size} | 🔊 ${message.guild.channels.cache.filter(c => c.type === "GUILD_VOICE").size}`)
 			.addField("Security", `\`${VerificationLevels[message.guild.verificationLevel].emoji}\` **Verification Level**: ${VerificationLevels[message.guild.verificationLevel].desc}\n\`1️⃣\` **Notification Settings**: ${message.guild.defaultMessageNotifications === "ONLY_MENTIONS" ? "Only Mentions" : "All Messages"}\n\`🔎\` **Content Filter**: ${explicitContentFilterLevels[message.guild.explicitContentFilter] || bot.config.emojis.error}\n\`🔒\` **2FA Enabled**: ${message.guild.mfaLevel === "ELEVATED" ? bot.config.emojis.success : bot.config.emojis.error}`, true)
