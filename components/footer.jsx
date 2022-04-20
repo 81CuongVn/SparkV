@@ -11,9 +11,9 @@ export default function Navbar({ name, description, banner, servers }) {
           <h1 className="display-2_title" style={{ width: "100%", textAlign: "center", fontSize: "xxx-large;" }}>{name}</h1>
           <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>{description}</p>
           <div className="row justify-content-center" style={{ display: "flex", height: "100px", marginTop: "32px" }}>
-            <a type="button" className="col-5 btn btn-info text-white fw-bold" href="/dashboard" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px;" }}>
+            <Link type="button" className="col-5 btn btn-info text-white fw-bold" href="/dashboard" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px;" }}>
               <span>Invite {name}</span>
-            </a>
+            </Link>
 
             <a type="button" className="col-5 btn btn-gray text-white fw-bold" href="#features" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px;" }}>Learn More</a>
           </div>
@@ -21,7 +21,7 @@ export default function Navbar({ name, description, banner, servers }) {
 
         <div className="col-md-6 text-end">
           <div className="video-box">
-            <img defer src={banner} alt="SparkV" className="img-fluid" style={{ borderRadius: "15px" }} draggable="false"/>
+            <Image defer src={banner} alt="SparkV" className="img-fluid" style={{ borderRadius: "15px" }} draggable="false"/>
           </div>
         </div>
       </div>
