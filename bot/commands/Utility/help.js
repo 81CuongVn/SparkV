@@ -101,7 +101,7 @@ async function execute(bot, message, args, command, data) {
 		return await message.replyT({
 			embeds: [embed],
 			components: [
-				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton),
+				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
 			]
 		});
 	}
@@ -113,7 +113,7 @@ async function execute(bot, message, args, command, data) {
 			label: `${await message.translate(cat.name)} [${cat.commands.length}]`,
 			description: cat.description,
 			value: cat.name,
-			emoji: cat.emoji ? cat.emoji : null,
+			emoji: cat.emoji ? cat.emoji : null
 		});
 	});
 
@@ -122,8 +122,7 @@ async function execute(bot, message, args, command, data) {
 			name: (message?.applicationId ? message.user : message.author).tag,
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
-		.setTitle(await message.translate("**Hi there!**"))
-		.setDescription(`${await message.translate("I'm a powerful multipurpose meme/chat bot with over")} **100+** ${await message.translate("commands to keep your server entertained and active, all while being free!\n\n**Want to enable a setting?**\n You can either vist our")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run \`/settings\` (Settings command is in BETA, and not all settings have been added. Please use our dashboard, as it is much more stable).\n\nA special thanks to")} [Icons by Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("They made most of the black and grey icons.\nIf you have any questions, feel free to join our server!")} https://discord.gg/PPtzT8Mu3h.`)
+		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can either visit my")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
 		.setFooter({
 			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -149,7 +148,7 @@ async function execute(bot, message, args, command, data) {
 		embeds: [Menu],
 		components: [
 			new MessageActionRow().addComponents(CatSelect),
-			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton),
+			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
 		],
 		fetchReply: true
 	});
@@ -166,7 +165,7 @@ async function execute(bot, message, args, command, data) {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
 				await interaction.update({
-					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]],
+					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]]
 				});
 			}
 		}
