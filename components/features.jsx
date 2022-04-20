@@ -11,7 +11,7 @@ export default function Features({ name, features }) {
         if (f.align === "left") {
           <div className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
             <div className="col-12 col-sm-8 col-lg-6">
-              <Image defer data-aos="fade-up" src="<%- f.icon %>" className="w-100 mx-lg-auto img-fluid aos-init aos-animate"
+              <img defer data-aos="fade-up" src="<%- f.icon %>" className="w-100 mx-lg-auto img-fluid aos-init aos-animate"
           alt="<%- f.alt %>" style="border-radius:6px;max-width: 400px;"/>
           </div>
             <div className="col-lg-6">
@@ -26,7 +26,7 @@ export default function Features({ name, features }) {
               <p style="color: #fff9;font-size: 20px;font-family: Satoshi-Regular, sans-serif;" data-aos="fade-up">{f.description}</p>
             </div>
             <div className="col-12 col-sm-8 col-lg-6">
-              <Image defer data-aos="fade-up" src="<%- f.icon %>" className="w-100 mx-lg-auto img-fluid aos-init aos-animate"
+              <img defer data-aos="fade-up" src="<%- f.icon %>" className="w-100 mx-lg-auto img-fluid aos-init aos-animate"
           alt="<%- f.alt %>" style="max-width: 400px;border-radius:6px;"/>
             </div>
           </div>

@@ -23,7 +23,7 @@ export default function Navbar({ title, logo, items, user }) {
       <div className="container">
         <Link className="navbar-brand" style={{ fontFamily: "\'Poppins\', sans-serif", fontWeight: "700" }} href="/">
           <span>
-            <Image src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}></Image>
+            <img src={logo} width="48" height="48" style={{ borderRadius: "1.5rem" }} alt={`${title} logo`}></Image>
             {title}
           </span>
         </Link>
@@ -67,7 +67,7 @@ export default function Navbar({ title, logo, items, user }) {
             <div className="dropdown user-dropdown my-menu">
               <button className="btn dropdown-toggle px-2 text-white" style={{ textTransform: none }} type="button" id="dropdown_user" data-bs-toggle="dropdown" aria-expanded="false">
                 <span>
-                  <Image src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp<%- user.picture -%>`} height="38" width="38" style={{ marginRight: "5px", borderRadius: "8px" }} className="rounded" alt="Profile Icon" />
+                  <img src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp<%- user.picture -%>`} height="38" width="38" style={{ marginRight: "5px", borderRadius: "8px" }} className="rounded" alt="Profile Icon" />
                 </span>
                 <p style={{ alignSelf: "center", fontSize: "16px", fontWeight: "600", marginBottom: "0" }}>
                   <span>{user.username}</span>
