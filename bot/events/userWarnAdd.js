@@ -7,7 +7,7 @@ module.exports = {
 
 		if (!data?.logging?.enabled === "true") return;
 
-		const channel = channel?.guild?.channels?.cache.get(data.logging?.channel);
+		const channel = guild?.channels?.cache.get(data.logging?.channel);
 
 		if (!channel) return;
 
@@ -28,5 +28,5 @@ module.exports = {
 		await channel.send({
 			embeds: [embed]
 		}).catch(() => {});
-	},
+	}
 };
