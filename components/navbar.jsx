@@ -6,6 +6,9 @@ import config from '../config';
 
 import style from "../styles/navbar.module.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+
 export default class Navbar extends React.Component {
   componentDidMount() {
     function changeCss() {
@@ -101,9 +104,10 @@ export default class Navbar extends React.Component {
                 </ul>
               </div>
             ) : (
-              <Link type="button" className="btn btn-primary btn-rounded" href="/api/auth/login" role="button">
-                <span><i className="fab fa-discord"></i>Login</span>
-              </Link>
+              <button className="btn btn-primary btn-rounded" href="/api/auth/login" role="button">
+                <FontAwesomeIcon icon={faDiscord} size={"lg"} />
+                <span style={{ marginInlineStart: "4px" }}>Login</span>
+              </button>
             )}
           </div>
         </div>
