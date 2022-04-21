@@ -80,6 +80,7 @@ export default class Render extends React.Component {
                     <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
                 </Head>
                 <body>
+                    {/* Loading Screen */}
                     <div id="load" style={{ display: "flex", height: "100%", width: "100%", alignItems: "center", justifyContent: "center", position: "fixed", zIndex: "9999", backgroundColor: "var(--sparkv-dark)" }}>
                         <div className="">
                             <div className={loader.dots} style={{ height: "100%", width: "100%", textAlign: "center" }}>
@@ -90,6 +91,12 @@ export default class Render extends React.Component {
                         </div>
                     </div>
 
+                    {/* Background */}
+                    <div className="position-fixed w-100 h-100" style={{ zIndex: "-1;" }}>
+                        <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", webkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }}/>
+                    </div>
+
+                    {/* Content */}
                     <section className="container-md">
                         <Navbar title="SparkV" logo="/images/SparkV.webp" items={items} user={user} />
                         <section id="home" style={{ paddingTop: "5rem", paddingBottom: "10rem" }}>
