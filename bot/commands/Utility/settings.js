@@ -410,7 +410,7 @@ async function execute(bot, message, args, command, data) {
 							}
 						});
 					}
-				},
+				}
 				// {
 				// 	name: await message.translate("Custom Words"),
 				// 	required: true,
@@ -464,6 +464,75 @@ async function execute(bot, message, args, command, data) {
 				else if (type === "disable") data.guild.antiScam.enabled = "false";
 
 				data.guild.markModified("antiScam.enabled");
+
+				await data.guild.save();
+			}
+		},
+		{
+			name: await message.translate("AntiSpam"),
+			description: await message.translate("Take action against spam in your Discord server."),
+			id: "antispam",
+			emoji: bot.config.emojis.message,
+			emojiID: "966496523955339264",
+			buttons: [
+				{
+					name: "Toggle",
+					data: ToggleButton,
+					getData: () => data.guild.antiSpam?.enabled || "false"
+				},
+				{
+					name: await message.translate("Actions"),
+					required: true,
+					data: new MessageButton()
+						.setLabel(await message.translate("Actions"))
+						.setEmoji(bot.config.emojis.ban)
+						.setCustomId("actions")
+						.setStyle("SECONDARY"),
+					getData: () => data.guild?.antiSpam?.action || "None",
+					setData: async () => {
+						await setNewData(message, {
+							title: `${bot.config.emojis.config} | AntiSpam Actions`,
+							description: "Please select the actions to take when a user spams. You have 60 seconds.",
+							id: "antiSpam",
+							color: "YELLOW",
+							dropdownItems: [
+								{
+									label: await message.translate("Timeout"),
+									emoji: bot.config.emojis.timeout,
+									value: "timeout"
+								},
+								{
+									label: await message.translate("Kick"),
+									emoji: bot.config.emojis.kick,
+									value: "kick"
+								},
+								{
+									label: await message.translate("Ban"),
+									emoji: bot.config.emojis.ban,
+									value: "ban"
+								}
+							],
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
+									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
+									.setColor("GREEN");
+
+								data.guild.antiSpam.action = collected;
+								data.guild.markModified("antiSpam.action");
+
+								await data.guild.save();
+							}
+						});
+					}
+				}
+			],
+			getState: () => data.guild.antiSpam?.enabled,
+			setState: async type => {
+				if (type === "enable") data.guild.antiSpam.enabled = "true";
+				else if (type === "disable") data.guild.antiSpam.enabled = "false";
+
+				data.guild.markModified("antiSpam.enabled");
 
 				await data.guild.save();
 			}
@@ -734,8 +803,6 @@ async function execute(bot, message, args, command, data) {
 		.setStyle("LINK");
 
 	let pages = [];
-	let buttons = [];
-	let number = 0;
 	let curSetting;
 
 	function createPages() {
@@ -758,6 +825,8 @@ async function execute(bot, message, args, command, data) {
 		});
 	}
 
+	let buttons = [];
+	let rows = 0;
 	async function setupSettings() {
 		settings.forEach(async setting => {
 			const SettingButton = new MessageButton()
@@ -767,20 +836,21 @@ async function execute(bot, message, args, command, data) {
 				.setStyle("PRIMARY")
 				.setDisabled(setting?.disabled ? setting.disabled : false);
 
-			if (!buttons[number]) {
-				buttons[number] = {
+			console.log(rows, buttons[rows]);
+			if (!buttons[rows]) {
+				buttons[rows] = {
 					type: 1,
 					components: [SettingButton]
 				};
-			} else if (buttons[number].length === 6) {
+			} else if (buttons[rows]?.components?.length >= 5) {
 				buttons.push({
 					type: 1,
 					components: [SettingButton]
 				});
 
-				number = 1;
+				++rows;
 			} else {
-				buttons[number].components.push(SettingButton);
+				buttons[rows].components.push(SettingButton);
 			}
 		});
 	}
@@ -836,6 +906,8 @@ async function execute(bot, message, args, command, data) {
 					type: 1,
 					components: [ExitButton, DashButton, SupportButton]
 				});
+
+				buttons = buttons.filter(Boolean);
 
 				curSetting = null;
 

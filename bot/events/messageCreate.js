@@ -7,21 +7,6 @@ const cursewords = require("../cursewords.json");
 const cooldowns = [];
 const messages = [];
 
-// Used for AntiSpam
-function deleteMessages(bot, matches) {
-	matches.forEach(message => {
-		const channel = bot.channels.cache.get(message.channelID);
-
-		if (channel) {
-			const msg = channel.messages.cache.get(message.messageID);
-
-			if (msg) {
-				msg.delete().catch(err => { });
-			}
-		}
-	});
-}
-
 // Timeout user
 function timeoutUser(offense, message, data) {
 	if (message.member.isCommunicationDisabled()) return;
@@ -143,10 +128,23 @@ module.exports = {
 					const httpsRegex = /(https?:\/\/)?(www\.)?/g;
 					let cleanMessage = message.cleanContent.toLowerCase().replaceAll(httpsRegex, "");
 					cleanMessage.endsWith("/") && (cleanMessage = cleanMessage.slice(0, -1));
-					console.log(cleanMessage, scamLinks.includes(cleanMessage));
 
 					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
-						await message.delete();
+						try {
+							message.delete().catch(err => { });
+						} catch (err) {
+							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
+						}
+
+						++data.member.infractionsCount;
+						data.member.infractions.push({
+							type: "scamlink",
+							date: Date.now()
+						});
+
+						data.member.markModified("infractionsCount");
+						data.member.markModified("infractions");
+						await data.member.save();
 
 						if (data.guild?.antiScam?.action === "timeout") {
 							timeoutUser("scamLink", message, data);
@@ -203,56 +201,52 @@ module.exports = {
 				}
 			}
 
-			// Check for links
-			if (data.guild.automod.removeLinks === "true") {
-				if (
-					!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") &&
-					!message.channel.permissionsFor(message.member).has("ADMINISTRATOR") &&
-					bot.functions.isURL(message.content)
-				) {
-					++data.member.infractionsCount;
-					data.member.infractions.push({
-						type: "links",
-						date: Date.now()
-					});
+			// // Check for links
+			// if (data.guild.automod.removeLinks === "true") {
+			// 	if (
+			// 		!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") &&
+			// 		!message.channel.permissionsFor(message.member).has("ADMINISTRATOR") &&
+			// 		bot.functions.isURL(message.content)
+			// 	) {
+			// 		++data.member.infractionsCount;
+			// 		data.member.infractions.push({
+			// 			type: "links",
+			// 			date: Date.now()
+			// 		});
 
-					data.member.markModified("infractionsCount");
-					data.member.markModified("infractions");
-					await data.member.save();
+			// 		data.member.markModified("infractionsCount");
+			// 		data.member.markModified("infractions");
+			// 		await data.member.save();
 
-					try {
-						message.delete().catch(err => { });
-					} catch (err) {
-						message
-							.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
-					}
+			// 		try {
+			// 			message.delete().catch(err => { });
+			// 		} catch (err) {
+			// 			message
+			// 				.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
+			// 		}
 
-					message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
+			// 		message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
 
-					timeoutUser("sending links", message, data);
-				}
-			}
+			// 		timeoutUser("sending links", message, data);
+			// 	}
+			// }
 
 			// Check for spam
-			if (data.guild.automod.removeDuplicateText === "true") {
+			if (data.guild.antiSpam.enabled === "true") {
 				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") || !message.channel.permissionsFor(message.member).has("ADMINISTRATOR")) {
-					if (!message.channel.name.startsWith(`spam`) && !message.channel.name.endsWith(`spam`)) {
+					if (!message.channel.name.startsWith("spam") && !message.channel.name.endsWith("spam")) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
 
-						const currentMessage = {
+						messages.push({
 							messageID: message.id,
 							guildID: message.guild.id,
 							authorID: message.author.id,
 							channelID: message.channel.id,
 							content: message.content,
 							sendTimestamp: message.createdTimestamp
-						};
+						});
 
-						messages.push(currentMessage);
-
-						const foundMatches = messages.filter(
-							msg => msg.authorID === message.author.id && msg.guildID === message.guild.id
-						);
+						const foundMatches = messages.filter(msg => msg.authorID === message.author.id && msg.guildID === message.guild.id);
 
 						if (!foundMatches) return;
 
@@ -269,10 +263,36 @@ module.exports = {
 							data.member.markModified("infractions");
 							await data.member.save();
 
-							deleteMessages(bot, matches);
+							matches.forEach(message => {
+								const channel = bot.channels.cache.get(message.channelID);
+
+								if (channel) {
+									const msg = channel.messages.cache.get(message.messageID);
+
+									if (msg) {
+										msg.delete().catch(err => { });
+									}
+								}
+							});
+
 							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
-							timeoutUser("spamming", message, data);
+							if (data.guild?.antiSpam?.action === "timeout") {
+								timeoutUser("spamming", message, data);
+								bot.emit("userSpammed", message, data);
+							} else if (data.guild?.antiSpam?.action === "kick") {
+								message.member.kick({
+									reason: `Spammed multiple times.`
+								});
+
+								bot.emit("userSpammed", message, data);
+							} else if (data.guild?.antiSpam?.action === "ban") {
+								message.member.ban({
+									reason: `Spammed multiple times.`
+								});
+
+								bot.emit("userSpammed", message, data);
+							}
 						}
 					}
 				}

@@ -22,8 +22,17 @@ const Schema = new mongoose.Schema({
 	},
 	antiScam: {
 		enabled: { type: String, default: "false" },
+		action: { type: String, default: "timeout" },
 		custom: { type: Array, default: [] },
-		action: { type: String, default: "timeout" }
+		bypass: { type: Array, default: [] }
+	},
+	antiSpam: {
+		enabled: { type: String, default: "false" },
+		action: { type: String, default: "timeout" },
+		bypass: {
+			roles: { type: Array, default: [] },
+			channels: { type: Array, default: [] }
+		}
 	},
 	automod: {
 		removeLinks: { type: String, default: "false" },
