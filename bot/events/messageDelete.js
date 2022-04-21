@@ -44,5 +44,5 @@ module.exports = {
 		await channel.send({
 			embeds: [embed]
 		}).catch(() => {});
-	},
+	}
 };

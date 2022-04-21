@@ -22,7 +22,7 @@ const SparkV = new Client({
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 		Intents.FLAGS.GUILD_VOICE_STATES,
-		Intents.FLAGS.GUILD_BANS,
+		Intents.FLAGS.GUILD_BANS
 		// Intents.FLAGS.GUILD_WEBHOOKS,
 		// Intents.FLAGS.GUILD_INTEGRATIONS,
 		// Intents.FLAGS.GUILD_INVITES,
@@ -34,9 +34,9 @@ const SparkV = new Client({
 	presence: {
 		activity: {
 			name: `Loading SparkV (99%)`,
-			type: "PLAYING",
+			type: "PLAYING"
 		},
-		status: "dnd",
+		status: "dnd"
 	}
 });
 global.bot = SparkV;

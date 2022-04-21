@@ -10,9 +10,9 @@ module.exports = {
 			activities: [
 				{
 					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
-					type: "PLAYING",
-				},
-			],
+					type: "PLAYING"
+				}
+			]
 		});
 
 		bot.logger(`[App] Connected to Discord as ${bot.user.tag}.`);
@@ -33,7 +33,7 @@ module.exports = {
 				apiKeys,
 				clientLibrary: "discord.js",
 				serverCount: async () => await bot.functions.GetServerCount(),
-				userCount: async () => await bot.functions.GetUserCount(),
+				userCount: async () => await bot.functions.GetUserCount()
 			});
 
 			// Start Posting to Bot Lists
@@ -52,5 +52,5 @@ module.exports = {
 		} else {
 			bot.logger("[Statcord] WARNING: Statcord is not installed! Statitics will not be posted.", "warning");
 		}
-	},
+	}
 };
