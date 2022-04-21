@@ -61,28 +61,35 @@
   font-size: 16px;
 }
 
+.nav-tabs .nav-link.active {
+  background-color: rgba(0, 10, 35, 0.3);
+  border-radius: 8px;
+  border-color: transparent;
+}
+
 .nav-tabs .nav-item:hover {
-  background: #111b35;
+  background: rgba(0, 10, 35, 0.3);
   border: none;
 }
 .nav-tabs .nav-item .navlink .active {
-  background: #111b35;
+  background: rgba(0, 10, 35, 0.3);
   border: none;
 }
 .nav-tabs .nav-item .navlink .active:hover {
-  background: #111b35;
+  background: rgba(0, 10, 35, 0.3);
   border: none;
 }
-.nav-tabs .nav-link:hover {
-  background: #111b35;
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus, .nav-tabs .nav-link:focus-visible {
+  background: rgba(0, 10, 35, 0.3);
   border: none;
+  outline: none;
 }
 .nav-tabs .nav-link .active {
-  background: #111b35;
+  background: rgba(0, 10, 35, 0.3);
   border: none;
 }
 .nav-tabs .nav-link .active:hover {
-  background: #111b35;
+  background: rgba(0, 10, 35, 0.3);
   border: none;
 }
 

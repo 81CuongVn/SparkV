@@ -71,36 +71,43 @@
   }
 }
 
+.nav-tabs .nav-link.active {
+  background-color: rgb(0, 10, 35, .3);
+  border-radius: 8px;
+  border-color: transparent;
+}
+
 .nav-tabs {
   .nav-item {
     &:hover {
-      background: #111b35;
+      background: rgb(0, 10, 35, .3);
       border: none;
     }
 
     .navlink .active {
-      background: #111b35;
+      background: rgb(0, 10, 35, .3);
       border: none;
 
       &:hover {
-        background: #111b35;
+        background: rgb(0, 10, 35, .3);
         border: none;
       }
     }
   }
 
   .nav-link {
-    &:hover {
-      background: #111b35;
+    &:hover, &:focus, &:focus-visible {
+      background: rgb(0, 10, 35, .3);
       border: none;
+      outline: none;
     }
 
     .active {
-      background: #111b35;
+      background: rgb(0, 10, 35, .3);
       border: none;
 
       &:hover {
-        background: #111b35;
+        background: rgb(0, 10, 35, .3);
         border: none;
       }
     }
