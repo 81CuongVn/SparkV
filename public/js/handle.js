@@ -10,15 +10,6 @@ import SmoothScroll from "smooth-scroll/dist/smooth-scroll.polyfills.js";
 
 $(window).on("load", async () => new SmoothScroll('a[href*="#"]'));
 $(document).ready(() => {
-  let scrollSpy = new bootstrap.ScrollSpy(document.body, {
-    target: "#navbar-example",
-  });
-
-  let dataSpyList = [].slice.call(document.querySelectorAll('[data-bs-spy="scroll"]'));
-  dataSpyList.forEach(dataSpyEl => {
-    bootstrap.ScrollSpy.getInstance(dataSpyEl).refresh();
-  });
-
   AOS.init({
     once: false,
     startEvent: "load",

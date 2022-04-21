@@ -92,7 +92,7 @@ export default class Render extends React.Component {
                     </div>
 
                     {/* Background */}
-                    <div className="position-fixed w-100 h-100" style={{ zIndex: "-1;" }}>
+                    <div className="position-fixed w-100 h-100" style={{ zIndex: "-1" }}>
                         <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", webkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }}/>
                     </div>
 
