@@ -1,4 +1,10 @@
 module.exports = {
+  images: {
+    domains: [
+      "cdn.discordapp.com",
+      "http.cat"
+    ]
+  },
   async redirects() {
     return [
       {

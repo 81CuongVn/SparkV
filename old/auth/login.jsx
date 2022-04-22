@@ -1,5 +1,4 @@
 import config from "../../../config";
-import { setCookie } from 'nookies';
 
 const scopes = [
     "identify",
@@ -7,15 +6,6 @@ const scopes = [
 ];
 
 export default async function AuthLogin(req, res) {
-    if (req.query.dt == "true") {
-        setCookie({ res }, "__SparkVSession", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            path: '/'
-        });
-    };
-
     const query = new URLSearchParams({
         client_id: config.client_ID,
         scope: scopes.join(" "),
