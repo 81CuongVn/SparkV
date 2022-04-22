@@ -1,5 +1,4 @@
 module.exports = {
-  reactStrictMode: true,
   async redirects() {
     return [
       {
@@ -8,22 +7,12 @@ module.exports = {
         permanent: false,
       },
       {
-        source: "/tos",
-        destination: "https://docs.sparkv.tk/legal/terms-of-service",
-        permanent: false,
-      },
-      {
-        source: "/privacy",
-        destination: "https://docs.sparkv.tk/legal/privacy-policy",
-        permanent: false,
-      },
-      {
         source: "/support",
         destination: "https://discord.gg/PPtzT8Mu3h",
         permanent: false,
       },
       {
-        source: "/support",
+        source: "/status",
         destination: "https://status.sparkv.tk/",
         permanent: false,
       }

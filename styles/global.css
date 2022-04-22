@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
 /*!
  * Ch1llest Site v1.0.0 (https://ch1llest.ch1ll.tk/)
  * Copyright 2021 KingCh1ll
@@ -37,28 +39,43 @@
 }
 
 .btn-info {
+  background-color: transparent;
+  border-color: var(--bs-primary);
+  color: white;
   box-shadow: 0 10px 20px -10px #59a6ff;
-  background: linear-gradient(180deg, #5561FF 0%, #3643FC 100%, #3643FC 100%);
 }
 .btn-info:hover {
-  background: linear-gradient(180deg, #6B75FF 0%, #535FFF 100%);
+  background-color: #3643FC;
 }
 
 .btn-primary {
-  background: var(--bs-primary);
+  background-color: transparent;
+  border-color: var(--bs-primary);
+  color: white;
   box-shadow: 0 10px 20px -10px var(--bs-primary);
-  background: linear-gradient(180deg, #5561FF 0%, #3643FC 100%, #3643FC 100%);
+}
+.btn-primary:hover {
+  background-color: var(--bs-primary);
 }
 
 .btn-secondary {
-  background: var(--bs-secondary);
+  background-color: transparent;
+  border-color: var(--bs-secondary);
+  color: white;
   box-shadow: 0 10px 20px -10px var(--bs-secondary);
-  background-image: linear-gradient(180deg, #feff8a 0%, #9ca704 100%);
+}
+.btn-secondary:hover {
+  background-color: var(--bs-secondary);
 }
 
 .btn-gray {
+  background-color: transparent;
+  border-color: var(--bs-gray-700);
+  color: white;
   box-shadow: 0 10px 20px -10px var(--bs-gray-700);
-  background-image: linear-gradient(180deg, #777777 0%, #4f505c 100%);
+}
+.btn-gray:hover {
+  background-color: var(--bs-gray-700);
 }
 
 hr {
@@ -252,7 +269,7 @@ hr {
 
 :root {
   --sparkv-dark: #0a1227;
-  --sparkv-color: fff;
+  --sparkv-color: #0d1014;
   --sparkv-color-2: rgba(255,255,255, 0.05);
   --sparkv-yellow: #dee03b;
 }

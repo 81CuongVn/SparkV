@@ -8,9 +8,13 @@
 @use "components/icons";
 @use "components/gradients";
 
+//-- Fonts --//
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+
 :root {
   --sparkv-dark: #0a1227;
-  --sparkv-color: fff;
+  --sparkv-color: #0d1014;
   --sparkv-color-2: rgba(255,255,255, 0.05);
   --sparkv-yellow: #dee03b;
 }

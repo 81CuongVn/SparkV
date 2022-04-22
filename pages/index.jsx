@@ -8,13 +8,13 @@ import Script from "next/script";
 import config from "../config";
 
 import hero from "../styles/hero.module.css";
-import loader from "../styles/loader.module.css";
 
+import Loader from "../components/loader";
 import Header from "../components/head";
 import Navbar from "../components/navbar";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHouseChimney, faLightbulb, faHandshake, faPlusCircle, faPlus, faSliders, faBook, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faHouseChimney, faLightbulb, faHandshake, faPlusCircle, faPlus, faSliders, faBook, faCircleQuestion, faCircleExclamation } from "@fortawesome/free-solid-svg-icons"
 
 export default class Render extends React.Component {
     constructor(props) {
@@ -29,76 +29,22 @@ export default class Render extends React.Component {
     render() {
         const { user } = this.state;
         const { token } = this.props;
-        const items = [
-            {
-                name: "Home",
-                image: <FontAwesomeIcon icon={faHouseChimney}/>,
-                href: "#home",
-            },
-            {
-                name: "Features",
-                image: <FontAwesomeIcon icon={faLightbulb} />,
-                href: "#features",
-            },
-            {
-                name: "Reviews",
-                image: <FontAwesomeIcon icon={faHandshake}/>,
-                href: "#reviews",
-            },
-            {
-                name: "More",
-                image: <FontAwesomeIcon icon={faPlusCircle}/>,
-                type: "dropdown",
-                items: [
-                    {
-                        name: "Dashboard",
-                        image: <FontAwesomeIcon icon={faSliders}/>,
-                        href: "https://www.sparkv.tk/dashboard"
-                    },
-                    {
-                        name: "Docs",
-                        image: <FontAwesomeIcon icon={faBook}/>,
-                        href: "https://docs.sparkv.tk/"
-                    },
-                    {
-                        name: "Support",
-                        image: <FontAwesomeIcon icon={faCircleQuestion}/>,
-                        href: "https://www.sparkv.tk/support"
-                    },
-                    {
-                        name: "Status",
-                        image: <FontAwesomeIcon icon={faCircleExclamation}/>,
-                        href: "https://status.sparkv.tk/"
-                    },
-                ],
-            },
-        ];
 
         return (
             <>
                 <Head>
-                    <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
+                    <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
                 </Head>
                 <body>
-                    {/* Loading Screen */}
-                    <div id="load" style={{ display: "flex", height: "100%", width: "100%", alignItems: "center", justifyContent: "center", position: "fixed", zIndex: "9999", backgroundColor: "var(--sparkv-dark)" }}>
-                        <div className="">
-                            <div className={loader.dots} style={{ height: "100%", width: "100%", textAlign: "center" }}>
-                                <span id="dot" style={{ width: "25px", height: "25px", margin: "0 5px", borderRadius: "50%", display: "inline-block", backgroundColor: "var(--sparkv-yellow)" }}></span>
-                                <span id="dot" style={{ width: "25px", height: "25px", margin: "0 5px", borderRadius: "50%", display: "inline-block", backgroundColor: "var(--sparkv-yellow)" }}></span>
-                                <span id="dot" style={{ width: "25px", height: "25px", margin: "0 5px", borderRadius: "50%", display: "inline-block", backgroundColor: "var(--sparkv-yellow)" }}></span>
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Background */}
                     <div className="position-fixed w-100 h-100" style={{ zIndex: "-1" }}>
-                        <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", webkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }}/>
+                        <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", WebkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }}/>
                     </div>
 
                     {/* Content */}
                     <section className="container-md">
-                        <Navbar title="SparkV" logo="/images/SparkV.webp" items={items} user={user} />
+                        <Navbar title="SparkV" logo="/images/SparkV.webp" user={user} />
+
                         <section id="home" style={{ paddingTop: "5rem", paddingBottom: "10rem" }}>
                             <div className="container pb-5">
                                 <div className="row align-items-center text-white">
@@ -106,8 +52,8 @@ export default class Render extends React.Component {
                                         <h1 className="display-2_title" style={{ width: "100%", textAlign: "center", fontSize: "xxx-large" }}>SparkV</h1>
                                         <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Powerful, Modern, SparkV. A multipurpose bot with Music, Memes, AI Chatbot, Currency, Leveling, Utility, a dashboard, and more.</p>
                                         <div className="row justify-content-center" style={{ display: "flex", height: "100px", marginTop: "32px" }}>
-                                            <a type="button" className="col-5 btn btn-info text-white fw-bold" href="/dashboard" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px" }}>Invite SparkV</a>
-                                            <a type="button" className="col-5 btn btn-gray text-white fw-bold" href="#features" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px" }}>Learn More</a>
+                                            <Link href="/dashboard"><a type="button" className="col-5 btn btn-info text-white fw-bold" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px" }}>Invite SparkV</a></Link>
+                                            <Link href="#features"><a type="button" className="col-5 btn btn-gray text-white fw-bold" style={{ height: "56px", marginInlineEnd: "16px", borderRadius: "8px" }}>Learn More</a></Link>
                                         </div>
                                     </div>
 
@@ -126,7 +72,7 @@ export default class Render extends React.Component {
                                         <div className="col-lg-7 col-md-6">
                                             {config.servers?.map(s => (
                                                 <>
-                                                    <a href={s.Link} style={{ marginInlineEnd: "10px" }}>
+                                                    <a key={s.name} href={s.Link} style={{ marginInlineEnd: "10px" }}>
                                                         <img defer className="animate__animated animate__fadeInUp" src={s.icon} alt={s.name} title={s.name} style={{ borderRadius: "10px" }} height="60" width="60" />
                                                     </a>
                                                 </>
@@ -145,7 +91,7 @@ export default class Render extends React.Component {
                                 SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
                             </p>
                             {config.features.map(f => (
-                                <div className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
+                                <div key={f.alt} className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
                                     {f.align === "left" ? (
                                         <>
                                             <div className="col-12 col-sm-8 col-lg-6">
@@ -181,9 +127,9 @@ export default class Render extends React.Component {
                             </div>
                             <div className="row justify-content-center text-center pb-5 mx-auto">
                                 {config.reviews.map(r => (
-                                    <div className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "#111b35", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "15px 15px 0px 15px" }} data-aos="fade-up">
+                                    <div key={r.username} className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "#111b35", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "15px 15px 0px 15px" }} data-aos="fade-up">
                                         <div style={{ display: "flex", alignItems: "center", color: "rgb(255, 255, 255)", fontSize: "18px", fontWeight: "600", textAlign: "start" }}>
-                                            <img defer style={{ height: "28px", width: "28px", borderRadius: "50%", marginInlineEnd: "4px" }} src={r.picture} alt={`${r.username}'s Review`} />
+                                            <img defer style={{ height: "28px", width: "28px", borderRadius: "50%", marginInlineEnd: "4px" }} src={r.picture} alt={`${r.username}"s Review`} />
                                             <span style={{ verticalAlign: "middle" }}>{r.username}</span>
                                         </div>
                                         <p style={{ position: "absolute", marginTop: "8px", color: "rgb(209 213 219 / 0.8)" }}>{r.review}</p>
@@ -214,24 +160,24 @@ export default class Render extends React.Component {
                                     <h5 className="text-capitalize fw-bold">Legal</h5>
                                     <hr className="bg-white d-inline-block mb-4" style={{ width: "60px", height: "2px" }} />
                                     <ul className="list-inline campany-list">
-                                        <li><a href="/tos">Terms of Service</a></li>
-                                        <li><a href="/privacy">Discordbotlist.com</a></li>
+                                        <li><Link href="/tos">Terms of Service</Link></li>
+                                        <li><Link href="/privacy">Privacy Policy</Link></li>
                                     </ul>
                                 </div>
                             </div>
                             <hr style={{ color: "gray" }} />
                             <div className="py-4 text-center text-white" style={{ display: "flex", justifyContent: "space-between" }}>
                                 <div style={{ textAlign: "start" }}>
-                                    © 2021-2022 <a href="https://www.sparkv.tk/">SparkV</a>. Illustrations by <a href="https://storyset.com/technology">Storyset</a> and <a href="https://undraw.co/">Undraw</a>
+                                    © 2021-2022 <Link href="https://www.sparkv.tk/">SparkV</Link>. Illustrations by <Link href="https://storyset.com/technology">Storyset</Link> and <Link href="https://undraw.co/">Undraw</Link>
                                 </div>
                                 <div style={{ justifyContent: "space-evenly", display: "flex", width: "100px" }}>
                                     {/* <a href="#"><i class="fab fa-facebook"></i></a> */}
-                                    <a href="https://twitter.com/Ch1llStudio">
+                                    <Link href="https://twitter.com/Ch1llStudio" passHref>
                                         <i className="fab fa-twitter" style={{ fontSize: "22px" }}></i>
-                                    </a>
-                                    <a href="https://github.com/Ch1ll-Studio">
+                                    </Link>
+                                    <Link href="https://github.com/Ch1ll-Studio" passHref>
                                         <i className="fab fa-github" style={{ fontSize: "22px" }}></i>
-                                    </a>
+                                    </Link>
                                     {/* <a href="https://linkedin.com/KingCh1ll"><i class="fab fa-linkedin"></i></a> */}
                                     {/* <a href="https://instagram.com/Ch1llStudio"><i class="fab fa-instagram"></i></a> */}
                                 </div>
@@ -248,13 +194,13 @@ export default class Render extends React.Component {
     }
 }
 
-export const getServerSideProps = async (data) => {
-    const { ["__SparkVSession"]: token = null } = parseCookies(data);
+// export async function getServerSideProps(data) {
+//     const { ["__SparkVSession"]: token = null } = parseCookies(data);
 
-    return {
-        props: {
-            token,
-            hostApi: config.api,
-        },
-    };
-}
+//     return {
+//         props: {
+//             token,
+//             hostApi: config.api,
+//         },
+//     };
+// }

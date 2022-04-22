@@ -1,5 +1,4 @@
 import nookies from "nookies";
-import fetch from "node-fetch";
 import formData from "form-data";
 
 import config from "../../../config";
