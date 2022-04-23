@@ -19,9 +19,9 @@ async function execute(bot, message, args, command, data) {
 			result = inspect(result, {
 				depth: +!(
 					inspect(result, {
-						depth: 1,
+						depth: 1
 					}).length > 1000
-				),
+				)
 			});
 		}
 	} catch (err) {
@@ -35,12 +35,12 @@ async function execute(bot, message, args, command, data) {
 	} else {
 		const Embed = new Discord.MessageEmbed()
 			.setTitle(`${bot.config.emojis.success} | Eval Results`)
-			.addField(`Input`, `\`\`\`${input}}\`\`\``)
+			.addField(`Input`, `\`\`\`${input.slice(0, 1000)}}\`\`\``)
 			.addField(`Output`, `\`\`\`js\n${result.slice(0, 1000)}\`\`\``)
 			.setColor(`GREEN`);
 
 		return await message.replyT({
-			embeds: [Embed],
+			embeds: [Embed]
 		});
 	}
 }
