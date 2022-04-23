@@ -275,7 +275,7 @@ hr {
 }
 
 body {
-  background: var(--sparkv-dark);
+  background: var(--sparkv-dark) !important;
   font-family: Satoshi-Regular, sans-serif;
 }
 
