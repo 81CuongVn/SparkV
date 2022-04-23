@@ -209,6 +209,7 @@ module.exports = {
 		bot.commands.each(() => ++cmdCount);
 
 		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
+		let cmdTable = {};
 
 		bot.categories
 			.filter(cat => {
@@ -251,6 +252,8 @@ module.exports = {
 
 				info.push(["Name", "Description", "Usage", "Cooldown"]);
 
+				if (!cmdTable[cat.name]) cmdTable[cat.name] = [];
+
 				cmds
 					.sort((a, b) => {
 						if (a.settings.name < b.settings.name) {
@@ -260,17 +263,26 @@ module.exports = {
 						}
 					})
 					.forEach(cmd => {
+						cmdTable[cat.name].push({
+							name: `**${cmd.settings.name || "Command name invalid."}**`,
+							description: cmd.settings.description || "No description for this command",
+							usage: cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
+							cooldown: `${Math.ceil(cmd.settings.cooldown / 1000)} seconds`
+						});
+
 						info.push([
 							`**${cmd.settings.name || "Command name invalid."}**`,
 							cmd.settings.description || "No description for this command",
 							cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
-							`${Math.ceil(cmd.settings.cooldown / 1000)} seconds`,
+							`${Math.ceil(cmd.settings.cooldown / 1000)} seconds`
 						]);
 					});
 
 				baseText += `${markdown(info)}\n`;
 			});
+			console.log(cmdTable)
 
 		fs.writeFileSync(path.join(`${MainDir}/docs/commands.md`), baseText);
-	},
+		fs.writeFileSync(path.join(`${MainDir}/docs/commandsdata.json`), JSON.stringify(cmdTable));
+	}
 };
