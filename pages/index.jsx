@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 // import dbConnect from "../old/dbConnect";
+// @chakra-ui/toast will be used in the future
 
 export default function Render() {
     return (
