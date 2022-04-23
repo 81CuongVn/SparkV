@@ -269,6 +269,8 @@ hr {
 
 :root {
   --sparkv-dark: #0a1227;
+  --sparkv-dark-2: rgba(0, 10, 35, 0.3);
+  --sparkv-light: rgb(255, 255, 255, .6);
   --sparkv-color: #0d1014;
   --sparkv-color-2: rgba(255,255,255, 0.05);
   --sparkv-yellow: #dee03b;

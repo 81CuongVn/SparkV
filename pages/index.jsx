@@ -25,7 +25,7 @@ export default function Render() {
             <Head>
                 <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
             </Head>
-            <body>
+            <body style={{ background: "var(--sparkv-dark)", fontFamily: "Satoshi-Regular, sans-serif" }}>
                 {/* Background */}
                 <div className="position-fixed w-100 h-100" style={{ zIndex: "-1" }}>
                     <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", WebkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }} />
