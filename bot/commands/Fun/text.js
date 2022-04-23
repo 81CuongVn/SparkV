@@ -1,6 +1,5 @@
 const Discord = require(`discord.js`);
 const figlet = require(`figlet`);
-const zalgo = require("to-zalgo");
 
 const cmd = require("@templates/command");
 
@@ -21,6 +20,24 @@ const chars = {
 	"#": ":hash:",
 	"*": ":asterisk:",
 	" ": "   "
+};
+
+const zalgo = {
+	up: [
+		"̍", "̎", "̄", "̅", "̿", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "̊",
+		"͂", "̓", "̈́", "͊", "͋", "͌", "̃", "̂", "̌", "͐", "̀", "́", "̋", "̏",
+		"̒", "̓", "̔", "̽", "̉", "ͣ", "ͤ", "ͥ", "ͦ", "ͧ", "ͨ", "ͩ", "ͪ", "ͫ",
+		"ͬ", "ͭ", "ͮ", "ͯ", "̾", "͛", "͆", "̚"
+	],
+	middle: [
+		"̕", "̛", "̀", "́", "͘", "̡", "̢", "̧", "̨", "̴", "̵", "̶", "͏", "͜",
+		"͝", "͞", "͟", "͠", "͢", "̸", "̷", "͡", "҉"
+	],
+	down: [
+		"̖", "̗", "̘", "̙", "̜", "̝", "̞", "̟", "̠", "̤", "̥", "̦", "̩", "̪",
+		"̫", "̬", "̭", "̮", "̯", "̰", "̱", "̲", "̳", "̹", "̺", "̻", "̼", "ͅ",
+		"͇", "͈", "͉", "͍", "͎", "͓", "͔", "͕", "͖", "͙", "͚", "̣"
+	]
 };
 
 async function execute(bot, message, args, command, data) {
@@ -55,7 +72,48 @@ async function execute(bot, message, args, command, data) {
 	} else if (type === "clapify") {
 		editedText = text.trim().split(/ +/g).length === 1 ? text.split("").join(" 👏 ") : text.trim().split(/ +/g).join(" 👏 ");
 	} else if (type === "zalgo") {
-		editedText = zalgo(text);
+		// Special thanks to the package to-zalgo, to who are responcible for creating this part of the text command.
+		// https://github.com/michaelrhodes/to-zalgo/blob/master/index.js
+		// It had some useless packages that I didn't want taking up my node_modules folder.
+
+		let counts;
+		let result = "";
+		const types = [];
+		types.push("up");
+		types.push("middle");
+		types.push("down");
+
+		for (let i = 0, l = text.length; i < l; i++) {
+			if (RegExp(`(${[].concat(zalgo.up, zalgo.middle, zalgo.down).join("|")})`, "g").test(text[i])) continue;
+
+			if (text[i].length > 1) {
+				result += text[i];
+				continue;
+			}
+
+			counts = {
+				up: 0,
+				middle: 0,
+				down: 0
+			};
+
+			counts.up = ~~(Math.random() * 8) + 1;
+			counts.middle = ~~(Math.random() * 3);
+			counts.down = ~~(Math.random() * 8) + 1;
+
+			result += text[i];
+			for (let j = 0, m = types.length; j < m; j++) {
+				const type = types[j];
+				let count = counts[type];
+				const tchars = zalgo[type];
+
+				while (count--) {
+					result += tchars[~~(Math.random() * (tchars.length - 1))];
+				}
+			}
+		}
+
+		editedText = result;
 	} else if (type === "char_count") {
 		editedText = `That text has **${text.length} characters**.`;
 	}
