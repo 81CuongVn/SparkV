@@ -14,7 +14,7 @@ const items = [
   {
     name: "Home",
     image: <FontAwesomeIcon icon={faHouseChimney} />,
-    href: "/home",
+    href: "/",
   },
   {
     name: "Commands",
@@ -101,14 +101,14 @@ export default class Navbar extends React.Component {
                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown" style={{ backgroundColor: "var(--sparkv-dark)" }}>
                           {item.items.map(dropItem => (
                             <li>
-                              <a className="dropdown-item" href={dropItem.href}>{dropItem.image} {dropItem.name}</a>
+                              <Link href={dropItem.href}><a className="dropdown-item">{dropItem.image} {dropItem.name}</a></Link>
                             </li>
                           ))}
                         </ul>
                       </li>
                     ) : (
                       <li className="nav-item">
-                        <a className="nav-link" aria-current="page" href={item.href}>{item.image} {item.name}</a>
+                        <Link href={item.href}><a className="nav-link" aria-current="page">{item.image} {item.name}</a></Link>
                       </li>
                     )}
                   </>
