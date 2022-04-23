@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const axios = require("axios");
-const RandomWord = require("random-words");
 const akinator = require("discord.js-akinator");
 
 const cmd = require("@templates/gameCommand");
+const words = require("@root/bot/words.json");
 
 function shuffle(array) {
 	let currentIndex = array.length, randomIndex;
@@ -22,7 +22,7 @@ async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
 
 	if (type === "hangman") {
-		const word = RandomWord();
+		const word = words[Math.floor(Math.random() * words.length)];
 		const lettersRegExp = new RegExp(`^[A-Za-zÀ-ú](?:.{0}|.{${word.length - 1}})$`);
 
 		let menuEmbed;
@@ -72,7 +72,7 @@ async function execute(bot, message, args, command, data) {
 
 		const collector = await menuEmbed.channel.createMessageCollector({
 			filter: m => m.content,
-			time: 900 * 1000,
+			time: 900 * 1000
 		});
 
 		collector.on("collect", async m => {
@@ -121,7 +121,12 @@ async function execute(bot, message, args, command, data) {
 			await updateGame();
 		});
 	} else if (type === "spelling") {
-		const chosenWord = RandomWord({ exactly: 2, wordsPerString: 2, join: " " });
+		let chosenWord = "";
+		chosenWord += `${words[Math.floor(Math.random() * words.length)]} `;
+		chosenWord += `${words[Math.floor(Math.random() * words.length)]} `;
+		chosenWord += `${words[Math.floor(Math.random() * words.length)]} `;
+		chosenWord += `${words[Math.floor(Math.random() * words.length)]}`;
+
 		const gameCreation = Date.now();
 
 		const MenuEmbed = new Discord.MessageEmbed()
@@ -146,7 +151,7 @@ async function execute(bot, message, args, command, data) {
 			},
 			max: 1,
 			time: 60 * 1000,
-			errors: ["time"],
+			errors: ["time"]
 		}).then(async collected => {
 			const colMessage = collected.first();
 			const embed = new Discord.MessageEmbed()
