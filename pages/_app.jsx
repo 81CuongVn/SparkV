@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import "pace-js/themes/blue/pace-theme-minimal.css";
 import "aos/dist/aos.css";
-import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/global.css";
 
 import config from "../config";
