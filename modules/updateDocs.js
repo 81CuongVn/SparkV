@@ -280,7 +280,6 @@ module.exports = {
 
 				baseText += `${markdown(info)}\n`;
 			});
-			console.log(cmdTable)
 
 		fs.writeFileSync(path.join(`${MainDir}/docs/commands.md`), baseText);
 		fs.writeFileSync(path.join(`${MainDir}/docs/commandsdata.json`), JSON.stringify(cmdTable));
