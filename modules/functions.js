@@ -33,7 +33,7 @@ module.exports = {
    */
 	getPrefix(message, data) {
 		const acceptedPrefixes = [
-			process.argv.includes("--dev") === true ? "_" : "sv!",
+			process.argv.includes("--dev") === true ? "_" : "sv!"
 		];
 
 		let prefix = null;
@@ -214,7 +214,7 @@ module.exports = {
 
 		if (key.match(/^!?(\w+)#(\d+)$/)) {
 			const user = bot.users.cache.find(
-				u => u.username === key.match(/^!?(\w+)#(\d+)$/)[0] && u.discriminator === key.match(/^!?(\w+)#(\d+)$/)[1],
+				u => u.username === key.match(/^!?(\w+)#(\d+)$/)[0] && u.discriminator === key.match(/^!?(\w+)#(\d+)$/)[1]
 			);
 
 			if (user) return user;
@@ -303,5 +303,5 @@ module.exports = {
    */
 	async FormatDate(date) {
 		return new Intl.DateTimeFormat("en-US").format(date);
-	},
+	}
 };
