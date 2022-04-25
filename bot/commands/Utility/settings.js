@@ -751,7 +751,7 @@ async function execute(bot, message, args, command, data) {
 
 		buttons.push({
 			type: 1,
-			components: [BackButton, DashButton, SupportButton]
+			components: [BackButton, WebsiteButton, SupportButton]
 		});
 
 		await botMessage.edit({
@@ -792,9 +792,10 @@ async function execute(bot, message, args, command, data) {
 		.setCustomId("back")
 		.setStyle("SECONDARY");
 
-	const DashButton = new MessageButton()
-		.setURL(`https://${process.env.BASEURL}/dashboard`)
-		.setLabel("Dashboard")
+	const WebsiteButton = new MessageButton()
+		.setURL(`https://${process.env.BASEURL}/`)
+		.setEmoji(bot.config.emojis.globe)
+		.setLabel("Website")
 		.setStyle("LINK");
 
 	const SupportButton = new MessageButton()
@@ -860,7 +861,7 @@ async function execute(bot, message, args, command, data) {
 
 	buttons.push({
 		type: 1,
-		components: [ExitButton, DashButton, SupportButton]
+		components: [ExitButton, WebsiteButton, SupportButton]
 	});
 
 	await bot.wait(750);
@@ -904,7 +905,7 @@ async function execute(bot, message, args, command, data) {
 
 				buttons.push({
 					type: 1,
-					components: [ExitButton, DashButton, SupportButton]
+					components: [ExitButton, WebsiteButton, SupportButton]
 				});
 
 				buttons = buttons.filter(Boolean);

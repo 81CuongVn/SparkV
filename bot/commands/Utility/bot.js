@@ -7,7 +7,7 @@ async function execute(bot, message, args, command, data) {
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: bot.user.tag,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true }),
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setTimestamp();
 
@@ -28,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 			"CONNECT",
 			"SPEAK",
 			"MANAGE_NICKNAMES",
-			"MANAGE_ROLES",
+			"MANAGE_ROLES"
 		];
 
 		const myPerms = message.channel.permissionsFor(message.guild.me);
@@ -48,7 +48,7 @@ async function execute(bot, message, args, command, data) {
 			.setThumbnail(message.guild.iconURL({ dynamic: true, format: "png" }))
 			.setFooter({
 				text: `SparkV's permissions in this server. • ${bot.config.embed.footer}`,
-				iconURL: bot.user.displayAvatarURL(),
+				iconURL: bot.user.displayAvatarURL()
 			})
 			.setColor(bot.config.embed.color);
 	} else if (type === "credits") {
@@ -56,15 +56,15 @@ async function execute(bot, message, args, command, data) {
 			{
 				name: await message.translate("**🛠 | Developers**"),
 				value: "The people who made SparkV!\n\n**KingCh1ll** - Head Developer\n**Qu1ckly_Frost** - Developer",
-				inline: true,
+				inline: true
 			},
 			{
 				name: await message.translate("**✨ | Contributors**"),
 				value: `${await message.translate(
-					"People that have contributed to ",
+					"People that have contributed to "
 				)}SparkV.\n\n**2Lost4Discord** - ${await message.translate("Getting the bot verified.")}`,
-				inline: true,
-			},
+				inline: true
+			}
 		];
 
 		embed
@@ -77,7 +77,7 @@ async function execute(bot, message, args, command, data) {
 		const rules = [
 			"No Automation. Using automation (Ex: auto-typers) is forbidden. Using automation (and with found proof) will cause a wipe of your data and a ban from using SparkV.",
 			"No spamming commands. Spamming SparkV's commands will result with a warning. If continued, a complete wipe of your data and a ban from SparkV will be given to you.",
-			"No using alternate accounts to earn yourself money. If proof is found, your data will be wiped and you will be banned from SparkV.",
+			"No using alternate accounts to earn yourself money. If proof is found, your data will be wiped and you will be banned from SparkV."
 		];
 
 		let description = "";
@@ -90,26 +90,18 @@ async function execute(bot, message, args, command, data) {
 		embed
 			.setDescription(`**Rules**\n*Here's a simple list of rules for SparkV.*\n\n${description}`)
 			.setColor(bot.config.embed.color);
-	} else if (type === "dashboard") {
-		embed
-			.setDescription(
-				`**Hi, ${message.user.tag}!**\nClick [${await message.translate("here")}](https://${
-					process.env.BASEURL
-				}/dashboard) to view my dashboard.`,
-			)
-			.setColor("GREEN");
 	} else if (type === "website") {
 		embed
 			.setDescription(
 				`**Hi, ${message.user.tag}!**\nClick [${await message.translate("here")}](https://${
 					process.env.BASEURL
-				}/) to view my website.`,
+				}/) to view my website.`
 			)
 			.setColor("GREEN");
 	}
 
 	await message.replyT({
-		embeds: [embed],
+		embeds: [embed]
 	});
 }
 
@@ -129,26 +121,22 @@ module.exports = new cmd(execute, {
 			choices: [
 				{
 					name: "credits",
-					value: "credits",
+					value: "credits"
 				},
 				{
 					name: "permissions",
-					value: "permissions",
+					value: "permissions"
 				},
 				{
 					name: "rules",
-					value: "rules",
+					value: "rules"
 				},
 				{
 					name: "website",
-					value: "website",
-				},
-				{
-					name: "dashboard",
-					value: "dashboard",
-				},
-			],
-		},
-	],
-},
+					value: "website"
+				}
+			]
+		}
+	]
+}
 );

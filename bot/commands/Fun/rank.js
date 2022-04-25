@@ -4,7 +4,7 @@ const canvacord = require("canvacord");
 const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
-	if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
+	if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. You can enable it on my settings panel, by typing `/settings`");
 
 	const Target = data.options.getMember("user") || message.member;
 	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);
@@ -30,7 +30,7 @@ async function execute(bot, message, args, command, data) {
 		const Attachment = new Discord.MessageAttachment(data, `RankCard.png`);
 
 		return await message.replyT({
-			files: [Attachment],
+			files: [Attachment]
 		});
 	});
 }
@@ -45,7 +45,7 @@ module.exports = new cmd(execute, {
 		{
 			type: 6,
 			name: "user",
-			description: "The user to get the rank of.",
+			description: "The user to get the rank of."
 		}
 	]
 });
