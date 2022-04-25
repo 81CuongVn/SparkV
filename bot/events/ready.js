@@ -9,7 +9,7 @@ module.exports = {
 			status: "online",
 			activities: [
 				{
-					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
+					name: `/help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
 					type: "PLAYING"
 				}
 			]
