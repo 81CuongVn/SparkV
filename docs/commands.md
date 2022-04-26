@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **68 commands**!
+SparkV's Command List! SparkV contains more than **67 commands**!
 
 ## Economy
 
@@ -95,7 +95,6 @@ SparkV's Command List! SparkV contains more than **68 commands**!
 | **afk**          | Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be... | (optional: reason)                                           | 2 seconds |
 | **bot**          | Information for SparkV.                                                                             |                                                              | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                                        | (optional: search)                                           | 2 seconds |
-| **icon**         | Grab the icon of the server or a user.                                                              | (type (user/server)) (user/invite)                           | 2 seconds |
 | **id**           | Grab the ID of the server or a user.                                                                | (type (user/server/role/channel)) (user/invite/role/channel) | 2 seconds |
 | **info**         | See information about a user or server.                                                             | (user)                                                       | 2 seconds |
 | **invite**       | Displays links.                                                                                     |                                                              | 2 seconds |
