@@ -131,8 +131,6 @@ export default function Render({ commands }) {
                         </div>
                     </div>
                 </footer>
-
-                <Script src="/js/commands" id="list" type="module" />
             </body>
         </>
     );
