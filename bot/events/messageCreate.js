@@ -130,12 +130,6 @@ module.exports = {
 					cleanMessage.endsWith("/") && (cleanMessage = cleanMessage.slice(0, -1));
 
 					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
-						try {
-							message.delete().catch(err => { });
-						} catch (err) {
-							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
-						}
-
 						++data.member.infractionsCount;
 						data.member.infractions.push({
 							type: "scamlink",
@@ -161,6 +155,12 @@ module.exports = {
 							});
 
 							bot.emit("scamLinkSent", message, data);
+						}
+
+						try {
+							message.delete().catch(err => { });
+						} catch (err) {
+							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
 						}
 					}
 				}
