@@ -65,7 +65,7 @@ export default function Render({ commands }) {
                                     <div className="command m-2" style={{ width: "100%", background: "rgb(0, 10, 35, .3)", borderRadius: "20px", padding: "20px" }}>
                                         <div style={{ fontFamily: "Rubik, sans-serif", marginLeft: "20px" }} className="col">
                                             <h1 className="cmdName" style={{ textAlign: "left", fontSize: "20px", fontWeight: "600", color: "rgb(255, 255, 255)" }}>
-                                                /{command?.name?.slice(2, 2)} {command?.usage ? `(${command?.usage})` : ""}
+                                                /{command?.name} {command?.usage ? `(${command?.usage})` : ""}
                                             </h1>
                                             <p className="cmdDesc" style={{ width: "100%", fontSize: "15px", textAlign: "left", color: "var(--sparkv-light)" }}>{command?.description || "No description provided."}</p>
                                         </div>
