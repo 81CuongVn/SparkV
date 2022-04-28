@@ -1,10 +1,16 @@
 // Buttons //
 @use "../config" as *;
 
-.btn {
-  padding: 7px 20px;
-  font-size: 14px;
+.button {
+  display: inline-flex;
   box-shadow: 0px 5px 20px 0 rgba(0, 0, 0, 0.1);
+  height: 36px;
+  line-height: 1.5px;
+  border-radius: 8px;
+  padding: 24px;
+  font-size: 16px;
+  border: 1px solid transparent;
+  white-space: nowrap;
   -webkit-appearance: button;
   -moz-appearance: button;
   appearance: button;
@@ -39,41 +45,31 @@
   }
 }
 
-.btn-info {
+.button-blue {
   background-color: transparent;
-  border-color: var(--bs-primary);
-  color: white;
-  box-shadow: 0 10px 20px -10px #59a6ff;
+  color: rgb(107, 114, 207);
+  border-color: rgb(107, 114, 207);
+  box-shadow: 0 10px 20px -10px rgb(107, 114, 207);
 
   &:hover {
-    // linear-gradient(180deg, #5561FF 0%, #3643FC 100%, #3643FC 100%);
-    background-color: #3643FC;
+    background-color: rgb(107, 114, 207);
+    border-color: rgb(107, 114, 207);
+    color: white;
   }
 }
 
-.btn-primary {
+.button-yellow {
   background-color: transparent;
-  border-color: var(--bs-primary);
+  border-color: var(--sparkv-yellow);
   color: white;
-  box-shadow: 0 10px 20px -10px var(--bs-primary);
+  box-shadow: 0 10px 20px -10px var(--sparkv-yellow);
 
   &:hover {
-    background-color: var(--bs-primary);
+    background-color: var(--sparkv-yellow);
   }
 }
 
-.btn-secondary {
-  background-color: transparent;
-  border-color: var(--bs-secondary);
-  color: white;
-  box-shadow: 0 10px 20px -10px var(--bs-secondary);
-
-  &:hover {
-    background-color: var(--bs-secondary);
-  }
-}
-
-.btn-gray {
+.button-gray {
   background-color: transparent;
   border-color: var(--bs-gray-700);
   color: white;

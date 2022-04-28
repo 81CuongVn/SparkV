@@ -78,7 +78,7 @@ module.exports = {
         {
             username: "Danikcool",
             review: "one of the best fun bots I have ever used. there are a lot of commands like /text asciify, /image (many things here) /screenshot (let screenshot a site)...",
-            picture: "/images/discordDefualtUser.png",
+            picture: "/images/discordDefaultUser.png",
             role: "SparkV User"
         },
         {
@@ -91,7 +91,7 @@ module.exports = {
             username: "The Digital",
             review: "Nice and funny bot, good luck in future!",
             picture: "https://cdn.discordapp.com/attachments/955321206729502730/966335471955370034/TheDigital.png",
-            role: "Owner of Status Bot (https://statusbot.us/), Discord Updates, and Badge Bot"
+            role: "Developer of Status Bot & System Updates"
         }
     ]
 }

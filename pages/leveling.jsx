@@ -16,14 +16,11 @@ import Navbar from "../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
-// import dbConnect from "../old/dbConnect";
-// @chakra-ui/toast will be used in the future
-
 export default function Render() {
     return (
         <>
             <Head>
-                <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
+                <Header name={`Music - ${config.meta.name}`} description={`Enjoy high quality music, on your favorate Discord server. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
             </Head>
             <body style={{ background: "var(--sparkv-dark)", fontFamily: "Satoshi-Regular, sans-serif" }}>
                 {/* Background */}
@@ -39,10 +36,8 @@ export default function Render() {
                         <div className="container pb-5">
                             <div className="row align-items-center text-white">
                                 <div className="col-md-6 text-start">
-                                    <h1 className="display-2_title" style={{ width: "100%", textAlign: "center", fontSize: "xxx-large" }}>
-                                        SparkV
-                                    </h1>
-                                    <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Powerful, Modern, SparkV. A multipurpose bot with Music, Memes, AI Chatbot, Currency, Leveling, Utility, a dashboard, and more.</p>
+                                    <h1 className="display-2_title" style={{ width: "100%", textAlign: "center", fontSize: "xxx-large" }}>SparkV - <a className="gr-blue">Leveling</a></h1>
+                                    <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Take your server to the next <a className="gr-blue">level</a>.</p>
                                     <div className="row" style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "space-evenly" }}>
                                         <Link href="/dashboard">
                                             <a type="button" className="button button-blue">
@@ -84,45 +79,28 @@ export default function Render() {
                     </section>
 
                     <section id="features" style={{ paddingBottom: "12rem" }}>
-                        <h1 className="text-center text-white" style={{ fontWeight: "600" }}>
-                            Why use SparkV?
-                        </h1>
+                        <h1 className="text-center text-white" style={{ fontWeight: "600" }}>Why use SparkV's leveling feature?</h1>
                         <p className="text-center" style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>
-                            SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
+                            Make your server much more <a className="gr-blue">active</a>.
                         </p>
-                        {config.features.map((f) => (
-                            <div key={f.alt} className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
-                                {f.align === "left" ? (
-                                    <>
-                                        <div className="col-12 col-sm-8 col-lg-6">
-                                            <img defer data-aos="fade-up" src={f.icon} className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt={f.alt} style={{ borderRadius: "6px", maxWidth: "400px" }} />
-                                        </div>
-                                        <div className="col-lg-6">
-                                            <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">
-                                                {f.title}
-                                            </h1>
-                                            <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">
-                                                {f.description}
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="col-lg-6">
-                                            <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">
-                                                {f.title}
-                                            </h1>
-                                            <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">
-                                                {f.description}
-                                            </p>
-                                        </div>
-                                        <div className="col-12 col-sm-8 col-lg-6">
-                                            <img defer data-aos="fade-up" src={f.icon} className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt={f.alt} style={{ borderRadius: "6px", maxWidth: "400px" }} />
-                                        </div>
-                                    </>
-                                )}
+                        <div className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
+                            <div className="col-12 col-sm-8 col-lg-6">
+                                <img defer data-aos="fade-up" src="/images/features/xp_gain.webp" className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt="Gain XP" style={{ borderRadius: "6px", maxWidth: "400px" }} />
                             </div>
-                        ))}
+                            <div className="col-lg-6">
+                                <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">Gain <a className="gr-blue">XP</a></h1>
+                                <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">Fun fact: users <a className="gr-red">LOVE</a> to see numbers go up. SparkV gives users random xp between 5-25. That generates chat activity!</p>
+                            </div>
+                        </div>
+                        <div className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
+                            <div className="col-lg-6">
+                                <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">Get <a className="gr-yellow">Competitive</a></h1>
+                                <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">Users will <a className="gr-yellow">compete</a> to get the highest rank, which will <a className="gr-blue">boost</a> your chat activity!</p>
+                            </div>
+                            <div className="col-12 col-sm-8 col-lg-6">
+                                <img defer data-aos="fade-up" src="/images/features/levelboard.webp" className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt="SparkV Levelboard" style={{ borderRadius: "6px", maxWidth: "400px" }} />
+                            </div>
+                        </div>
                     </section>
 
                     {/* Reviews */}

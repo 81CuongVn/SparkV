@@ -18,7 +18,7 @@ export default function Render({ commands }) {
     return (
         <>
             <Head>
-                <Header name={`Commands - ${config.name}`} description={`Read about how we use your data. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
+                <Header name={`Commands - ${config.name}`} description={`View SparkV's many amazing commands. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
             </Head>
             <body>
                 {/* Content */}
@@ -64,7 +64,7 @@ export default function Render({ commands }) {
                                     <div className="command m-2" style={{ width: "100%", background: "rgb(0, 10, 35, .3)", borderRadius: "20px", padding: "20px" }}>
                                         <div style={{ fontFamily: "Rubik, sans-serif", marginLeft: "20px" }} className="col">
                                             <h1 className="cmdName" style={{ textAlign: "left", fontSize: "20px", fontWeight: "600", color: "rgb(255, 255, 255)" }}>
-                                                /{command?.name} {command?.usage ? `(${command?.usage})` : ""}
+                                                /{command?.name} {command?.usage ? command?.usage : ""}
                                             </h1>
                                             <p className="cmdDesc" style={{ width: "100%", fontSize: "15px", textAlign: "left", color: "var(--sparkv-light)" }}>{command?.description || "No description provided."}</p>
                                         </div>

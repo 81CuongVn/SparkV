@@ -25,7 +25,7 @@ export default function Render() {
                         <Image defer src="/images/404.svg" alt="SparkV" className="img-fluid" width="450" height="250" style={{ borderRadius: "15px" }} />
                         <p style={{ color: "rgb(255, 255, 255, 0.6)", fontSize: "17.5px", textAlign: "center", marginTop: "20px", marginBottom: "50px", fontWeight: "600" }}>Wait a second... where are we? I think we're lost.</p>
                         <div className="row" style={{ maxWidth: "800px", justifyContent: "center" }}>
-                            <Link href="/"><a type="button" className="col-5 btn btn-info text-white fw-bold" style={{ height: "56px", width: "150px", marginInlineEnd: "16px", borderRadius: "8px" }}>Home</a></Link>
+                            <Link href="/"><a type="button" className="col-5 button button-blue text-white fw-bold" style={{ height: "56px", width: "150px", marginInlineEnd: "16px", borderRadius: "8px" }}>Home</a></Link>
                         </div>
                     </section>
                 </section>
