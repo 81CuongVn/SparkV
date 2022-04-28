@@ -23,7 +23,7 @@ const items = [
   },
   {
     name: "Status",
-    image: <FontAwesomeIcon icon={faTrafficLight} />,
+    image: <FontAwesomeIcon icon={faCircleExclamation} />,
     href: "/status",
   },
   {
@@ -49,11 +49,6 @@ const items = [
     type: "dropdown",
     items: [
       {
-        name: "Dashboard",
-        image: <FontAwesomeIcon icon={faSliders} />,
-        href: "https://www.sparkv.tk/dashboard"
-      },
-      {
         name: "Docs",
         image: <FontAwesomeIcon icon={faBook} />,
         href: "https://docs.sparkv.tk/"
@@ -62,12 +57,7 @@ const items = [
         name: "Support",
         image: <FontAwesomeIcon icon={faCircleQuestion} />,
         href: "https://www.sparkv.tk/support"
-      },
-      {
-        name: "Status",
-        image: <FontAwesomeIcon icon={faCircleExclamation} />,
-        href: "https://status.sparkv.tk/"
-      },
+      }
     ],
   },
 ];
