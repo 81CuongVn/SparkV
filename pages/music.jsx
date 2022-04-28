@@ -16,14 +16,11 @@ import Navbar from "../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
-// import dbConnect from "../old/dbConnect";
-// @chakra-ui/toast will be used in the future
-
 export default function Render() {
     return (
         <>
             <Head>
-                <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
+                <Header name={`Music - ${config.meta.name}`} description={`Enjoy high quality music, on your favorate Discord server. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
             </Head>
             <body style={{ background: "var(--sparkv-dark)", fontFamily: "Satoshi-Regular, sans-serif" }}>
                 {/* Background */}
@@ -80,27 +77,6 @@ export default function Render() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-
-                    <section id="features">
-                        <h1 className="text-center text-white" style={{ fontWeight: "600" }}>
-                            Why use SparkV?
-                        </h1>
-                        <p className="text-center" style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>
-                            SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
-                        </p>
-                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-                            <div className="col row d-flex align-items-start" style={{ display: "flex" }}>
-                                <div className="col-2">
-                                    <FontAwesomeIcon icon={faAngleUp}></FontAwesomeIcon>
-                                </div>
-                                <div className="col-md-4">
-                                    <h4 className="fw-bold mb-0">Featured title</h4>
-                                    <p>Paragraph of text beneath the heading to explain the heading.</p>
-                                </div>
-                            </div>
-
                         </div>
                     </section>
 
