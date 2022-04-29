@@ -46,13 +46,13 @@
 
 .button-blue {
   background-color: transparent;
-  color: rgb(107, 114, 207);
-  border-color: rgb(107, 114, 207);
-  box-shadow: 0 10px 20px -10px rgb(107, 114, 207);
+  color: #6b72cf;
+  border-color: #6b72cf;
+  box-shadow: 0 10px 20px -10px #6b72cf;
 }
 .button-blue:hover {
-  background-color: rgb(107, 114, 207);
-  border-color: rgb(107, 114, 207);
+  background-color: #6b72cf;
+  border-color: #6b72cf;
   color: white;
 }
 
@@ -280,13 +280,13 @@ body {
 }
 
 a {
-  color: rgba(255, 255, 255, 0.55);
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-  text-decoration: none;
+  color: rgba(255, 255, 255, 0.55) !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
+  text-decoration: none !important;
 }
 
 a:hover {
-  color: white;
+  color: white !important;
 }
 
 ::-webkit-scrollbar {

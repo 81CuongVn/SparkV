@@ -27,13 +27,13 @@ body {
 }
 
 a {
-  color: rgba(255, 255, 255, 0.55);
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-  text-decoration: none;
+  color: rgba(255, 255, 255, 0.55) !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
+  text-decoration: none !important;
 }
 
 a:hover {
-  color: white;
+  color: white !important;
 }
 
 ::-webkit-scrollbar {
