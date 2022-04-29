@@ -11,5 +11,5 @@ const app = express();
 
 // Code //
 console.log("-------- Website --------");
-app.use("*", (req, res) => res.status(200).send({ status: 200, message: "SparkV is online." }));
+app.use("*", (req, res) => res.status(404).send({ status: 404, message: "This API route does not exist." }));
 app.listen(process.env.PORT || 3000, () => console.log("💻 | Server listening to port 3000."));
