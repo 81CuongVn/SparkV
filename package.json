@@ -52,10 +52,6 @@
     "redis": "^4.0.6",
     "statcord.js": "^3.4.2"
   },
-  "devDependencies": {
-    "eslint": "^8.13.0",
-    "prettier": "2.6.2"
-  },
   "_moduleAliases": {
     "@root": ".",
     "@database": "./database",
