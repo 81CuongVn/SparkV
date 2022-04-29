@@ -43,7 +43,7 @@ export default function Render() {
                                         SparkV
                                     </h1>
                                     <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Powerful, Modern, SparkV. A multipurpose bot with Music, Memes, AI Chatbot, Currency, Leveling, Utility, a dashboard, and more.</p>
-                                    <div className="row" style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "space-evenly" }}>
+                                    <div style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "space-evenly" }}>
                                         <Link href="/dashboard">
                                             <a type="button" className="button button-blue">
                                                 Invite SparkV
