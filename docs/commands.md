@@ -48,11 +48,11 @@ SparkV's Command List! SparkV contains more than **67 commands**!
 
 ## Images
 
-| Name               | Description                     | Usage                      | Cooldown  |
-| ------------------ | ------------------------------- | -------------------------- | --------- |
-| **color**          | No description for this command | {command}                  | 2 seconds |
-| **image**          | Generate images with ease.      | (image type)               | 3 seconds |
-| **youtubecomment** | YouTube comment lol.            | (user default: you) (text) | 3 seconds" |
+| Name               | Description                      | Usage                      | Cooldown  |
+| ------------------ | -------------------------------- | -------------------------- | --------- |
+| **color**          | No description for this command. | {command}                  | 2 seconds |
+| **image**          | Generate images with ease.       | (image type)               | 3 seconds |
+| **youtubecomment** | YouTube comment lol.             | (user default: you) (text) | 3 seconds" |
 
 ## Moderation
 
