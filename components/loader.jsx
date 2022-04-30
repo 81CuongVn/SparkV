@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import config from "../config";
 
-import loader from "../styles/loader.module.css";
+import loader from "../styles/loader.module.scss";
 
 export default class Loader extends React.Component {
     constructor(props) {

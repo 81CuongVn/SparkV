@@ -16,10 +16,10 @@
   appearance: button;
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.3s ease-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
+  transition: all 3s ease-out;
+  -webkit-transition: all 3s ease-in-out;
+  -moz-transition: all 3s ease-out;
+  -o-transition: all 3s ease-out;
   will-change: opacity, transform;
 
   &:hover {

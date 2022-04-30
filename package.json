@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "style": "sass styles/scss:styles --watch",
     "start": "next start -p 5000",
     "lint": "next lint"
   },
@@ -37,7 +36,6 @@
   "devDependencies": {
     "eslint": "^8.13.0",
     "eslint-config-next": "12.1.5",
-    "prettier": "2.6.2",
-    "sass": "^1.50.0"
+    "prettier": "2.6.2"
   }
 }

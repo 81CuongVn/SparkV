@@ -6,8 +6,8 @@ import Script from "next/script";
 
 import config from "../config";
 
-import hero from "../styles/hero.module.css";
-import footer from "../styles/footer.module.css";
+import hero from "../styles/hero.module.scss";
+import footer from "../styles/footer.module.scss";
 
 import Loader from "../components/loader";
 import Header from "../components/head";

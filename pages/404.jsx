@@ -6,8 +6,7 @@ import Script from "next/script";
 
 import config from "../config";
 
-import hero from "../styles/hero.module.css";
-import loader from "../styles/loader.module.css";
+import hero from "../styles/hero.module.scss";
 
 import Header from "../components/head";
 import Navbar from "../components/navbar";
@@ -21,6 +20,8 @@ export default function Render() {
             <body>
                 {/* Content */}
                 <section className="container-md">
+                    <Navbar title="SparkV" logo="/images/SparkV.webp" />
+
                     <section id="home" style={{ width: "100%", height: "100%", display: "flex", marginTop: "125px", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", textAlign: "center", margin: "7% 0" }}>
                         <Image defer src="/images/404.svg" alt="SparkV" className="img-fluid" width="450" height="250" style={{ borderRadius: "15px" }} />
                         <p style={{ color: "rgb(255, 255, 255, 0.6)", fontSize: "17.5px", textAlign: "center", marginTop: "20px", marginBottom: "50px", fontWeight: "600" }}>Wait a second... where are we? I think we're lost.</p>
