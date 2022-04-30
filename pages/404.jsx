@@ -17,7 +17,6 @@ export default function Render() {
             <Head>
                 <Header name={`${config.name} | 404`} description={`We couldn't find that page on our server. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
             </Head>
-            <body>
                 {/* Content */}
                 <section className="container-md">
                     <Navbar title="SparkV" logo="/images/SparkV.webp" />
@@ -30,7 +29,6 @@ export default function Render() {
                         </div>
                     </section>
                 </section>
-            </body>
         </>
     );
 }

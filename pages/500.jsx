@@ -18,9 +18,10 @@ export default function Render({ statusCode }) {
             <Head>
                 <Header name={`${config.name} | Error`} description={`Wow, you encountered an error! Our team have been notified, are are working on a fix. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png"></Header>
             </Head>
-            <body>
                 {/* Content */}
                 <section className="container-md">
+                    <Navbar title="SparkV" logo="/images/SparkV.webp" />
+
                     <section id="home" style={{ width: "100%", height: "100%", display: "flex", marginTop: "125px", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", textAlign: "center", margin: "7% 0" }}>
                         <Image defer src={`https://http.cat/${statusCode}`} alt={`Error Code ${statusCode}`} className="img-fluid" width="450" height="250" style={{ borderRadius: "15px" }} />
                         <div className="row" style={{ maxWidth: "800px", justifyContent: "center" }}>
@@ -28,7 +29,6 @@ export default function Render({ statusCode }) {
                         </div>
                     </section>
                 </section>
-            </body>
         </>
     );
 }

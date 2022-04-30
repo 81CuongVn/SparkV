@@ -101,9 +101,9 @@ export default class Navbar extends React.Component {
             <div className="mx-auto">
               <ul className="navbar-nav">
                 {items.map(item => (
-                  <>
+                  <li key={item.name} className={`nav-item ${item?.type === "dropdown" ? "dropdown" : ""}`}>
                     {item?.type === "dropdown" ? (
-                      <li key={item.name} className="nav-item dropdown">
+                        <>
                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{item.image} {item.name}</a>
                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown" style={{ backgroundColor: "var(--sparkv-dark)" }}>
                           {item.items.map(dropItem => (
@@ -112,13 +112,13 @@ export default class Navbar extends React.Component {
                             </li>
                           ))}
                         </ul>
-                      </li>
+                        </>
                     ) : (
-                      <li key={item.name} className="nav-item">
-                        <Link href={item.href}><a className="nav-link" aria-current="page">{item.image} {item.name}</a></Link>
-                      </li>
+                      <Link href={item.href}>
+                        <a className="nav-link" aria-current="page">{item.image} {item.name}</a>
+                      </Link>
                     )}
-                  </>
+                  </li>
                 ))}
               </ul>
             </div>

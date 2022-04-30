@@ -22,7 +22,6 @@ export default function Render() {
             <Head>
                 <Header name={`Music - ${config.meta.name}`} description={`Enjoy high quality music, on your favorate Discord server. ${config.meta.description}`} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
             </Head>
-            <body style={{ background: "var(--sparkv-dark)", fontFamily: "Satoshi-Regular, sans-serif" }}>
                 {/* Background */}
                 <div className="position-fixed w-100 h-100" style={{ zIndex: "-1" }}>
                     <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", WebkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }} />
@@ -32,20 +31,20 @@ export default function Render() {
                 <section className="container-md">
                     <Navbar title="SparkV" logo="/images/SparkV.webp" />
 
-                    <section id="home" style={{ paddingTop: "5rem", paddingBottom: "10rem" }}>
+                    <section id="home" style={{ paddingTop: "8rem", paddingBottom: "10rem" }}>
                         <div className="container pb-5">
                             <div className="row align-items-center text-white">
                                 <div className="col-md-6 text-start">
                                     <h1 className="display-2_title" style={{ width: "100%", textAlign: "center", fontSize: "xxx-large" }}>SparkV - <a className="gr-blue">Leveling</a></h1>
                                     <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Take your server to the next <a className="gr-blue">level</a>.</p>
-                                    <div className="row" style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "space-evenly" }}>
+                                    <div style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "center" }}>
                                         <Link href="/dashboard">
-                                            <a type="button" className="button button-blue">
+                                            <a type="button" className="button button-blue" style={{ marginInlineEnd: "20px" }}>
                                                 Invite SparkV
                                             </a>
                                         </Link>
                                         <Link href="#features">
-                                            <a type="button" className="button button-gray">
+                                            <a type="button" className="button button-gray" style={{ marginInlineEnd: "20px" }}>
                                                 Learn More
                                             </a>
                                         </Link>
@@ -54,7 +53,7 @@ export default function Render() {
 
                                 <div className="col-md-6 text-end">
                                     <div className="video-box">
-                                        <img defer src="images/features/hero_banner.webp" alt="SparkV" className="img-fluid" style={{ borderRadius: "15px" }} draggable="false" />
+                                        <img defer src="/images/features/rankcard.webp" alt="SparkV" className="img-fluid" style={{ borderRadius: "15px" }} draggable="false" />
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +103,7 @@ export default function Render() {
                     </section>
 
                     {/* Reviews */}
-                    <section id="reviews" style={{ paddingBottom: "18rem", background: "transparent" }}>
+                    <section id="reviews" style={{ paddingBottom: "8rem", background: "transparent" }}>
                         <div className="row text-center text-white">
                             <h1 data-aos="fade-up" className="display-3 fw-bold aos-init aos-animate">
                                 Reviews
@@ -188,7 +187,6 @@ export default function Render() {
                         <FontAwesomeIcon icon={faAngleUp} size={"lg"} />
                     </a>
                 </Link>
-            </body>
         </>
     );
 }
