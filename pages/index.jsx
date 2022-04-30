@@ -14,7 +14,7 @@ import Header from "../components/head";
 import Navbar from "../components/navbar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faAngleUp, faBullseyeArrow, faFaceGrinTears, faGamepad, faMoneyBill1Wave, faRadio } from "@fortawesome/free-solid-svg-icons";
 
 // import dbConnect from "../old/dbConnect";
 // @chakra-ui/toast will be used in the future
@@ -43,14 +43,14 @@ export default function Render() {
                                         SparkV
                                     </h1>
                                     <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>Powerful, Modern, SparkV. A multipurpose bot with Music, Memes, AI Chatbot, Currency, Leveling, Utility, a dashboard, and more.</p>
-                                    <div style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "space-evenly" }}>
+                                    <div style={{ display: "flex", height: "100px", marginTop: "32px", justifyContent: "center" }}>
                                         <Link href="/dashboard">
-                                            <a type="button" className="button button-blue">
+                                            <a type="button" className="button button-blue" style={{ marginInlineEnd: "20px" }}>
                                                 Invite SparkV
                                             </a>
                                         </Link>
                                         <Link href="#features">
-                                            <a type="button" className="button button-gray">
+                                            <a type="button" className="button button-gray" style={{ marginInlineEnd: "20px" }}>
                                                 Learn More
                                             </a>
                                         </Link>
@@ -83,67 +83,71 @@ export default function Render() {
                         </div>
                     </section>
 
-                    <section id="features">
+                    <section id="features" style={{ paddingBottom: "7.5rem" }}>
                         <h1 className="text-center text-white" style={{ fontWeight: "600" }}>
                             Why use SparkV?
                         </h1>
                         <p className="text-center" style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>
                             SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
                         </p>
-                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-                            <div className="col row d-flex align-items-start" style={{ display: "flex" }}>
-                                <div className="col-2">
-                                    <FontAwesomeIcon icon={faAngleUp}></FontAwesomeIcon>
+                        <div className="row justify-content-center">
+                            <center className="col-md-4 m-2" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                                <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
+                                    <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
+                                        <FontAwesomeIcon icon={faRadio} />
+                                    </span>
                                 </div>
-                                <div className="col-md-4">
-                                    <h4 className="fw-bold mb-0">Featured title</h4>
-                                    <p>Paragraph of text beneath the heading to explain the heading.</p>
+                                <h2 style={{ color: "#fff" }}><a className="gr-blue">Quality</a> Music</h2>
+                                <p style={{ color: "rgba(255, 255, 255, 0.6)", fontFamily: "Satoshi-Regular, sans-serif" }}>
+                                    SparkV has <a className="gr-blue" style={{ fontWeight: "700" }}>high quality</a> and breath-taking music. Not to mention, the <a className="gr-blue" style={{ fontWeight: "700" }}>beautiful UI</a> that goes with it. Perfect for karaoke night!
+                                </p>
+                                <Link href="/music">
+                                    <a className="button button-blue">Learn More</a>
+                                </Link>
+                            </center>
+                            <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                                <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
+                                    <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
+                                        <FontAwesomeIcon icon={faFaceGrinTears} />
+                                    </span>
                                 </div>
-                            </div>
-
+                                <h2 style={{ color: "#fff" }}><a className="gr-yellow">Hilarious</a> Memes</h2>
+                                <p style={{ color: "rgba(255, 255, 255, 0.6)", fontFamily: "Satoshi-Regular, sans-serif" }}>
+                                    SparkV has memes that will make you <a className="gr-yellow">smile</a>.
+                                </p>
+                                <Link href="/reddit">
+                                    <a className="button button-yellow" style={{ marginTop: "40px" }}>Learn More</a>
+                                </Link>
+                            </center>
+                            <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                                <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
+                                    <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
+                                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                    </span>
+                                </div>
+                                <h2 style={{ color: "#fff" }}><a className="gr-yellow">Rich</a> Economy</h2>
+                                <p style={{ color: "rgba(255, 255, 255, 0.6)", fontFamily: "Satoshi-Regular, sans-serif" }}>
+                                SparkV has a <a className="gr-yellow">rich</a> economy system. Perfect for generating chat activity!
+                                </p>
+                                <Link href="/economy">
+                                    <a className="button button-yellow" style={{ marginTop: "16px" }}>Learn More</a>
+                                </Link>
+                            </center>
+                            <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                                <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
+                                    <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
+                                        <FontAwesomeIcon icon={faGamepad} />
+                                    </span>
+                                </div>
+                                <h2 style={{ color: "#fff" }}>Games</h2>
+                                <p style={{ color: "rgba(255, 255, 255, 0.6)", fontFamily: "Satoshi-Regular, sans-serif" }}>
+                                    SparkV contains many fun/game commands that will keep your server active!
+                                </p>
+                                <Link href="/games">
+                                    <a className="button button-blue" style={{ marginTop: "16px" }}>Learn More</a>
+                                </Link>
+                            </center>
                         </div>
-                    </section>
-
-                    <section id="features" style={{ paddingBottom: "12rem" }}>
-                        <h1 className="text-center text-white" style={{ fontWeight: "600" }}>
-                            Why use SparkV?
-                        </h1>
-                        <p className="text-center" style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif", textAlign: "center" }}>
-                            SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
-                        </p>
-                        {config.features.map((f) => (
-                            <div key={f.alt} className="row flex-lg-row-reverse align-items-center g-5 py-5 px-5 aos-init" data-aos="zoom-in">
-                                {f.align === "left" ? (
-                                    <>
-                                        <div className="col-12 col-sm-8 col-lg-6">
-                                            <img defer data-aos="fade-up" src={f.icon} className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt={f.alt} style={{ borderRadius: "6px", maxWidth: "400px" }} />
-                                        </div>
-                                        <div className="col-lg-6">
-                                            <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">
-                                                {f.title}
-                                            </h1>
-                                            <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">
-                                                {f.description}
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="col-lg-6">
-                                            <h1 className="display-5 text-white fw-bold lh-1 mb-3" data-aos="fade-up">
-                                                {f.title}
-                                            </h1>
-                                            <p style={{ color: "#fff9", fontSize: "20px", fontFamily: "Satoshi-Regular, sans-serif" }} data-aos="fade-up">
-                                                {f.description}
-                                            </p>
-                                        </div>
-                                        <div className="col-12 col-sm-8 col-lg-6">
-                                            <img defer data-aos="fade-up" src={f.icon} className="w-100 mx-lg-auto img-fluid aos-init aos-animate" alt={f.alt} style={{ borderRadius: "6px", maxWidth: "400px" }} />
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        ))}
                     </section>
 
                     {/* Reviews */}
