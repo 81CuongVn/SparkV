@@ -5,12 +5,12 @@ const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("GREEN")
+		.setColor("#57F287")
 		.setTimestamp();
 
 	if (type === "8ball") {
@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 
 		const reply = replies[Math.floor(Math.random() * replies.length + 0)];
 
-		embed.setDescription(`**8Ball**\n${reply}`).setColor(goodReplies.find(r => r === reply) ? "GREEN" : "RED");
+		embed.setDescription(`**8Ball**\n${reply}`).setColor(goodReplies.find(r => r === reply) ? "#57F287" : "#ED4245");
 	} else if (type === "advice") {
 		const data = await axios.get("https://api.adviceslip.com/advice").then(res => res.data).catch(err => bot.logger(`Advice failed: ${err}`, "error"));
 

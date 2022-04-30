@@ -29,7 +29,7 @@ module.exports = {
 		if (stars) {
 			const foundStar = stars.embeds[0];
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -57,5 +57,5 @@ module.exports = {
 
 			if (reaction.count === 0) return setTimeout(() => starMsg.delete(), 3 * 1000);
 		}
-	},
+	}
 };

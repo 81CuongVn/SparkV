@@ -268,6 +268,15 @@ module.exports = {
 		}
 	},
 
+	/**
+   * Get a button style.
+   * @param {string} style The style to get.
+   * @returns {Object} The button style.
+   */
+	getButtonStyle(style) {
+		return Discord.EnumResolvers.resolveButtonStyle(style);
+	},
+
 	/*
   Async Debounce(callback, wait, immediate) {
 	let timeout

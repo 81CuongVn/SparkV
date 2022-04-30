@@ -11,20 +11,20 @@ async function execute(bot, message, args, command, data) {
 		const description = data.options.getString("description") || await message.translate("Need help? Click the button below to create a support ticket.");
 		const color = data.options.getString("color") || bot.config.embed.color;
 
-		const ticketEmbed = new Discord.MessageEmbed()
+		const ticketEmbed = new Discord.EmbedBuilder()
 			.setTitle(title)
 			.setDescription(description)
 			.setColor(color);
 
-		const ticketCreateButton = new Discord.MessageButton()
+		const ticketCreateButton = new Discord.ButtonBuilder()
 			.setLabel(await message.translate("Create Ticket"))
 			.setEmoji(bot.config.emojis.ticket)
-			.setStyle("SECONDARY")
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 			.setCustomId("ticket_create");
 
 		await message.channel.send({
 			embeds: [ticketEmbed],
-			components: [new Discord.MessageActionRow().addComponents(ticketCreateButton)]
+			components: [new Discord.ActionRowBuilder().addComponents(ticketCreateButton)]
 		});
 
 		const category = await message.guild.channels.cache.find(c => (c.name.toLowerCase().includes("support") || c.name.toLowerCase().includes("tickets")) && c.type === "GUILD_CATEGORY") || await message.guild.channels.create("Tickets", {
@@ -41,15 +41,15 @@ async function execute(bot, message, args, command, data) {
 		const description = data.options.getString("description") || "Click the button(s) below to give yourself a role!";
 		const color = data.options.getString("color") || bot.config.embed.color;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setTitle(title)
 			.setDescription(description)
 			.setColor(color);
 
 		const buttons = [];
-		const button1 = new Discord.MessageButton()
+		const button1 = new Discord.ButtonBuilder()
 			.setLabel(data.options.getString("role1_text"))
-			.setStyle("SECONDARY")
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 			.setCustomId(`role_${data.options.getRole("role1").id}`);
 
 		if (data.options.getString("role1_emoji")) button1.setEmoji(data.options.getString("role1_emoji"));
@@ -57,9 +57,9 @@ async function execute(bot, message, args, command, data) {
 		buttons.push(button1);
 
 		if (data.options.getRole("role2") && data.options.getString("role2_text")) {
-			const button = new Discord.MessageButton()
+			const button = new Discord.ButtonBuilder()
 				.setLabel(data.options.getString("role2_text") || "React to get a role")
-				.setStyle("SECONDARY")
+				.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 				.setCustomId(`role_${await data.options.getRole("role2").id}`);
 
 			if (data.options.getString("role2_emoji")) button.setEmoji(data.options.getString("role2_emoji"));
@@ -68,9 +68,9 @@ async function execute(bot, message, args, command, data) {
 		}
 
 		if (data.options.getRole("role3") && data.options.getString("role3_text")) {
-			const button = new Discord.MessageButton()
+			const button = new Discord.ButtonBuilder()
 				.setLabel(data.options.getString("role3_text") || "React to get a role")
-				.setStyle("SECONDARY")
+				.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 				.setCustomId(`role_${await data.options.getRole("role3").id}`);
 
 			if (data.options.getString("role3_emoji")) button.setEmoji(data.options.getString("role3_emoji"));
@@ -79,9 +79,9 @@ async function execute(bot, message, args, command, data) {
 		}
 
 		if (data.options.getRole("role4") && data.options.getString("role4_text")) {
-			const button = new Discord.MessageButton()
+			const button = new Discord.ButtonBuilder()
 				.setLabel(data.options.getString("role4_text") || "React to get a role")
-				.setStyle("SECONDARY")
+				.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 				.setCustomId(`role_${await data.options.getRole("role4").id}`);
 
 			if (data.options.getString("role4_emoji")) button.setEmoji(data.options.getString("role4_emoji"));
@@ -90,9 +90,9 @@ async function execute(bot, message, args, command, data) {
 		}
 
 		if (data.options.getRole("role5") && data.options.getString("role5_text")) {
-			const button = new Discord.MessageButton()
+			const button = new Discord.ButtonBuilder()
 				.setLabel(data.options.getString("role5_text") || "React to get a role")
-				.setStyle("SECONDARY")
+				.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 				.setCustomId(`role_${await data.options.getRole("role5").id}`);
 
 			if (data.options.getString("role5_emoji")) button.setEmoji(data.options.getString("role5_emoji"));
@@ -116,7 +116,7 @@ async function execute(bot, message, args, command, data) {
 		const description = data.options.getString("description");
 		const color = data.options.getString("color") || bot.config.embed.color;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setDescription(description.replaceAll("<br>", "\n"))
 			.setColor(color);
 
@@ -134,7 +134,7 @@ module.exports = new cmd(execute, {
 	description: "Set up a feature. (tickets, roles, embed)",
 	dirname: __dirname,
 	aliases: [],
-	perms: ["MANAGE_GUILD"],
+	perms: ["ManageGuild"],
 	usage: "(tickets|roles|embed) (title|description|color)",
 	slash: true,
 	slashOnly: true,
@@ -182,7 +182,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "green",
-							value: "GREEN"
+							value: "#57F287"
 						},
 						{
 							name: "dark_green",
@@ -218,7 +218,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "red",
-							value: "RED"
+							value: "#ED4245"
 						},
 						{
 							name: "dark_red",
@@ -280,7 +280,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role1_emoji",
-					description: "The emoji to use for the first role button.",
+					description: "The emoji to use for the first role button."
 				},
 				{
 					type: 8,
@@ -295,7 +295,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role2_emoji",
-					description: "The emoji to use for the second role button.",
+					description: "The emoji to use for the second role button."
 				},
 				{
 					type: 8,
@@ -310,7 +310,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role3_emoji",
-					description: "The emoji to use for the third role button.",
+					description: "The emoji to use for the third role button."
 				},
 				{
 					type: 8,
@@ -325,7 +325,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role4_emoji",
-					description: "The emoji to use for the fourth role button.",
+					description: "The emoji to use for the fourth role button."
 				},
 				{
 					type: 8,
@@ -340,7 +340,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role5_emoji",
-					description: "The emoji to use for the fifth role button.",
+					description: "The emoji to use for the fifth role button."
 				},
 				{
 					type: 3,
@@ -379,7 +379,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "green",
-							value: "GREEN"
+							value: "#57F287"
 						},
 						{
 							name: "dark_green",
@@ -415,7 +415,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "red",
-							value: "RED"
+							value: "#ED4245"
 						},
 						{
 							name: "dark_red",
@@ -500,7 +500,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "green",
-							value: "GREEN"
+							value: "#57F287"
 						},
 						{
 							name: "dark_green",
@@ -536,7 +536,7 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "red",
-							value: "RED"
+							value: "#ED4245"
 						},
 						{
 							name: "dark_red",
@@ -577,6 +577,6 @@ module.exports = new cmd(execute, {
 					]
 				}
 			]
-		},
+		}
 	]
 });

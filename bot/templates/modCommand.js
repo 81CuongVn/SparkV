@@ -11,7 +11,7 @@ module.exports = class ModCommand {
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
-			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!perms.has(Discord.Permissions.Flags[perm])) {
 				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
 					ephemeral: true,
@@ -24,7 +24,7 @@ module.exports = class ModCommand {
 		const botperms = message.channel.permissionsFor(message.guild.me);
 
 		for (const perm of this.settings.bot_perms) {
-			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!botperms.has(Discord.Permissions.Flags[perm])) {
 				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,

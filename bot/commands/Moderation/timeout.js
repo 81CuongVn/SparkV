@@ -24,8 +24,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: `(user) (optional: reason)`,
-	perms: ["MODERATE_MEMBERS"],
-	bot_perms: ["MODERATE_MEMBERS"],
+	perms: ["ModerateMembers"],
+	bot_perms: ["ModerateMembers"],
 	slash: true,
 	slashOnly: true,
 	options: [

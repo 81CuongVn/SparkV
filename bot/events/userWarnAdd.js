@@ -11,7 +11,7 @@ module.exports = {
 
 		if (!channel) return;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: user.user.tag,
 				iconURL: user.user.displayAvatarURL({ dynamic: true })

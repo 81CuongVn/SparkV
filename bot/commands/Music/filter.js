@@ -26,7 +26,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "(filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off)",
 	aliases: ["setfilter"],
-	perms: ["ADMINISTRATOR"],
+	perms: ["ManageChannels"],
 	slash: true,
 	slashOnly: true,
 	options: [

@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **68 commands**!
+SparkV's Command List! SparkV contains more than **63 commands**!
 
 ## Economy
 
@@ -22,37 +22,23 @@ SparkV's Command List! SparkV contains more than **68 commands**!
 
 ## Fun
 
-| Name           | Description                                              | Usage           | Cooldown  |
-| -------------- | -------------------------------------------------------- | --------------- | --------- |
-| **chatbot**    | Talk to me!                                              |                 | 2 seconds |
-| **fun**        | Just a little fun.                                       |                 | 2 seconds |
-| **rank**       | View a users rank!                                       | (optional user) | 2 seconds |
-| **screenshot** | Screenshot a site!                                       | (website URL)   | 2 seconds |
-| **text**       | I will change the text depending on what you want to do. | (text)          | 2 seconds" |
-
-## Games
-
-| Name            | Description                                                         | Usage                                                                                                                                            | Cooldown   |
-| --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
-| **activity**    | Play a Discord VC activity!                                         | (type (youtube, poker, chess, checkers, betrayal, fishing, lettertile, wordsnack, doodlecrew, spellcast, awkword, puttparty, sketchheads, ocho)) | 20 seconds |
-| **connectfour** | Play a game of ConnectFour with me or mention someone to play with! | (optional user)                                                                                                                                  | 20 seconds |
-| **game**        | Play a game with SparkV.                                            |                                                                                                                                                  | 20 seconds |
-| **memory**      | Pratice your memory!                                                | (level default: 5)                                                                                                                               | 1 seconds  |
-| **tictactoe**   | Play a game of Tic Tac Toe with me or mention someone to play with! |                                                                                                                                                  | 2 seconds " |
-
-## Giveaways
-
-| Name         | Description                                                  | Usage | Cooldown  |
-| ------------ | ------------------------------------------------------------ | ----- | --------- |
-| **giveaway** | Create, delete, pause, resume, reroll, or reroll a giveaway. |       | 2 seconds" |
+| Name           | Description                                              | Usage                                                                                                                                            | Cooldown   |
+| -------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **activity**   | Play a Discord VC activity!                              | (type (youtube, poker, chess, checkers, betrayal, fishing, lettertile, wordsnack, doodlecrew, spellcast, awkword, puttparty, sketchheads, ocho)) | 20 seconds |
+| **chatbot**    | Talk to me!                                              |                                                                                                                                                  | 2 seconds  |
+| **fun**        | Just a little fun.                                       |                                                                                                                                                  | 2 seconds  |
+| **game**       | Play a game with SparkV.                                 |                                                                                                                                                  | 20 seconds |
+| **rank**       | View a users rank!                                       | (optional user)                                                                                                                                  | 2 seconds  |
+| **screenshot** | Screenshot a site!                                       | (website URL)                                                                                                                                    | 2 seconds  |
+| **text**       | I will change the text depending on what you want to do. | (text)                                                                                                                                           | 2 seconds " |
 
 ## Images
 
-| Name               | Description                     | Usage                      | Cooldown  |
-| ------------------ | ------------------------------- | -------------------------- | --------- |
-| **color**          | No description for this command | {command}                  | 2 seconds |
-| **image**          | Generate images with ease.      | (image type)               | 3 seconds |
-| **youtubecomment** | YouTube comment lol.            | (user default: you) (text) | 3 seconds" |
+| Name               | Description                      | Usage                      | Cooldown  |
+| ------------------ | -------------------------------- | -------------------------- | --------- |
+| **color**          | No description for this command. | {command}                  | 2 seconds |
+| **image**          | Generate images with ease.       | (image type)               | 3 seconds |
+| **youtubecomment** | YouTube comment lol.             | (user default: you) (text) | 3 seconds" |
 
 ## Moderation
 
@@ -95,7 +81,6 @@ SparkV's Command List! SparkV contains more than **68 commands**!
 | **afk**          | Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be... | (optional: reason)                                           | 2 seconds |
 | **bot**          | Information for SparkV.                                                                             |                                                              | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                                        | (optional: search)                                           | 2 seconds |
-| **icon**         | Grab the icon of the server or a user.                                                              | (type (user/server)) (user/invite)                           | 2 seconds |
 | **id**           | Grab the ID of the server or a user.                                                                | (type (user/server/role/channel)) (user/invite/role/channel) | 2 seconds |
 | **info**         | See information about a user or server.                                                             | (user)                                                       | 2 seconds |
 | **invite**       | Displays links.                                                                                     |                                                              | 2 seconds |

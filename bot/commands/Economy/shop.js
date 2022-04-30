@@ -6,7 +6,7 @@ async function execute(bot, message, args, command, data) {
 	const pages = [];
 
 	bot.shop.each(item => {
-		const itemEmbed = new Discord.MessageEmbed()
+		const itemEmbed = new Discord.EmbedBuilder()
 			.setTitle(`Shop - ${item.name}`)
 			.setDescription(item.desc || "Well that's odd... this item doesn't have a description.")
 			.addField(`IDs`, item.ids.join(", "), true)
@@ -17,35 +17,35 @@ async function execute(bot, message, args, command, data) {
 		pages.push(itemEmbed);
 	});
 
-	const quickLeft = new Discord.MessageButton()
+	const quickLeft = new Discord.ButtonBuilder()
 		.setEmoji("⬅️")
 		.setCustomId("quickLeft")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const left = new Discord.MessageButton()
+	const left = new Discord.ButtonBuilder()
 		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("left")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const number = new Discord.MessageButton()
+	const number = new Discord.ButtonBuilder()
 		.setEmoji(bot.config.emojis.channel)
 		.setCustomId("number")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const right = new Discord.MessageButton()
+	const right = new Discord.ButtonBuilder()
 		.setEmoji(bot.config.emojis.arrows.right)
 		.setCustomId("right")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const quickRight = new Discord.MessageButton()
+	const quickRight = new Discord.ButtonBuilder()
 		.setEmoji("➡️")
 		.setCustomId("quickRight")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
 	let PageNumber = 0;
 	const msg = await message.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, number, right, quickRight)],
+		components: [new Discord.ActionRowBuilder().addComponents(quickLeft, left, number, right, quickRight)],
 		fetchReply: true
 	});
 
@@ -118,7 +118,7 @@ async function execute(bot, message, args, command, data) {
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
-				],
+				]
 			});
 		} catch (err) {
 			// Page deleted.

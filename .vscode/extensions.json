@@ -2,7 +2,6 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "digitalbrainstem.javascript-ejs-support",
     "ms-vsliveshare.vsliveshare"
   ]
 }

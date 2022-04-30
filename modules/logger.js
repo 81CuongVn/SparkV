@@ -33,16 +33,16 @@ module.exports = async (content, type) => {
 				const errorChannel = await global.bot.channels.fetch("948686231892545547");
 
 				if (errorChannel) {
-					const ErrorEmbed = new Discord.MessageEmbed()
+					const ErrorEmbed = new Discord.EmbedBuilder()
 						.setTitle("Uh oh!")
 						.setDescription(`**An error occured!**`)
 						.addField("**Error**", `\`\`\`${content}\`\`\``)
-						.setColor("RED");
+						.setColor("#ED4245");
 
 					if (content?.stack) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
 
 					await errorChannel.send({
-						embeds: [ErrorEmbed],
+						embeds: [ErrorEmbed]
 					});
 				}
 			}

@@ -37,7 +37,7 @@ async function execute(bot, message, args, command, data) {
 
 		// eslint-disable-next-line no-inner-declarations
 		async function updateGame() {
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: (message.user ? message.user : message.author).tag,
 					iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -55,7 +55,7 @@ async function execute(bot, message, args, command, data) {
 				.addField(await message.translate("Word"), `\`${progress}\``, false)
 				.addField(await message.translate("Guesses"), `${misses.join(", ") || "None."}`, true)
 				.addField(await message.translate("Lives"), `${"❤️".repeat(lives >= 0 ? lives : 0)}${"🖤".repeat(6 - lives)}`, true)
-				.setColor(gameOver ? (gameStatus === "won" ? "GREEN" : "RED") : "BLUE");
+				.setColor(gameOver ? (gameStatus === "won" ? "#57F287" : "#ED4245") : "BLUE");
 
 			if (menuEmbed) {
 				await menuEmbed.edit({
@@ -129,7 +129,7 @@ async function execute(bot, message, args, command, data) {
 
 		const gameCreation = Date.now();
 
-		const MenuEmbed = new Discord.MessageEmbed()
+		const MenuEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -154,7 +154,7 @@ async function execute(bot, message, args, command, data) {
 			errors: ["time"]
 		}).then(async collected => {
 			const colMessage = collected.first();
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: (message.user ? message.user : message.author).tag,
 					iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -170,25 +170,25 @@ async function execute(bot, message, args, command, data) {
 					embeds: [
 						MenuEmbed
 							.setDescription(`${MenuEmbed.description}\n\n${bot.config.emojis.success} | ${colMessage.author} ${await message.translate("has won the game in")} **${seconds} ${await message.translate("seconds")}** ${await message.translate("with a WPM of ")}**${WPM}**!`)
-							.setColor("GREEN")
+							.setColor("#57F287")
 					]
 				});
 
 				embed
 					.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}\`${chosenWord}\`. You got it right in **${seconds} seconds** with a WPM of **${WPM}**!`)
-					.setColor("GREEN");
+					.setColor("#57F287");
 			} else {
 				await Menu.edit({
 					embeds: [
 						MenuEmbed
 							.setDescription(`${MenuEmbed.description}\n\n${bot.config.emojis.error} | ${colMessage.author} ${await message.translate("spelt the word wrong, and lost the game")}.`)
-							.setColor("RED")
+							.setColor("#ED4245")
 					]
 				});
 
 				embed
 					.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The words were ")}\`${chosenWord}\`.`)
-					.setColor("RED");
+					.setColor("#ED4245");
 			}
 
 			await message.replyT({
@@ -202,7 +202,7 @@ async function execute(bot, message, args, command, data) {
 	} else if (type === "trivia") {
 		const trivia = await message.replyT({
 			embeds: [
-				new Discord.MessageEmbed()
+				new Discord.EmbedBuilder()
 					.setAuthor({
 						name: message.user.tag,
 						iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -226,7 +226,7 @@ async function execute(bot, message, args, command, data) {
 		shuffle(choices);
 
 		let number = 0;
-		const triviaEmbed = new Discord.MessageEmbed()
+		const triviaEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -237,25 +237,25 @@ async function execute(bot, message, args, command, data) {
 			}).join("\n")}`)
 			.setColor(bot.config.embed.color);
 
-		const answer1B = new Discord.MessageButton()
+		const answer1B = new Discord.ButtonBuilder()
 			.setEmoji("1️⃣")
 			.setCustomId("1")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-		const answer2B = new Discord.MessageButton()
+		const answer2B = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.numbers.two)
 			.setCustomId("2")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-		const answer3B = new Discord.MessageButton()
+		const answer3B = new Discord.ButtonBuilder()
 			.setEmoji("3️⃣")
 			.setCustomId("3")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-		const answer4B = new Discord.MessageButton()
+		const answer4B = new Discord.ButtonBuilder()
 			.setEmoji("4️⃣")
 			.setCustomId("4")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
 		await trivia.edit({
 			embeds: [triviaEmbed],
@@ -275,7 +275,7 @@ async function execute(bot, message, args, command, data) {
 		collector.on("collect", async interaction => {
 			await interaction.deferReply();
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.user.tag,
 					iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -287,31 +287,31 @@ async function execute(bot, message, args, command, data) {
 			if ((parseInt(interaction.customId) - 1) === winningNumber) {
 				embed
 					.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}**${triviaData.correct_answer}**!`)
-					.setColor("GREEN");
+					.setColor("#57F287");
 			} else {
 				embed
 					.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The answer was ")}**${triviaData.correct_answer}**.`)
-					.setColor("RED");
+					.setColor("#ED4245");
 
 				if ((parseInt(interaction.customId) - 1) === 0) {
-					answer1B.setStyle("DANGER");
+					answer1B.setStyle(bot.functions.getButtonStyle("DANGER"));
 				} else if ((parseInt(interaction.customId) - 1) === 1) {
-					answer2B.setStyle("DANGER");
+					answer2B.setStyle(bot.functions.getButtonStyle("DANGER"));
 				} else if ((parseInt(interaction.customId) - 1) === 2) {
-					answer3B.setStyle("DANGER");
+					answer3B.setStyle(bot.functions.getButtonStyle("DANGER"));
 				} else if ((parseInt(interaction.customId) - 1) === 3) {
-					answer4B.setStyle("DANGER");
+					answer4B.setStyle(bot.functions.getButtonStyle("DANGER"));
 				}
 			}
 
 			if (winningNumber === 0) {
-				answer1B.setStyle("SUCCESS");
+				answer1B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 			} else if (winningNumber === 1) {
-				answer2B.setStyle("SUCCESS");
+				answer2B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 			} else if (winningNumber === 2) {
-				answer3B.setStyle("SUCCESS");
+				answer3B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 			} else if (winningNumber === 3) {
-				answer4B.setStyle("SUCCESS");
+				answer4B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 			}
 
 			await trivia.edit({

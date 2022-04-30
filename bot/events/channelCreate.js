@@ -17,17 +17,17 @@ module.exports = {
 
 		if (!logChannel) return;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setDescription(`**Channel Created ${channel}**`)
 			.setFooter({
 				text: `Channel ID: ${channel.id}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
-			.setColor("GREEN")
+			.setColor("#57F287")
 			.setTimestamp();
 
 		await logChannel.send({
 			embeds: [embed]
 		}).catch(() => {});
-	},
+	}
 };

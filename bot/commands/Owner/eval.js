@@ -33,7 +33,7 @@ async function execute(bot, message, args, command, data) {
 
 		return await message.replyT(`Eval exceeds 4000 characters. Please view here: ${paste.body}`);
 	} else {
-		const Embed = new Discord.MessageEmbed()
+		const Embed = new Discord.EmbedBuilder()
 			.setTitle(`${bot.config.emojis.success} | Eval Results`)
 			.addField(`Input`, `\`\`\`${input.slice(0, 1000)}}\`\`\``)
 			.addField(`Output`, `\`\`\`js\n${result.slice(0, 1000)}\`\`\``)

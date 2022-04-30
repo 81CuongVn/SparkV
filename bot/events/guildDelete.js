@@ -12,23 +12,23 @@ module.exports = {
 			activities: [
 				{
 					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
-					type: "PLAYING",
-				},
-			],
+					type: "PLAYING"
+				}
+			]
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
 		const Owner = await guild?.fetchOwner() || null;
 
 		if (Logger) {
-			const ServerRemovedEmbed = new Discord.MessageEmbed()
+			const ServerRemovedEmbed = new Discord.EmbedBuilder()
 				.setTitle("🔽︱Guild Removed")
 				.setDescription(`SparkV left **${guild.name} (${guild.id})**.`)
 				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
-				.setColor("RED");
+				.setColor("#ED4245");
 
 			if (guild.vanityURLCode) {
 				ServerRemovedEmbed
@@ -44,8 +44,8 @@ module.exports = {
 			}
 
 			Logger.send({
-				embeds: [ServerRemovedEmbed],
+				embeds: [ServerRemovedEmbed]
 			});
 		}
-	},
+	}
 };

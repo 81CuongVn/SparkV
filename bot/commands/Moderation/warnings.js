@@ -40,7 +40,7 @@ async function execute(bot, message, args, command, data) {
 	}
 
 	WarningsSubArray.map((i, v) => {
-		const SongEmbed = new Discord.MessageEmbed()
+		const SongEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: `${(User.user ? User.user : User).tag}'s Warning${UserData.infractionsCount > 1 ? "s" : ""}`,
 				iconURL: (User.user ? User.user : User).displayAvatarURL({ dynamic: true })
@@ -55,29 +55,29 @@ async function execute(bot, message, args, command, data) {
 		pages.push(SongEmbed);
 	});
 
-	const quickLeft = new Discord.MessageButton()
+	const quickLeft = new Discord.ButtonBuilder()
 		.setEmoji(emojis[0])
 		.setCustomId("quickLeft")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const left = new Discord.MessageButton()
+	const left = new Discord.ButtonBuilder()
 		.setEmoji(emojis[1])
 		.setCustomId("left")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const right = new Discord.MessageButton()
+	const right = new Discord.ButtonBuilder()
 		.setEmoji(emojis[2])
 		.setCustomId("right")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const quickRight = new Discord.MessageButton()
+	const quickRight = new Discord.ButtonBuilder()
 		.setEmoji(emojis[3])
 		.setCustomId("quickRight")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
 	const msg = await message.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)],
+		components: [new Discord.ActionRowBuilder().addComponents(quickLeft, left, right, quickRight)],
 		fetchReply: true
 	});
 
@@ -118,7 +118,7 @@ async function execute(bot, message, args, command, data) {
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
-				],
+				]
 			});
 		} catch (err) {
 			// Page deleted.
@@ -131,14 +131,14 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["infractions"],
 	usage: `(user)`,
-	perms: ["MODERATE_MEMBERS"],
-	bot_perms: ["MODERATE_MEMBERS"],
+	perms: ["ModerateMembers"],
+	bot_perms: ["ModerateMembers"],
 	slash: true,
 	options: [
 		{
 			type: 6,
 			name: "user",
-			description: "The user to display the warnings of.",
+			description: "The user to display the warnings of."
 		}
 	]
 });

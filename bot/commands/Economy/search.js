@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const { parse } = require("dotenv");
 
 const cmd = require("@templates/command");
@@ -17,22 +17,22 @@ async function execute(bot, message, args, command, data) {
 
 	const winningPlace = Math.floor(Math.random() * 2);
 
-	const place1B = new MessageButton()
+	const place1B = new ButtonBuilder()
 		.setLabel(place1)
 		.setCustomId(`1_${place1.toLowerCase()}`)
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const place2B = new MessageButton()
+	const place2B = new ButtonBuilder()
 		.setLabel(place2)
 		.setCustomId(`2_${place2.toLowerCase()}`)
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const place3B = new MessageButton()
+	const place3B = new ButtonBuilder()
 		.setLabel(place3)
 		.setCustomId(`3_${place3.toLowerCase()}`)
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const SearchEmbed = new MessageEmbed()
+	const SearchEmbed = new EmbedBuilder()
 		.setAuthor({
 			name: (message.user ? message.user : message.author).tag,
 			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ format: "png", dynamic: true })
@@ -46,7 +46,7 @@ async function execute(bot, message, args, command, data) {
 
 	const SearchMessage = await message.replyT({
 		embeds: [SearchEmbed],
-		components: [new MessageActionRow().addComponents(place1B, place2B, place3B)],
+		components: [new ActionRowBuilder().addComponents(place1B, place2B, place3B)]
 	});
 
 	const collector = SearchMessage.createMessageComponentCollector({
@@ -73,34 +73,34 @@ async function execute(bot, message, args, command, data) {
 
 			SearchEmbed
 				.setDescription(`Congrats, you found ⏣${bot.functions.formatNumber(foundMoney)} coins in **${place}**!${data.user.money.multiplier > 1 ? ` It also seems you also have a **${data.user.money.multiplier}x** coin multiplier!` : ""}\nYou now have ⏣${bot.functions.formatNumber(data.user.money.balance)} coins!`)
-				.setColor("GREEN");
+				.setColor("#57F287");
 		} else {
 			SearchEmbed
 				.setDescription(`Dang, you found nothing in **${place}**.\nYour balance stays the same at ⏣${bot.functions.formatNumber(data.user.money.balance)} coins.`)
-				.setColor("RED");
+				.setColor("#ED4245");
 
 			if (placeNum === 0) {
-				place1B.setStyle("DANGER");
+				place1B.setStyle(bot.functions.getButtonStyle("DANGER"));
 			} else if (placeNum === 1) {
-				place2B.setStyle("DANGER");
+				place2B.setStyle(bot.functions.getButtonStyle("DANGER"));
 			} else if (placeNum === 2) {
-				place3B.setStyle("DANGER");
+				place3B.setStyle(bot.functions.getButtonStyle("DANGER"));
 			}
 		}
 
 		if (winningPlace === 0) {
-			place1B.setStyle("SUCCESS");
+			place1B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 		} else if (winningPlace === 1) {
-			place2B.setStyle("SUCCESS");
+			place2B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 		} else if (winningPlace === 2) {
-			place3B.setStyle("SUCCESS");
+			place3B.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 		}
 
 		await SearchMessage.edit({
 			embeds: [SearchEmbed],
 			components: [
-				new MessageActionRow().addComponents(place1B.setDisabled(true), place2B.setDisabled(true), place3B.setDisabled(true)),
-			],
+				new ActionRowBuilder().addComponents(place1B.setDisabled(true), place2B.setDisabled(true), place3B.setDisabled(true))
+			]
 		});
 	});
 
@@ -125,5 +125,5 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	perms: [],
 	slash: true,
-	cooldown: 15,
+	cooldown: 15
 });
