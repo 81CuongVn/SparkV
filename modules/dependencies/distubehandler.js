@@ -118,7 +118,7 @@ module.exports = async bot => {
 					2
 				];
 
-				const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+				const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
 				const loopMode = nextLoopMode === 0 ? `${bot.config.emojis.error} Disabled` : `${bot.config.emojis.success} ${nextLoopMode === 1 ? "\`Server Queue\`" : "\`Current Song\`"}`;
 
 				queue.setRepeatMode(nextLoopMode);

@@ -135,7 +135,7 @@ async function execute(bot, message, args, command, data) {
 						2
 					];
 
-					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+					const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
 					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
 
 					queue.setRepeatMode(nextLoopMode);
