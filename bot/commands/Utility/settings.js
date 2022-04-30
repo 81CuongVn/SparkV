@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder, EmbedBuilder } = require("discord.js");
+const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Options } = require("discord.js");
 
 const cmd = require("@templates/command");
 
@@ -37,7 +37,7 @@ const numFilter = async m => {
 };
 
 async function setNewData(message, options) {
-	const requestMsg = new EmbedBuilder()
+	const requestMsg = new MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -53,13 +53,13 @@ async function setNewData(message, options) {
 	const components = [];
 
 	if (options.dropdownItems) {
-		const SelectMenu = new SelectMenuBuilder()
+		const SelectMenu = new MessageSelectMenu()
 			.setCustomId(`SelectMenu_${options.id}`)
 			.setPlaceholder("Select an option.")
 
 			.addOptions(options.dropdownItems);
 
-		components.push(new ActionRowBuilder().addComponents(SelectMenu));
+		components.push(new MessageActionRow().addComponents(SelectMenu));
 	}
 
 	const channelMsg = await message.replyT({
@@ -88,14 +88,14 @@ async function setNewData(message, options) {
 						}, 5 * 1000);
 					} catch (err) { }
 				} catch (err) {
-					const ErrorEmbed = new EmbedBuilder()
+					const ErrorEmbed = new MessageEmbed()
 						.setAuthor({
 							name: interaction.user.tag,
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						})
 						.setTitle("Uh oh!")
 						.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
-						.setColor("#ED4245");
+						.setColor("RED");
 
 					try {
 						return await message.replyT({
@@ -129,14 +129,14 @@ async function setNewData(message, options) {
 					}, 5 * 1000);
 				} catch (err) { }
 			} catch (err) {
-				const ErrorEmbed = new EmbedBuilder()
+				const ErrorEmbed = new MessageEmbed()
 					.setAuthor({
 						name: interaction.user.tag,
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					})
 					.setTitle("Uh oh!")
 					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
-					.setColor("#ED4245");
+					.setColor("RED");
 
 				return await message.reply({
 					embeds: [ErrorEmbed]
@@ -147,7 +147,7 @@ async function setNewData(message, options) {
 }
 
 async function execute(bot, message, args, command, data) {
-	const loadingEmbed = new EmbedBuilder()
+	const loadingEmbed = new MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -166,17 +166,17 @@ async function execute(bot, message, args, command, data) {
 		ephemeral: true
 	});
 
-	const ToggleButton = new ButtonBuilder()
+	const ToggleButton = new MessageButton()
 		.setLabel("Toggle")
 		.setEmoji("⏺️")
 		.setCustomId("toggle")
-		.setStyle(bot.functions.getButtonStyle("DANGER"));
+		.setStyle("DANGER");
 
-	const channelButton = new ButtonBuilder()
+	const channelButton = new MessageButton()
 		.setLabel(await message.translate("Channel"))
 		.setEmoji(bot.config.emojis.channel)
 		.setCustomId("category")
-		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+		.setStyle("SECONDARY");
 
 	const settings = [
 		{
@@ -188,11 +188,11 @@ async function execute(bot, message, args, command, data) {
 			buttons: [
 				{
 					name: await message.translate("Language"),
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel(await message.translate("Language"))
 						.setEmoji(bot.config.emojis.slash)
 						.setCustomId("language")
-						.setStyle(ButtonStyle.Primary),
+						.setStyle("PRIMARY"),
 					getData: () => data.guild.language,
 					setData: async () => {
 						await setNewData(message, {
@@ -318,11 +318,11 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: "Roles",
 					required: true,
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel("Support Roles")
 						.setEmoji(bot.config.emojis.special)
 						.setCustomId("roles")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => {
 						if (data.guild?.tickets?.roles) return data.guild?.tickets?.roles.map(r => `<@&${r}>`).join(", ");
 						else return "None";
@@ -368,11 +368,11 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: await message.translate("Actions"),
 					required: true,
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel(await message.translate("Actions"))
 						.setEmoji(bot.config.emojis.ban)
 						.setCustomId("actions")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => data.guild?.antiScam?.action || "None",
 					setData: async () => {
 						await setNewData(message, {
@@ -401,7 +401,7 @@ async function execute(bot, message, args, command, data) {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("#57F287");
+									.setColor("GREEN");
 
 								data.guild.antiScam.action = collected;
 								data.guild.markModified("antiScam.action");
@@ -414,11 +414,11 @@ async function execute(bot, message, args, command, data) {
 				// {
 				// 	name: await message.translate("Custom Words"),
 				// 	required: true,
-				// 	data: new ButtonBuilder()
+				// 	data: new MessageButton()
 				// 		.setLabel(await message.translate("Custom Words"))
 				// 		.setEmoji(bot.config.emojis.ban)
 				// 		.setCustomId("custom")
-				// 		.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+				// 		.setStyle("SECONDARY"),
 				// 	getData: () => data.guild?.antiScam?.custom.map(link => `**${link}**`).join(", ") || "None",
 				// 	setData: async () => {
 				// 		await setNewData(message, {
@@ -447,7 +447,7 @@ async function execute(bot, message, args, command, data) {
 				// 				requestMsg
 				// 					.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 				// 					.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-				// 					.setColor("#57F287");
+				// 					.setColor("GREEN");
 
 				// 				data.guild.antiScam.action = collected;
 				// 				data.guild.markModified("antiScam.action");
@@ -483,11 +483,11 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: await message.translate("Actions"),
 					required: true,
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel(await message.translate("Actions"))
 						.setEmoji(bot.config.emojis.ban)
 						.setCustomId("actions")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => data.guild?.antiSpam?.action || "None",
 					setData: async () => {
 						await setNewData(message, {
@@ -516,7 +516,7 @@ async function execute(bot, message, args, command, data) {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("#57F287");
+									.setColor("GREEN");
 
 								data.guild.antiSpam.action = collected;
 								data.guild.markModified("antiSpam.action");
@@ -553,11 +553,11 @@ async function execute(bot, message, args, command, data) {
 					name: "Channel",
 					required: true,
 					enabledText: "Successfully setup channel!",
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel("Channel")
 						.setEmoji(bot.config.emojis.channel)
 						.setCustomId("channel")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => {
 						if (data.guild.starboard?.channel) return `<#${data.guild.starboard.channel}>`;
 						else return "None";
@@ -584,11 +584,11 @@ async function execute(bot, message, args, command, data) {
 				},
 				{
 					name: "Emoji",
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel("Emoji")
 						.setEmoji(bot.config.emojis.star)
 						.setCustomId("emoji")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => data.guild.starboard?.emoji || "⭐",
 					setData: async () => {
 						await setNewData(message, {
@@ -628,11 +628,11 @@ async function execute(bot, message, args, command, data) {
 				},
 				{
 					name: "Minimum",
-					data: new ButtonBuilder()
+					data: new MessageButton()
 						.setLabel("Minimum")
 						.setEmoji(bot.config.emojis.numbers.two)
 						.setCustomId("minimum")
-						.setStyle(bot.functions.getButtonStyle("SECONDARY")),
+						.setStyle("SECONDARY"),
 					getData: () => data.guild.starboard?.min || 2,
 					setData: async () => {
 						await setNewData(message, {
@@ -730,7 +730,7 @@ async function execute(bot, message, args, command, data) {
 
 		curSetting.buttons.forEach(button => {
 			if (button.name.toLowerCase() === "toggle") {
-				const buttonData = button.data.setDisabled(false).setStyle(button.getData() === "true" ? bot.functions.getButtonStyle("SUCCESS") : bot.functions.getButtonStyle("DANGER"));
+				const buttonData = button.data.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER");
 
 				return buttonsIncluded.push(buttonData);
 			}
@@ -751,19 +751,19 @@ async function execute(bot, message, args, command, data) {
 
 		buttons.push({
 			type: 1,
-			components: [BackButton, WebsiteButton, SupportButton]
+			components: [BackButton, DashButton, SupportButton]
 		});
 
 		await botMessage.edit({
 			embeds: [
-				pages.find(page => page.data.author.name.includes(curSetting.name))
+				pages.find(page => page.author.name.includes(curSetting.name))
 			],
 			components: buttons,
 			ephemeral: true
 		});
 	}
 
-	const Menu = new EmbedBuilder()
+	const Menu = new MessageEmbed()
 		.setAuthor({
 			name: "SparkV Settings Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -780,28 +780,27 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
 
-	const ExitButton = new ButtonBuilder()
+	const ExitButton = new MessageButton()
 		.setLabel("Exit")
 		.setEmoji(bot.config.emojis.leave)
 		.setCustomId("exit")
-		.setStyle(bot.functions.getButtonStyle("DANGER"));
+		.setStyle("DANGER");
 
-	const BackButton = new ButtonBuilder()
+	const BackButton = new MessageButton()
 		.setLabel("Back")
 		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("back")
-		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+		.setStyle("SECONDARY");
 
-	const WebsiteButton = new ButtonBuilder()
-		.setURL(`https://${process.env.BASEURL}/`)
-		.setEmoji(bot.config.emojis.globe)
-		.setLabel("Website")
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+	const DashButton = new MessageButton()
+		.setURL(`https://${process.env.BASEURL}/dashboard`)
+		.setLabel("Dashboard")
+		.setStyle("LINK");
 
-	const SupportButton = new ButtonBuilder()
+	const SupportButton = new MessageButton()
 		.setURL(bot.config.support.invite)
 		.setLabel("Support")
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+		.setStyle("LINK");
 
 	let pages = [];
 	let curSetting;
@@ -809,7 +808,7 @@ async function execute(bot, message, args, command, data) {
 	function createPages() {
 		settings.forEach(setting => {
 			const settData = setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`);
-			const NewEmbed = new EmbedBuilder()
+			const NewEmbed = new MessageEmbed()
 				.setAuthor({
 					name: `${setting.emojiID ? "" : setting.emoji}SparkV ${setting.name}`,
 					iconURL: `https://cdn.discordapp.com/emojis/${setting.emojiID}.webp?size=56&quality=lossless`
@@ -830,11 +829,11 @@ async function execute(bot, message, args, command, data) {
 	let rows = 0;
 	async function setupSettings() {
 		settings.forEach(async setting => {
-			const SettingButton = new ButtonBuilder()
+			const SettingButton = new MessageButton()
 				.setLabel(setting.name)
 				.setEmoji(setting.emoji)
 				.setCustomId(setting.id)
-				.setStyle(ButtonStyle.Primary)
+				.setStyle("PRIMARY")
 				.setDisabled(setting?.disabled ? setting.disabled : false);
 
 			console.log(rows, buttons[rows]);
@@ -861,7 +860,7 @@ async function execute(bot, message, args, command, data) {
 
 	buttons.push({
 		type: 1,
-		components: [ExitButton, WebsiteButton, SupportButton]
+		components: [ExitButton, DashButton, SupportButton]
 	});
 
 	await bot.wait(750);
@@ -886,7 +885,7 @@ async function execute(bot, message, args, command, data) {
 		}, time: 300 * 1000
 	});
 
-	const exitEmbed = new EmbedBuilder()
+	const exitEmbed = new MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -905,7 +904,7 @@ async function execute(bot, message, args, command, data) {
 
 				buttons.push({
 					type: 1,
-					components: [ExitButton, WebsiteButton, SupportButton]
+					components: [ExitButton, DashButton, SupportButton]
 				});
 
 				buttons = buttons.filter(Boolean);
@@ -941,14 +940,14 @@ async function execute(bot, message, args, command, data) {
 		} catch (error) {
 			bot.logger(error, "error");
 
-			const ErrorEmbed = new EmbedBuilder()
+			const ErrorEmbed = new MessageEmbed()
 				.setAuthor({
 					name: interaction.user.tag,
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 				})
 				.setTitle("Uh oh!")
 				.setDescription(`**A critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-				.setColor("#ED4245");
+				.setColor("RED");
 
 			try {
 				return await botMessage.edit({
@@ -974,7 +973,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: [],
-	perms: ["ManageGuild"],
+	perms: ["MANAGE_GUILD"],
 	slash: true,
 	slashOnly: true,
 	cooldown: 30

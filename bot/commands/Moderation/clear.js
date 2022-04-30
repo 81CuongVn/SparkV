@@ -52,8 +52,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: `(# of messages) (Optional: Type (all, user only, pinned only))`,
 	aliases: [`purge`, `clr`],
-	perms: ["ManageMessages"],
-	bot_perms: ["ManageMessages"],
+	perms: ["MANAGE_MESSAGES"],
+	bot_perms: ["MANAGE_MESSAGES"],
 	slash: true,
 	slashOnly: true,
 	options: [

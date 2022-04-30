@@ -45,7 +45,7 @@ module.exports = class ModCommand {
 
 			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}**.`));
 		} else if (this.settings.type === "multiplayerGame") {
-			const playersEmbed = new discord.EmbedBuilder()
+			const playersEmbed = new discord.MessageEmbed()
 				.setAuthor({
 					name: (message.user ? message.user : message.author).tag,
 					iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -56,24 +56,24 @@ module.exports = class ModCommand {
 					text: bot.config.embed.footer,
 					iconURL: bot.user.displayAvatarURL({ dynamic: true })
 				})
-				.setColor("#57F287");
+				.setColor("GREEN");
 
-			const joinButton = new discord.ButtonBuilder()
+			const joinButton = new discord.MessageButton()
 				.setCustomId("join")
 				.setEmoji("🚪")
 				.setLabel("Join")
-				.setStyle(bot.functions.getButtonStyle("SUCCESS"));
+				.setStyle("SUCCESS");
 
-			const leaveButton = new discord.ButtonBuilder()
+			const leaveButton = new discord.MessageButton()
 				.setCustomId("leave")
 				.setEmoji("🚪")
 				.setLabel("Leave")
-				.setStyle(bot.functions.getButtonStyle("DANGER"));
+				.setStyle("DANGER");
 
 			const players = [];
 			const playersMessage = await message.replyT({
 				embeds: [playersEmbed],
-				components: [new discord.ActionRowBuilder().addComponents(joinButton, leaveButton)],
+				components: [new discord.MessageActionRow().addComponents(joinButton, leaveButton)],
 				fetchReply: true
 			});
 

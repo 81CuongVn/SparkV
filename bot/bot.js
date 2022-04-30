@@ -9,31 +9,28 @@ require("./structures/extenders");
 const fs = require("fs");
 const path = require("path");
 const Statcord = require("statcord.js");
-const { GatewayIntentBits, Partials } = require("discord.js");
+const { Collection, Intents, Permissions, Options } = require("discord.js");
 
 const Client = require("./structures/client");
 const SparkV = new Client({
 	intents: [
-		// GatewayIntentBits.Flags.DIRECT_MESSAGES,
-		// GatewayIntentBits.Flags.DIRECT_MESSAGE_REACTIONS,
-		// GatewayIntentBits.Flags.DIRECT_MESSAGE_TYPING
-		GatewayIntentBits.Guilds,
-		// GatewayIntentBits.Flags.GUILD_MEMBERS,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildMessageReactions,
-		GatewayIntentBits.GuildVoiceStates,
-		GatewayIntentBits.GuildBans
-		// GatewayIntentBits.Flags.GUILD_WEBHOOKS,
-		// GatewayIntentBits.Flags.GUILD_INTEGRATIONS,
-		// GatewayIntentBits.Flags.GUILD_INVITES,
-		// GatewayIntentBits.Flags.GUILD_PRESENCES,
-		// GatewayIntentBits.Flags.GUILD_EMOJIS_AND_STICKERS,
-		// GatewayIntentBits.Flags.GUILD_MESSAGE_TYPING,
+		Intents.FLAGS.DIRECT_MESSAGES,
+		// Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+		// Intents.FLAGS.DIRECT_MESSAGE_TYPING
+		Intents.FLAGS.GUILDS,
+		// Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+		Intents.FLAGS.GUILD_VOICE_STATES,
+		Intents.FLAGS.GUILD_BANS
+		// Intents.FLAGS.GUILD_WEBHOOKS,
+		// Intents.FLAGS.GUILD_INTEGRATIONS,
+		// Intents.FLAGS.GUILD_INVITES,
+		// Intents.FLAGS.GUILD_PRESENCES,
+		// Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+		// Intents.FLAGS.GUILD_MESSAGE_TYPING,
 	],
-	partials: [
-		Partials.Message,
-		Partials.Reaction
-	],
+	partials: ["MESSAGE", "REACTION"],
 	presence: {
 		activity: {
 			name: `Loading SparkV (99%)`,

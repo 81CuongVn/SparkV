@@ -6,9 +6,9 @@ const commands = fs
 	.map(c => require(`${__dirname}/${c}`));
 
 module.exports = {
-	name: "Fun",
-	description: "Haha!",
-	emoji: "<:happysmile:934916888721522698>",
-	emojiID: "934916888721522698",
+	name: "Giveaways",
+	description: "These commands let you create/manage your own giveaways!",
+	emoji: "<:tada:948365031857356860>",
+	emojiID: "948365031857356860",
 	commands,
 };

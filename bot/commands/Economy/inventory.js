@@ -25,7 +25,7 @@ module.exports = new cmd(
 		inventory.forEach(item => {
 			const itemData = bot.shop.filter(i => i.name === item).first();
 
-			const itemEmbed = new Discord.EmbedBuilder()
+			const itemEmbed = new Discord.MessageEmbed()
 				.setTitle(`Inventory - ${item}`)
 				.setDescription(itemData.description || "This item has no description.")
 				.addField("Amount Owned", userData.inventory[item].toString(), true)
@@ -38,35 +38,35 @@ module.exports = new cmd(
 
 		if (pages.length < 1) return await message.editT("This user does not have any items in their inventory.");
 
-		const quickLeft = new Discord.ButtonBuilder()
+		const quickLeft = new Discord.MessageButton()
 			.setEmoji("⬅️")
 			.setCustomId("quickLeft")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const left = new Discord.ButtonBuilder()
+		const left = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.arrows.left)
 			.setCustomId("left")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const number = new Discord.ButtonBuilder()
+		const number = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.channel)
 			.setCustomId("number")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const right = new Discord.ButtonBuilder()
+		const right = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.arrows.right)
 			.setCustomId("right")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const quickRight = new Discord.ButtonBuilder()
+		const quickRight = new Discord.MessageButton()
 			.setEmoji("➡️")
 			.setCustomId("quickRight")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
 		let PageNumber = 0;
 		const msg = await message.replyT({
 			embeds: [pages[0]],
-			components: [new Discord.ActionRowBuilder().addComponents(quickLeft, left, number, right, quickRight)],
+			components: [new Discord.MessageActionRow().addComponents(quickLeft, left, number, right, quickRight)],
 			fetchReply: true
 		});
 
@@ -139,7 +139,7 @@ module.exports = new cmd(
 						pages[PageNumber].setFooter({
 							text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 						})
-					]
+					],
 				});
 			} catch (err) {
 				// Page deleted.
@@ -170,5 +170,5 @@ module.exports = new cmd(
 				description: "The user to show the inventory of."
 			}
 		]
-	}
+	},
 );

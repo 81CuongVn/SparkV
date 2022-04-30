@@ -4,12 +4,12 @@ const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const state = message.options.getSubcommand();
-	const embed = new Discord.EmbedBuilder()
+	const embed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("#57F287")
+		.setColor("GREEN")
 		.setTimestamp();
 
 	if (state === "create") {
@@ -45,7 +45,7 @@ async function execute(bot, message, args, command, data) {
 		data.guild.markModified("tags");
 		await data.guild.save();
 
-		embed.setDescription(`**Deleted ${tag.name}**\nI successfully deleted **${tag.name}**.`).setColor("#ED4245");
+		embed.setDescription(`**Deleted ${tag.name}**\nI successfully deleted **${tag.name}**.`).setColor("RED");
 	}
 
 	await message.replyT({

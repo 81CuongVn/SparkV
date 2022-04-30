@@ -6,7 +6,7 @@ async function execute(bot, message, args, command, data) {
 	const state = data.options.getString("state");
 	const reason = data.options.getString("reason");
 
-	const embed = new Discord.EmbedBuilder()
+	const embed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: (message?.user ? message.user : message.author).tag,
 			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -22,23 +22,23 @@ async function execute(bot, message, args, command, data) {
 		if (state.toLowerCase() === "on") {
 			Channels.forEach(Channel => {
 				Channel.permissionOverwrites.create(message.guild.roles.everyone, {
-					SEND_MESSAGES: false
+					SEND_MESSAGES: false,
 				});
 			});
 
 			embed
 				.setDescription(`This server is on lockdown! Reason: ${reason}`)
-				.setColor("#ED4245");
+				.setColor("RED");
 		} else if (state.toLowerCase() === "off") {
 			Channels.forEach(channel => {
 				channel.permissionOverwrites.create(message.guild.roles.everyone, {
-					SEND_MESSAGES: true
+					SEND_MESSAGES: true,
 				});
 			});
 
 			embed
 				.setDescription(`This server is on lockdown! Reason: ${reason}`)
-				.setColor("#ED4245");
+				.setColor("RED");
 		} else {
 			await message.replyT("Invalid command usage. Please specify a valid state (on/off).");
 		}
@@ -52,8 +52,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: `<on | off>`,
-	perms: ["ManageChannels"],
-	bot_perms: ["ManageChannels"],
+	perms: ["MANAGE_CHANNELS"],
+	bot_perms: ["MANAGE_CHANNELS"],
 	slash: true,
 	options: [
 		{
@@ -75,7 +75,7 @@ module.exports = new cmd(execute, {
 		{
 			type: 3,
 			name: "reason",
-			description: "Reason for locking the server."
-		}
+			description: "Reason for locking the server.",
+		},
 	]
 });

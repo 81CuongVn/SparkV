@@ -2,11 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
-const { Client, Collection, Structures, ApplicationCommand } = require("discord.js");
+const { Client, Collection, Intents, Structures, ApplicationCommand } = require("discord.js");
 const { DiscordTogether } = require("discord-together");
 const Statcord = require("statcord.js");
 
 const Distube = require("@modules/dependencies/distubehandler");
+const giveawayshandler = require("@modules/dependencies/giveawayshandler");
 const updateDocs = require("@modules/updateDocs");
 
 const shopdata = require("../shopdata.json");
@@ -54,7 +55,7 @@ module.exports = class bot extends Client {
 		// Functions
 		this.database.init(this);
 		Distube(this);
-		// giveawayshandler(this);
+		giveawayshandler(this);
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);

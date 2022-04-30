@@ -264,15 +264,15 @@ module.exports = {
 					})
 					.forEach(cmd => {
 						cmdTable[cat.name].push({
-							name: cmd.settings.name || "Untitled Command",
-							description: cmd.settings.description || "There is no description provided for this command.",
+							name: `**${cmd.settings.name || "Command name invalid."}**`,
+							description: cmd.settings.description || "No description for this command",
 							usage: cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
 							cooldown: `${Math.ceil(cmd.settings.cooldown / 1000)} seconds`
 						});
 
 						info.push([
-							`**${cmd.settings.name || "Untitled Command"}**`,
-							cmd.settings.description || "No description for this command.",
+							`**${cmd.settings.name || "Command name invalid."}**`,
+							cmd.settings.description || "No description for this command",
 							cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
 							`${Math.ceil(cmd.settings.cooldown / 1000)} seconds`
 						]);

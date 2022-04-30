@@ -5,7 +5,7 @@ const NewCommand = require("./command");
 
 const filters = {
 	image: post => post.data.post_hint === "image",
-	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256
+	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256,
 };
 
 module.exports = class RedditCommand {
@@ -16,10 +16,10 @@ module.exports = class RedditCommand {
 				{
 					cooldown: 2 * 1000,
 					slash: true,
-					bot_perms: ["EmbedLinks"]
+					bot_perms: ["EMBED_LINKS"],
 				},
-				sett
-			)
+				sett,
+			),
 		).settings;
 	}
 
@@ -48,7 +48,7 @@ module.exports = class RedditCommand {
 		const posts = res.data.children.filter(filters[this.settings.type]);
 		const selectedPost = posts[Math.floor(Math.random() * Object.keys(posts).length)].data;
 
-		const RedditEmbed = new Discord.EmbedBuilder()
+		const RedditEmbed = new Discord.MessageEmbed()
 			.setTitle(selectedPost.title.length > 256 ? `${selectedPost.title.slice(0, 248)}...` : selectedPost.title)
 			.setImage(this.settings.type === "image" ? selectedPost.url : "")
 			.setURL(`https://www.reddit.com${selectedPost.permalink}`)

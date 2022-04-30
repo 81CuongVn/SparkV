@@ -37,7 +37,7 @@ module.exports = new cmd(execute, {
 	description: "Talk to me!",
 	dirname: __dirname,
 	usage: "",
-	perms: ["EmbedLinks", "ManageMessages"],
+	perms: ["EMBED_LINKS", "MANAGE_MESSAGES"],
 	slash: true,
 	slashOnly: true,
 	options: [

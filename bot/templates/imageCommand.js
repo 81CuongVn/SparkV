@@ -13,7 +13,7 @@ module.exports = class ModCommand {
 	}
 
 	async run(bot, message, args, command, data) {
-		const loadingEmbed = new Discord.EmbedBuilder()
+		const loadingEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -28,14 +28,14 @@ module.exports = class ModCommand {
 			.setTimestamp();
 
 		const ImageLoading = await message.replyT({
-			embeds: [loadingEmbed]
+			embeds: [loadingEmbed],
 		});
 
 		try {
 			const generateImage = await this.settings.generate(bot, message, data);
 			const Image = new Discord.MessageAttachment(generateImage, `${this.settings.name}.${this.settings?.type || "png"}`);
 
-			const ImageEmbed = new Discord.EmbedBuilder()
+			const ImageEmbed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: `${message.user.tag}`,
 					iconURL: message.user.displayAvatarURL({ format: "png" })
@@ -46,7 +46,7 @@ module.exports = class ModCommand {
 					text: bot.config.embed.footer,
 					iconURL: bot.user.displayAvatarURL({ format: "png" })
 				})
-				.setColor("#57F287");
+				.setColor("GREEN");
 
 			try {
 				await ImageLoading.edit({
@@ -57,10 +57,10 @@ module.exports = class ModCommand {
 		} catch (err) {
 			bot.logger(err, "error");
 
-			const ImageEmbed = new Discord.EmbedBuilder()
+			const ImageEmbed = new Discord.MessageEmbed()
 				.setTitle(await message.translate(`${bot.config.emojis.error} | ${capFirstLetter(this.settings.name)}`))
 				.setDescription(await message.translate("An error occured while creating the image. Please try again later!"))
-				.setColor("#ED4245");
+				.setColor("RED");
 
 			try {
 				await ImageLoading?.edit({
