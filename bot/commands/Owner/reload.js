@@ -13,13 +13,13 @@ async function execute(bot, message, args, command, data) {
 		bot.commands.delete(Command);
 		bot.commands.set(Command.toLowerCase(), CommandFile);
 
-		const embed = new Discord.EmbedBuilder()
+		const embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.author.tag,
 				iconURL: message.author.displayAvatarURL({ dynamic: true })
 			})
 			.setTitle(`Successfuly reloaded ${Command}.`)
-			.setColor("#57F287");
+			.setColor("GREEN");
 
 		return await message.replyT({
 			embeds: [embed]
@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 	} catch (err) {
 		bot.logger(err, "error");
 
-		const ErrorEmbed = new Discord.EmbedBuilder()
+		const ErrorEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.author.tag,
 				iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -35,7 +35,7 @@ async function execute(bot, message, args, command, data) {
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to refresh ${Command}!**`)
 			.addField("**Error**", `\`\`\`${err.message}\`\`\``)
-			.setColor("#ED4245");
+			.setColor("RED");
 
 		return await message.replyT({
 			embeds: [ErrorEmbed]
@@ -48,5 +48,5 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	dirname: __dirname,
 	usage: `(command)`,
-	ownerOnly: true
+	ownerOnly: true,
 });

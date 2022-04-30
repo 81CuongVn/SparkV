@@ -22,7 +22,7 @@ async function execute(bot, message, args, command, data) {
 	} catch (err) {
 		bot.logger(err, "error");
 
-		const ErrorEmbed = new Discord.EmbedBuilder()
+		const ErrorEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: interaction.author.tag,
 				iconURL: interaction.author.displayAvatarURL({ dynamic: true })
@@ -30,7 +30,7 @@ async function execute(bot, message, args, command, data) {
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to refresh the Redis cache!**`)
 			.addField("**Error**", `\`\`\`${error.message}\`\`\``)
-			.setColor("#ED4245");
+			.setColor("RED");
 
 		return await message.replyT({
 			embeds: [ErrorEmbed]
@@ -44,5 +44,5 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	ownerOnly: true,
-	options: []
+	options: [],
 });

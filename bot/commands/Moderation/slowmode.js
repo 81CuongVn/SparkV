@@ -21,8 +21,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["slow"],
 	usage: `(user) <reason>`,
-	perms: ["ManageChannels"],
-	bot_perms: ["ManageChannels"],
+	perms: ["MANAGE_CHANNELS"],
+	bot_perms: ["MANAGE_CHANNELS"],
 	slash: true,
 	slashOnly: true,
 	options: [

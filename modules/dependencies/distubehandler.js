@@ -10,13 +10,13 @@ const { YtDlpPlugin } = require("@distube/yt-dlp");
 module.exports = async bot => {
 	const spotifySettings = {
 		parallel: true,
-		emitEventsAfterFetching: true
+		emitEventsAfterFetching: true,
 	};
 
 	if (process.env.SPOTIFYID && process.env.SPOTIFYSECRET) {
 		spotifySettings.api = {
 			clientId: process.env.SPOTIFYID,
-			clientSecret: process.env.SPOTIFYSECRET
+			clientSecret: process.env.SPOTIFYSECRET,
 		};
 	}
 
@@ -31,6 +31,7 @@ module.exports = async bot => {
 		savePreviousSongs: true,
 		emitAddSongWhenCreatingQueue: false,
 		emptyCooldown: 25,
+		youtubeDL: false,
 		plugins: [
 			new YtDlpPlugin(),
 			new SpotifyPlugin(spotifySettings),
@@ -40,25 +41,25 @@ module.exports = async bot => {
 	});
 
 	async function handleMusic(queue, song, mEmbed, options) {
-		const TogglePlayingButton = new Discord.ButtonBuilder()
+		const TogglePlayingButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.pause)
 			.setCustomId("TP")
-			.setStyle(bot.functions.getButtonStyle("DANGER"));
+			.setStyle("DANGER");
 
-		const LoopButton = new Discord.ButtonBuilder()
+		const LoopButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.loop)
 			.setCustomId("loop")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const LyricsButton = new Discord.ButtonBuilder()
+		const LyricsButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.queue)
 			.setCustomId("lyrics")
-			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
+			.setStyle("SECONDARY");
 
-		const StopButton = new Discord.ButtonBuilder()
+		const StopButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.music_stop)
 			.setCustomId("stop")
-			.setStyle(bot.functions.getButtonStyle("DANGER"));
+			.setStyle("DANGER");
 
 		const buttons = [];
 
@@ -100,7 +101,7 @@ module.exports = async bot => {
 				collector.stop();
 			}
 
-			const embed = new Discord.EmbedBuilder()
+			const embed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: song.member.user.username,
 					iconURL: song.member.user.displayAvatarURL({ dynamic: true })
@@ -117,7 +118,7 @@ module.exports = async bot => {
 					2
 				];
 
-				const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
+				const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
 				const loopMode = nextLoopMode === 0 ? `${bot.config.emojis.error} Disabled` : `${bot.config.emojis.success} ${nextLoopMode === 1 ? "\`Server Queue\`" : "\`Current Song\`"}`;
 
 				queue.setRepeatMode(nextLoopMode);
@@ -133,23 +134,23 @@ module.exports = async bot => {
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
 						.setDescription(`Resumed ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-						.setColor("#57F287");
+						.setColor("GREEN");
 
-					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle(bot.functions.getButtonStyle("DANGER"));
+					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 				} else {
 					queue.pause();
 
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Paused!`)
 						.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-						.setColor("#ED4245");
+						.setColor("RED");
 
-					TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle(bot.functions.getButtonStyle("SUCCESS"));
+					TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
 				}
 
 				MusicMessage.editT({
 					embeds: [mEmbed],
-					components: [new Discord.ActionRowBuilder().addComponents(TogglePlayingButton, StopButton, LoopButton)]
+					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
 				});
 			} else if (interaction.customId === "stop") {
 				queue.stop();
@@ -157,7 +158,7 @@ module.exports = async bot => {
 				embed
 					.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
 					.setDescription(`Stopped playing ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-					.setColor("#ED4245");
+					.setColor("RED");
 			} else if (interaction.customId === "lyrics") {
 				embed
 					.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
@@ -190,7 +191,7 @@ module.exports = async bot => {
 			queue.volume = 75;
 		})
 		.on("playSong", async (queue, song) => {
-			const NowPlayingEmbed = new Discord.EmbedBuilder()
+			const NowPlayingEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name}`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
@@ -236,7 +237,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${queue.formattedCurrentTime}/${song.formattedDuration}\`\`\``,
-							inline: true
+							inline: true,
 						},
 						{
 							name: `${bot.config.emojis.clock} Song Progress`,
@@ -266,7 +267,7 @@ module.exports = async bot => {
 			}, 7.5 * 1000);
 		})
 		.on("addSong", async (queue, song) => {
-			const SongAddedQueue = new Discord.EmbedBuilder()
+			const SongAddedQueue = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Added ${song.name} to Queue`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
@@ -297,7 +298,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${song.formattedDuration}\`\`\``,
-							inline: true
+							inline: true,
 						},
 						{
 							name: `${bot.config.emojis.volume} Volume`,
@@ -322,7 +323,7 @@ module.exports = async bot => {
 			}, 7.5 * 1000);
 		})
 		.on("addList", async (queue, playlist) => {
-			const SongAddedQueue = new Discord.EmbedBuilder()
+			const SongAddedQueue = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Added ${playlist.name} (Playlist) To Queue`)
 				.setDescription(playlist.name)
 				.setImage(playlist?.thumbnail)

@@ -16,7 +16,7 @@ async function execute(bot, message, args, command, data) {
 	if (UserBalance.money.balance < 0) return await message.replyT(`${bot.config.emojis.error} | This user is in **DEBT**! LOL!! HOW ON EARTH DID THAT HAPPEN LMFAOOOOO!!! Anyways, contact support and we'll reset your balance. :)`);
 
 	const odds = Math.floor(Math.random() * 100) + 1;
-	const Embed = new Discord.EmbedBuilder()
+	const Embed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: (message.user ? message.user : message.author).tag,
 			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -58,29 +58,29 @@ async function execute(bot, message, args, command, data) {
 		Embed
 			.setTitle(`**You got caught!**`)
 			.setDescription(`Uh oh! You got caught and paid **⏣250** to ${User}. You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
-			.setColor("#ED4245");
+			.setColor("RED");
 	} else if (type === "small-payout") {
 		Embed
 			.setTitle(`**Small Payout**`)
 			.setDescription(`You got away with a **small amount** of **⏣${await bot.functions.formatNumber(amount)}**. You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins!`)
-			.setColor("#57F287");
+			.setColor("GREEN");
 	} else if (type === "medium-payout") {
 		Embed
 			.setTitle(`**Large Payout**`)
 			.setDescription(`You managed to steal a **large amount** of **⏣${await bot.functions.formatNumber(amount)}**. Great job! You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins!`)
-			.setColor("#57F287");
+			.setColor("GREEN");
 	} else if (type === "full-payout") {
 		Embed
 			.setTitle(`**FULL PAYOUT!**`)
 			.setDescription(`YOU GOT AWAY WITH **ALL ⏣${await bot.functions.formatNumber(amount)}** OF THEIR MONEY LOL. Honestly, they should have protected their coins in their bank. You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins!`)
-			.setColor("#57F287");
+			.setColor("GREEN");
 	}
 
 	await UserBalance.save();
 	await data.user.save();
 
 	await message.replyT({
-		embeds: [Embed]
+		embeds: [Embed],
 	});
 }
 

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, EnumResolvers } = require("discord.js");
+const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = require("discord.js");
 
 const cmd = require("../../templates/command");
 
@@ -21,14 +21,12 @@ async function execute(bot, message, args, command, data) {
 
 		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
-		const NewEmbed = new EmbedBuilder()
+		const NewEmbed = new MessageEmbed()
 			.setAuthor({
 				name: (message?.applicationId ? message.user : message.author).tag,
 				iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.addFields(commands)
-			.setThumbnail(bot.user.displayAvatarURL())
-			.setImage("https://www.sparkv.tk/assets/images/banner.gif")
 			.setFooter({
 				text: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
 				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
@@ -39,36 +37,36 @@ async function execute(bot, message, args, command, data) {
 		pages.push(NewEmbed);
 	});
 
-	const InviteButton = new ButtonBuilder()
+	const InviteButton = new MessageButton()
 		.setURL(bot.config.bot_invite)
 		.setEmoji(bot.config.emojis.plus)
 		.setLabel(await message.translate("Invite"))
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+		.setStyle("LINK");
 
-	const SupportButton = new ButtonBuilder()
+	const SupportButton = new MessageButton()
 		.setURL(bot.config.support.invite)
 		.setEmoji(bot.config.emojis.question)
 		.setLabel(await message.translate("Support Server"))
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+		.setStyle("LINK");
 
-	const VoteButton = new ButtonBuilder()
+	const VoteButton = new MessageButton()
 		.setURL("https://top.gg/bot/884525761694933073")
 		.setEmoji(bot.config.emojis.stats)
 		.setLabel(await message.translate("Vote"))
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+		.setStyle("LINK");
 
-	const WebsiteButton = new ButtonBuilder()
+	const WebsiteButton = new MessageButton()
 		.setURL("https://www.sparkv.tk/")
 		.setEmoji(bot.config.emojis.globe)
 		.setLabel(await message.translate("Website"))
-		.setStyle(bot.functions.getButtonStyle("LINK"));
+		.setStyle("LINK");
 
 	if (data.options.getString("search")) {
 		const name = data.options.getString("search").toString().toLowerCase();
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 		const category = bot.categories.get(name.charAt(0).toUpperCase() + name.slice(1));
 
-		let embed = new EmbedBuilder();
+		let embed = new MessageEmbed();
 
 		if (cmd) {
 			embed
@@ -97,13 +95,13 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTitle(await message.translate("Uh oh!"))
 				.setDescription(await message.translate("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**"))
-				.setColor("#ED4245");
+				.setColor("RED");
 		}
 
 		return await message.replyT({
 			embeds: [embed],
 			components: [
-				new ActionRowBuilder().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
+				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
 			]
 		});
 	}
@@ -119,13 +117,12 @@ async function execute(bot, message, args, command, data) {
 		});
 	});
 
-	const Menu = new EmbedBuilder()
+	const Menu = new MessageEmbed()
 		.setAuthor({
 			name: (message?.applicationId ? message.user : message.author).tag,
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, type")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
-		.setImage("https://www.sparkv.tk/assets/images/banner.gif")
+		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can either visit my")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
 		.setFooter({
 			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -142,7 +139,7 @@ async function execute(bot, message, args, command, data) {
 
 	pages.push(Menu);
 
-	const CatSelect = new SelectMenuBuilder()
+	const CatSelect = new MessageSelectMenu()
 		.setCustomId("SelectHelpMenu")
 		.setPlaceholder(await message.translate("Select a category to view its commands."))
 		.addOptions(Selections);
@@ -150,8 +147,8 @@ async function execute(bot, message, args, command, data) {
 	const helpMessage = await message.replyT({
 		embeds: [Menu],
 		components: [
-			new ActionRowBuilder().addComponents([CatSelect]),
-			new ActionRowBuilder().addComponents([InviteButton, SupportButton, VoteButton, WebsiteButton])
+			new MessageActionRow().addComponents(CatSelect),
+			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
 		],
 		fetchReply: true
 	});
@@ -167,12 +164,8 @@ async function execute(bot, message, args, command, data) {
 	collector.on("collect", async interaction => {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
-				const page = pages.find(p => p?.data?.footer?.text?.toLowerCase()?.includes(interaction?.values[0]?.toLowerCase()));
-
-				if (!page) return;
-
 				await interaction.update({
-					embeds: [page]
+					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]]
 				});
 			}
 		}
@@ -183,7 +176,9 @@ async function execute(bot, message, args, command, data) {
 			await helpMessage?.edit({
 				components: []
 			});
-		} catch (err) {}
+		} catch (err) {
+			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
+		}
 	});
 }
 

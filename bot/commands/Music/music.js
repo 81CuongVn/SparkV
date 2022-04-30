@@ -42,7 +42,7 @@ async function execute(bot, message, args, command, data) {
 			if (!queue) return await message.replyT(`${bot.config.emojis.error} | The queue is empty! Try adding some songs.`);
 
 			const queueSongs = queue.songs.map((song, id) => `${Emotes[id] || (id + 1)} **${song.name}** - ${song.formattedDuration}`).slice(0, 10);
-			const queueEmbed = new Discord.EmbedBuilder()
+			const queueEmbed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: message.user.tag,
 					iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -66,7 +66,7 @@ async function execute(bot, message, args, command, data) {
 
 			const song = queue.songs[0];
 			const queueSongs = queue.songs.map((song, id) => `${Emotes[id] || (id + 1)} **${song.name}** - ${song.formattedDuration}`).slice(0, 10);
-			const SongAddedQueue = new Discord.EmbedBuilder()
+			const SongAddedQueue = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Playing ${song.name} by ${song.uploader.name} To Queue`)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
 				.addField("`⏳` Duration", `\`${queue.formattedCurrentTime}/${song.formattedDuration}\``, true)
@@ -82,24 +82,24 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTimestamp();
 
-			const TogglePlayingButton = new Discord.ButtonBuilder()
+			const TogglePlayingButton = new Discord.MessageButton()
 				.setEmoji("⏯")
 				.setCustomId("TP")
-				.setStyle(Discord.ButtonStyle.Primary);
+				.setStyle("PRIMARY");
 
-			const LoopButton = new Discord.ButtonBuilder()
+			const LoopButton = new Discord.MessageButton()
 				.setEmoji("🔁")
 				.setCustomId("loop")
-				.setStyle(Discord.ButtonStyle.Primary);
+				.setStyle("PRIMARY");
 
-			const StopButton = new Discord.ButtonBuilder()
+			const StopButton = new Discord.MessageButton()
 				.setEmoji("⏹️")
 				.setCustomId("stop")
-				.setStyle(bot.functions.getButtonStyle("DANGER"));
+				.setStyle("DANGER");
 
 			const MusicMessage = await message.editT({
 				embeds: [SongAddedQueue],
-				components: [new Discord.ActionRowBuilder().addComponents(TogglePlayingButton, StopButton, LoopButton)],
+				components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)],
 				fetchReply: true
 			});
 
@@ -114,11 +114,11 @@ async function execute(bot, message, args, command, data) {
 				if (!queue) {
 					return interaction.replyT({
 						content: "There is no music playing.",
-						ephemeral: true
+						ephemeral: true,
 					});
 				}
 
-				const embed = new Discord.EmbedBuilder()
+				const embed = new Discord.MessageEmbed()
 					.setAuthor({
 						name: song.user.username,
 						iconURL: song.user.displayAvatarURL({ dynamic: true })
@@ -135,7 +135,7 @@ async function execute(bot, message, args, command, data) {
 						2
 					];
 
-					const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
+					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
 					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
 
 					queue.setRepeatMode(nextLoopMode);
@@ -151,14 +151,14 @@ async function execute(bot, message, args, command, data) {
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
 							.setDescription(`Resumed ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-							.setColor("#57F287");
+							.setColor("GREEN");
 					} else {
 						queue.pause();
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
 							.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-							.setColor("#ED4245");
+							.setColor("RED");
 					}
 				} else if (interaction.customId === "stop") {
 					queue.stop();
@@ -166,12 +166,12 @@ async function execute(bot, message, args, command, data) {
 					embed
 						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
 						.setDescription(`Stopped playing ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-						.setColor("#ED4245");
+						.setColor("RED");
 				}
 
 				interaction.replyT({
 					embeds: [embed],
-					ephemeral: true
+					ephemeral: true,
 				});
 			});
 
@@ -201,7 +201,7 @@ async function execute(bot, message, args, command, data) {
 
 			queue.skip();
 
-			const embed = new Discord.EmbedBuilder()
+			const embed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: message.user.tag,
 					iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -209,7 +209,7 @@ async function execute(bot, message, args, command, data) {
 				.setTitle(`${bot.config.emojis.error} | Next!`)
 				.setDescription(`Going to the next song.`)
 				.setFooter(bot.config.embed.footer)
-				.setColor("#ED4245");
+				.setColor("RED");
 
 			await message.replyT({
 				embeds: [embed]
@@ -301,7 +301,7 @@ async function execute(bot, message, args, command, data) {
 
 		bot.distube.play(message.member.voice.channel, query, {
 			textChannel: message.channel,
-			member: message.member
+			member: message.member,
 		});
 
 		return await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
@@ -323,7 +323,7 @@ async function execute(bot, message, args, command, data) {
 
 		queue.skip();
 
-		const embed = new Discord.EmbedBuilder()
+		const embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -331,7 +331,7 @@ async function execute(bot, message, args, command, data) {
 			.setTitle(`${bot.config.emojis.error} | Skipped!`)
 			.setDescription(`Skiped to the next song.`)
 			.setFooter(bot.config.embed.footer)
-			.setColor("#ED4245");
+			.setColor("RED");
 
 		await message.replyT({
 			embeds: [embed]
@@ -417,15 +417,15 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "pause",
-							value: "pause"
+							value: "pause",
 						},
 						{
 							name: "resume",
-							value: "resume"
+							value: "resume",
 						},
 						{
 							name: "shuffle",
-							value: "shuffle"
+							value: "shuffle",
 						}
 					]
 				}

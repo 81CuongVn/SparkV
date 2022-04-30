@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const cmd = require("@templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
-	const embed = new Discord.EmbedBuilder()
+	const embed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: (message?.user ? message.user : message.author).tag,
 			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -13,7 +13,7 @@ async function execute(bot, message, args, command, data) {
 			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("#57F287");
+		.setColor("GREEN");
 
 	try {
 		await message.guild.roles.cache.forEach(role => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: true }));
@@ -31,7 +31,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: ["ulock"],
 	usage: "",
-	perms: ["ManageChannels"],
-	bot_perms: ["ManageChannels"],
-	slash: true
+	perms: ["MANAGE_CHANNELS"],
+	bot_perms: ["MANAGE_CHANNELS"],
+	slash: true,
 });

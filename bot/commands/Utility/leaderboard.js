@@ -8,7 +8,7 @@ async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
 
 	if (type === "leveling") {
-		if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. You can enable it on my settings panel, by typing `/settings`");
+		if (data.guild.leveling.enabled === "false") return await message.replyT("Leveling is disabled. Please enable it on the dashboard.");
 
 		let TopMembers = await bot.MemberSchema.find({ guildID: message.guild.id }).sort([["xp", "descending"]]).exec();
 		TopMembers = TopMembers.slice(0, 10);
@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 			});
 		}
 
-		const LeaderboardEmbed = new Discord.EmbedBuilder()
+		const LeaderboardEmbed = new Discord.MessageEmbed()
 			.setTitle(`${message.guild.name}'s Level Leaderboard`)
 			.setDescription(Leaderboard.map(data => `${Emotes[data.rank - 1] || "🏅"} **Level ${data.level}** - ${data.username}#${data.discriminator}`).join("\n"))
 			.setFooter({
@@ -37,7 +37,7 @@ async function execute(bot, message, args, command, data) {
 			.setColor(bot.config.embed.color);
 
 		await message.replyT({
-			embeds: [LeaderboardEmbed]
+			embeds: [LeaderboardEmbed],
 		});
 	} else if (type === "money") {
 		const global = data.options.getBoolean("global") || false;
@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 		if (global === false) Leaderboard = Leaderboard.filter(user => message.guild.members.cache.has(user.id));
 
 		let rank = 0;
-		const LeaderboardEmbed = new Discord.EmbedBuilder()
+		const LeaderboardEmbed = new Discord.MessageEmbed()
 			.setTitle(`${message.guild.name}'s Money Leaderboard`)
 			.setDescription(Leaderboard.map(data => {
 				rank++;
@@ -63,11 +63,11 @@ async function execute(bot, message, args, command, data) {
 				text: `${bot.user.username} • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
-			.setColor("#57F287")
+			.setColor("GREEN")
 			.setTimestamp();
 
 		await message.replyT({
-			embeds: [LeaderboardEmbed]
+			embeds: [LeaderboardEmbed],
 		});
 	}
 }

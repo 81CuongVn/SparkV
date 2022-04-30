@@ -11,7 +11,7 @@ module.exports = {
 
 		if (!channel) return;
 
-		const embed = new Discord.EmbedBuilder()
+		const embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: user.tag,
 				iconURL: user.displayAvatarURL({ dynamic: true })
@@ -21,7 +21,7 @@ module.exports = {
 				text: `User ID: ${user.id}`,
 				iconURL: newM.author.displayAvatarURL({ dynamic: true })
 			})
-			.setColor("#ED4245")
+			.setColor("RED")
 			.setTimestamp();
 
 		await channel.send({

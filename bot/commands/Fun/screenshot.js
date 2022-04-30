@@ -16,7 +16,7 @@ async function execute(bot, message, args, command, data) {
 		data = Buffer.from(data.data, "base64");
 
 		const Image = new Discord.MessageAttachment(data, `website.png`);
-		const ImageEmbed = new Discord.EmbedBuilder()
+		const ImageEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ format: "png" })
@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ format: "png" })
 			})
-			.setColor("#57F287");
+			.setColor("GREEN");
 
 		await ImageLoading.edit({
 			embeds: [ImageEmbed],
@@ -36,11 +36,11 @@ async function execute(bot, message, args, command, data) {
 	}).catch(async err => {
 		bot.logger(err, "error");
 
-		const ImageEmbed = new Discord.EmbedBuilder()
+		const ImageEmbed = new Discord.MessageEmbed()
 			.setTitle(await message.translate(`Screenshot of ${website} Failed!`))
 			.setDescription(await message.translate("An error occured while trying to take a screenshot of this website. This could be either because you supplied a bad URL, or the website you sent isn't working right. Please try again later!"))
 			.addField("Error", err.message, true)
-			.setColor("#ED4245");
+			.setColor("RED");
 
 		await ImageLoading.edit({
 			embeds: [ImageEmbed]

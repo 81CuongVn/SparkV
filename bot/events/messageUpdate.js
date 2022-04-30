@@ -20,7 +20,7 @@ module.exports = {
 
 		if (!channel) return;
 
-		const embed = new Discord.EmbedBuilder()
+		const embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: newM.author.tag,
 				iconURL: newM.author.displayAvatarURL({ dynamic: true })
@@ -38,5 +38,5 @@ module.exports = {
 		await channel.send({
 			embeds: [embed]
 		}).catch(() => {});
-	}
+	},
 };

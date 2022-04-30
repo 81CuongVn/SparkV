@@ -1,5 +1,5 @@
 /* eslint-disable no-return-assign */
-const { Message, EmbedBuilder, Interaction } = require("discord.js");
+const { Message, MessageEmbed, Interaction } = require("discord.js");
 const translate = require("@vitalets/google-translate-api");
 
 async function translateContent(content) {
@@ -53,7 +53,7 @@ async function replyTranslate(options) {
 			fetchReply: true,
 			allowedMentions: {
 				repliedUser: false
-			}
+			},
 		};
 
 		options = newOptions;
@@ -88,7 +88,7 @@ async function editTranslate(options) {
 			fetchReply: true,
 			allowedMentions: {
 				repliedUser: false
-			}
+			},
 		};
 
 		options = newOptions;
