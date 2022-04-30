@@ -5,12 +5,12 @@ const cmd = require("@templates/command");
 async function execute(bot, message, args, command, data) {
 	const action = data.options.getString("action");
 	const amount = data.options.getNumber("money");
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("GREEN")
+		.setColor("#57F287")
 		.setTimestamp();
 
 	if (action === "deposit") {

@@ -7,7 +7,7 @@ async function execute(bot, message, args, command, data) {
 
 	const UserData = await bot.database.getUser(User.id);
 
-	const BalanceEmbed = new Discord.MessageEmbed()
+	const BalanceEmbed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: `${User.tag}'s Balance`,
 			iconURL: User.displayAvatarURL({ dynamic: true })

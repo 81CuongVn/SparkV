@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, EnumResolvers } = require("discord.js");
 
 const cmd = require("../../templates/command");
 
@@ -21,12 +21,14 @@ async function execute(bot, message, args, command, data) {
 
 		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
 
-		const NewEmbed = new MessageEmbed()
+		const NewEmbed = new EmbedBuilder()
 			.setAuthor({
 				name: (message?.applicationId ? message.user : message.author).tag,
 				iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.addFields(commands)
+			.setThumbnail(bot.user.displayAvatarURL())
+			.setImage("https://www.sparkv.tk/assets/images/banner.gif")
 			.setFooter({
 				text: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
 				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
@@ -37,36 +39,36 @@ async function execute(bot, message, args, command, data) {
 		pages.push(NewEmbed);
 	});
 
-	const InviteButton = new MessageButton()
+	const InviteButton = new ButtonBuilder()
 		.setURL(bot.config.bot_invite)
 		.setEmoji(bot.config.emojis.plus)
 		.setLabel(await message.translate("Invite"))
-		.setStyle("LINK");
+		.setStyle(bot.functions.getButtonStyle("LINK"));
 
-	const SupportButton = new MessageButton()
+	const SupportButton = new ButtonBuilder()
 		.setURL(bot.config.support.invite)
 		.setEmoji(bot.config.emojis.question)
 		.setLabel(await message.translate("Support Server"))
-		.setStyle("LINK");
+		.setStyle(bot.functions.getButtonStyle("LINK"));
 
-	const VoteButton = new MessageButton()
+	const VoteButton = new ButtonBuilder()
 		.setURL("https://top.gg/bot/884525761694933073")
 		.setEmoji(bot.config.emojis.stats)
 		.setLabel(await message.translate("Vote"))
-		.setStyle("LINK");
+		.setStyle(bot.functions.getButtonStyle("LINK"));
 
-	const WebsiteButton = new MessageButton()
+	const WebsiteButton = new ButtonBuilder()
 		.setURL("https://www.sparkv.tk/")
 		.setEmoji(bot.config.emojis.globe)
 		.setLabel(await message.translate("Website"))
-		.setStyle("LINK");
+		.setStyle(bot.functions.getButtonStyle("LINK"));
 
 	if (data.options.getString("search")) {
 		const name = data.options.getString("search").toString().toLowerCase();
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 		const category = bot.categories.get(name.charAt(0).toUpperCase() + name.slice(1));
 
-		let embed = new MessageEmbed();
+		let embed = new EmbedBuilder();
 
 		if (cmd) {
 			embed
@@ -95,13 +97,13 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTitle(await message.translate("Uh oh!"))
 				.setDescription(await message.translate("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**"))
-				.setColor("RED");
+				.setColor("#ED4245");
 		}
 
 		return await message.replyT({
 			embeds: [embed],
 			components: [
-				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
+				new ActionRowBuilder().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
 			]
 		});
 	}
@@ -117,7 +119,7 @@ async function execute(bot, message, args, command, data) {
 		});
 	});
 
-	const Menu = new MessageEmbed()
+	const Menu = new EmbedBuilder()
 		.setAuthor({
 			name: (message?.applicationId ? message.user : message.author).tag,
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -140,7 +142,7 @@ async function execute(bot, message, args, command, data) {
 
 	pages.push(Menu);
 
-	const CatSelect = new MessageSelectMenu()
+	const CatSelect = new SelectMenuBuilder()
 		.setCustomId("SelectHelpMenu")
 		.setPlaceholder(await message.translate("Select a category to view its commands."))
 		.addOptions(Selections);
@@ -148,8 +150,8 @@ async function execute(bot, message, args, command, data) {
 	const helpMessage = await message.replyT({
 		embeds: [Menu],
 		components: [
-			new MessageActionRow().addComponents(CatSelect),
-			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
+			new ActionRowBuilder().addComponents([CatSelect]),
+			new ActionRowBuilder().addComponents([InviteButton, SupportButton, VoteButton, WebsiteButton])
 		],
 		fetchReply: true
 	});
@@ -165,8 +167,12 @@ async function execute(bot, message, args, command, data) {
 	collector.on("collect", async interaction => {
 		if (interaction.customId) {
 			if (interaction.customId === "SelectHelpMenu") {
+				const page = pages.find(p => p?.data?.footer?.text?.toLowerCase()?.includes(interaction?.values[0]?.toLowerCase()));
+
+				if (!page) return;
+
 				await interaction.update({
-					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]]
+					embeds: [page]
 				});
 			}
 		}
@@ -177,9 +183,7 @@ async function execute(bot, message, args, command, data) {
 			await helpMessage?.edit({
 				components: []
 			});
-		} catch (err) {
-			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
-		}
+		} catch (err) {}
 	});
 }
 

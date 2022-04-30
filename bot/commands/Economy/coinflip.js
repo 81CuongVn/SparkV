@@ -9,7 +9,7 @@ async function execute(bot, message, args, command, data) {
 	const Bet = data.options.getNumber("bet").toString();
 
 	const ReplyText = Math.floor(Math.random() * Replies.length);
-	const Embed = new Discord.MessageEmbed()
+	const Embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -22,13 +22,13 @@ async function execute(bot, message, args, command, data) {
 
 		Embed
 			.setDescription(`Congrats, you won **⏣${await bot.functions.formatNumber(Bet * 2)}** coins!\nBecause you bet on ${Side}, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
-			.setColor("GREEN");
+			.setColor("#57F287");
 	} else {
 		data.user.money.balance -= Bet;
 
 		Embed
 			.setDescription(`Aww, you bet on ${Side} however your coin landed on ${Replies[ReplyText]}. You lost **⏣${await bot.functions.formatNumber(Bet)}** coins.\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`)
-			.setColor("RED");
+			.setColor("#ED4245");
 	}
 
 	data.user.markModified("money.balance");

@@ -35,7 +35,7 @@ async function execute(bot, interaction, args, command, data) {
 	}
 
 	LyricsSubArray.map((i, v) => {
-		const SongEmbed = new Discord.MessageEmbed()
+		const SongEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: interaction.user.tag,
 				iconURL: interaction.user.displayAvatarURL({ dynamic: true })
@@ -51,29 +51,29 @@ async function execute(bot, interaction, args, command, data) {
 		pages.push(SongEmbed);
 	});
 
-	const quickLeft = new Discord.MessageButton()
+	const quickLeft = new Discord.ButtonBuilder()
 		.setEmoji("⬅️")
 		.setCustomId("quickLeft")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const left = new Discord.MessageButton()
+	const left = new Discord.ButtonBuilder()
 		.setEmoji(bot.config.emojis.arrows.left)
 		.setCustomId("left")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const right = new Discord.MessageButton()
+	const right = new Discord.ButtonBuilder()
 		.setEmoji(bot.config.emojis.arrows.right)
 		.setCustomId("right")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-	const quickRight = new Discord.MessageButton()
+	const quickRight = new Discord.ButtonBuilder()
 		.setEmoji("➡️")
 		.setCustomId("quickRight")
-		.setStyle("SECONDARY");
+		.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
 	const msg = await interaction.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)],
+		components: [new Discord.ActionRowBuilder().addComponents(quickLeft, left, right, quickRight)],
 		fetchReply: true
 	});
 
@@ -110,7 +110,7 @@ async function execute(bot, interaction, args, command, data) {
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
-				],
+				]
 			});
 		} catch (err) {
 			// Page deleted.

@@ -6,7 +6,7 @@ const cmd = require("@templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const loadingEmbed = new Discord.MessageEmbed()
+		const loadingEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.user.tag,
 				iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -29,7 +29,7 @@ module.exports = new cmd(
 
 		// RamData = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)
 
-		const StatsEmbed = new Discord.MessageEmbed()
+		const StatsEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: (message.user ? message.user : message.author).tag,
 				iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -55,5 +55,5 @@ module.exports = new cmd(
 		aliases: ["ping", "pong", "up", "ram", "memory", "uptime", "latency", "data", "storage"],
 		perms: [],
 		slash: true
-	},
+	}
 );

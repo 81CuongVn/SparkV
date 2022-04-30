@@ -4,7 +4,7 @@ const cmd = require("@templates/command");
 
 async function execute(bot, message, args, command, data) {
 	const type = data.options.getString("type");
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: bot.user.tag,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
@@ -32,7 +32,7 @@ async function execute(bot, message, args, command, data) {
 		];
 
 		const myPerms = message.channel.permissionsFor(message.guild.me);
-		const perms = Object.keys(Discord.Permissions.FLAGS);
+		const perms = Object.keys(Discord.Permissions.Flags);
 
 		let description = "";
 
@@ -97,7 +97,7 @@ async function execute(bot, message, args, command, data) {
 					process.env.BASEURL
 				}/) to view my website.`
 			)
-			.setColor("GREEN");
+			.setColor("#57F287");
 	}
 
 	await message.replyT({

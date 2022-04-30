@@ -57,7 +57,7 @@ module.exports = {
 			const time = userCooldown[command.settings.name] || 0;
 
 			if (time && (time > Date.now())) {
-				const cooldownEmbed = new Discord.MessageEmbed()
+				const cooldownEmbed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: interaction.user.tag,
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
@@ -65,7 +65,7 @@ module.exports = {
 					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
 					.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
 					.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-					.setColor("RED")
+					.setColor("#ED4245")
 					.setFooter({
 						text: bot.config.embed.footer,
 						iconURL: bot.user.displayAvatarURL()
@@ -104,15 +104,20 @@ module.exports = {
 			} catch (error) {
 				bot.logger(error, "error");
 
-				const ErrorEmbed = new Discord.MessageEmbed()
+				const ErrorEmbed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: interaction.user.tag,
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					})
 					.setTitle("Uh oh!")
 					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-					.addField("**Error**", `\`\`\`${error.message}\`\`\``)
-					.setColor("RED");
+					.addFields([
+						{
+							name: "**Error**",
+							value: `\`\`\`${error.message}\`\`\``
+						}
+					])
+					.setColor("#ED4245");
 
 				await interaction.replyT({
 					embeds: [ErrorEmbed],
@@ -174,7 +179,7 @@ module.exports = {
 						permissionOverwrites
 					});
 
-					const supportEmbed = new Discord.MessageEmbed()
+					const supportEmbed = new Discord.EmbedBuilder()
 						.setTitle(`Support Awaits!`)
 						.setDescription(`Support will be with you shortly.\n\nTicket Creator: ${interaction.member.user}`)
 						.setFooter({
@@ -184,37 +189,37 @@ module.exports = {
 						.setColor("BLUE")
 						.setTimestamp();
 
-					const lockButton = new Discord.MessageButton()
+					const lockButton = new Discord.ButtonBuilder()
 						.setEmoji("🔒")
-						.setStyle("SECONDARY")
+						.setStyle(bot.functions.getButtonStyle("SECONDARY"))
 						.setCustomId(`ticket_close_${interaction.channel.id}`);
 
 					ticketChannel.send({
 						embeds: [supportEmbed],
 						components: [
-							new Discord.MessageActionRow().addComponents(lockButton)
+							new Discord.ActionRowBuilder().addComponents(lockButton)
 						]
 					});
 
 					interaction.followUp(`Your ticket has been created. ${ticketChannel}`);
 				} else if (interaction.customId.startsWith(`ticket_close`)) {
-					const closedEmbed = new Discord.MessageEmbed()
+					const closedEmbed = new Discord.EmbedBuilder()
 						.setColor("#ffffff")
 						.setDescription(
 							`Ticket closed by ${interaction.user}\n🔓 Reopen Ticket\n📛 Delete Ticket`
 						);
 
-					const reopen = new Discord.MessageButton()
+					const reopen = new Discord.ButtonBuilder()
 						.setLabel("")
 						.setCustomId(`ticket_reopen_${interaction.channel.id}`)
 						.setEmoji("🔓")
-						.setStyle("SUCCESS");
+						.setStyle(bot.functions.getButtonStyle("SUCCESS"));
 
-					const deleteinteraction = new Discord.MessageButton()
+					const deleteinteraction = new Discord.ButtonBuilder()
 						.setLabel("")
 						.setCustomId(`ticket_delete_${interaction.channel.id}`)
 						.setEmoji("📛")
-						.setStyle("DANGER");
+						.setStyle(bot.functions.getButtonStyle("DANGER"));
 
 					interaction.channel
 						.edit({
@@ -243,7 +248,7 @@ module.exports = {
 					interaction.reply({
 						embeds: [closedEmbed],
 						components: [
-							new Discord.MessageActionRow().addComponents(reopen, deleteinteraction)
+							new Discord.ActionRowBuilder().addComponents(reopen, deleteinteraction)
 						]
 					}).catch(err => { });
 				} else if (interaction.customId === `ticket_reopen_${interaction.channel.id}`) {
@@ -274,7 +279,7 @@ module.exports = {
 
 					interaction.reply(`This ticket has been reopened. Welcome back!`);
 				} else if (interaction.customId.startsWith("ticket_delete")) {
-					const deleteEmbed = new Discord.MessageEmbed()
+					const deleteEmbed = new Discord.EmbedBuilder()
 						.setColor("#ffffff")
 						.setDescription("Ticket will be deleted in 5 seconds.");
 

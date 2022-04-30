@@ -5,7 +5,7 @@ const SlotItems = [
 	"🍏",
 	"🍓",
 	"🍒",
-	"🍑",
+	"🍑"
 ];
 
 const cmd = require("@templates/command");
@@ -54,7 +54,7 @@ async function execute(bot, message, args, command, data) {
 
 	if (amountWon > 0) win = true;
 
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
@@ -70,13 +70,13 @@ async function execute(bot, message, args, command, data) {
 		data.user.money.balance += amountWon;
 
 		embed
-			.setColor("GREEN")
+			.setColor("#57F287")
 			.setDescription(`Congrats, you won **⏣${await bot.functions.formatNumber(amountWon)}** coins!\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and won, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`);
 	} else {
 		data.user.money.balance -= parseInt(bet);
 
 		embed
-			.setColor("RED")
+			.setColor("#ED4245")
 			.setDescription(`Aww, you lost **⏣${await bot.functions.formatNumber(bet)}** coins.\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and lost, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`);
 	}
 
@@ -84,7 +84,7 @@ async function execute(bot, message, args, command, data) {
 	await data.user.save();
 
 	await message.replyT({
-		embeds: [embed],
+		embeds: [embed]
 	});
 }
 

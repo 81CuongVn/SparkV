@@ -17,13 +17,13 @@ module.exports = {
 
 		if (!logChannel) return;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setDescription(`**Channel Deleted ${channel}**`)
 			.setFooter({
 				text: `Channel ID: ${channel.id}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
-			.setColor("RED")
+			.setColor("#ED4245")
 			.setTimestamp();
 
 		await logChannel.send({

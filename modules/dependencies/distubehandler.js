@@ -10,13 +10,13 @@ const { YtDlpPlugin } = require("@distube/yt-dlp");
 module.exports = async bot => {
 	const spotifySettings = {
 		parallel: true,
-		emitEventsAfterFetching: true,
+		emitEventsAfterFetching: true
 	};
 
 	if (process.env.SPOTIFYID && process.env.SPOTIFYSECRET) {
 		spotifySettings.api = {
 			clientId: process.env.SPOTIFYID,
-			clientSecret: process.env.SPOTIFYSECRET,
+			clientSecret: process.env.SPOTIFYSECRET
 		};
 	}
 
@@ -31,7 +31,6 @@ module.exports = async bot => {
 		savePreviousSongs: true,
 		emitAddSongWhenCreatingQueue: false,
 		emptyCooldown: 25,
-		youtubeDL: false,
 		plugins: [
 			new YtDlpPlugin(),
 			new SpotifyPlugin(spotifySettings),
@@ -41,25 +40,25 @@ module.exports = async bot => {
 	});
 
 	async function handleMusic(queue, song, mEmbed, options) {
-		const TogglePlayingButton = new Discord.MessageButton()
+		const TogglePlayingButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.pause)
 			.setCustomId("TP")
-			.setStyle("DANGER");
+			.setStyle(bot.functions.getButtonStyle("DANGER"));
 
-		const LoopButton = new Discord.MessageButton()
+		const LoopButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.loop)
 			.setCustomId("loop")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-		const LyricsButton = new Discord.MessageButton()
+		const LyricsButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.queue)
 			.setCustomId("lyrics")
-			.setStyle("SECONDARY");
+			.setStyle(bot.functions.getButtonStyle("SECONDARY"));
 
-		const StopButton = new Discord.MessageButton()
+		const StopButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.music_stop)
 			.setCustomId("stop")
-			.setStyle("DANGER");
+			.setStyle(bot.functions.getButtonStyle("DANGER"));
 
 		const buttons = [];
 
@@ -101,7 +100,7 @@ module.exports = async bot => {
 				collector.stop();
 			}
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: song.member.user.username,
 					iconURL: song.member.user.displayAvatarURL({ dynamic: true })
@@ -134,23 +133,23 @@ module.exports = async bot => {
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
 						.setDescription(`Resumed ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-						.setColor("GREEN");
+						.setColor("#57F287");
 
-					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
+					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle(bot.functions.getButtonStyle("DANGER"));
 				} else {
 					queue.pause();
 
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Paused!`)
 						.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-						.setColor("RED");
+						.setColor("#ED4245");
 
-					TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
+					TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle(bot.functions.getButtonStyle("SUCCESS"));
 				}
 
 				MusicMessage.editT({
 					embeds: [mEmbed],
-					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
+					components: [new Discord.ActionRowBuilder().addComponents(TogglePlayingButton, StopButton, LoopButton)]
 				});
 			} else if (interaction.customId === "stop") {
 				queue.stop();
@@ -158,7 +157,7 @@ module.exports = async bot => {
 				embed
 					.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
 					.setDescription(`Stopped playing ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
-					.setColor("RED");
+					.setColor("#ED4245");
 			} else if (interaction.customId === "lyrics") {
 				embed
 					.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
@@ -191,7 +190,7 @@ module.exports = async bot => {
 			queue.volume = 75;
 		})
 		.on("playSong", async (queue, song) => {
-			const NowPlayingEmbed = new Discord.MessageEmbed()
+			const NowPlayingEmbed = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${song.playlist?.name || song.name}`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
@@ -237,7 +236,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${queue.formattedCurrentTime}/${song.formattedDuration}\`\`\``,
-							inline: true,
+							inline: true
 						},
 						{
 							name: `${bot.config.emojis.clock} Song Progress`,
@@ -267,7 +266,7 @@ module.exports = async bot => {
 			}, 7.5 * 1000);
 		})
 		.on("addSong", async (queue, song) => {
-			const SongAddedQueue = new Discord.MessageEmbed()
+			const SongAddedQueue = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.music} | Added ${song.name} to Queue`)
 				.setURL(song.url)
 				.setImage(song.playlist?.thumbnail || song.thumbnail)
@@ -298,7 +297,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${song.formattedDuration}\`\`\``,
-							inline: true,
+							inline: true
 						},
 						{
 							name: `${bot.config.emojis.volume} Volume`,
@@ -323,7 +322,7 @@ module.exports = async bot => {
 			}, 7.5 * 1000);
 		})
 		.on("addList", async (queue, playlist) => {
-			const SongAddedQueue = new Discord.MessageEmbed()
+			const SongAddedQueue = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.music} | Added ${playlist.name} (Playlist) To Queue`)
 				.setDescription(playlist.name)
 				.setImage(playlist?.thumbnail)

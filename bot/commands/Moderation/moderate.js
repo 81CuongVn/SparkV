@@ -15,12 +15,12 @@ async function execute(bot, interaction, args, command, data) {
 	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.editT(`${bot.config.emojis.alert} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 	if (!user.moderatable) return interaction.editT(`${bot.config.emojis.alert} | I cannot moderate this user.`);
 
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: interaction.user.tag,
 			iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("GREEN")
+		.setColor("#57F287")
 		.setTimestamp();
 
 	if (action === "warn") {
@@ -29,7 +29,7 @@ async function execute(bot, interaction, args, command, data) {
 		++memberData.infractionsCount;
 		memberData.infractions.push({
 			type: reason,
-			date: Date.now(),
+			date: Date.now()
 		});
 
 		memberData.markModified("infractionsCount");
@@ -40,7 +40,7 @@ async function execute(bot, interaction, args, command, data) {
 			.send(`${bot.config.emojis.warning} | You were warned in **${interaction.guild.name}**. **${reason}**`)
 			.catch(async err => await interaction.replyT(`${user}, you were warned in **${interaction.guild.name}**. I would've sent this to you in your DMs, but they were off. ${reason}.`));
 
-		embed.setDescription(`**${bot.config.emojis.alert} | Warn Successful**\nSuccessfully warned ${user}. **${reason}**`).setColor("GREEN");
+		embed.setDescription(`**${bot.config.emojis.alert} | Warn Successful**\nSuccessfully warned ${user}. **${reason}**`).setColor("#57F287");
 
 		bot.emit("userWarnAdd", interaction.guild, user, reason);
 	} else if (action === "kick") {
@@ -69,8 +69,8 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: "(user) (reason)",
-	perms: ["MODERATE_MEMBERS"],
-	bot_perms: ["MODERATE_MEMBERS"],
+	perms: ["ModerateMembers"],
+	bot_perms: ["ModerateMembers"],
 	slash: true,
 	ephemeral: true,
 	options: [
@@ -82,15 +82,15 @@ module.exports = new cmd(execute, {
 			choices: [
 				{
 					name: "warn",
-					value: "warn",
+					value: "warn"
 				},
 				{
 					name: "kick",
-					value: "kick",
+					value: "kick"
 				},
 				{
 					name: "ban",
-					value: "ban",
+					value: "ban"
 				}
 			]
 		},

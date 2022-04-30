@@ -37,7 +37,7 @@ module.exports = {
 		const botMember = await message.guild.members.fetch(bot.user.id);
 
 		// If the bot cannot send messages, return.
-		if (!botMember.permissionsIn(message.channel).has("SEND_MESSAGES")) return;
+		if (!botMember.permissionsIn(message.channel).has("SendMessages")) return;
 
 		// If the guild is part of the guild blacklist, return.
 		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
@@ -68,7 +68,7 @@ module.exports = {
 			// Vote reminder
 			if (data.user.votes.remind === "true") {
 				if (43200000 - (Date.now() - data.user.votes.voted) > 0) {
-					const voteEmbed = new Discord.MessageEmbed()
+					const voteEmbed = new Discord.EmbedBuilder()
 						.setAuthor({
 							name: message.author.tag,
 							iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -77,15 +77,15 @@ module.exports = {
 						.setDescription(`You can vote again on <:topgg:946558388261769227> **top.gg**.`)
 						.setColor(bot.config.embed.color);
 
-					const VoteButton = new Discord.MessageButton()
+					const VoteButton = new Discord.ButtonBuilder()
 						.setEmoji("<:topgg:946558388261769227>")
 						.setLabel("Vote")
 						.setURL("https://top.gg/bot/884525761694933073")
-						.setStyle("LINK");
+						.setStyle(bot.functions.getButtonStyle("LINK"));
 
 					message.author.send({
 						embeds: [voteEmbed],
-						components: [new Discord.MessageActionRow().addComponents(VoteButton)]
+						components: [new Discord.ActionRowBuilder().addComponents(VoteButton)]
 					});
 				}
 			}
@@ -385,14 +385,14 @@ module.exports = {
 
 			bot.logger(err, "error");
 
-			const ErrorEmbed = new Discord.MessageEmbed()
+			const ErrorEmbed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
 				})
 				.setTitle("Uh oh!")
 				.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
-				.setColor("RED");
+				.setColor("#ED4245");
 
 			await message.replyT({
 				embeds: [ErrorEmbed]

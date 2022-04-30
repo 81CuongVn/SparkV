@@ -79,7 +79,7 @@ async function execute(bot, message, args, command, data) {
 	if (state === "user") {
 		let user = data.options.getUser("user") || message.user;
 		const icon = message.options.getString("icon");
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: `${user.tag} (${user.bot ? await message.translate("Robot") : await message.translate("Human")})`,
 				iconURL: user.displayAvatarURL({ dynamic: true })
@@ -141,7 +141,7 @@ async function execute(bot, message, args, command, data) {
 				.addField(`${bot.config.emojis.clock} ${await message.translate("Join Position")}`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
 				.setColor(roleColor || bot.config.embed.color);
 
-			if (user.flags.toArray().length > 0) embed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
+			if (user.Flags.toArray().length > 0) embed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.Flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
 
 			embed
 				.addField(`${bot.config.emojis.plus} ${await message.translate("Registered")}`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
@@ -157,7 +157,7 @@ async function execute(bot, message, args, command, data) {
 	} else if (state === "server") {
 		let invite = data.options.getString("invite") || null;
 		const icon = message.options.getString("icon");
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: `${message.guild.name} (${message.guild.id})`,
 				iconURL: message.guild.iconURL({ dynamic: true, format: "png" })
@@ -223,25 +223,25 @@ async function execute(bot, message, args, command, data) {
 					text: `🔢 ID: ${message.guild.id} • ${bot.config.embed.footer}`,
 					iconURL: bot.user.displayAvatarURL({ dynamic: true })
 				})
-				.setColor("GREEN");
+				.setColor("#57F287");
 
 			if (message.guild?.welcome_screen?.description) embed.setDescription(message.guild.welcome_screen.description);
 			if (message.guild?.banner) embed.setImage(`https://cdn.discordapp.com/banners/${message.guild.id}/${message.guild.banner}.png?size=1024`);
 			if (message.guild?.vanity_url_code) embed.setURL(`https://discord.gg/${message.guild.vanityURLCode}`);
 
-			const serverIcon = new Discord.MessageButton()
+			const serverIcon = new Discord.ButtonBuilder()
 				.setLabel(await message.translate("Server Icon"))
 				.setEmoji("🖼️")
-				.setStyle("LINK")
+				.setStyle(bot.functions.getButtonStyle("LINK"))
 				.setURL(message.guild.iconURL({ dynamic: true }) || "https://cdn.discordapp.com/embed/avatars/1.png");
 
-			const bannerButton = new Discord.MessageButton()
+			const bannerButton = new Discord.ButtonBuilder()
 				.setLabel(await message.translate("Banner"))
 				.setEmoji("🏳️")
-				.setStyle("LINK")
+				.setStyle(bot.functions.getButtonStyle("LINK"))
 				.setURL(`https://cdn.discordapp.com/banners/${message.guild.id}/${message.guild.banner}.png?size=1024`);
 
-			const buttons = new Discord.MessageActionRow();
+			const buttons = new Discord.ActionRowBuilder();
 			buttons.addComponents(serverIcon);
 
 			if (message.guild?.banner) buttons.addComponents(bannerButton);

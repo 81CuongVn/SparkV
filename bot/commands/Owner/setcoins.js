@@ -14,13 +14,13 @@ async function execute(bot, message, args, command, data) {
 
 		await UserData.save();
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: User.user ? User.user.tag : User.tag,
 				iconURL: User.displayAvatarURL({ dynamic: true })
 			})
 			.setTitle(`Successfuly set coins to ⏣${bot.functions.formatNumber(UserData.money.balance)}.`)
-			.setColor("GREEN");
+			.setColor("#57F287");
 
 		return await message.replyT({
 			embeds: [embed]
@@ -28,7 +28,7 @@ async function execute(bot, message, args, command, data) {
 	} catch (err) {
 		bot.logger(err, "error");
 
-		const ErrorEmbed = new Discord.MessageEmbed()
+		const ErrorEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.author.tag,
 				iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -36,7 +36,7 @@ async function execute(bot, message, args, command, data) {
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to set ${interaction.user.tag}'s coins!**`)
 			.addField("**Error**", `\`\`\`${error.message}\`\`\``)
-			.setColor("RED");
+			.setColor("#ED4245");
 
 		return await message.replyT({
 			embeds: [ErrorEmbed]
@@ -49,5 +49,5 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	dirname: __dirname,
 	usage: `(user) (ammount)`,
-	ownerOnly: true,
+	ownerOnly: true
 });

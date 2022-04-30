@@ -4,7 +4,7 @@ const cmd = require("@templates/modCommand");
 
 async function execute(bot, message, args, command, data) {
 	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ")) || "No reason provided.";
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: (message?.user ? message.user : message.author).tag,
 			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -14,7 +14,7 @@ async function execute(bot, message, args, command, data) {
 			text: bot.config.embed.footer,
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setColor("RED");
+		.setColor("#ED4245");
 
 	try {
 		await message.guild.roles.cache.forEach(role => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: false }));
@@ -34,14 +34,14 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: "",
-	perms: ["MANAGE_CHANNELS"],
-	bot_perms: ["MANAGE_CHANNELS"],
+	perms: ["ManageChannels"],
+	bot_perms: ["ManageChannels"],
 	slash: true,
 	options: [
 		{
 			type: 3,
 			name: "reason",
-			description: "Reason for locking the server.",
-		},
+			description: "Reason for locking the server."
+		}
 	]
 });

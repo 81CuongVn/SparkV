@@ -31,7 +31,7 @@ module.exports = {
 			const foundStar = stars.embeds[0];
 			const msg = await channel.messages.fetch(stars.id);
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })
@@ -47,7 +47,7 @@ module.exports = {
 				embeds: [embed]
 			}).catch(() => {});
 		} else {
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
 					iconURL: message.author.displayAvatarURL({ dynamic: true })

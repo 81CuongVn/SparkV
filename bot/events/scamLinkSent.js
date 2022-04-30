@@ -9,13 +9,13 @@ module.exports = {
 
 		if (!channel) return;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.author.tag,
 				iconURL: message.author.displayAvatarURL({ dynamic: true })
 			})
 			.setDescription(`${bot.config.emojis.alert} | **${message.author} sent a scam link!**\n\n${bot.config.emojis.id} | **ID:** ${message.author.id}`)
-			.setColor("RED")
+			.setColor("#ED4245")
 			.setTimestamp();
 
 		await channel.send({

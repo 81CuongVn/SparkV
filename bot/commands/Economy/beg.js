@@ -14,7 +14,7 @@ const NoReplies = [
 
 async function execute(bot, message, args, command, data) {
 	const choice = Math.floor(Math.random() * 2);
-	const Embed = new Discord.MessageEmbed()
+	const Embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: (message.user ? message.user : message.author).tag,
 			iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
@@ -30,14 +30,14 @@ async function execute(bot, message, args, command, data) {
 		Embed
 			.setTitle(`**${YesReplies[ReplyText]}**`)
 			.setDescription(`From begging, you received **⏣${await bot.functions.formatNumber(RandomAmmount)}**. You now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins!`)
-			.setColor("GREEN");
+			.setColor("#57F287");
 	} else {
 		const ReplyText = Math.floor(Math.random() * YesReplies.length);
 
 		Embed
 			.setTitle(`**${NoReplies[ReplyText]}**`)
 			.setDescription(`No money for you. You're balance stays the same at **⏣${await bot.functions.formatNumber(data.user.money.balance)}** coins.`)
-			.setColor("RED");
+			.setColor("#ED4245");
 	}
 
 	data.user.markModified("money.balance");

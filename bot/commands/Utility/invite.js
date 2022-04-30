@@ -4,7 +4,7 @@ const cmd = require("@templates/command");
 
 module.exports = new cmd(
 	async (bot, message) => {
-		const InvitesEmbend = new Discord.MessageEmbed()
+		const InvitesEmbend = new Discord.EmbedBuilder()
 			.setTitle("Invites")
 			.setDescription(`The following are links for SparkV!`)
 			.setThumbnail(message?.applicationId ? message.user.displayAvatarURL({ dynamic: true, format: "gif" }) : message.author.displayAvatarURL({ dynamic: true, format: "gif" }))
@@ -17,7 +17,7 @@ module.exports = new cmd(
 			.setColor(bot.config.embed.color);
 
 		await await message.replyT({
-			embeds: [InvitesEmbend],
+			embeds: [InvitesEmbend]
 		});
 	},
 	{
@@ -27,5 +27,5 @@ module.exports = new cmd(
 		aliases: ["invite", "support"],
 		perms: [],
 		slash: true
-	},
+	}
 );

@@ -19,14 +19,14 @@ module.exports = {
 		const Owner = await guild?.fetchOwner() || null;
 
 		if (Logger) {
-			const ServerAddedEmbed = new Discord.MessageEmbed()
+			const ServerAddedEmbed = new Discord.EmbedBuilder()
 				.setTitle("🔼︱Guild Added")
 				.setDescription(`SparkV has joined **${guild.name} (${guild.id})**!`)
 				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
-				.setColor("GREEN");
+				.setColor("#57F287");
 
 			if (guild.vanityURLCode) {
 				ServerAddedEmbed
@@ -47,7 +47,7 @@ module.exports = {
 		}
 
 		if (guild.systemChannel) {
-			const WelcomeEmbed = new Discord.MessageEmbed()
+			const WelcomeEmbed = new Discord.EmbedBuilder()
 				.setTitle("Thanks for adding me!")
 				.setDescription(`I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can type \`/settings\`.\n\nSimply type the command \`/help\` to get a list of my commands.\nIf you have any questions, feel free to join our [Discord server](https://discord.gg/PPtzT8Mu3h).`)
 				.setThumbnail(bot.user.displayAvatarURL())
@@ -61,27 +61,27 @@ module.exports = {
 				});
 			}
 
-			const InviteButton = new Discord.MessageButton()
+			const InviteButton = new Discord.ButtonBuilder()
 				.setURL(bot.config.bot_invite)
 				.setEmoji(bot.config.emojis.plus)
 				.setLabel("Bot Invite")
-				.setStyle("LINK");
+				.setStyle(bot.functions.getButtonStyle("LINK"));
 
-			const SupportButton = new Discord.MessageButton()
+			const SupportButton = new Discord.ButtonBuilder()
 				.setURL(bot.config.support.invite)
 				.setEmoji(bot.config.emojis.question)
 				.setLabel("Support Invite")
-				.setStyle("LINK");
+				.setStyle(bot.functions.getButtonStyle("LINK"));
 
-			const WebsiteButton = new Discord.MessageButton()
+			const WebsiteButton = new Discord.ButtonBuilder()
 				.setURL("https://www.sparkv.tk/")
 				.setEmoji(bot.config.emojis.globe)
 				.setLabel("Website")
-				.setStyle("LINK");
+				.setStyle(bot.functions.getButtonStyle("LINK"));
 
 			await guild.systemChannel.send({
 				embeds: [WelcomeEmbed],
-				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, WebsiteButton)]
+				components: [new Discord.ActionRowBuilder().addComponents(InviteButton, SupportButton, WebsiteButton)]
 			}).catch(err => console.log(`Failed to send message to ${guild.name} (${guild.id})! ${err.message}`));
 		}
 	}

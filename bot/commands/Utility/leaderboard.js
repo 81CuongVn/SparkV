@@ -27,7 +27,7 @@ async function execute(bot, message, args, command, data) {
 			});
 		}
 
-		const LeaderboardEmbed = new Discord.MessageEmbed()
+		const LeaderboardEmbed = new Discord.EmbedBuilder()
 			.setTitle(`${message.guild.name}'s Level Leaderboard`)
 			.setDescription(Leaderboard.map(data => `${Emotes[data.rank - 1] || "🏅"} **Level ${data.level}** - ${data.username}#${data.discriminator}`).join("\n"))
 			.setFooter({
@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 		if (global === false) Leaderboard = Leaderboard.filter(user => message.guild.members.cache.has(user.id));
 
 		let rank = 0;
-		const LeaderboardEmbed = new Discord.MessageEmbed()
+		const LeaderboardEmbed = new Discord.EmbedBuilder()
 			.setTitle(`${message.guild.name}'s Money Leaderboard`)
 			.setDescription(Leaderboard.map(data => {
 				rank++;
@@ -63,7 +63,7 @@ async function execute(bot, message, args, command, data) {
 				text: `${bot.user.username} • ${bot.config.embed.footer}`,
 				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
-			.setColor("GREEN")
+			.setColor("#57F287")
 			.setTimestamp();
 
 		await message.replyT({
