@@ -1075,7 +1075,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: [],
-	perms: ["MANAGE_GUILD"],
+	perms: [],
 	slash: true,
 	slashOnly: true,
 	cooldown: 30
