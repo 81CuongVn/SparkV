@@ -5,7 +5,7 @@ module.exports = {
 	async execute(bot, message, data) {
 		if (!data?.logging?.enabled === "true") return;
 
-		const channel = channel?.guild?.channels?.cache.get(data.logging?.channel);
+		const channel = message.channel?.guild?.channels?.cache.get(data.logging?.channel);
 
 		if (!channel) return;
 
