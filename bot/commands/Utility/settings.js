@@ -1021,7 +1021,7 @@ async function execute(bot, message, args, command, data) {
 				});
 			} else if (interaction.customId === "exit") {
 				return await collector.stop();
-			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.customId.toLowerCase() === "toggle")) {
+			} else if (interaction?.customId === "toggle" && curSetting && curSetting?.buttons.find(button => button?.customId?.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
 
 				if (newState === "true") {
@@ -1032,7 +1032,7 @@ async function execute(bot, message, args, command, data) {
 				}
 
 				refreshSetting(curSetting);
-			} else if (curSetting && curSetting?.buttons.find(button => button.customId.toLowerCase() === interaction.customId.toLowerCase())) {
+			} else if (curSetting && curSetting?.buttons?.find(button => button?.customId?.toLowerCase() === interaction?.customId?.toLowerCase())) {
 				const button = curSetting.buttons.find(button => button.customId.toLowerCase() === interaction.customId.toLowerCase());
 				await button.setData();
 				refreshSetting(curSetting);
