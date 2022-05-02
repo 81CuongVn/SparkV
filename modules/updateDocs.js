@@ -264,7 +264,7 @@ module.exports = {
 					})
 					.forEach(cmd => {
 						cmdTable[cat.name].push({
-							name: `**${cmd.settings.name || "Command name invalid."}**`,
+							name: cmd.settings?.name || "Untitled Command",
 							description: cmd.settings.description || "No description for this command",
 							usage: cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",
 							cooldown: `${Math.ceil(cmd.settings.cooldown / 1000)} seconds`
