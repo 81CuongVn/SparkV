@@ -93,5 +93,5 @@ module.exports = {
             picture: "https://cdn.discordapp.com/attachments/955321206729502730/966335471955370034/TheDigital.png",
             role: "Developer of Status Bot & System Updates"
         }
-    ]
+    ],
 }
