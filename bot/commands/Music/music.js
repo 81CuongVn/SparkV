@@ -114,7 +114,7 @@ async function execute(bot, message, args, command, data) {
 				if (!queue) {
 					return interaction.replyT({
 						content: "There is no music playing.",
-						ephemeral: true,
+						ephemeral: true
 					});
 				}
 
@@ -135,7 +135,7 @@ async function execute(bot, message, args, command, data) {
 						2
 					];
 
-					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+					const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
 					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
 
 					queue.setRepeatMode(nextLoopMode);
@@ -171,7 +171,7 @@ async function execute(bot, message, args, command, data) {
 
 				interaction.replyT({
 					embeds: [embed],
-					ephemeral: true,
+					ephemeral: true
 				});
 			});
 
@@ -251,7 +251,7 @@ async function execute(bot, message, args, command, data) {
 		}
 	} else if (state === "song") {
 		const type = message.options.getString("action");
-		const number = messge.options.getNumber("number");
+		const number = message.options.getNumber("number");
 
 		if (type === "volume") {
 			let volume = data.options.getString("volume");
@@ -301,7 +301,7 @@ async function execute(bot, message, args, command, data) {
 
 		bot.distube.play(message.member.voice.channel, query, {
 			textChannel: message.channel,
-			member: message.member,
+			member: message.member
 		});
 
 		return await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
@@ -417,15 +417,15 @@ module.exports = new cmd(execute, {
 						},
 						{
 							name: "pause",
-							value: "pause",
+							value: "pause"
 						},
 						{
 							name: "resume",
-							value: "resume",
+							value: "resume"
 						},
 						{
 							name: "shuffle",
-							value: "shuffle",
+							value: "shuffle"
 						}
 					]
 				}
