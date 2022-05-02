@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Permissions } = require("discord.js");
+const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Options } = require("discord.js");
 
 const cmd = require("@templates/command");
 
@@ -95,7 +95,7 @@ async function setNewData(message, options) {
 						})
 						.setTitle("Uh oh!")
 						.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
-						.setColor("#ED4245");
+						.setColor("RED");
 
 					try {
 						return await message.replyT({
@@ -136,7 +136,7 @@ async function setNewData(message, options) {
 					})
 					.setTitle("Uh oh!")
 					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
-					.setColor("#ED4245");
+					.setColor("RED");
 
 				return await message.reply({
 					embeds: [ErrorEmbed]
@@ -286,17 +286,17 @@ async function execute(bot, message, args, command, data) {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (!m?.content) {
-									await m.replyT("Please send a valid category ID to setup the tickets system in.");
+									m.replyT("Please send a valid category ID to setup the tickets system in.");
 									return false;
 								}
 
 								if (m?.content.length > 24) {
-									await m.replyT("The category ID must be 24 characters or less.");
+									m.replyT("The category ID must be 24 characters or less.");
 									return false;
 								}
 
 								if (!m.guild.channels.cache.has(m.content)) {
-									await m.replyT("That is not a valid channel ID!");
+									m.replyT("That is not a valid channel ID!");
 									return false;
 								}
 
@@ -401,7 +401,7 @@ async function execute(bot, message, args, command, data) {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("#57F287");
+									.setColor("GREEN");
 
 								data.guild.antiScam.action = collected;
 								data.guild.markModified("antiScam.action");
@@ -447,7 +447,7 @@ async function execute(bot, message, args, command, data) {
 				// 				requestMsg
 				// 					.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 				// 					.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-				// 					.setColor("#57F287");
+				// 					.setColor("GREEN");
 
 				// 				data.guild.antiScam.action = collected;
 				// 				data.guild.markModified("antiScam.action");
@@ -516,7 +516,7 @@ async function execute(bot, message, args, command, data) {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("#57F287");
+									.setColor("GREEN");
 
 								data.guild.antiSpam.action = collected;
 								data.guild.markModified("antiSpam.action");
@@ -751,7 +751,7 @@ async function execute(bot, message, args, command, data) {
 
 		buttons.push({
 			type: 1,
-			components: [BackButton, WebsiteButton, SupportButton]
+			components: [BackButton, DashButton, SupportButton]
 		});
 
 		await botMessage.edit({
@@ -792,10 +792,9 @@ async function execute(bot, message, args, command, data) {
 		.setCustomId("back")
 		.setStyle("SECONDARY");
 
-	const WebsiteButton = new MessageButton()
-		.setURL(`https://${process.env.BASEURL}/`)
-		.setEmoji(bot.config.emojis.globe)
-		.setLabel("Website")
+	const DashButton = new MessageButton()
+		.setURL(`https://${process.env.BASEURL}/dashboard`)
+		.setLabel("Dashboard")
 		.setStyle("LINK");
 
 	const SupportButton = new MessageButton()
@@ -861,119 +860,17 @@ async function execute(bot, message, args, command, data) {
 
 	buttons.push({
 		type: 1,
-		components: [ExitButton, WebsiteButton, SupportButton]
+		components: [ExitButton, DashButton, SupportButton]
 	});
 
 	await bot.wait(750);
 
-	const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
-
-	if (!perms.has(Permissions.FLAGS.MANAGE_GUILD)) {
-		if (message.user.id === bot.config.ownerID) {
-			await botMessage.edit({
-				embeds: [
-					new MessageEmbed()
-						.setAuthor({
-							name: message.user.tag,
-							iconURL: message.user.displayAvatarURL({ dynamic: true })
-						})
-						.setDescription(`${bot.config.emojis.alert} | You do not have permission (MANAGE_GUILD) to manage this guild's settings for SparkV. However, you're my owner so you can have access. Please select below \`yes\` or \`no\` to continue.`)
-						.setColor("#ED4245")
-				],
-				components: [
-					{
-						type: 1,
-						components: [
-							new MessageButton()
-								.setEmoji(bot.config.emojis.success)
-								.setLabel("Yes")
-								.setStyle("SUCCESS")
-								.setCustomId("yes"),
-							new MessageButton()
-								.setEmoji(bot.config.emojis.error)
-								.setLabel("No")
-								.setStyle("DANGER")
-								.setCustomId("no")
-						]
-					},
-					{
-						type: 1,
-						components: [WebsiteButton, SupportButton]
-					}
-				],
-				fetchReply: true,
-				ephemeral: true
-			});
-
-			const collector = botMessage.createMessageComponentCollector({
-				filter: async interaction => {
-					if (interaction.user.id !== message.user.id) {
-						await interaction.reply({
-							content: `Only ${message.user} can edit these settings!`,
-							ephemeral: true
-						});
-					}
-
-					return interaction.user.id === message.user.id;
-				}, time: 300 * 1000, max: 1
-			});
-
-			collector.on("collect", async interaction => {
-				if (!interaction.deferred) interaction.deferUpdate();
-
-				if (interaction.customId === "no") {
-					await botMessage.edit({
-						embeds: [
-							new MessageEmbed()
-								.setAuthor({
-									name: message.user.tag,
-									iconURL: message.user.displayAvatarURL({ dynamic: true })
-								})
-								.setDescription(`${bot.config.emojis.alert} | You have chosen to not manage this guild's settings for SparkV.`)
-								.setColor("#ED4245")
-						],
-						components: [
-							{
-								type: 1,
-								components: [WebsiteButton, SupportButton]
-							}
-						],
-						fetchReply: true,
-						ephemeral: true
-					});
-				} else {
-					await botMessage.edit({
-						embeds: [Menu],
-						components: buttons,
-						fetchReply: true,
-						ephemeral: true
-					});
-				}
-			});
-		} else {
-			return await botMessage.edit({
-				embeds: [
-					new MessageEmbed()
-						.setAuthor({
-							name: message.user.tag,
-							iconURL: message.user.displayAvatarURL({ dynamic: true })
-						})
-						.setDescription(`${bot.config.emojis.alert} | You do not have permission (MANAGE_GUILD) to manage this server's settings for SparkV. Please contact the server owner to request this permission.`)
-						.setColor("#ED4245")
-				],
-				components: buttons,
-				fetchReply: true,
-				ephemeral: true
-			});
-		}
-	} else {
-		await botMessage.edit({
-			embeds: [Menu],
-			components: buttons,
-			fetchReply: true,
-			ephemeral: true
-		});
-	}
+	await botMessage.edit({
+		embeds: [Menu],
+		components: buttons,
+		fetchReply: true,
+		ephemeral: true
+	});
 
 	const collector = botMessage.createMessageComponentCollector({
 		filter: async interaction => {
@@ -1007,7 +904,7 @@ async function execute(bot, message, args, command, data) {
 
 				buttons.push({
 					type: 1,
-					components: [ExitButton, WebsiteButton, SupportButton]
+					components: [ExitButton, DashButton, SupportButton]
 				});
 
 				buttons = buttons.filter(Boolean);
@@ -1050,7 +947,7 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTitle("Uh oh!")
 				.setDescription(`**A critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-				.setColor("#ED4245");
+				.setColor("RED");
 
 			try {
 				return await botMessage.edit({
@@ -1076,7 +973,7 @@ module.exports = new cmd(execute, {
 	dirname: __dirname,
 	usage: "",
 	aliases: [],
-	perms: [],
+	perms: ["MANAGE_GUILD"],
 	slash: true,
 	slashOnly: true,
 	cooldown: 30
