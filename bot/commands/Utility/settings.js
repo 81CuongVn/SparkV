@@ -735,13 +735,10 @@ async function execute(bot, message, args, command, data) {
 				return buttonsIncluded.push(buttonData);
 			}
 
-			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button?.setDisabled(false));
+			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button?.data?.setDisabled(false));
 
-			if (curSetting?.getState() === "true") {
-				buttonsIncluded.push(button?.setDisabled(false));
-			} else if (curSetting?.getState() === "false") {
-				buttonsIncluded.push(button?.setDisabled(true));
-			}
+			if (curSetting?.getState() === "true") buttonsIncluded.push(button?.data?.setDisabled(false));
+			else if (curSetting?.getState() === "false") buttonsIncluded.push(button?.data?.setDisabled(true));
 		});
 
 		buttons.push({
@@ -867,7 +864,7 @@ async function execute(bot, message, args, command, data) {
 
 	const perms = message.channel.permissionsFor(message.user);
 
-	if (!perms.has(Permissions.FLAGS.MANAGE_GUILD)) {
+	if (perms.has(Permissions.FLAGS.MANAGE_GUILD)) {
 		if (message.user.id === bot.config.ownerID) {
 			await botMessage.edit({
 				embeds: [
