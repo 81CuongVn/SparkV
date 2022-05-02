@@ -730,17 +730,17 @@ async function execute(bot, message, args, command, data) {
 
 		curSetting.buttons.forEach(button => {
 			if (button.name.toLowerCase() === "toggle") {
-				const buttonData = button.data.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER");
+				const buttonData = button.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER");
 
 				return buttonsIncluded.push(buttonData);
 			}
 
-			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button.data.setDisabled(false));
+			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button.setDisabled(false));
 
 			if (curSetting?.getState() === "true") {
-				buttonsIncluded.push(button.data.setDisabled(false));
+				buttonsIncluded.push(button.setDisabled(false));
 			} else if (curSetting?.getState() === "false") {
-				buttonsIncluded.push(button.data.setDisabled(true));
+				buttonsIncluded.push(button.setDisabled(true));
 			}
 		});
 
@@ -756,7 +756,7 @@ async function execute(bot, message, args, command, data) {
 
 		await botMessage.edit({
 			embeds: [
-				pages.find(page => page.data.author.name.includes(curSetting.name))
+				pages.find(page => page.author.name.includes(curSetting.name))
 			],
 			components: buttons,
 			ephemeral: true
@@ -1021,7 +1021,7 @@ async function execute(bot, message, args, command, data) {
 				});
 			} else if (interaction.customId === "exit") {
 				return await collector.stop();
-			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.data.customId.toLowerCase() === "toggle")) {
+			} else if (interaction.customId === "toggle" && curSetting && curSetting.buttons.find(button => button.customId.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
 
 				if (newState === "true") {
@@ -1032,8 +1032,8 @@ async function execute(bot, message, args, command, data) {
 				}
 
 				refreshSetting(curSetting);
-			} else if (curSetting && curSetting?.buttons.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase())) {
-				const button = curSetting.buttons.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase());
+			} else if (curSetting && curSetting?.buttons.find(button => button.customId.toLowerCase() === interaction.customId.toLowerCase())) {
+				const button = curSetting.buttons.find(button => button.customId.toLowerCase() === interaction.customId.toLowerCase());
 				await button.setData();
 				refreshSetting(curSetting);
 			} else {
