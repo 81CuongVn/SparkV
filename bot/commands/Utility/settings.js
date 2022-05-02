@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Options } = require("discord.js");
+const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Permissions } = require("discord.js");
 
 const cmd = require("@templates/command");
 
@@ -865,12 +865,114 @@ async function execute(bot, message, args, command, data) {
 
 	await bot.wait(750);
 
-	await botMessage.edit({
-		embeds: [Menu],
-		components: buttons,
-		fetchReply: true,
-		ephemeral: true
-	});
+	const perms = message.channel.permissionsFor(message.user);
+
+	if (!perms.has(Permissions.FLAGS.MANAGE_GUILD)) {
+		if (message.user.id === bot.config.ownerID) {
+			await botMessage.edit({
+				embeds: [
+					new MessageEmbed()
+						.setAuthor({
+							name: message.user.tag,
+							iconURL: message.user.displayAvatarURL({ dynamic: true })
+						})
+						.setDescription(`${bot.config.emojis.alert} | You do not have permission (MANAGE_GUILD) to manage this guild's settings for SparkV. However, you're my owner so you can have access. Please select below \`yes\` or \`no\` to continue.`)
+						.setColor("RED")
+				],
+				components: [
+					{
+						type: 1,
+						components: [
+							new MessageButton()
+								.setEmoji(bot.config.emojis.success)
+								.setLabel("Yes")
+								.setStyle("SUCCESS")
+								.setCustomId("yes"),
+							new MessageButton()
+								.setEmoji(bot.config.emojis.error)
+								.setLabel("No")
+								.setStyle("DANGER")
+								.setCustomId("no")
+						]
+					},
+					{
+						type: 1,
+						components: [DashButton, SupportButton]
+					}
+				],
+				fetchReply: true,
+				ephemeral: true
+			});
+
+			const collector = botMessage.createMessageComponentCollector({
+				filter: async interaction => {
+					if (interaction.user.id !== message.user.id) {
+						await interaction.reply({
+							content: `Only ${message.user} can edit these settings!`,
+							ephemeral: true
+						});
+					}
+
+					return interaction.user.id === message.user.id;
+				}, time: 300 * 1000, max: 1
+			});
+
+			collector.on("collect", async interaction => {
+				if (!interaction.deferred) interaction.deferUpdate();
+
+				if (interaction.customId === "no") {
+					await botMessage.edit({
+						embeds: [
+							new MessageEmbed()
+								.setAuthor({
+									name: message.user.tag,
+									iconURL: message.user.displayAvatarURL({ dynamic: true })
+								})
+								.setDescription(`${bot.config.emojis.alert} | You have chosen to not manage this guild's settings for SparkV.`)
+								.setColor("RED")
+						],
+						components: [
+							{
+								type: 1,
+								components: [DashButton, SupportButton]
+							}
+						],
+						fetchReply: true,
+						ephemeral: true
+					});
+				} else {
+					await botMessage.edit({
+						embeds: [Menu],
+						components: buttons,
+						fetchReply: true,
+						ephemeral: true
+					});
+				}
+			});
+		} else {
+			return await botMessage.edit({
+				embeds: [
+					new MessageEmbed()
+						.setAuthor({
+							name: message.user.tag,
+							iconURL: message.user.displayAvatarURL({ dynamic: true })
+						})
+						.setDescription(`${bot.config.emojis.alert} | You do not have permission (MANAGE_GUILD) to manage this server's settings for SparkV. Please contact the server owner to request this permission.`)
+						.setColor("RED")
+				],
+				components: buttons,
+				fetchReply: true,
+				ephemeral: true
+			});
+		}
+	} else {
+		await botMessage.edit({
+			embeds: [Menu],
+			components: buttons,
+			fetchReply: true,
+			ephemeral: true
+		});
+	}
 
 	const collector = botMessage.createMessageComponentCollector({
 		filter: async interaction => {
