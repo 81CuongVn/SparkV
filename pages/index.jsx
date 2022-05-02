@@ -6,8 +6,8 @@ import Script from "next/script";
 
 import config from "../config";
 
-import hero from "../styles/hero.module.scss";
-import footer from "../styles/footer.module.scss";
+import "../styles/hero.module.scss";
+import "../styles/footer.module.scss";
 
 import Loader from "../components/loader";
 import Header from "../components/head";
@@ -164,7 +164,7 @@ export default function Render() {
                                     <div style={{ marginInlineEnd: "4px", marginTop: "5px" }}><Image defer height="28" width="28" src={r.picture} style={{ borderRadius: "50%" }} alt={`${r.username}"s Review`} /></div>
                                     <span style={{ verticalAlign: "middle" }}>{r.username}</span>
                                 </div>
-                                <p style={{ position: "absolute", marginTop: "8px", color: "rgb(209 213 219 / 0.8)" }}>{r.review}</p>
+                                <p style={{ position: "absolute", marginTop: "8px", color: "rgb(209 213 219 / 0.8)" }} dangerouslySetInnerHTML={{__html: r.review}} />
                                 <p style={{ color: "rgb(209 213 219 / 0.8)", textAlign: "end", marginInlineEnd: "10px", marginTop: "86px" }}>{r.role}</p>
                             </div>
                         ))}
@@ -229,9 +229,11 @@ export default function Render() {
                 </div>
             </footer>
 
-            <Link href="#">
-                <a className="back-to-top shadow button-secondary rounded-circle" id="back-to-top">
-                    <FontAwesomeIcon icon={faAngleUp} size={"lg"} />
+            <Link href="#top">
+                <a className="shadow button-secondary rounded-circle" style={{ position: "fixed", width: "3rem", height: "3rem", right: "1.875rem", bottom: "1.875rem", zIndex: "9999" }}>
+                    <span style={{ color: "#fff", fontSize: "1rem", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                        <FontAwesomeIcon icon={faAngleUp} size={"lg"} />
+                    </span>
                 </a>
             </Link>
         </>
