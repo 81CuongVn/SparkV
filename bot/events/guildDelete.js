@@ -11,10 +11,10 @@ module.exports = {
 			status: "online",
 			activities: [
 				{
-					name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
-					type: "PLAYING",
-				},
-			],
+					name: `/help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
+					type: "PLAYING"
+				}
+			]
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
@@ -22,7 +22,7 @@ module.exports = {
 
 		if (Logger) {
 			const ServerRemovedEmbed = new Discord.MessageEmbed()
-				.setTitle("🔽︱Guild Removed")
+				.setTitle(`${bot.config.emojis.arrows.down}︱Guild Removed`)
 				.setDescription(`SparkV left **${guild.name} (${guild.id})**.`)
 				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
@@ -44,8 +44,8 @@ module.exports = {
 			}
 
 			Logger.send({
-				embeds: [ServerRemovedEmbed],
+				embeds: [ServerRemovedEmbed]
 			});
 		}
-	},
+	}
 };

@@ -10,9 +10,9 @@ module.exports = {
 		bot.user.setPresence({
 			status: "online",
 			activities: [{
-				name: `/Help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
+				name: `/help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
 				type: "PLAYING"
-			}],
+			}]
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
@@ -20,7 +20,7 @@ module.exports = {
 
 		if (Logger) {
 			const ServerAddedEmbed = new Discord.MessageEmbed()
-				.setTitle("🔼︱Guild Added")
+				.setTitle(`${bot.config.emojis.arrows.up}︱Guild Added`)
 				.setDescription(`SparkV has joined **${guild.name} (${guild.id})**!`)
 				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
 				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
@@ -42,21 +42,17 @@ module.exports = {
 			}
 
 			Logger.send({
-				embeds: [ServerAddedEmbed],
+				embeds: [ServerAddedEmbed]
 			});
 		}
 
 		if (guild.systemChannel) {
 			const WelcomeEmbed = new Discord.MessageEmbed()
-				.setTitle("Thanks for adding me!")
-				.setDescription(`I'm a powerful multipurpose meme/chat bot with over **120+** commands to keep your server entertained and active, all while being free!\nSimply type the command \`/help\` to get a list of my commands.\nWant to enable a setting? You can either run \`/settings\`, or go to our dashboard by clicking the button \`Dashboard\` below.\nIf you have any questions, feel free to join our server! https://discord.gg/PPtzT8Mu3h`)
-				.setThumbnail(guild.iconURL())
-				.setImage(guild.bannerURL())
-				.setFooter({
-					text: `SparkV • ${bot.config.embed.footer}`,
-					iconURL: bot.user.displayAvatarURL()
-				})
-				.setColor(bot.config.embed.color);
+				.setDescription(`I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can type \`/settings\`.\n\nSimply type the command \`/help\` to get a list of my commands.\nIf you have any questions, feel free to join our [Discord server](https://discord.gg/PPtzT8Mu3h).`)
+				.setThumbnail(bot.user.displayAvatarURL())
+				.setImage("https://www.sparkv.tk/assets/images/banner.gif")
+				.setColor(bot.config.embed.color)
+				.setTimestamp();
 
 			if (Owner) {
 				WelcomeEmbed.setAuthor({
@@ -67,23 +63,26 @@ module.exports = {
 
 			const InviteButton = new Discord.MessageButton()
 				.setURL(bot.config.bot_invite)
-				.setLabel("Bot Invite")
+				.setEmoji(bot.config.emojis.plus)
+				.setLabel("Invite")
 				.setStyle("LINK");
 
 			const SupportButton = new Discord.MessageButton()
 				.setURL(bot.config.support.invite)
-				.setLabel("Support Invite")
+				.setEmoji(bot.config.emojis.question)
+				.setLabel("Support")
 				.setStyle("LINK");
 
-			const Dashboard = new Discord.MessageButton()
-				.setURL("https://www.sparkv.tk/dashboard")
-				.setLabel("Dashboard")
+			const WebsiteButton = new Discord.MessageButton()
+				.setURL("https://www.sparkv.tk/")
+				.setEmoji(bot.config.emojis.globe)
+				.setLabel("Website")
 				.setStyle("LINK");
 
 			await guild.systemChannel.send({
 				embeds: [WelcomeEmbed],
-				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, Dashboard)],
+				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, WebsiteButton)]
 			}).catch(err => console.log(`Failed to send message to ${guild.name} (${guild.id})! ${err.message}`));
 		}
-	},
+	}
 };
