@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **60 commands**!
+SparkV's Command List! SparkV contains more than **58 commands**!
 
 ## Economy
 
@@ -8,17 +8,16 @@ SparkV's Command List! SparkV contains more than **60 commands**!
 | ------------- | -------------------------------------------- | --------------------------- | --------- |
 | **balance**   | View your balance.                           | (user default: you)         | 2 seconds |
 | **bank**      | Manage your bank. (Deposit/Withdraw)         | (action) (amount)           | 2 seconds |
-| **beg**       | Beg for coins.                               |                             | 2 seconds |
 | **buy**       | Buy an item from the shop.                   | (item) (optional: quantity) | 2 seconds |
 | **coinflip**  | Bet on a side and flip a coin! (heads/tails) | (Side)                      | 2 seconds |
 | **daily**     | Collect your daily amount of coins!          |                             | 1 seconds |
 | **give**      | Give someone some money.                     | (user) (money)              | 2 seconds |
 | **inventory** | Shows the items you have.                    | (user)                      | 2 seconds |
 | **rob**       | Steal somebody's hard earned money.          | (user)                      | 2 seconds |
-| **search**    | Search a place for coins!                    |                             | 1 seconds |
 | **shop**      | Displays the shop!                           |                             | 2 seconds |
 | **slots**     | Don't gamble kids!                           | (amount)                    | 2 seconds |
-| **use**       | Use an item in your inventory.               | (item) (optional: quantity) | 2 seconds" |
+| **use**       | Use an item in your inventory.               | (item) (optional: quantity) | 2 seconds |
+| **work**      | Beg for coins.                               |                             | 2 seconds" |
 
 ## Fun
 
@@ -73,7 +72,6 @@ SparkV's Command List! SparkV contains more than **60 commands**!
 | **afk**          | Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be... | (optional: reason)                              | 2 seconds |
 | **bot**          | Information for SparkV.                                                                             |                                                 | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                                        | (optional: search)                              | 2 seconds |
-| **icon**         | Grab the icon of the server or a user.                                                              | (type (user/server)) (user/invite)              | 2 seconds |
 | **info**         | See information about a user or server.                                                             | (user)                                          | 2 seconds |
 | **invite**       | Displays links.                                                                                     |                                                 | 2 seconds |
 | **leaderboard**  | View the top 10 users for leveling and money.                                                       |                                                 | 2 seconds |
