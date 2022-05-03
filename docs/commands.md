@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **58 commands**!
+SparkV's Command List! SparkV contains more than **57 commands**!
 
 ## Economy
 
@@ -28,7 +28,6 @@ SparkV's Command List! SparkV contains more than **58 commands**!
 | **fun**      | Just a little fun.                                       |                                                                                                                                                  | 2 seconds  |
 | **game**     | Play a game with SparkV.                                 |                                                                                                                                                  | 20 seconds |
 | **image**    | <:image:948004558884442142> Generate images with ease.   | (image type)                                                                                                                                     | 3 seconds  |
-| **rank**     | View a users rank!                                       | (optional user)                                                                                                                                  | 2 seconds  |
 | **text**     | I will change the text depending on what you want to do. | (text)                                                                                                                                           | 2 seconds " |
 
 ## Moderation
@@ -72,7 +71,7 @@ SparkV's Command List! SparkV contains more than **58 commands**!
 | **afk**          | Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be... | (optional: reason)                              | 2 seconds |
 | **bot**          | Information for SparkV.                                                                             |                                                 | 2 seconds |
 | **help**         | View SparkV's 130+ commands.                                                                        | (optional: search)                              | 2 seconds |
-| **info**         | See information about a user or server.                                                             | (user)                                          | 2 seconds |
+| **info**         | Get information about a user or server. (user/rank/icon)                                            | (user/rank/icon)                                | 2 seconds |
 | **invite**       | Displays links.                                                                                     |                                                 | 2 seconds |
 | **leaderboard**  | View the top 10 users for leveling and money.                                                       |                                                 | 2 seconds |
 | **panel**        | Set up a feature. (tickets, roles, embed)                                                           | (tickets|roles|embed) (title|description|color) | 2 seconds |
