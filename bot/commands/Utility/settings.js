@@ -469,59 +469,6 @@ async function execute(bot, message, args, command, data) {
 			}
 		},
 		{
-			name: "Logging",
-			id: "logging",
-			emoji: bot.config.emojis.stats,
-			emojiID: "947990408657518652",
-			description: "Log actions in your server!",
-			disabled: false,
-			buttons: [
-				{
-					name: "Toggle",
-					data: ToggleButton,
-					getData: () => data.guild.logging?.enabled || "false"
-				},
-				{
-					name: "Channel",
-					required: true,
-					enabledText: "Successfully setup channel!",
-					data: channelButton,
-					getData: () => {
-						if (data.guild.logging?.channel) return `<#${data.guild.logging.channel}>`;
-						else return "None";
-					},
-					setData: async () => {
-						await setNewData(message, {
-							title: `${bot.config.emojis.config} | Logging Channel Setup`,
-							description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
-							color: "BLUE",
-							time: 60,
-							filter: cFilter,
-							handleData: async (collected, requestMsg) => {
-								requestMsg
-									.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
-									.setDescription(`Successfully setup logging channel to ${collected.content}.`);
-
-								data.guild.logging.channel = collected.content.slice(2, -1);
-								data.guild.markModified("logging.channel");
-
-								await data.guild.save();
-							}
-						});
-					}
-				}
-			],
-			getState: () => data.guild.logging?.enabled,
-			setState: async type => {
-				if (type === "enable") data.guild.logging.enabled = "true";
-				else if (type === "disable") data.guild.logging.enabled = "false";
-
-				data.guild.markModified("logging.enabled");
-
-				await data.guild.save();
-			}
-		}
-		{
 			name: await message.translate("AntiSpam"),
 			description: await message.translate("Take action against spam in your Discord server."),
 			id: "antispam",
