@@ -730,7 +730,7 @@ async function execute(bot, message, args, command, data) {
 
 		curSetting.buttons.forEach(button => {
 			if (button.name.toLowerCase() === "toggle") {
-				const buttonData = button?.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER");
+				const buttonData = button?.data?.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER");
 
 				return buttonsIncluded.push(buttonData);
 			}
