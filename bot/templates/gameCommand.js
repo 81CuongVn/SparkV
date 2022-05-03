@@ -80,7 +80,7 @@ module.exports = class ModCommand {
 			players[message.author.id] = true;
 
 			const collector = await playersMessage.createMessageComponentCollector({
-				filter: interaction => interaction.deferUpdate(),
+				filter: interaction => interaction.deferUpdate().catch(err => {}),
 				time: 30 * 1000,
 				errors: ["time"],
 				max: 5

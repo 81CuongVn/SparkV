@@ -916,7 +916,7 @@ async function execute(bot, message, args, command, data) {
 			});
 
 			collector.on("collect", async interaction => {
-				if (!interaction.deferred) interaction.deferUpdate();
+				if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
 
 				if (interaction.customId === "no") {
 					await botMessage.edit({
@@ -994,7 +994,7 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color);
 
 	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate();
+		if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
 
 		try {
 			buttons = [];

@@ -79,7 +79,7 @@ async function execute(bot, interaction, args, command, data) {
 
 	const collector = msg.createMessageComponentCollector({
 		filter: interaction => {
-			if (!interaction.deferred && !interaction.customId === "LyricsMenu") interaction.deferUpdate();
+			if (!interaction.deferred && !interaction.customId === "LyricsMenu") interaction.deferUpdate().catch(err => {});
 
 			return true;
 		}, time: 300 * 1000
