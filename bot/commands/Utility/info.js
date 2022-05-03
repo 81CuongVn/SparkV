@@ -1,112 +1,141 @@
 const Discord = require("discord.js");
-const axios = require("axios");
+const canvacord = require("canvacord");
 
 const cmd = require("@templates/command");
 
-function capFirstLetter(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function handleAnimated(url) {
-	if (url.includes("a_")) return url.replace(".png", ".gif");
-}
-
 async function execute(bot, message, args, command, data) {
-	const state = message.options.getSubcommand();
+	const statuses = {
+		online: "<:online:948002054029340733>",
+		idle: "<:idle:948003685118664784>",
+		dnd: "<:dnd:948003123308396624>",
+		offline: "<:offline:948002054247432202>"
+	};
 
-	if (state === "user") {
-		const statuses = {
-			online: "<:online:948002054029340733>",
-			idle: "<:idle:948003685118664784>",
-			dnd: "<:dnd:948003123308396624>",
-			offline: "<:offline:948002054247432202>"
-		};
+	const badges = {
+		HOUSE_BRAVERY: "<:house_bravery:941439956528803860>",
+		HOUSE_BRILLIANCE: "<:house_brilliance:941439956507840543>",
+		HOUSE_BALANCE: "<:house_balance:941440238486691921>",
+		DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>"
+	};
 
-		const badges = {
-			HOUSE_BRAVERY: "<:house_bravery:941439956528803860>",
-			HOUSE_BRILLIANCE: "<:house_brilliance:941439956507840543>",
-			HOUSE_BALANCE: "<:house_balance:941440238486691921>",
-			DISCORD_CERTIFIED_MODERATOR: "<:moderator:943240444777730068>"
-		};
+	let user = data.options.getUser("user") || message.user;
+	const icon = message.options.getString("icon");
+	const rank = message.options.getString("rank");
+	const embed = new Discord.MessageEmbed()
+		.setAuthor({
+			name: `${user.tag} (${user.bot ? await message.translate("Robot") : await message.translate("Human")})`,
+			iconURL: user.displayAvatarURL({ dynamic: true })
+		})
+		.setFooter({
+			text: bot.config.embed.footer,
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+		});
 
-		let user = data.options.getUser("user") || message.user;
-		const icon = message.options.getString("icon");
-		const embed = new Discord.MessageEmbed()
-			.setAuthor({
-				name: `${user.tag} (${user.bot ? await message.translate("Robot") : await message.translate("Human")})`,
-				iconURL: user.displayAvatarURL({ dynamic: true })
-			})
-			.setFooter({
-				text: bot.config.embed.footer,
-				iconURL: bot.user.displayAvatarURL({ dynamic: true })
-			});
+	if (icon === "yes") {
+		const avatar = user.displayAvatarURL({ dynamic: true, format: "png" });
 
-		if (icon === "yes") {
-			const avatar = user.displayAvatarURL({ dynamic: true, format: "png" });
-
-			embed
-				.setDescription(`[32px](${avatar}?size=32) | [64px](${avatar}?size=64) | [128px](${avatar}?size=128) | [256px](${avatar}?size=256) | [512px](${avatar}?size=512) | [1024px](${avatar}?size=1024)\n[png](${avatar.replace(".gif", ".png")}) | [jpg](${avatar.replace(".png", ".jpg").replace(".gif", ".jpg")}) | [gif](${avatar.replace(".png", ".gif")})`)
-				.setThumbnail(`${avatar}?size=512`)
-				.setColor(bot.config.embed.color);
-		} else {
-			user = user.user ? await user.user.fetch() : await user.fetch();
-			const member = message.channel.guild.members.cache.get(user.id);
-
-			let num = 0;
-			let addedRoles = 0;
-			let roleCount = 0;
-			let plusRoles = false;
-			let roleColor;
-			let roles = member.roles.cache
-				.sort((a, b) => b.comparePositionTo(a))
-				.filter(r => r.id !== message.guild.id)
-				.map((r, id) => {
-					roleCount++;
-					if (num === 0) roleColor = r.hexColor;
-
-					if (num < 4) {
-						num++;
-
-						return `<@&${r.id}>`;
-					} else {
-						plusRoles = true;
-						addedRoles++;
-					}
-				})
-				.join(" ");
-
-			if (plusRoles === true) roles += `+${addedRoles}`;
-
-			const members = message.guild.members.cache
-				.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
-				.toJSON();
-
-			const position = new Promise(forfill => {
-				for (let i = 1; i < members.length + 1; i++) {
-					if (members[i - 1].id === member.id) forfill(i);
-				}
-			});
-
-			embed
-				.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
-				.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? capFirstLetter(member?.presence?.status) : "None")}\`\`\``, true)
-				.addField(`${bot.config.emojis.clock} ${await message.translate("Join Position")}`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
-				.setColor(roleColor || bot.config.embed.color);
-
-			if (user.flags.toArray().length > 0) embed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
-
-			embed
-				.addField(`${bot.config.emojis.plus} ${await message.translate("Registered")}`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
-				.addField(`${bot.config.emojis.join} ${await message.translate("Joined Server")}`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
-
-			if (roles) embed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
-			if (user.user ? user.user.banner : user.banner) embed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
-		}
+		embed
+			.setDescription(`[32px](${avatar}?size=32) | [64px](${avatar}?size=64) | [128px](${avatar}?size=128) | [256px](${avatar}?size=256) | [512px](${avatar}?size=512) | [1024px](${avatar}?size=1024)\n[png](${avatar.replace(".gif", ".png")}) | [jpg](${avatar.replace(".png", ".jpg").replace(".gif", ".jpg")}) | [gif](${avatar.replace(".png", ".gif")})`)
+			.setThumbnail(`${avatar}?size=512`)
+			.setColor(bot.config.embed.color);
 
 		return message.replyT({
 			embeds: [embed]
 		});
-	} else if (state === "server") {
+	} else if (rank === "yes") {
+		if (data.guild.leveling.enabled === "false") return await message.replyT(`${bot.config.emojis.alert} | Leveling is disabled. Please ask a server admin, or server owner, to enable it on the \`/settings\` panel.`);
+
+		const Target = data.options.getMember("user") || message.member;
+		const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id);
+
+		const userData = await bot.database.getMember(Target.user ? Target.user.id : Target.id, message.guild.id);
+
+		const leaderboard = await bot.MemberSchema.find({
+			guildID: message.guild.id
+		}).sort([["xp", "descending"]]).exec();
+
+		const Rank = new canvacord.Rank()
+			.setUsername(Target.user ? Target.user.username : Target.username)
+			.setDiscriminator(Target.user ? Target.user.discriminator : Target.discriminator)
+			.setAvatar(Target.displayAvatarURL({ dynamic: false, format: "png" }))
+			.setStatus(TargetMember?.presence?.status || "offline")
+			.setRank(leaderboard.findIndex(i => i.guildID === message.guild.id && i.id === (Target.user ? Target.user.id : Target.id)) + 1)
+			.setLevel(userData.level || 0)
+			.setCurrentXP(userData.xp || 0)
+			.setRequiredXP(((parseInt(userData.level) + 1) * (parseInt(userData.level) + 1) * 100) || 100)
+			.setProgressBar(`#0099ff`, `COLOR`);
+
+		Rank.build().then(async data => {
+			const Attachment = new Discord.MessageAttachment(data, `RankCard.png`);
+
+			return await message.replyT({
+				files: [Attachment]
+			});
+		});
+	} else {
+		user = user.user ? await user.user.fetch() : await user.fetch();
+		const member = message.channel.guild.members.cache.get(user.id);
+
+		let num = 0;
+		let addedRoles = 0;
+		let roleCount = 0;
+		let plusRoles = false;
+		let roleColor;
+		let roles = member.roles.cache
+			.sort((a, b) => b.comparePositionTo(a))
+			.filter(r => r.id !== message.guild.id)
+			.map((r, id) => {
+				roleCount++;
+				if (num === 0) roleColor = r.hexColor;
+
+				if (num < 4) {
+					num++;
+
+					return `<@&${r.id}>`;
+				} else {
+					plusRoles = true;
+					addedRoles++;
+				}
+			})
+			.join(" ");
+
+		if (plusRoles === true) roles += `+${addedRoles}`;
+
+		const members = message.guild.members.cache
+			.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
+			.toJSON();
+
+		const position = new Promise(forfill => {
+			for (let i = 1; i < members.length + 1; i++) {
+				if (members[i - 1].id === member.id) forfill(i);
+			}
+		});
+
+		embed
+			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
+			.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? (member?.presence?.status.charAt(0).toUpperCase() + member?.presence?.status.slice(1)) : "None")}\`\`\``, true)
+			.addField(`${bot.config.emojis.clock} ${await message.translate("Join Position")}`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
+			.setColor(roleColor || bot.config.embed.color);
+
+		if (user.flags.toArray().length > 0) embed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
+
+		embed
+			.addField(`${bot.config.emojis.plus} ${await message.translate("Registered")}`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
+			.addField(`${bot.config.emojis.join} ${await message.translate("Joined Server")}`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
+
+		if (roles) embed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
+		if (user.user ? user.user.banner : user.banner) embed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
+
+		return message.replyT({
+			embeds: [embed]
+		});
+	}
+
+	/*
+		Function handleAnimated(url) {
+			if (url.includes("a_")) return url.replace(".png", ".gif");
+		}
+
 		let invite = data.options.getString("invite") || null;
 		const icon = message.options.getString("icon");
 		const embed = new Discord.MessageEmbed()
@@ -251,69 +280,50 @@ async function execute(bot, message, args, command, data) {
 				components: [buttons]
 			});
 		}
-	}
+	*/
 }
 
 module.exports = new cmd(execute, {
-	description: "See information about a user or server.",
+	description: "Get information about a user or server. (user/rank/icon)",
 	dirname: __dirname,
-	usage: "(user)",
+	usage: "(user/rank/icon)",
 	aliases: ["ui"],
 	perms: [],
 	slash: true,
 	slashOnly: true,
 	options: [
 		{
-			type: 1,
-			name: "server",
-			description: "Get the information of a server.",
-			options: [
+			type: 6,
+			name: "user",
+			description: "The user to get the information of. Leave blank to get your info."
+		},
+		{
+			type: 3,
+			name: "rank",
+			description: "Whether or not you want to view the rank of a user.",
+			choices: [
 				{
-					type: 3,
-					name: "invite",
-					description: "The invite of the server. Leave blank to get the info of the current server."
+					name: "Yes",
+					value: "yes"
 				},
 				{
-					type: 3,
-					name: "icon",
-					description: "Whether or not you want to get the icon, and not the info of the server.",
-					choices: [
-						{
-							name: "Yes",
-							value: "yes"
-						},
-						{
-							name: "No",
-							value: "no"
-						}
-					]
+					name: "No",
+					value: "no"
 				}
 			]
 		},
 		{
-			type: 1,
-			name: "user",
-			description: "Get the information of a user.",
-			options: [
+			type: 3,
+			name: "icon",
+			description: "Whether or not you want to get the icon, and not the info of the user.",
+			choices: [
 				{
-					type: 6,
-					name: "user",
-					description: "The user to get the information of. Leave blank to get your info."
+					name: "Yes",
+					value: "yes"
 				},
 				{
-					type: 3,
-					name: "icon",
-					description: "Whether or not you want to get the icon, and not the info of the user.",
-					choices: [
-						{
-							name: "Yes",
-							value: "yes"
-						},
-						{
-							name: "No",
-							value: "no"
-						}
-					]
+					name: "No",
+					value: "no"
 				}
 			]
 		}
