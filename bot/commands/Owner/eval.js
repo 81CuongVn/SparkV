@@ -35,7 +35,7 @@ async function execute(bot, message, args, command, data) {
 	} else {
 		const Embed = new Discord.MessageEmbed()
 			.setTitle(`${bot.config.emojis.success} | Eval Results`)
-			.addField(`Input`, `\`\`\`${input.slice(0, 1000)}}\`\`\``)
+			.addField(`Input`, `\`\`\`js\n${input.slice(0, 1000)}\`\`\``)
 			.addField(`Output`, `\`\`\`js\n${result.slice(0, 1000)}\`\`\``)
 			.setColor(`GREEN`);
 
