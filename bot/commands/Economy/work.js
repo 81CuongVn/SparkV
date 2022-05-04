@@ -154,7 +154,7 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: "Beg for coins.",
+	description: "Work to recieve coins. (beg/search)",
 	dirname: __dirname,
 	usage: "",
 	aliases: [],
