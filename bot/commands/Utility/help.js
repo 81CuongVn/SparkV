@@ -27,6 +27,7 @@ async function execute(bot, message, args, command, data) {
 				iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 			})
 			.addFields(commands)
+			.setThumbnail(bot.user.displayAvatarURL())
 			.setImage("https://www.sparkv.tk/images/banner.gif")
 			.setFooter({
 				text: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
