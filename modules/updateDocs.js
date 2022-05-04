@@ -7,15 +7,13 @@ const logger = require("./logger");
 // https://github.com/wooorm/markdown-table/
 // They switched to ESM only, so I can no longer use their package.
 function markdown(table) {
-	var minCellSize = 3;
-	var dotRe = /\./;
+	const rowLength = table.length;
+	const alignment = [];
+	const rule = [];
 	let cellCount = 0;
 	let rowIndex = -1;
-	const rowLength = table.length;
 	let sizes = [];
-	const alignment = [];
 	let align;
-	let rule;
 	let rows;
 	let row;
 	let cells;
@@ -37,15 +35,10 @@ function markdown(table) {
 		}
 
 		while (++index < cellCount) {
-			position = row[index] ? dotindex(row[index]) : null;
+			position = row[index] && dotindex(row[index]);
 
-			if (!sizes[index]) {
-				sizes[index] = minCellSize;
-			}
-
-			if (position > sizes[index]) {
-				sizes[index] = position;
-			}
+			if (!sizes[index]) sizes[index] = 3;
+			if (position > sizes[index]) sizes[index] = position;
 		}
 	}
 
@@ -55,20 +48,7 @@ function markdown(table) {
 	while (++index < cellCount) {
 		align = alignment[index];
 
-		if (typeof align === "string") {
-			console.log("funny string");
-			align = align.charAt(0).toLowerCase();
-		}
-
-		if (
-			align !== "l" &&
-			align !== "r" &&
-			align !== "c" &&
-			align !== "."
-		) {
-			align = "";
-		}
-
+		if (align !== "l" && align !== "r" && align !== "c" && align !== ".") align = "";
 		alignment[index] = align;
 	}
 
@@ -84,16 +64,9 @@ function markdown(table) {
 		while (++index < cellCount) {
 			value = row[index];
 
-			value = stringify(value);
-
 			if (alignment[index] === ".") {
 				position = dotindex(value);
-
-				size =
-					sizes[index] +
-					(dotRe.test(value) ? 0 : 1) -
-					(String(value).length - position);
-
+				size = sizes[index] + (/\./.test(value) ? 0 : 1) - (String(value).length - position);
 				cells[index] = value + pad(size - 1);
 			} else {
 				cells[index] = value;
@@ -108,21 +81,15 @@ function markdown(table) {
 
 	while (++rowIndex < rowLength) {
 		cells = rows[rowIndex];
-
 		index = -1;
 
 		while (++index < cellCount) {
 			value = cells[index];
 
-			if (!sizes[index]) {
-				sizes[index] = minCellSize;
-			}
-
+			if (!sizes[index]) sizes[index] = 3;
 			size = String(value).length;
 
-			if (size > sizes[index]) {
-				sizes[index] = size;
-			}
+			if (size > sizes[index]) sizes[index] = size;
 		}
 	}
 
@@ -164,14 +131,11 @@ function markdown(table) {
 	}
 
 	index = -1;
-	rule = [];
 
 	while (++index < cellCount) {
-		// When `pad` is false, make the rule the same size as the first row.
 		spacing = sizes[index];
 		align = alignment[index];
 
-		// When `align` is left, don't add colons.
 		value = align === "r" || align === "" ? "-" : ":";
 		value += pad(spacing - 2, "-");
 		value += align !== "l" && align !== "" ? ":" : "-";
@@ -183,16 +147,12 @@ function markdown(table) {
 	return `| ${rows.join(" |\n| ")}" |`;
 }
 
-function stringify(value) {
-	return value === null || value === undefined ? "" : String(value);
-}
-
 function pad(length, character) {
 	return new Array(length + 1).join(character || " ");
 }
 
 function dotindex(value) {
-	var match = /\.[^.]*$/.exec(value);
+	const match = /\.[^.]*$/.exec(value);
 
 	return match ? match.index + 1 : value.length;
 }
@@ -205,63 +165,30 @@ module.exports = {
    */
 	update(bot, MainDir) {
 		let cmdCount = 0;
-
-		bot.commands.each(() => ++cmdCount);
+		bot.commands.each(cmd => !cmd.category.toLowerCase().includes("owner") && ++cmdCount);
 
 		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
-		let cmdTable = {};
+		const cmdTable = {};
 
 		bot.categories
-			.filter(cat => {
-				if (cat.name.toLowerCase().includes("owner")) return false;
-
-				return true;
-			})
+			.filter(cat => !cat.name.toLowerCase().includes("owner"))
 			.sort((a, b) => {
-				const aCmds = bot.commands.filter(c => {
-					if (c) {
-						return c.category === a;
-					}
-				});
-
-				const bCmds = bot.commands.filter(c => {
-					if (c) {
-						return c.category === b;
-					}
-				});
-
-				if (aCmds.length > bCmds.length) {
-					return -1;
-				} else {
-					return 1;
-				}
+				if (bot.commands.filter(c => c.category === a).length > bot.commands.filter(c => c.category === b).length) return -1;
+				else return 1;
 			})
 			.forEach(cat => {
 				const info = [];
-				const cmds = bot.commands.filter(cmd => {
-					if (cmd) {
-						return cmd.category === cat.name;
-					}
-				});
 
-				if (cat.emoji.includes("<")) {
-					baseText += `\n## ${cat.name}\n\n`;
-				} else {
-					baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
-				}
+				if (cat.emoji.includes("<")) baseText += `\n## ${cat.name}\n\n`;
+				else baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
 
 				info.push(["Name", "Description", "Usage", "Cooldown"]);
 
 				if (!cmdTable[cat.name]) cmdTable[cat.name] = [];
 
-				cmds
-					.sort((a, b) => {
-						if (a.settings.name < b.settings.name) {
-							return -1;
-						} else {
-							return 1;
-						}
-					})
+				bot.commands
+					.filter(cmd => cmd.category === cat.name)
+					.sort((a, b) => a.settings.name < b.settings.name ? -1 : 1)
 					.forEach(cmd => {
 						cmdTable[cat.name].push({
 							name: cmd.settings?.name || "Untitled Command",
