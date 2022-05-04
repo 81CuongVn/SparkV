@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **57 commands**!
+SparkV's Command List! SparkV contains more than **49 commands**!
 
 ## Economy
 
@@ -17,7 +17,7 @@ SparkV's Command List! SparkV contains more than **57 commands**!
 | **shop**      | Displays the shop!                           |                             | 2 seconds |
 | **slots**     | Don't gamble kids!                           | (amount)                    | 2 seconds |
 | **use**       | Use an item in your inventory.               | (item) (optional: quantity) | 2 seconds |
-| **work**      | Beg for coins.                               |                             | 2 seconds" |
+| **work**      | Work to recieve coins. (beg/search)          |                             | 2 seconds" |
 
 ## Fun
 
