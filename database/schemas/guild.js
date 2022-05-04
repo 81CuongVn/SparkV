@@ -29,10 +29,10 @@ const Schema = new mongoose.Schema({
 	antiSpam: {
 		enabled: { type: String, default: "false" },
 		action: { type: String, default: "timeout" },
-		bypass: {
-			roles: { type: Array, default: [] },
-			channels: { type: Array, default: [] }
-		}
+		// bypass: {
+		// 	roles: { type: Array, default: [] },
+		// 	channels: { type: Array, default: [] }
+		// }
 	},
 	automod: {
 		removeLinks: { type: String, default: "false" },
