@@ -834,7 +834,6 @@ async function execute(bot, message, args, command, data) {
 				.setStyle("PRIMARY")
 				.setDisabled(setting?.disabled ? setting.disabled : false);
 
-			console.log(rows, buttons[rows]);
 			if (!buttons[rows]) {
 				buttons[rows] = {
 					type: 1,
@@ -863,9 +862,7 @@ async function execute(bot, message, args, command, data) {
 
 	await bot.wait(750);
 
-	const perms = message.channel.permissionsFor(message.user);
-
-	if (!perms.has(Permissions.FLAGS.MANAGE_GUILD)) {
+	if (!message.channel.permissionsFor(message.user).has("MANAGE_GUILD")) {
 		if (message.user.id === bot.config.ownerID) {
 			await botMessage.edit({
 				embeds: [
@@ -1018,7 +1015,7 @@ async function execute(bot, message, args, command, data) {
 				});
 			} else if (interaction.customId === "exit") {
 				return await collector.stop();
-			} else if (interaction?.customId === "toggle" && curSetting && curSetting?.buttons.find(button => button?.customId?.toLowerCase() === "toggle")) {
+			} else if (interaction?.customId === "toggle" && curSetting && curSetting?.buttons.find(button => button?.data?.customId?.toLowerCase() === "toggle")) {
 				const newState = curSetting.getState() === "true" ? "false" : "true";
 
 				if (newState === "true") {
@@ -1029,8 +1026,8 @@ async function execute(bot, message, args, command, data) {
 				}
 
 				refreshSetting(curSetting);
-			} else if (curSetting && curSetting?.buttons?.find(button => button?.customId?.toLowerCase() === interaction?.customId?.toLowerCase())) {
-				const button = curSetting.buttons.find(button => button.customId.toLowerCase() === interaction.customId.toLowerCase());
+			} else if (curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase())) {
+				const button = curSetting.buttons.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase());
 				await button.setData();
 				refreshSetting(curSetting);
 			} else {
