@@ -51,14 +51,15 @@ async function setNewData(message, options) {
 		.setColor(options.color);
 
 	const components = [];
-
 	if (options.dropdownItems) {
-		const SelectMenu = new MessageSelectMenu()
-			.setCustomId(`SelectMenu_${options.id}`)
-			.setPlaceholder("Select an option.")
-			.addOptions(options.dropdownItems);
-
-		components.push(new MessageActionRow().addComponents(SelectMenu));
+		components.push(
+			new MessageActionRow().addComponents(
+				new MessageSelectMenu()
+					.setCustomId(`SelectMenu_${options.id}`)
+					.setPlaceholder("Select an option.")
+					.addOptions(options.dropdownItems)
+			)
+		);
 	}
 
 	const channelMsg = await message.replyT({
@@ -144,22 +145,22 @@ async function setNewData(message, options) {
 }
 
 async function execute(bot, message, args, command, data) {
-	const loadingEmbed = new MessageEmbed()
-		.setAuthor({
-			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
-		})
-		.setTitle(await message.translate(`${bot.config.emojis.config} | Loading settings...`))
-		.setDescription(await message.translate(`Please wait while I load the settings...`))
-		.setFooter({
-			text: bot.config.embed.footer,
-			icon_url: bot.user.displayAvatarURL({ dynamic: true })
-		})
-		.setColor(bot.config.embed.color)
-		.setTimestamp();
-
 	const botMessage = await message.replyT({
-		embeds: [loadingEmbed],
+		embeds: [
+			new MessageEmbed()
+				.setAuthor({
+					name: message.user.tag,
+					iconURL: message.user.displayAvatarURL({ dynamic: true })
+				})
+				.setTitle(await message.translate(`${bot.config.emojis.config} | Loading settings...`))
+				.setDescription(await message.translate(`Please wait while I load the settings...`))
+				.setFooter({
+					text: bot.config.embed.footer,
+					icon_url: bot.user.displayAvatarURL({ dynamic: true })
+				})
+				.setColor(bot.config.embed.color)
+				.setTimestamp()
+		],
 		ephemeral: true
 	});
 
@@ -172,7 +173,7 @@ async function execute(bot, message, args, command, data) {
 	const channelButton = new MessageButton()
 		.setLabel(await message.translate("Channel"))
 		.setEmoji(bot.config.emojis.channel)
-		.setCustomId("category")
+		.setCustomId("channel")
 		.setStyle("SECONDARY");
 
 	const settings = [
@@ -279,7 +280,7 @@ async function execute(bot, message, args, command, data) {
 						.setCustomId("message")
 						.setStyle("DANGER"),
 					getData: () => {
-						if (data.guild?.leveling?.message) return data.guild.leveling.message;
+						if (data.guild?.leveling?.message) return `${data.guild.leveling.message}`;
 						else return "None";
 					},
 					setData: async () => {
@@ -363,7 +364,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: await message.translate("Category"),
 					required: true,
-					data: channelButton.setLabel(await message.translate("Category")),
+					data: channelButton.setLabel(await message.translate("Category").setCustomId("category")),
 					getData: () => {
 						if (data?.guild?.tickets?.category) return `<#${data.guild.tickets.category}>`;
 						else return "None";
