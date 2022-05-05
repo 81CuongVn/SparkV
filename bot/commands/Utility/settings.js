@@ -364,7 +364,7 @@ async function execute(bot, message, args, command, data) {
 				{
 					name: await message.translate("Category"),
 					required: true,
-					data: channelButton.setLabel(await message.translate("Category").setCustomId("category")),
+					data: channelButton.setLabel(await message.translate("Category")).setCustomId("category"),
 					getData: () => {
 						if (data?.guild?.tickets?.category) return `<#${data.guild.tickets.category}>`;
 						else return "None";
