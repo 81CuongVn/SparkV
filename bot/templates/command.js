@@ -19,7 +19,7 @@ module.exports = class Command {
 	}
 
 	async run(bot, message, args, command, data) {
-		if (message.channel.type === "dm") return await message.replyT(`${bot.config.emojis.error} | This command cannot be used in DMs!`);
+		if (message?.channel?.type === "dm") return await message.replyT(`${bot.config.emojis.error} | This command cannot be used in DMs!`);
 
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 

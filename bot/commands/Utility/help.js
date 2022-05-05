@@ -7,7 +7,7 @@ async function execute(bot, message, args, command, data) {
 	const pages = [];
 
 	bot.categories.map(cat => {
-		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
+		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
 
 		const commands = [];
 		bot.commands
@@ -18,9 +18,6 @@ async function execute(bot, message, args, command, data) {
 			}));
 
 		const user = message.applicationId ? message.user : message.author;
-
-		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
-
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
 				name: (message?.applicationId ? message.user : message.author).tag,
@@ -109,7 +106,7 @@ async function execute(bot, message, args, command, data) {
 	}
 
 	bot.categories.map(async cat => {
-		if (cat.name.toLowerCase().includes("owner") && (message.author?.id || message.user.id) !== bot.config.ownerID) return;
+		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
 
 		Selections.push({
 			label: `${await message.translate(cat.name)} [${cat.commands.length}]`,

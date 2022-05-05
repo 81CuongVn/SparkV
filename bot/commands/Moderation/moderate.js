@@ -12,7 +12,7 @@ async function execute(bot, interaction, args, command, data) {
 	const MemberPosition = interaction.member.roles.highest.position;
 	const ModerationPosition = interaction.member.roles.highest.position;
 
-	if (interaction.guild.ownerId !== interaction.user.id && !ModerationPosition > MemberPosition) return await interaction.editT(`${bot.config.emojis.alert} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
+	if (!bot.config.owners.includes(interaction.user.id) && !ModerationPosition > MemberPosition) return await interaction.editT(`${bot.config.emojis.alert} | Uh oh... I can\`t warn this user! This user is either the owner, or is a higher rank than SparkV.`);
 	if (!user.moderatable) return interaction.editT(`${bot.config.emojis.alert} | I cannot moderate this user.`);
 
 	const embed = new Discord.MessageEmbed()

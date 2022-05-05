@@ -13,7 +13,7 @@ function timeoutUser(offense, message, data) {
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
 		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
-		.catch(async () => await message.replyT(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
+		.catch(async () => await message.channel.send(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
 }
 
 module.exports = {
@@ -367,7 +367,7 @@ module.exports = {
 
 		if (!commandfile) return;
 
-		if (message.author.id !== bot.config.ownerID) return;
+		if (!bot.config.owners.includes(message?.author?.id)) return;
 
 		try {
 			await commandfile.run(bot, message, args, command, data);
