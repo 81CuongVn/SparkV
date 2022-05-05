@@ -16,7 +16,7 @@ module.exports = {
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
-		const Owner = await guild?.fetchOwner() || null;
+		const Owner = await guild?.fetchOwner().catch(err => null) || null;
 
 		if (Logger) {
 			const ServerAddedEmbed = new Discord.MessageEmbed()
