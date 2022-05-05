@@ -56,7 +56,6 @@ async function setNewData(message, options) {
 		const SelectMenu = new MessageSelectMenu()
 			.setCustomId(`SelectMenu_${options.id}`)
 			.setPlaceholder("Select an option.")
-
 			.addOptions(options.dropdownItems);
 
 		components.push(new MessageActionRow().addComponents(SelectMenu));
@@ -93,8 +92,7 @@ async function setNewData(message, options) {
 							name: interaction.user.tag,
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						})
-						.setTitle("Uh oh!")
-						.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
+						.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
 						.setColor("RED");
 
 					try {
@@ -134,8 +132,7 @@ async function setNewData(message, options) {
 						name: interaction.user.tag,
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					})
-					.setTitle("Uh oh!")
-					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err}\n${err.message}`)
+					.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
 					.setColor("RED");
 
 				return await message.reply({
@@ -260,6 +257,101 @@ async function execute(bot, message, args, command, data) {
 				}
 			],
 			stateDisabled: true
+		},
+		{
+			name: "Leveling",
+			id: "leveling",
+			emoji: bot.config.emojis.arrows.up,
+			emojiID: "954930080436609055",
+			description: "Allow users to level up in your server.",
+			disabled: false,
+			buttons: [
+				{
+					name: "Toggle",
+					data: ToggleButton,
+					getData: () => data.guild.leveling?.enabled || "false"
+				},
+				{
+					name: "Message",
+					data: new MessageButton()
+						.setLabel("Message")
+						.setEmoji(bot.config.emojis.message)
+						.setCustomId("message")
+						.setStyle("DANGER"),
+					getData: () => {
+						if (data.guild?.leveling?.message) return data.guild.leveling.message;
+						else return "None";
+					},
+					setData: async () => {
+						await setNewData(message, {
+							title: `${bot.config.emojis.config} | Leveling Message Setup`,
+							description: "Please send text that will be said when a user levels up. You have 60 seconds to send some text. Default: `<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!`\n**Placeholders**\n{author} - The user who leveled up.\n{level} - The user's new level.",
+							color: "BLUE",
+							time: 60,
+							filter: async m => {
+								if (m.author.id === m.client.user.id) return false;
+
+								if (m.content) {
+									if (m.content.length >= 500) {
+										await m.replyT(`${bot.config.emojis.error} | The new leveling message cannot be longer than 500 characters. Try again.`);
+										return false;
+									}
+
+									return true;
+								} else {
+									await m.replyT("Dude... I need you to send a message. Not a picture.");
+									return false;
+								}
+							},
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`${bot.config.emojis.config} | Leveling Message Setup`)
+									.setDescription(`Successfully setup leveling message to ${collected.content}.`);
+
+								data.guild.leveling.message = collected.content;
+								data.guild.markModified("leveling.message");
+
+								await data.guild.save();
+							}
+						});
+					}
+				},
+				{
+					name: "Channel",
+					data: channelButton,
+					getData: () => {
+						if (data.guild.leveling?.channel !== null) return `<#${data.guild.leveling.channel}>`;
+						else return "None";
+					},
+					setData: async () => {
+						await setNewData(message, {
+							title: `${bot.config.emojis.config} | Leveling Channel Setup`,
+							description: "Please send a channel to revieve level up notifications in. You have 60 seconds to send a channel.",
+							color: "BLUE",
+							time: 60,
+							filter: cFilter,
+							handleData: async (collected, requestMsg) => {
+								requestMsg
+									.setTitle(`${bot.config.emojis.config} | Leveling Channel Setup`)
+									.setDescription(`Successfully setup leveling channel to ${collected.content}.`);
+
+								data.guild.leveling.channel = collected.content.slice(2, -1);
+								data.guild.markModified("leveling.channel");
+
+								await data.guild.save();
+							}
+						});
+					}
+				}
+			],
+			getState: () => data.guild.leveling?.enabled,
+			setState: async type => {
+				if (type === "enable") data.guild.leveling.enabled = "true";
+				else if (type === "disable") data.guild.leveling.enabled = "false";
+
+				data.guild.markModified("leveling.enabled");
+				await data.guild.save();
+			}
 		},
 		{
 			name: await message.translate("Tickets"),
@@ -723,6 +815,7 @@ async function execute(bot, message, args, command, data) {
 	];
 
 	async function refreshSetting(curSetting) {
+		buttons = [];
 		pages = [];
 		createPages();
 
@@ -863,7 +956,7 @@ async function execute(bot, message, args, command, data) {
 	await bot.wait(750);
 
 	if (!message.channel.permissionsFor(message.user).has("MANAGE_GUILD")) {
-		if (message.user.id === bot.config.ownerID) {
+		if (bot.config.owners.includes(message?.user?.id)) {
 			await botMessage.edit({
 				embeds: [
 					new MessageEmbed()
@@ -913,7 +1006,7 @@ async function execute(bot, message, args, command, data) {
 			});
 
 			collector.on("collect", async interaction => {
-				if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
+				if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
 
 				if (interaction.customId === "no") {
 					await botMessage.edit({
@@ -987,11 +1080,11 @@ async function execute(bot, message, args, command, data) {
 			name: message.user.tag,
 			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription("Saved changes and exited the settings menu.")
+		.setDescription(`${bot.config.emojis.alert} | Saved changes and exited the settings menu.`)
 		.setColor(bot.config.embed.color);
 
 	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
+		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
 
 		try {
 			buttons = [];
@@ -1005,7 +1098,6 @@ async function execute(bot, message, args, command, data) {
 				});
 
 				buttons = buttons.filter(Boolean);
-
 				curSetting = null;
 
 				return await botMessage.edit({
@@ -1042,8 +1134,7 @@ async function execute(bot, message, args, command, data) {
 					name: interaction.user.tag,
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 				})
-				.setTitle("Uh oh!")
-				.setDescription(`**A critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+				.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
 				.setColor("RED");
 
 			try {
