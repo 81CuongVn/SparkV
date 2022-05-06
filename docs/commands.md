@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **49 commands**!
+SparkV's Command List! SparkV contains more than **47 commands**!
 
 ## Economy
 
@@ -25,8 +25,7 @@ SparkV's Command List! SparkV contains more than **49 commands**!
 | ------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
 | **activity** | Play a Discord VC activity!                              | (type (youtube, poker, chess, checkers, betrayal, fishing, lettertile, wordsnack, doodlecrew, spellcast, awkword, puttparty, sketchheads, ocho)) | 20 seconds |
 | **chatbot**  | Talk to me!                                              |                                                                                                                                                  | 2 seconds  |
-| **fun**      | Just a little fun.                                       |                                                                                                                                                  | 2 seconds  |
-| **game**     | Play a game with SparkV.                                 |                                                                                                                                                  | 20 seconds |
+| **fun**      | Just a little fun.                                       | (type)                                                                                                                                           | 2 seconds  |
 | **image**    | <:image:948004558884442142> Generate images with ease.   | (image type)                                                                                                                                     | 3 seconds  |
 | **text**     | I will change the text depending on what you want to do. | (text)                                                                                                                                           | 2 seconds " |
 
@@ -49,8 +48,7 @@ SparkV's Command List! SparkV contains more than **49 commands**!
 | Name       | Description                                                                | Usage                                                       | Cooldown  |
 | ---------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
 | **filter** | Change what the song sounds like! Requires administrator to prevent abuse. | (filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off) | 5 seconds |
-| **lyrics** | Get any song's lyrics!                                                     | (song title or URL)                                         | 2 seconds |
-| **music**  | Play music in your server!                                                 |                                                             | 5 seconds" |
+| **music**  | Play music in your Discord server!                                         |                                                             | 5 seconds" |
 
 ## Reddit
 
