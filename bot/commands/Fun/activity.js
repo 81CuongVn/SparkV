@@ -11,12 +11,19 @@ module.exports = new cmd(null, {
 	bot_perms: ["START_EMBEDDED_ACTIVITIES"],
 	type: "activity",
 	slash: true,
-	ephemeral: true,
 	options: [
+		{
+			type: 7,
+			channel_types: [2],
+			name: "channel",
+			description: "The voice channel to play the activity in.",
+			required: true
+		},
 		{
 			type: 3,
 			name: "type",
 			description: "The type of activity.",
+			required: true,
 			choices: [
 				{
 					name: "youtube",
@@ -74,8 +81,7 @@ module.exports = new cmd(null, {
 					name: "ocho",
 					value: "ocho"
 				}
-			],
-			required: true
+			]
 		}
 	]
 });

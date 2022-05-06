@@ -37,13 +37,12 @@ module.exports = class ModCommand {
 
 	async run(bot, message, args, command, data) {
 		if (this.settings.type === "activity") {
-			let type;
+			const channel = data.options.getChannel("channel");
+			const type = data.options.getString("type");
 
-			if (data?.options?.getString("type")) type = data?.options?.getString("type");
-
-			if (!message.member.voice.channel) return message.replyT(`${bot.config.emojis.error} | You must be in a __**voice channel**__ to use this command!`);
-
-			bot.discordTogether.createTogetherCode(message.member.voice.channel.id, type.toLowerCase()).then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}**.`));
+			bot.discordTogether.createTogetherCode(channel?.id, type?.toLowerCase())
+				.then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}** in ${channel}.`))
+				.catch(async err => await message.replyT(`${bot.config.emojis.alert} | Uh oh! Looks like an error occured. Sorry about that. Please try again later.`))
 		} else if (this.settings.type === "multiplayerGame") {
 			const playersEmbed = new discord.MessageEmbed()
 				.setAuthor({
