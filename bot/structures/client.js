@@ -2,12 +2,11 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
-const { Client, Collection, Intents, Structures, ApplicationCommand } = require("discord.js");
+const { Client, Collection, Intents, ApplicationCommand } = require("discord.js");
 const { DiscordTogether } = require("discord-together");
 const Statcord = require("statcord.js");
 
 const Distube = require("@modules/dependencies/distubehandler");
-// const giveawayshandler = require("@modules/dependencies/giveawayshandler");
 const updateDocs = require("@modules/updateDocs");
 
 const shopdata = require("../shopdata.json");
@@ -55,7 +54,6 @@ module.exports = class bot extends Client {
 		// Functions
 		this.database.init(this);
 		Distube(this);
-		// giveawayshandler(this);
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);
@@ -84,7 +82,6 @@ module.exports = class bot extends Client {
 		}
 
 		this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size.toString() ?? "0");
-
 		this.discordTogether = new DiscordTogether(this);
 
 		if (process.env.REDIS_URL) {
@@ -101,83 +98,56 @@ module.exports = class bot extends Client {
 	async LoadEvents(MainPath) {
 		const events = fs.readdirSync(path.join(`${MainPath}/events`)).filter(file => file.endsWith(".js"));
 
-		for (const eventF of events) {
-			const event = require(path.resolve(`${MainPath}/events/${eventF}`));
+		for (const file of events) {
+			const event = require(path.resolve(`${MainPath}/events/${file}`));
+			const handleArgs = (...args) => event.execute(this, ...args);
 
-			if (event.once) {
-				this.once(eventF.split(".")[0], (...args) => event.execute(this, ...args));
-			} else {
-				this.on(eventF.split(".")[0], (...args) => event.execute(this, ...args));
-			}
+			event.once ? this.once(file.split(".")[0], handleArgs) : this.on(file.split(".")[0], handleArgs);
 		}
 	}
 
 	async LoadCommands(MainPath) {
-		await fs.readdir(path.join(`${MainPath}/commands`), async (err, cats) => {
-			if (err) return this.logger(`Commands failed to load! ${err}`, "error");
+		await fs.readdirSync(`${MainPath}/commands`).forEach(async cat => {
+			const category = require(path.join(`${MainPath}/commands/${cat}`));
+			this.categories.set(category.name, category);
+			await fs.readdirSync(`${MainPath}/commands/${cat}`).forEach(async file => {
+				if (!file.endsWith(".js")) return;
 
-			await cats.forEach(async cat => {
-				const category = require(path.join(`${MainPath}/commands/${cat}`));
-				this.categories.set(category.name, category);
+				const commandname = file.split(".")[0];
+				const command = require(path.resolve(`${MainPath}/commands/${cat}/${commandname}`));
 
-				await fs.readdir(path.join(`${MainPath}/commands/${cat}`), async (err, files) => {
-					if (err) return this.logger(`Commands failed to load! ${err}`, "error");
+				if (!command || !command.settings) return;
 
-					await files.forEach(async file => {
-						if (!file.endsWith(".js")) return;
+				command.category = category.name;
+				command.description = category.description;
 
-						const commandname = file.split(".")[0];
-						const command = require(path.resolve(`${MainPath}/commands/${cat}/${commandname}`));
+				if (!this.categories.has(command.category)) this.categories.set(command.category, category);
 
-						if (!command || !command.settings || command.config) return;
+				command.settings.name = commandname;
 
-						command.category = category.name;
-						command.description = category.description;
+				if (this.commands.has(commandname)) return this.logger(`You cannot set command ${commandname} because it is already in use by the command ${this.commands.get(commandname).settings.name}. This is most likely due to a accidental clone of a command with the same name.`, "error");
 
-						if (!this.categories.has(command.category)) this.categories.set(command.category, category);
+				this.commands.set(commandname, command);
 
-						command.settings.name = commandname;
+				if (command.settings.slash && command.settings.slash === true) {
+					if (command.settings.description.length >= 100) command.settings.description = `${command.settings.description.slice(0, 96)}...`;
 
-						if (this.commands.has(commandname)) {
-							const existingCommand = this.commands.get(commandname);
-
-							return this.logger(
-								`You cannot set command ${commandname} because it is already in use by the command ${existingCommand.settings.name}. This is most likely due to a accidental clone of a command with the same name.`,
-								"error",
-							);
-						}
-
-						this.commands.set(commandname, command);
-
-						if (command.settings.slash && command.settings.slash === true) {
-							if (command.settings.description.length >= 100) command.settings.description = `${command.settings.description.slice(0, 96)}...`;
-
-							await this.slashCommands.push({
-								name: commandname,
-								description: command.settings.description,
-								options: command.settings.options || [],
-								type: command.settings.type || 1,
-							});
-						}
-
-						if (!command.settings.aliases) return;
-
-						for (const alias of command.settings.aliases) {
-							if (!alias) return;
-
-							if (this.aliases.has(alias)) {
-								const existingCommand = this.aliases.get(alias);
-
-								return this.logger(
-									`You cannot set alias ${alias} to ${command.settings.name} because it is already in use by the command ${existingCommand.settings.name}.`,
-									"error",
-								);
-							}
-
-							this.aliases.set(alias, command);
-						}
+					await this.slashCommands.push({
+						name: commandname,
+						description: command.settings.description,
+						options: command.settings.options || [],
+						type: command.settings.type || 1
 					});
-				});
+				}
+
+				if (!command.settings.aliases) return;
+
+				for (const alias of command.settings.aliases) {
+					if (!alias) return;
+					if (this.aliases.has(alias)) return this.logger(`You cannot set alias ${alias} to ${command.settings.name} because it is already in use by the command ${this.aliases.get(alias).settings.name}.`, "error");
+
+					this.aliases.set(alias, command);
+				}
 			});
 		});
 
@@ -213,14 +183,10 @@ module.exports = class bot extends Client {
 		const currentCmds = await this.application.commands.fetch(process.argv.includes("--dev") === true && { guildId: "763803059876397056" });
 
 		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
-		for (const newCmd of newCmds) {
-			await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
-		}
+		for (const newCmd of newCmds) await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
 
 		const removedCmds = currentCmds.filter(cmd => !slashCommands.some(c => c.name === cmd.name)).toJSON();
-		for (const removedCmd of removedCmds) {
-			await removedCmd.delete();
-		}
+		for (const removedCmd of removedCmds) await removedCmd.delete();
 
 		const updatedCmds = slashCommands.filter(cmd => slashCommands.some(c => c.name === cmd.name));
 		let updatedCount = 0;
@@ -240,7 +206,6 @@ module.exports = class bot extends Client {
 		}
 
 		updateDocs.update(this, process.env.MainDir);
-
 		this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
 	}
 };
