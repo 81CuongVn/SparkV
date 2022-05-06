@@ -96,11 +96,11 @@ async function start() {
 	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
 	mongoose.connection.on("open", () => Logger("DATABASE - ONLINE"));
 
-	process.on("warning", async warning => await logger(`${warning.name} - ${warning.message}`, "warn"));
-	process.on("exit", async code => await logger(`Process exited with code ${code}.`, "error"));
-	process.on("uncaughtException", async err => await logger(`Unhandled exception error. ${err.stack}.`, "error"));
-	process.on("unhandledException", async err => await logger(`Unhandled exception error. ${err.stack}.`, "error"));
-	process.on("unhandledRejection", async err => await logger(`Unhandled rejection error. ${err}.`, "error"));
+	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn"));
+	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error"));
+	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error"));
+	process.on("unhandledException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error"));
+	process.on("unhandledRejection", async err => await Logger(`Unhandled rejection error. ${err}.`, "error"));
 
 	process.env.MainDir = __dirname;
 
