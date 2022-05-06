@@ -87,7 +87,7 @@ async function start() {
 	if (process.env.MONGOOSEURL) {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,
-			useUnifiedTopology: true,
+			useUnifiedTopology: true
 		});
 	} else {
 		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
@@ -96,16 +96,11 @@ async function start() {
 	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
 	mongoose.connection.on("open", () => Logger("DATABASE - ONLINE"));
 
-	fs.readdir(path.join(`${__dirname}/events`), (err, files) => {
-		if (err) return Logger(err, "error");
-
-		files.forEach(file => {
-			const EventName = file.split(".")[0];
-			const FileEvent = require(`./events/${EventName}`);
-
-			process.on(EventName, (...args) => FileEvent.run(...args));
-		});
-	});
+	process.on("warning", async warning => await logger(`${warning.name} - ${warning.message}`, "warn"));
+	process.on("exit", async code => await logger(`Process exited with code ${code}.`, "error"));
+	process.on("uncaughtException", async err => await logger(`Unhandled exception error. ${err.stack}.`, "error"));
+	process.on("unhandledException", async err => await logger(`Unhandled exception error. ${err.stack}.`, "error"));
+	process.on("unhandledRejection", async err => await logger(`Unhandled rejection error. ${err}.`, "error"));
 
 	process.env.MainDir = __dirname;
 
@@ -114,7 +109,7 @@ async function start() {
 			token: process.env.TOKEN,
 			totalShards: Config.sharding.totalShards || "auto",
 			shardArgs: [...process.argv, ...["--sharding"]],
-			execArgv: [...process.argv, ...["--trace-warnings"]],
+			execArgv: [...process.argv, ...["--trace-warnings"]]
 		});
 
 		// Shard Handlers //
@@ -123,17 +118,17 @@ async function start() {
 
 			Shard.on("ready", () => {
 				console.log(
-					require("chalk").blue(`DEPLOY SUCCESS - SHARD ${Shard.id}/${manager.totalShards} DEPLOYED SUCCESSFULLY`),
+					require("chalk").blue(`DEPLOY SUCCESS - SHARD ${Shard.id}/${manager.totalShards} DEPLOYED SUCCESSFULLY`)
 				);
 			});
 
 			Shard.on("disconnect", event => {
 				Logger("Fatal", err, {
-					shard: Shard.id,
+					shard: Shard.id
 				});
 
 				console.log(
-					require("chalk").red(`SHARD DISCONNECTED - SHARD ${Shard.id}/${manager.totalShards} DISCONNECTED. ${event}`),
+					require("chalk").red(`SHARD DISCONNECTED - SHARD ${Shard.id}/${manager.totalShards} DISCONNECTED. ${event}`)
 				);
 			});
 
@@ -143,7 +138,7 @@ async function start() {
 
 			Shard.on("death", event => {
 				Logger(err, "error", {
-					shard: Shard.id,
+					shard: Shard.id
 				});
 
 				console.log(require("chalk").red(`SHARD CLOSED - SHARD ${Shard.id}/${manager.totalShards} UNEXPECTEDLY CLOSED! PID: ${event.pid} Code: ${event.exitCode}.`));
