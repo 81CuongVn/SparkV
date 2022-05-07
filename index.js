@@ -118,8 +118,8 @@ async function start() {
 
 			shard.on("ready", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - READY`));
 			shard.on("disconnect", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED\n${event}`, "error"));
-			Shard.on("reconnecting", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - RECONNECTING`, "warn"));
-			Shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
+			shard.on("reconnecting", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - RECONNECTING`, "warn"));
+			shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
 		});
 
 		manager.spawn();
