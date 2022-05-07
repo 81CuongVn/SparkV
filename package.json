@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "node .",
+    "start": "node . --sharding",
     "dev": "doppler run -- node . --dev",
     "lint": "eslint . --fix",
     "update": "git pull && npm install",

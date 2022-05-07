@@ -104,47 +104,22 @@ async function start() {
 
 	process.env.MainDir = __dirname;
 
-	if (Config.sharding.shardingEnabled === true) {
+	if (process.argv.includes("--sharding") === true) {
 		const manager = new discord.ShardingManager("./bot/bot.js", {
 			token: process.env.TOKEN,
-			totalShards: Config.sharding.totalShards || "auto",
+			totalShards: "auto",
 			shardArgs: [...process.argv, ...["--sharding"]],
 			execArgv: [...process.argv, ...["--trace-warnings"]]
 		});
 
 		// Shard Handlers //
-		manager.on("shardCreate", Shard => {
-			console.log(require("chalk").green(`DEPLOYING - SHARD ${Shard.id}/${manager.totalShards} DEPLOYING`));
+		manager.on("shardCreate", shard => {
+			Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DEPLOYING`);
 
-			Shard.on("ready", () => {
-				console.log(
-					require("chalk").blue(`DEPLOY SUCCESS - SHARD ${Shard.id}/${manager.totalShards} DEPLOYED SUCCESSFULLY`)
-				);
-			});
-
-			Shard.on("disconnect", event => {
-				Logger("Fatal", err, {
-					shard: Shard.id
-				});
-
-				console.log(
-					require("chalk").red(`SHARD DISCONNECTED - SHARD ${Shard.id}/${manager.totalShards} DISCONNECTED. ${event}`)
-				);
-			});
-
-			Shard.on("reconnecting", () => {
-				console.log(require("chalk").red(`SHARD RECONNECTING - SHARD ${Shard.id}/${manager.totalShards} RECONNECTING`));
-			});
-
-			Shard.on("death", event => {
-				Logger(err, "error", {
-					shard: Shard.id
-				});
-
-				console.log(require("chalk").red(`SHARD CLOSED - SHARD ${Shard.id}/${manager.totalShards} UNEXPECTEDLY CLOSED! PID: ${event.pid} Code: ${event.exitCode}.`));
-
-				if (!event.exitCode) console.warn(`WARNING: SHARD ${Shard.id}/${manager.totalShards} EXITED DUE TO LACK OF AVAILABLE MEMORY.`);
-			});
+			shard.on("ready", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - READY`));
+			shard.on("disconnect", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED\n${event}`, "error"));
+			Shard.on("reconnecting", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - RECONNECTING`, "warn"));
+			Shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
 		});
 
 		manager.spawn();
