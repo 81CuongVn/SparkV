@@ -1,11 +1,9 @@
-@use "../config" as *;
-
-// Gradients //
+/* Gradients */
 .gradient {
     background: linear-gradient(
         to right,
-        rgba($primary, 0.95),
-        rgba($secondary, 0.95)
+        rgba(#0a1227, 0.95),
+        rgba(#dee03b, 0.95)
     );
 }
 

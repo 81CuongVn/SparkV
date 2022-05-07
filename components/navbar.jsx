@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import config from '../config';
 
-import style from "../styles/navbar.module.scss";
+import style from "../styles/sections/navbar.module.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faHouseChimney, faLightbulb, faHandshake, faPlusCircle, faPlus, faSliders, faBook, faCircleQuestion, faCircleExclamation, faUser, faSignOut, faTrafficLight, faIdCard, faRadio } from "@fortawesome/free-solid-svg-icons";

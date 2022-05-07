@@ -6,10 +6,6 @@ import Script from "next/script";
 
 import config from "../config";
 
-import hero from "../styles/hero.module.scss";
-import footer from "../styles/footer.module.scss";
-
-import Loader from "../components/loader";
 import Header from "../components/head";
 import Navbar from "../components/navbar";
 
@@ -112,7 +108,7 @@ export default function Render() {
                         </div>
                         <div className="row justify-content-center text-center pb-5 mx-auto">
                             {config.reviews.map((r) => (
-                                <div key={r.username} className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "#111b35", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                                <div key={r.username} className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                                     <div style={{ display: "flex", alignItems: "center", color: "rgb(255, 255, 255)", fontSize: "18px", fontWeight: "600", textAlign: "start" }}>
                                         <div style={{ marginInlineEnd: "4px", marginTop: "5px" }}><Image defer height="28" width="28" src={r.picture} style={{ borderRadius: "50%" }} alt={`${r.username}"s Review`} /></div>
                                         <span style={{ verticalAlign: "middle" }}>{r.username}</span>

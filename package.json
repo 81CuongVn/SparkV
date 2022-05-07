@@ -1,6 +1,6 @@
 {
   "name": "spark.v.showcase",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The showcase site for SparkV.",
   "main": "index.js",
   "private": true,
@@ -17,7 +17,7 @@
   "author": "KingCh1ll",
   "license": "MIT",
   "engines": {
-    "node": "14.x",
+    "node": "16.x",
     "npm": "8.x"
   },
   "dependencies": {

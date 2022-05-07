@@ -1,6 +1,4 @@
-// Buttons //
-@use "../config" as *;
-
+/* Buttons */
 .button {
   display: inline-flex;
   box-shadow: 0px 5px 20px 0 rgba(0, 0, 0, 0.1);
@@ -21,41 +19,42 @@
   -moz-transition: all 3s ease-out;
   -o-transition: all 3s ease-out;
   will-change: opacity, transform;
-
-  &:hover {
-    transform: translateY(-4px);
-    -webkit-transform: translateY(-4px);
-  }
-
-  i {
-    margin-inline-end: 16px;
-    font-size: 20px;
-    vertical-align: bottom;
-  }
-
-  .disabled {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-
-    &:hover {
-      cursor: not-allowed;
-    }
-  }
 }
 
+.button:hover {
+  transform: translateY(-4px);
+  -webkit-transform: translateY(-4px);
+}
+
+.button i {
+  margin-inline-end: 16px;
+  font-size: 20px;
+  vertical-align: bottom;
+}
+
+.button .disabled {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.button .disabled:hover {
+  cursor: not-allowed;
+}
+
+/* Button Colors */
 .button-blue {
   background-color: transparent;
   color: rgb(107, 114, 207);
   border-color: rgb(107, 114, 207);
   box-shadow: 0 10px 20px -10px rgb(107, 114, 207);
+}
 
-  &:hover {
-    background-color: rgb(107, 114, 207);
-    border-color: rgb(107, 114, 207);
-    color: white;
-  }
+.button-blue:hover {
+  background-color: rgb(107, 114, 207);
+  border-color: rgb(107, 114, 207);
+  color: white;
 }
 
 .button-yellow {
@@ -63,10 +62,10 @@
   border-color: var(--sparkv-yellow);
   color: white;
   box-shadow: 0 10px 20px -10px var(--sparkv-yellow);
+}
 
-  &:hover {
-    background-color: var(--sparkv-yellow);
-  }
+.button-yellow:hover {
+  background-color: var(--sparkv-yellow);
 }
 
 .button-gray {
@@ -74,8 +73,8 @@
   border-color: var(--bs-gray-700);
   color: white;
   box-shadow: 0 10px 20px -10px var(--bs-gray-700);
+}
 
-  &:hover {
-    background-color: var(--bs-gray-700);
-  }
+.button-gray:hover {
+  background-color: var(--bs-gray-700);
 }

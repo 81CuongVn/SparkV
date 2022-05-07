@@ -3,13 +3,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
-
 import config from "../config";
 
-import "../styles/hero.module.scss";
-import "../styles/footer.module.scss";
-
-import Loader from "../components/loader";
 import Header from "../components/head";
 import Navbar from "../components/navbar";
 
@@ -26,8 +21,8 @@ export default function Render() {
                 <Header name={config.meta.name} description={config.meta.description} logo="https://www.sparkv.tk/assets/images/SparkV.png" />
             </Head>
             {/* Background */}
-            <div className="position-fixed w-100 h-100" style={{ zIndex: "-1" }}>
-                <img defer className="w-100 h-100" src="/images/blobs.svg" alt="Cool Blob Background" style={{ opacity: ".4", WebkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }} />
+            <div style={{ position: "fixed", height: "100%", width: "100%", zIndex: "-1" }}>
+                <img defer src="/images/blobs.svg" alt="Cool Blob Background" style={{ height: "100%", width: "100%", opacity: ".4", WebkitMaskImage: "linear-gradient(to top, transparent 0%, #fff 100%)", objectFit: "cover" }} />
             </div>
 
             {/* Content */}
@@ -90,7 +85,7 @@ export default function Render() {
                         SparkV is loved by more than <strong>157,000</strong> users as an outstanding bot with <a className="gr-blue">Music</a>, <a className="gr-yellow">Memes</a>, <a className="gr-yellow">Money</a>, and more.
                     </p>
                     <div className="row justify-content-center">
-                        <center className="col-md-4 m-2" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                        <center className="col-md-4 m-2" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                             <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
                                 <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
                                     <FontAwesomeIcon icon={faRadio} />
@@ -104,7 +99,7 @@ export default function Render() {
                                 <a className="button button-blue">Learn More</a>
                             </Link>
                         </center>
-                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                             <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
                                 <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
                                     <FontAwesomeIcon icon={faFaceGrinTears} />
@@ -118,7 +113,7 @@ export default function Render() {
                                 <a className="button button-yellow" style={{ marginTop: "40px" }}>Learn More</a>
                             </Link>
                         </center>
-                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", height: "345px", borderLeft: "solid var(--sparkv-yellow) 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                             <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
                                 <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
                                     <FontAwesomeIcon icon={faMoneyBill1Wave} />
@@ -132,7 +127,7 @@ export default function Render() {
                                 <a className="button button-yellow" style={{ marginTop: "16px" }}>Learn More</a>
                             </Link>
                         </center>
-                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "#111b35", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                        <center className="col-md-4 m-3" style={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", height: "345px", borderLeft: "solid #6b72cf 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                             <div style={{ width: "50px", height: "50px", margin: "15px 0", color: "rgb(255, 255, 255)", backgroundColor: "rgb(65, 105, 225)", fontSize: "38px", borderRadius: "50%", display: "inline-flex", alignItems: "center", padding: "40px" }}>
                                 <span style={{ color: "rgb(255, 255, 255)", width: "50px", height: "50p", margin: "-22.5px" }}>
                                     <FontAwesomeIcon icon={faGamepad} />
@@ -159,7 +154,7 @@ export default function Render() {
                     </div>
                     <div className="row justify-content-center text-center pb-5 mx-auto">
                         {config.reviews.map((r) => (
-                            <div key={r.username} className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "#111b35", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
+                            <div key={r.username} className="col-5 m-3 text-center aos-init aos-animate" style={{ borderRadius: "6px", background: "var(--sparkv-dark-2)", width: "400px", borderLeft: "solid #fff 0.3rem", padding: "10px 15px 0px" }} data-aos="fade-up">
                                 <div style={{ display: "flex", alignItems: "center", color: "rgb(255, 255, 255)", fontSize: "18px", fontWeight: "600", textAlign: "start" }}>
                                     <div style={{ marginInlineEnd: "4px", marginTop: "5px" }}><Image defer height="28" width="28" src={r.picture} style={{ borderRadius: "50%" }} alt={`${r.username}"s Review`} /></div>
                                     <span style={{ verticalAlign: "middle" }}>{r.username}</span>

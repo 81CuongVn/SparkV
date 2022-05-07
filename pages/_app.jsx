@@ -4,7 +4,7 @@ import AOS from "aos";
 import "pace-js/themes/blue/pace-theme-minimal.css";
 import "aos/dist/aos.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/global.scss";
+import "../styles/global.css";
 
 import config from "../config";
 

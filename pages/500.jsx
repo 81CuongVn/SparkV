@@ -6,9 +6,6 @@ import Script from "next/script";
 
 import config from "../config";
 
-import hero from "../styles/hero.module.scss";
-import loader from "../styles/loader.module.scss";
-
 import Header from "../components/head";
 import Navbar from "../components/navbar";
 

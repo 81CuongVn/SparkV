@@ -1,20 +1,16 @@
-@use "./config" as *;
-
-//-- Components --//
-@use "components/buttons";
-@use "components/mixins";
-@use "components/text";
-@use "components/dropdowns";
-@use "components/icons";
-@use "components/gradients";
-
-//-- Fonts --//
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
 
+/*!
+ * Ch1llest Site v1.0.0 (https://ch1llest.ch1ll.tk/)
+ * Copyright 2021 KingCh1ll
+ * Some tailwind included. (https://tailwindcss.com/)
+ */
+
 :root {
   --sparkv-dark: #0a1227;
-  --sparkv-dark-2: rgba(0, 10, 35, 0.3);
+  --sparkv-dark-2: #111b35;
+  /* --sparkv-dark-2: rgba(0, 10, 35, 0.3); */
   --sparkv-light: rgb(255, 255, 255, .6);
   --sparkv-color: #0d1014;
   --sparkv-color-2: rgba(255,255,255, 0.05);
@@ -38,13 +34,24 @@ a:hover {
 
 ::-webkit-scrollbar {
     width: 10px;
-    background: $primary;
+    background: #0a1227;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: $secondary;
+    background: #dee03b;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: $secondary;
+    background: #dee03b;
 }
+
+@import "./components/buttons.module.css";
+@import "./components/gradients.module.css";
+@import "./components/icons.module.css";
+@import "./components/text.module.css";
+@import "./components/dropdowns.module.css";
+
+@import "./sections/loader.module.css";
+@import "./sections/navbar.module.css";
+@import "./sections/hero.module.css";
+@import "./sections/footer.module.css";
