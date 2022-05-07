@@ -3,6 +3,8 @@ const axios = require("axios");
 
 const cmd = require("@templates/command");
 
+const words = require("@root/bot/words.json");
+
 function shuffle(array) {
 	let currentIndex = array.length, randomIndex;
 
