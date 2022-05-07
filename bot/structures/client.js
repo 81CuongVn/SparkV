@@ -61,15 +61,8 @@ module.exports = class bot extends Client {
 			this.shop.set(shopdata[i].name, shopdata[i]);
 		}
 
-		if (settings.sharding === true) {
-			this.StatClient = await new Statcord.ShardingClient({
-				client: this,
-				key: process.env.STATCORDAPIKEY,
-				postCpuStatistics: true,
-				postMemStatistics: true,
-				postNetworkStatistics: true,
-				autopost: true
-			});
+		if (settings?.sharding === true) {
+			this.StatClient = Statcord.ShardingClient;
 		} else {
 			this.StatClient = await new Statcord.Client({
 				client: this,
@@ -81,7 +74,7 @@ module.exports = class bot extends Client {
 			});
 		}
 
-		this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size.toString() ?? "0");
+		// this.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size.toString() ?? "0");
 		this.discordTogether = new DiscordTogether(this);
 
 		if (process.env.REDIS_URL) {
@@ -180,7 +173,8 @@ module.exports = class bot extends Client {
 		const ready = this.readyAt ? Promise.resolve() : new Promise(r => this.once("ready", r));
 		await ready;
 
-		const currentCmds = await this.application.commands.fetch(process.argv.includes("--dev") === true && { guildId: "763803059876397056" });
+		// Dev: process.argv.includes("--dev") === true && { guildId: "763803059876397056" }
+		const currentCmds = await this.application.commands.fetch();
 
 		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
 		for (const newCmd of newCmds) await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");

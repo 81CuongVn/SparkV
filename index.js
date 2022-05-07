@@ -45,6 +45,7 @@ const fs = require("fs");
 const path = require("path");
 
 const discord = require("discord.js");
+const Statcord = require("statcord.js");
 const Sentry = require("@sentry/node");
 const mongoose = require("mongoose");
 const axios = require("axios");
@@ -110,6 +111,15 @@ async function start() {
 			totalShards: "auto",
 			shardArgs: [...process.argv, ...["--sharding"]],
 			execArgv: [...process.argv, ...["--trace-warnings"]]
+		});
+
+		const StatClient = await new Statcord.ShardingClient({
+			manager,
+			key: process.env.STATCORDAPIKEY,
+			postCpuStatistics: true,
+			postMemStatistics: true,
+			postNetworkStatistics: true,
+			autopost: true
 		});
 
 		// Shard Handlers //
