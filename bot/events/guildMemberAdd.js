@@ -20,7 +20,7 @@ module.exports = {
 			}
 		}
 
-		const channel = channel?.guild?.channels?.cache.get(data.welcome?.channel);
+		const channel = member?.guild?.channels?.cache.get(data.welcome?.channel);
 
 		if (!channel) return;
 
