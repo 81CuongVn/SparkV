@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "node . --sharding",
-    "dev": "doppler run -- node . --dev",
+    "start": "node .",
+    "dev": "doppler run -- node . --dev --sharding",
     "lint": "eslint . --fix",
     "update": "git pull && npm install",
     "format": "prettier --write ."
