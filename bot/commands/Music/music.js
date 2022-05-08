@@ -204,7 +204,7 @@ async function execute(bot, message, args, command, data) {
 			]
 		});
 	} else if (state === "manage") {
-		const action = data.options.getString("action");
+		const type = data.options.getString("action");
 
 		if (type === "join") {
 			try {
