@@ -8,8 +8,8 @@ async function execute(bot, message, args, command, data) {
 	const state = message.options.getSubcommand();
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
-			name: interaction.user.tag,
-			iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+			name: message.user.tag,
+			iconURL: message.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
@@ -76,7 +76,7 @@ async function execute(bot, message, args, command, data) {
 		return await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
 	} else if (state === "lyrics") {
 		const query = data.options.getString("search");
-		if (!query) return interaction.replyT(`${bot.config.emojis.error} | Please supply the title of a song to search for.`);
+		if (!query) return message.replyT(`${bot.config.emojis.error} | Please supply the title of a song to search for.`);
 
 		let lyrics;
 		try {
@@ -85,7 +85,7 @@ async function execute(bot, message, args, command, data) {
 			lyrics = null;
 		}
 
-		if (!lyrics) return await interaction.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
+		if (!lyrics) return await message.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
 
 		const LyricsArray = lyrics.split(`\n`);
 		const LyricsSubArray = [];
@@ -105,7 +105,7 @@ async function execute(bot, message, args, command, data) {
 
 		LyricsSubArray.map((i, v) => pages.push(embed.setDescription(`**${query}**\n${i.replaceAll(undefined, "")}`).setFooter({ text: bot.config.embed.footer })));
 
-		const msg = await interaction.replyT({
+		const msg = await message.replyT({
 			embeds: [pages[0]],
 			components: [
 				new Discord.MessageActionRow().addComponents(
