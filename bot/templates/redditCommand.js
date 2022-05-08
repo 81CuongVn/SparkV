@@ -5,7 +5,7 @@ const NewCommand = require("./command");
 
 const filters = {
 	image: post => post.data.post_hint === "image",
-	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256,
+	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256
 };
 
 module.exports = class RedditCommand {
@@ -16,10 +16,10 @@ module.exports = class RedditCommand {
 				{
 					cooldown: 2 * 1000,
 					slash: true,
-					bot_perms: ["EMBED_LINKS"],
+					bot_perms: ["EMBED_LINKS"]
 				},
-				sett,
-			),
+				sett
+			)
 		).settings;
 	}
 
@@ -46,7 +46,9 @@ module.exports = class RedditCommand {
 		if (!res) return;
 
 		const posts = res.data.children.filter(filters[this.settings.type]);
-		const selectedPost = posts[Math.floor(Math.random() * Object.keys(posts).length)].data;
+		let selectedPost = posts[Math.floor(Math.random() * Object.keys(posts).length)];
+		if (selectedPost) selectedPost = selectedPost.data;
+		else return;
 
 		const RedditEmbed = new Discord.MessageEmbed()
 			.setTitle(selectedPost.title.length > 256 ? `${selectedPost.title.slice(0, 248)}...` : selectedPost.title)
@@ -58,9 +60,7 @@ module.exports = class RedditCommand {
 			})
 			.setColor(bot.config.embed.color);
 
-		if (this.settings.type === "text") {
-			RedditEmbed.setDescription(selectedPost.selftext);
-		}
+		if (this.settings.type === "text") RedditEmbed.setDescription(selectedPost.selftext);
 
 		await message.replyT({
 			embeds: [RedditEmbed]
