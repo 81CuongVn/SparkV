@@ -12,7 +12,18 @@ function timeoutUser(offense, message, data) {
 	if (message.member.isCommunicationDisabled()) return;
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
-		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
+		.then(async () => await message.channel.send({
+			embeds: [
+				new Discord.MessageEmbed()
+					.setAuthor({
+						name: message.author.tag,
+						iconURL: message.author.displayAvatarURL({ dynamic: true })
+					})
+					.setDescription(`${message.client.config.emojis.alert} | You've been placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
+					.setColor("RED")
+					.setTimestamp()
+			]
+		}))
 		.catch(() => {});
 }
 
