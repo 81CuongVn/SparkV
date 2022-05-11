@@ -5,7 +5,7 @@
 SparkV is a powerful multipurpose meme/chatbot that features Music, Currency, Memes, Games, Utility, a dope dashboard, and more! With 24/7 uptime, you can ensure your server is the best.
 > SparkV is loved by over 200+ servers and 124k+ users.
 
-If you want to learn more about SparkV (Information, commands, etc), run the command `\help` in any server. If you need help, then you should 100% join [Ch1ll Studios](https://discord.gg/PPtzT8Mu3h), our community/support server for SparkV and other amazing projects by us.
+If you want to learn more about SparkV (Information, commands, etc), run the command `/help` in any server. If you need help, then you should 100% join [Ch1ll Studios](https://discord.gg/PPtzT8Mu3h), our community/support server for SparkV and other amazing projects by us.
 
 ### ⚙️ Setup
 
