@@ -87,6 +87,8 @@ module.exports = async bot => {
 			fetchReply: true
 		}).catch(err => {});
 
+		if (!MusicMessage) return;
+
 		const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 		collector.on("collect", async interaction => {
 			await interaction.deferReply({
