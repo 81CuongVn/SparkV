@@ -13,7 +13,7 @@ function timeoutUser(offense, message, data) {
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
 		.then(async () => await message.replyT(`You've been **MUTED** for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for getting **${data.member.infractionsCount}** warning(s).`))
-		.catch(async () => await message.channel.send(`Failed to put ${message.member} on timeout! Please check that I have the correct permissions and my role is higher than ${message.member}.`));
+		.catch(() => {});
 }
 
 module.exports = {
@@ -233,7 +233,7 @@ module.exports = {
 
 			// Check for spam
 			if (data.guild.antiSpam.enabled === "true") {
-				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") || !message.channel.permissionsFor(message.member).has("ADMINISTRATOR")) {
+				if (!bot.config.owners.includes(message.author.id) && !message.member.roles.highest.position > message.guild.roles.highest.position) {
 					if (!message.channel.name.startsWith("spam") && !message.channel.name.endsWith("spam")) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
 
