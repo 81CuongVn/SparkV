@@ -85,7 +85,7 @@ module.exports = async bot => {
 				}
 			] : null,
 			fetchReply: true
-		});
+		}).catch(err => {});
 
 		const collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 		collector.on("collect", async interaction => {
@@ -350,8 +350,8 @@ module.exports = async bot => {
 		.on("searchCancel", async message => await message.replyT(`Searching canceled.`))
 		.on("searchInvalidAnswer", async message => await message.replyT("Search answer invalid. Make sure you're sending your selected song's page number. For example, if I wanted to play a song on the 5th page, I would send the number 5."))
 		.on("searchNoResult", async message => await message.replyT("No result found!"))
-		.on("finish", queue => queue.textChannel.send("No songs left in queue."))
+		.on("finish", queue => queue.textChannel.send("No songs left in queue.").catch(err => {}))
 		.on("noRelated", async message => await message.replyT("I cannot find a related video to play. I am stopping the music."))
-		.on("empty", queue => queue.textChannel.send("Voice chat is empty. I'm going to leave the voice chat now."))
+		.on("empty", queue => queue.textChannel.send("Voice chat is empty. I'm going to leave the voice chat now.").catch(err => {}))
 		.on("error", (channel, err) => channel.textChannel?.send(`${bot.config.emojis.error}︱Uh oh! An error occured. ${err}`));
 };
