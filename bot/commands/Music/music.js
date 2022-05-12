@@ -103,7 +103,7 @@ async function execute(bot, message, args, command, data) {
 			}
 		}
 
-		LyricsSubArray.map((i, v) => pages.push(embed.setDescription(`**${query}**\n${i.replaceAll(undefined, "")}`).setFooter({ text: bot.config.embed.footer })));
+		LyricsSubArray.map((i, v) => pages.push(embed.setDescription(`**${query}**\n${i.replaceAll(undefined, "")}`).setTimestamp()));
 
 		const msg = await message.replyT({
 			embeds: [pages[0]],
@@ -175,8 +175,8 @@ async function execute(bot, message, args, command, data) {
 			embeds: [
 				embed
 					.setDescription(`${bot.config.emojis.alert} | Skipped song!\nSkiped to the next song in queue.`)
-					.setFooter(bot.config.embed.footer)
 					.setColor("RED")
+					.setTimestamp()
 			]
 		});
 	} else if (state === "loop") {
@@ -199,7 +199,7 @@ async function execute(bot, message, args, command, data) {
 			embeds: [
 				embed
 					.setDescription(`${bot.config.emojis.music} | Okay, I ${state2 === "off" ? `stopped the loop.` : `looped the ${type}.`}`)
-					.setFooter(bot.config.embed.footer)
+					.setTimestamp()
 					.setColor("RED")
 			]
 		});
@@ -401,7 +401,7 @@ async function execute(bot, message, args, command, data) {
 				})
 				.setTitle(`${bot.config.emojis.error} | Next!`)
 				.setDescription(`Going to the next song.`)
-				.setFooter(bot.config.embed.footer)
+				.setTimestamp()
 				.setColor("RED");
 
 			await message.replyT({
