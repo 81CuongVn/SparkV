@@ -105,29 +105,23 @@ async function execute(bot, message, args, command, data) {
 			.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
 			.toJSON();
 
-		const position = new Promise(forfill => {
-			for (let i = 1; i < members.length + 1; i++) {
-				if (members[i - 1].id === member.id) forfill(i);
-			}
-		});
-
-		embed
+		const infoEmbed = new Discord.MessageEmbed()
 			.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
-			.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? (member?.presence?.status.charAt(0).toUpperCase() + member?.presence?.status.slice(1)) : "None")}\`\`\``, true)
-			.addField(`${bot.config.emojis.clock} ${await message.translate("Join Position")}`, `\`\`\`${await position || "UNKNOWN"}/${members.length}\`\`\``, true)
-			.setColor(roleColor || bot.config.embed.color);
+			.addField(`${bot.config.emojis.player} ${await message.translate("User")} ${user.flags.toArray().length > 0 && user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, `\`\`\`${user?.tag}\`\`\``, true)
+			.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? (member?.presence?.status.charAt(0).toUpperCase() + member?.presence?.status.slice(1)) : "Offline")}\`\`\``, true)
+			.addField(`${bot.config.emojis.id} ${await message.translate("ID")}`, `\`\`\`${user?.id}\`\`\``, false)
+			.setColor(roleColor || bot.config.embed.color)
+			.setTimestamp();
 
-		if (user.flags.toArray().length > 0) embed.addField(`${bot.config.emojis.award} ${await message.translate("Badges")}`, `${user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, false);
-
-		embed
+		infoEmbed
 			.addField(`${bot.config.emojis.plus} ${await message.translate("Registered")}`, `<t:${~~(user.createdAt / 1000)}:R>`, true)
 			.addField(`${bot.config.emojis.join} ${await message.translate("Joined Server")}`, `<t:${~~(member.joinedAt / 1000)}:R>`, true);
 
-		if (roles) embed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
-		if (user.user ? user.user.banner : user.banner) embed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
+		if (roles) infoEmbed.addField(`${bot.config.emojis.trophy} Roles (${roleCount})`, roles, false);
+		if (user.user ? user.user.banner : user.banner) infoEmbed.setImage(user.user ? user.user.bannerURL({ dynamic: true, size: 1024 }) : user.bannerURL({ dynamic: true, size: 1024 }));
 
 		return message.replyT({
-			embeds: [embed]
+			embeds: [infoEmbed]
 		});
 	}
 
