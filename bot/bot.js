@@ -2,14 +2,18 @@
 // Last Edited: 2/25/2021 //
 // Index.js //
 
-// Run Client Extender
+if (process.argv.includes("--sharding") === true) require("module-alias/register");
 require("./structures/extenders");
 
 // Librarys //
 const fs = require("fs");
 const path = require("path");
 const Statcord = require("statcord.js");
-const { Collection, Intents, Permissions, Options } = require("discord.js");
+const Sentry = require("@sentry/node");
+const mongoose = require("mongoose");
+const { Collection, Intents, Permissions } = require("discord.js");
+
+const PackageInfo = require("../package.json");
 
 const Client = require("./structures/client");
 const SparkV = new Client({
@@ -42,8 +46,31 @@ const SparkV = new Client({
 global.bot = SparkV;
 
 async function Start() {
+	if (process.argv.includes("--sharding") === true) {
+		if (process.env.SENTRYTOKEN) {
+			Sentry.init({
+				dsn: process.env.SENTRYTOKEN,
+				release: `${PackageInfo.name}@${PackageInfo.version}`
+			});
+		} else {
+			Logger("WARNING - NO API KEY FOR SENTRY! SPARKV MAY BREAK WITHOUT SENTRY LOGGING KEY.", "warn");
+		}
+
+		if (process.env.MONGOOSEURL) {
+			await mongoose.connect(process.env.MONGOOSEURL, {
+				useNewUrlParser: true,
+				useUnifiedTopology: true
+			});
+		} else {
+			Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
+		}
+	}
+
+	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
+	mongoose.connection.on("open", () => Logger("DATABASE - ONLINE"));
+
 	await SparkV.LoadModules({
-		sharding: process.execArgv.includes("--sharding")
+		sharding: process.argv.includes("--sharding")
 	});
 
 	await SparkV.LoadEvents(__dirname);

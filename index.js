@@ -94,9 +94,6 @@ async function start() {
 		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
 	}
 
-	mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
-	mongoose.connection.on("open", () => Logger("DATABASE - ONLINE"));
-
 	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn"));
 	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error"));
 	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error"));
@@ -109,8 +106,7 @@ async function start() {
 		const manager = new discord.ShardingManager("./bot/bot.js", {
 			token: process.env.TOKEN,
 			totalShards: "auto",
-			shardArgs: [...process.argv, ...["--sharding"]],
-			execArgv: [...process.argv, ...["--trace-warnings"]]
+			shardArgs: [...process.argv, ...["--sharding"]]
 		});
 
 		const StatClient = await new Statcord.ShardingClient({

@@ -97,7 +97,7 @@ module.exports = {
 			if (command.settings.guildOnly && !interaction.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.");
 			if (command.settings.ownerOnly && !bot.config.owners.includes(interaction.user.id)) return await interaction.replyT("This command is restricted. Only the owners (KingCh1ll, Unbreakablenight) can use this command.");
 
-			bot.StatClient.postCommand(command.settings.name, interaction.user.id);
+			bot.StatClient.postCommand(command.settings.name, interaction.user.id, process.argv.includes("--sharding") === true && bot);
 
 			try {
 				await command.run(bot, interaction, args, interaction.commandName, data);
@@ -298,14 +298,21 @@ module.exports = {
 				const roleID = interaction.customId.slice(5);
 				const role = await interaction.guild.roles.cache.get(roleID) || await interaction.guild.roles.fetch(roleID);
 
-				if (!interaction.member.roles.cache.get(roleID)) {
-					await interaction.member.roles.add(roleID);
-
-					interaction.followUp(`The role <@&${roleID}> was successfully added to you!`);
+				if (!interaction?.member?.roles?.cache?.get(roleID)) {
+					try {
+						await interaction?.member?.roles?.add(roleID);
+						interaction.followUp(`The role <@&${roleID}> was successfully added to you!`);
+					} catch (err) {
+						interaction.followUp(`${bot.config.emojis.error} | An error occurred while trying to add the role <@&${roleID}> to you. Please check my permissions and try again later.`);
+					}
 				} else {
-					await interaction.member.roles.remove(roleID);
+					try {
+						await interaction.member.roles.remove(roleID);
 
-					interaction.followUp(`The role <@&${roleID}> was successfully removed from you.`);
+						interaction.followUp(`The role <@&${roleID}> was successfully removed from you.`);
+					} catch (err) {
+						interaction.followUp(`${bot.config.emojis.error} | An error occurred while trying to remove the role <@&${roleID}> from you. Please check my permissions and try again later.`);
+					}
 				}
 			}
 		}

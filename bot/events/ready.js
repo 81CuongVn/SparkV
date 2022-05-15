@@ -45,8 +45,7 @@ module.exports = {
 
 		// Bot Stats
 		if (bot?.StatClient) {
-			bot.StatClient.post();
-			bot.StatClient.autopost();
+			bot.StatClient.post(process.argv.includes("--sharding") === true && bot);
 
 			bot.logger("[Statcord] Statcord ready, now posting statistics.");
 		} else {
