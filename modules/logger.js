@@ -42,7 +42,7 @@ module.exports = async (content, type) => {
 					if (content?.stack) ErrorEmbed.addField("**Stack**", `\`\`\`${content.stack}\`\`\``);
 
 					await errorChannel.send({
-						embeds: [ErrorEmbed],
+						embeds: [ErrorEmbed]
 					});
 				}
 			}

@@ -11,20 +11,21 @@ const messages = [];
 function timeoutUser(offense, message, data) {
 	if (message.member.isCommunicationDisabled()) return;
 
-	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
-		.then(async () => await message.channel.send({
-			embeds: [
-				new Discord.MessageEmbed()
-					.setAuthor({
-						name: message.author.tag,
-						iconURL: message.author.displayAvatarURL({ dynamic: true })
-					})
-					.setDescription(`${message.client.config.emojis.alert} | You've been placed on timeout for ${bot.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
-					.setColor("RED")
-					.setTimestamp()
-			]
-		}))
-		.catch(() => {});
+	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${message.client.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
+		.then(async () => {
+			const timeoutEmbed = new Discord.MessageEmbed()
+				.setAuthor({
+					name: message.author.tag,
+					iconURL: message.author.displayAvatarURL({ dynamic: true })
+				})
+				.setDescription(`${message.client.config.emojis.alert} | You've been placed on timeout for ${message.client.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
+				.setColor("RED")
+				.setTimestamp();
+
+			await message.channel.send({
+				embeds: [timeoutEmbed]
+			}).catch(err => { });
+		}).catch(() => { });
 }
 
 module.exports = {
@@ -45,16 +46,14 @@ module.exports = {
 		// If the message is from a DM, return. This prevents SparkV from responding to DMs.
 		if (message?.channel?.type === "dm") return;
 
-		const botMember = await message.guild.members.fetch(bot.user.id);
-
 		// If the bot cannot send messages, return.
-		if (!botMember.permissionsIn(message.channel).has("SEND_MESSAGES")) return;
+		if (!(await message.guild.members.fetch(bot.user.id)).permissionsIn(message.channel).has("SEND_MESSAGES")) return;
 
 		// If the guild is part of the guild blacklist, return.
 		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
 		// Cache the member.
-		if (message.guild && !message.member) await message.guild.members.fetch(message.author.id);
+		if (message.guild && !message.member) await message.guild.members.fetch(message?.author?.id);
 
 		// Data
 		const data = {};
@@ -67,7 +66,7 @@ module.exports = {
 			message.guild.data = data.guild;
 		}
 
-		if (message.guild) data.member = await bot.database.getMember(message.author.id, message.guild.id);
+		if (message.guild && message?.author?.id && message?.guild?.id) data.member = await bot.database.getMember(message?.author?.id, message?.guild?.id);
 
 		// User data
 		data.user = await bot.database.getUser(message.author.id);
@@ -77,27 +76,35 @@ module.exports = {
 		// Plugins
 		if (message.guild) {
 			// Vote reminder
-			if (data.user.votes.remind === "true") {
-				if (43200000 - (Date.now() - data.user.votes.voted) > 0) {
+			if (data.user.votes.reminded === "true" && !(43200000 - (Date.now() - data.user.votes.voted) > 0)) {
+				data.user.votes.reminded = "false";
+				await data.user.save();
+			}
+
+			if (data.user.votes.remind === "true" && data.user.votes.reminded === "false") {
+				if (!(43200000 - (Date.now() - data.user.votes.voted) > 0)) {
 					const voteEmbed = new Discord.MessageEmbed()
 						.setAuthor({
 							name: message.author.tag,
 							iconURL: message.author.displayAvatarURL({ dynamic: true })
 						})
-						.setTitle("You can vote again!")
-						.setDescription(`You can vote again on <:topgg:946558388261769227> **top.gg**.`)
-						.setColor(bot.config.embed.color);
+						.setDescription(`${bot.config.emojis.alert} | **Hi there!**\nYou're able to vote for me on top.gg. You've voted **${data.user.votes.total} times**, and **last voted <t:${~~(data.user.votes.voted / 1000)}:R>**.`)
+						.setColor(bot.config.embed.color)
+						.setTimestamp();
 
 					const VoteButton = new Discord.MessageButton()
 						.setEmoji("<:topgg:946558388261769227>")
 						.setLabel("Vote")
-						.setURL("https://top.gg/bot/884525761694933073")
+						.setURL("https://top.gg/bot/884525761694933073/vote")
 						.setStyle("LINK");
 
 					message.author.send({
 						embeds: [voteEmbed],
 						components: [new Discord.MessageActionRow().addComponents(VoteButton)]
 					});
+
+					data.user.votes.reminded = "true";
+					await data.user.save();
 				}
 			}
 
@@ -158,7 +165,7 @@ module.exports = {
 						await data.member.save();
 
 						if (data.guild?.antiScam?.action === "timeout") {
-							timeoutUser("scamLink", message, data);
+							timeoutUser("sending a scam link", message, data);
 							bot.emit("scamLinkSent", message, data);
 						} else if (data.guild?.antiScam?.action === "kick") {
 							message.member.kick({
@@ -205,8 +212,6 @@ module.exports = {
 						data.member.markModified("infractionsCount");
 						data.member.markModified("infractions");
 
-						message.replyT(`🔨 | ${message.author}, please stop cursing. If you continue, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
-
 						timeoutUser("cursing", message, data);
 					}
 				}
@@ -235,16 +240,13 @@ module.exports = {
 			// 			message
 			// 				.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
 			// 		}
-
-			// 		message.replyT(`🔨 | ${message.author}, you cannot send links! If you continue to send links, I will be forced to take action. | You have **${data.member.infractionsCount}** warning(s).`);
-
 			// 		timeoutUser("sending links", message, data);
 			// 	}
 			// }
 
 			// Check for spam
 			if (data.guild.antiSpam.enabled === "true") {
-				if (!bot.config.owners.includes(message.author.id) && !message.member.roles.highest.position > message.guild.roles.highest.position) {
+				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
 					if (!message.channel.name.startsWith("spam") && !message.channel.name.endsWith("spam")) {
 						const member = message.member || (await message.guild.members.fetch(message.author));
 
@@ -285,8 +287,6 @@ module.exports = {
 									}
 								}
 							});
-
-							message.replyT(`🔨 | ${message.author}, please stop spamming. If you continue to spam, you'll be punished. | You have **${data.member.infractionsCount}** warning(s).`);
 
 							if (data.guild?.antiSpam?.action === "timeout") {
 								timeoutUser("spamming", message, data);

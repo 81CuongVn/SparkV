@@ -152,7 +152,7 @@ async function execute(bot, message, args, command, data) {
 		collector.on("end", async interaction => {
 			try {
 				interaction.edit({ components: [] });
-			} catch (err) { }
+			} catch (err) {}
 		});
 	} else if (state === "skip") {
 		const queue = await bot.distube.getQueue(message);
@@ -451,7 +451,6 @@ module.exports = new cmd(execute, {
 	aliases: [],
 	usage: "",
 	slash: true,
-	// defer: false,
 	options: [
 		{
 			type: 1,

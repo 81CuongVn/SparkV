@@ -13,9 +13,7 @@ async function execute(bot, message, args, command, data) {
 	const User = message?.applicationId ? (data.options.getMember("user") || message.user) : (message.mentions.members.first() || message.author);
 	const UserData = (User.user ? User.user.id : User.id) === (message.user ? message.user.id : message.author.id) ? data.member : await bot.database.getMember(User.user ? User.user.id : User.id, message.guild.id);
 
-	console.log(UserData);
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please mention someone to view their warnings!`);
-
 	if (!UserData.infractionsCount === 0) return await message.replyT("This user doesn't have any infractions!");
 	if (UserData.infractionsCount >= 100) return await message.replyT("This user has over 100 infractions!");
 
@@ -90,27 +88,11 @@ async function execute(bot, message, args, command, data) {
 	});
 
 	collector.on("collect", async interaction => {
-		if (interaction.customId) {
-			if (interaction.customId === "quickLeft") {
-				PageNumber = 0;
-			} else if (interaction.customId === "left") {
-				if (PageNumber > 0) {
-					--PageNumber;
-				} else {
-					PageNumber = pages.length - 1;
-				}
-			} else if (interaction.customId === "right") {
-				if (PageNumber + 1 < pages.length) {
-					++PageNumber;
-				} else {
-					PageNumber = 0;
-				}
-			} else if (interaction.customId === "quickRight") {
-				PageNumber = pages.length - 1;
-			} else {
-				return;
-			}
-		}
+		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+		if (interaction.customId === "quickLeft") PageNumber = 0;
+		else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
+		else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
+		else if (interaction.customId === "quickRight") PageNumber = pages.length - 1;
 
 		try {
 			interaction.update({
@@ -118,11 +100,9 @@ async function execute(bot, message, args, command, data) {
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
-				],
+				]
 			});
-		} catch (err) {
-			// Page deleted.
-		}
+		} catch (err) {}
 	});
 }
 
@@ -138,7 +118,7 @@ module.exports = new cmd(execute, {
 		{
 			type: 6,
 			name: "user",
-			description: "The user to display the warnings of.",
+			description: "The user to display the warnings of."
 		}
 	]
 });

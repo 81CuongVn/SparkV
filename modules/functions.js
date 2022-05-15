@@ -15,9 +15,7 @@ module.exports = {
    * @param {Object} client Discord client.
    */
 	init(client) {
-		if (!client) {
-			throw new TypeError("Discord client must be valid.");
-		}
+		if (!client) throw new TypeError("Discord client must be valid.");
 
 		bot = client;
 
@@ -177,19 +175,22 @@ module.exports = {
    */
 	MSToTime(ms, type = "long") {
 		const RoundNumber = ms > 0 ? Math.floor : Math.ceil;
-		const Days = RoundNumber(ms / 86400000);
+		const Months = RoundNumber(ms / 2629800000);
+		const Days = RoundNumber(ms / 86400000) % 30.4167;
 		const Hours = RoundNumber(ms / 3600000) % 24;
 		const Mins = RoundNumber(ms / 60000) % 60;
 		const Secs = RoundNumber(ms / 1000) % 60;
 
 		let time;
 		if (type === "long") {
-			time = Days > 0 ? `${Days} Day${Days === 1 ? "" : "s"}, ` : "";
+			time = Months > 0 ? `${Months} Month${Months === 1 ? "" : "s"}, ` : "";
+			time += Days > 0 ? `${Days} Day${Days === 1 ? "" : "s"}, ` : "";
 			time += Hours > 0 ? `${Hours} Hour${Hours === 1 ? "" : "s"}, ` : "";
 			time += Mins > 0 ? `${Mins} Minute${Mins === 1 ? "" : "s"} & ` : "";
-			time += Secs > 0 ? `${Secs} Second${Secs === 1 ? "" : "s"}.` : "0 Seconds.";
+			time += Secs > 0 ? `${Secs} Second${Secs === 1 ? "" : "s"}` : "0 Seconds";
 		} else if (type === "short") {
-			time = Days > 0 ? `${Days}d ` : "";
+			time = Months > 0 ? `${Months}m ` : "";
+			time += Days > 0 ? `${Days}d ` : "";
 			time += Hours > 0 ? `${Hours}h ` : "";
 			time += Mins > 0 ? `${Mins}m ` : "";
 			time += Secs > 0 ? `${Secs}s` : "0s";

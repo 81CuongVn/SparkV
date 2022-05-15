@@ -3,23 +3,24 @@ const mongoose = require("mongoose");
 const Schema = new mongoose.Schema({
 	id: { type: String, unique: true },
 	registrationDate: { type: Number, default: Date.now() },
-	cooldowns: { type: Object, default: {
-		daily: 0,
-		weekly: 0
-	} },
+	cooldowns: {
+		daily: { type: Number, default: 0 },
+		weekly: { type: Number, default: 0 }
+	},
 	afk: { type: String, default: null },
-	money: { type: Object, default: {
-		balance: 100,
-		bank: 0,
-		bankMax: 2000,
-		multiplier: 1
-	} },
-	votes: { type: Object, default: {
-		voted: 0,
-		total: 0,
-		remind: "false"
-	} },
-	inventory: { type: Object, default: {} },
+	money: {
+		balance: { type: Number, default: 100 },
+		bank: { type: Number, default: 0 },
+		bankMax: { type: Number, default: 2000 },
+		multiplier: { type: Number, default: 1 }
+	},
+	votes: {
+		voted: { type: Number, default: 0 },
+		total: { type: Number, default: 0 },
+		remind: { type: String, default: "false" },
+		reminded: { type: String, default: "false" }
+	},
+	inventory: { type: Object, default: {} }
 });
 
 module.exports = mongoose.model("User", Schema);

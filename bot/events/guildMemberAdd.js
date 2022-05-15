@@ -43,7 +43,7 @@ module.exports = {
 
 		channel.send({
 			content: msg,
-			files: [attachment],
+			files: [attachment]
 		}).catch(err => { });
-	},
+	}
 };
