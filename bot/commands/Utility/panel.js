@@ -280,7 +280,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role1_emoji",
-					description: "The emoji to use for the first role button.",
+					description: "The emoji to use for the first role button."
 				},
 				{
 					type: 8,
@@ -295,7 +295,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role2_emoji",
-					description: "The emoji to use for the second role button.",
+					description: "The emoji to use for the second role button."
 				},
 				{
 					type: 8,
@@ -310,7 +310,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role3_emoji",
-					description: "The emoji to use for the third role button.",
+					description: "The emoji to use for the third role button."
 				},
 				{
 					type: 8,
@@ -325,7 +325,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role4_emoji",
-					description: "The emoji to use for the fourth role button.",
+					description: "The emoji to use for the fourth role button."
 				},
 				{
 					type: 8,
@@ -340,7 +340,7 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "role5_emoji",
-					description: "The emoji to use for the fifth role button.",
+					description: "The emoji to use for the fifth role button."
 				},
 				{
 					type: 3,
@@ -577,6 +577,6 @@ module.exports = new cmd(execute, {
 					]
 				}
 			]
-		},
+		}
 	]
 });

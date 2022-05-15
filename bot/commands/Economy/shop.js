@@ -49,68 +49,13 @@ async function execute(bot, message, args, command, data) {
 		fetchReply: true
 	});
 
-	const collector = msg.createMessageComponentCollector({
-		filter: interaction => {
-			if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
-
-			return true;
-		}, time: 300 * 1000
-	});
-
+	const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 	collector.on("collect", async interaction => {
-		if (interaction.customId === "quickLeft") {
-			PageNumber = 0;
-		} else if (interaction.customId === "left") {
-			if (PageNumber > 0) {
-				--PageNumber;
-			} else {
-				PageNumber = pages.length - 1;
-			}
-		} else if (interaction.customId === "right") {
-			if (PageNumber + 1 < pages.length) {
-				++PageNumber;
-			} else {
-				PageNumber = 0;
-			}
-		} else if (interaction.customId === "quickRight") {
-			PageNumber = pages.length - 1;
-		} else if (interaction.customId === "number") {
-			const infoMsg = await interaction.reply("Please send a page number.");
-
-			await interaction.channel.awaitMessages({
-				filter: msg => {
-					if (msg.author.id === msg.client.user.id) return false;
-
-					if (!msg.content) {
-						msg.reply("Please send a number!");
-
-						return false;
-					}
-
-					if (!parseInt(msg.content) && isNaN(msg.content)) {
-						msg.reply("Please send a valid number!");
-
-						return false;
-					}
-
-					if (parseInt(msg.content) > pages.length) {
-						msg.reply("That's a page number higher than the amount of pages there are.");
-
-						return false;
-					}
-
-					return true;
-				}, max: 1, time: 30 * 1000, errors: ["time"]
-			}).then(async collected => {
-				const input = parseInt(collected.first().content);
-
-				PageNumber = input - 1;
-				collected.first().delete().catch(err => { });
-				infoMsg.delete().catch(err => { });
-			}).catch(async collected => await interaction.replyT("Canceled due to no valid response within 30 seconds."));
-		} else {
-			return;
-		}
+		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+		if (interaction.customId === "quickLeft") PageNumber = 0;
+		else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
+		else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
+		else if (interaction.customId === "quickRight") PageNumber = pages.length - 1;
 
 		try {
 			interaction.edit({
@@ -118,11 +63,9 @@ async function execute(bot, message, args, command, data) {
 					pages[PageNumber].setFooter({
 						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
 					})
-				],
+				]
 			});
-		} catch (err) {
-			// Page deleted.
-		}
+		} catch (err) {}
 	});
 
 	collector.on("end", async () => {
@@ -130,9 +73,7 @@ async function execute(bot, message, args, command, data) {
 			await msg?.edit({
 				components: []
 			});
-		} catch (err) {
-			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
-		}
+		} catch (err) {}
 	});
 }
 
