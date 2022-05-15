@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node .",
-    "dev": "doppler run -- node . --dev --sharding",
+    "dev": "doppler run -- node . --dev",
     "lint": "eslint . --fix",
     "update": "git pull && npm install",
     "format": "prettier --write ."
