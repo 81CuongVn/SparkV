@@ -10,13 +10,13 @@ const { YtDlpPlugin } = require("@distube/yt-dlp");
 module.exports = async bot => {
 	const spotifySettings = {
 		parallel: true,
-		emitEventsAfterFetching: true,
+		emitEventsAfterFetching: true
 	};
 
 	if (process.env.SPOTIFYID && process.env.SPOTIFYSECRET) {
 		spotifySettings.api = {
 			clientId: process.env.SPOTIFYID,
-			clientSecret: process.env.SPOTIFYSECRET,
+			clientSecret: process.env.SPOTIFYSECRET
 		};
 	}
 
@@ -95,14 +95,6 @@ module.exports = async bot => {
 				ephemeral: true
 			});
 
-			const queue = bot.distube.getQueue(interaction);
-
-			if (!queue) {
-				await interaction.editT("There is no music playing.");
-
-				collector.stop();
-			}
-
 			const embed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: song.member.user.username,
@@ -114,24 +106,32 @@ module.exports = async bot => {
 				});
 
 			if (interaction.customId === "loop") {
-				const loopModes = [
-					0,
-					1,
-					2
-				];
+				const queue = bot.distube.getQueue(interaction);
 
+				if (!queue) {
+					await interaction.editT("There is no music playing.");
+					collector.stop();
+				}
+
+				const loopModes = [0, 1, 2];
 				const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
 				const loopMode = nextLoopMode === 0 ? `${bot.config.emojis.error} Disabled` : `${bot.config.emojis.success} ${nextLoopMode === 1 ? "\`Server Queue\`" : "\`Current Song\`"}`;
 
-				queue.setRepeatMode(nextLoopMode);
+				queue.setRepeatMode(nextLoopMode).catch(err => {});
 
 				embed
 					.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)
 					.setDescription(`Looping is now ${loopMode}.`)
 					.setColor(bot.config.embed.color);
 			} else if (interaction.customId === "TP") {
+				const queue = bot.distube.getQueue(interaction);
+				if (!queue) {
+					await interaction.editT("There is no music playing.");
+					collector.stop();
+				}
+
 				if (queue?.paused ?? null) {
-					queue.resume();
+					queue?.resume();
 
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
@@ -140,7 +140,13 @@ module.exports = async bot => {
 
 					TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 				} else {
-					queue.pause();
+					const queue = bot.distube.getQueue(interaction);
+					if (!queue) {
+						await interaction.editT("There is no music playing.");
+						collector.stop();
+					}
+
+					queue?.pause().catch(err => {});
 
 					embed
 						.setTitle(`${bot.config.emojis.music} | Music Paused!`)
@@ -155,7 +161,7 @@ module.exports = async bot => {
 					components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
 				});
 			} else if (interaction.customId === "stop") {
-				queue.stop();
+				queue?.stop().catch(err => {});
 
 				embed
 					.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
@@ -239,7 +245,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${queue.formattedCurrentTime}/${song.formattedDuration}\`\`\``,
-							inline: true,
+							inline: true
 						},
 						{
 							name: `${bot.config.emojis.clock} Song Progress`,
@@ -300,7 +306,7 @@ module.exports = async bot => {
 						{
 							name: `${bot.config.emojis.clock} Duration`,
 							value: `\`\`\`${song.formattedDuration}\`\`\``,
-							inline: true,
+							inline: true
 						},
 						{
 							name: `${bot.config.emojis.volume} Volume`,

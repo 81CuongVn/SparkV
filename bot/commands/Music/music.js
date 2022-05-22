@@ -174,7 +174,7 @@ async function execute(bot, message, args, command, data) {
 		await message.replyT({
 			embeds: [
 				embed
-					.setDescription(`${bot.config.emojis.alert} | Skipped song!\nSkiped to the next song in queue.`)
+					.setDescription(`**${bot.config.emojis.alert} | Skipped song!**\nSkiped to the next song in queue.`)
 					.setColor("RED")
 					.setTimestamp()
 			]
@@ -446,7 +446,7 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: "Play music in your Discord server!",
+	description: "<:music:947988551805575189> Play music in your Discord server.",
 	dirname: __dirname,
 	aliases: [],
 	usage: "",

@@ -19,14 +19,10 @@ async function execute(bot, message, args, command, data) {
 
 	if (number < 1 || number > 100) return message.replyT(`${bot.config.emojis.success} | Next time, please provide a number greater than 0 and less than 100.`);
 
-	if (message?.applicationId) {
-		await message.deleteReply();
-	} else {
-		await message.delete().catch(err => {});
-	}
+	await message.deleteReply().catch(err => {});
 
 	let messages = await message.channel.messages.fetch({
-		limit: 100,
+		limit: 100
 	});
 	messages = messages.toJSON();
 
@@ -35,13 +31,12 @@ async function execute(bot, message, args, command, data) {
 	if (data.options.getString("content")) messages = messages.filter(m => m.content.toLowerCase().includes(data.options.getString("content").toLowerCase()));
 
 	if (messages.length > number) messages.length = parseInt(number, 10);
-
 	number++;
 
 	try {
 		message.channel.bulkDelete(messages, true);
 
-		await message.replyT(`${bot.config.emojis.success} | Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`).then(m => setTimeout(() => m.delete(), 5 * 1000));
+		await message.replyT(`${bot.config.emojis.success} | Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`).then(m => setTimeout(() => m.delete().catch(err => err), 5 * 1000));
 	} catch (err) {
 		await message.replyT(`${bot.config.emojis.error} | Uh oh! I failed to clear **${--number}** messages${user ? ` from ${user.user.tag}` : ""}. Please check my permissions and try again.`);
 	}
@@ -81,12 +76,12 @@ module.exports = new cmd(execute, {
 		{
 			type: 6,
 			name: "user",
-			description: "The user to delete the messages of.",
+			description: "The user to delete the messages of."
 		},
 		{
 			type: 3,
 			name: "content",
-			description: "Only delete messages that contain this content.",
+			description: "Only delete messages that contain this content."
 		}
 	]
 });
