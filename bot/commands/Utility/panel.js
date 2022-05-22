@@ -119,7 +119,7 @@ async function execute(bot, message, args, command, data) {
 			.setColor(data.options.getString("color") || bot.config.embed.color);
 
 		if (data.options.getString("title")) embed.setTitle(data.options.getString("title"));
-		if (data.options.getString("image")) embed.setImage(data.options.getString("image"));
+		if (data.options.getString("image")) embed.setThumbnail(data.options.getString("image"));
 
 		await message.channel.send({
 			embeds: [embed]
