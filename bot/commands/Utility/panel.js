@@ -112,15 +112,14 @@ async function execute(bot, message, args, command, data) {
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created roles select panel.`);
 	} else if (state === "embed") {
-		const title = data.options.getString("title");
 		const description = data.options.getString("description");
-		const color = data.options.getString("color") || bot.config.embed.color;
 
 		const embed = new Discord.MessageEmbed()
 			.setDescription(description.replaceAll("<br>", "\n"))
-			.setColor(color);
+			.setColor(data.options.getString("color") || bot.config.embed.color);
 
-		if (title) embed.setTitle(title);
+		if (data.options.getString("title")) embed.setTitle(data.options.getString("title"));
+		if (data.options.getString("image")) embed.setImage(data.options.getString("image"));
 
 		await message.channel.send({
 			embeds: [embed]
@@ -465,13 +464,18 @@ module.exports = new cmd(execute, {
 				{
 					type: 3,
 					name: "description",
-					description: "The description to the ticket embed.",
+					description: "The description for the embed.",
 					required: true
 				},
 				{
 					type: 3,
 					name: "title",
-					description: "The title to the ticket embed."
+					description: "The title for the embed."
+				},
+				{
+					type: 3,
+					name: "image",
+					description: "The image for the embed. Please use a valid URL containing https:// in the start."
 				},
 				{
 					type: 3,
@@ -497,6 +501,14 @@ module.exports = new cmd(execute, {
 						{
 							name: "dark_blue",
 							value: "DARK_BLUE"
+						},
+						{
+							name: "luminous_vivid_pink",
+							value: "LUMINOUS_VIVID_PINK"
+						},
+						{
+							name: "dark_vivid_pink",
+							value: "DARK_VIVID_PINK"
 						},
 						{
 							name: "green",
