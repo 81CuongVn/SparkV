@@ -121,7 +121,7 @@ async function execute(bot, message, args, command, data) {
 			name: (message?.applicationId ? message.user : message.author).tag,
 			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can either visit my")} [${await message.translate("dashboard")}](https://www.sparkv.tk/dashboard), ${await message.translate("or run")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
+		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, run")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
 		.setImage("https://www.sparkv.tk/images/banner.gif")
 		.setFooter({
 			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
@@ -183,7 +183,7 @@ async function execute(bot, message, args, command, data) {
 }
 
 module.exports = new cmd(execute, {
-	description: `View SparkV's 130+ commands.`,
+	description: `Get help with SparkV, or view SparkV's commands.`,
 	aliases: [`cmds`, `commands`, "vote"],
 	usage: `(optional: search)`,
 	perms: [],
