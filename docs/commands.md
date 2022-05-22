@@ -48,7 +48,7 @@ SparkV's Command List! SparkV contains more than **47 commands**!
 | Name       | Description                                                                | Usage                                                       | Cooldown  |
 | ---------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
 | **filter** | Change what the song sounds like! Requires administrator to prevent abuse. | (filter: 3d/bassboost/echo/karaoke/nightcore/vaporwave/off) | 5 seconds |
-| **music**  | Play music in your Discord server!                                         |                                                             | 5 seconds" |
+| **music**  | <:music:947988551805575189> Play music in your Discord server.             |                                                             | 5 seconds" |
 
 ## Reddit
 
@@ -68,7 +68,7 @@ SparkV's Command List! SparkV contains more than **47 commands**!
 | ---------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------- | --------- |
 | **afk**          | Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be... | (optional: reason)                              | 2 seconds |
 | **bot**          | Information for SparkV.                                                                             |                                                 | 2 seconds |
-| **help**         | View SparkV's 130+ commands.                                                                        | (optional: search)                              | 2 seconds |
+| **help**         | Get help with SparkV, or view SparkV's commands.                                                    | (optional: search)                              | 2 seconds |
 | **info**         | Get information about a user or server. (user/rank/icon)                                            | (user/rank/icon)                                | 2 seconds |
 | **invite**       | Displays links.                                                                                     |                                                 | 2 seconds |
 | **leaderboard**  | View the top 10 users for leveling and money.                                                       |                                                 | 2 seconds |
