@@ -13,6 +13,7 @@ const Sentry = require("@sentry/node");
 const mongoose = require("mongoose");
 const { Collection, Intents, Permissions } = require("discord.js");
 
+const Logger = require("../modules/logger");
 const PackageInfo = require("../package.json");
 
 const Client = require("./structures/client");
