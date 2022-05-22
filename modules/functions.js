@@ -72,7 +72,7 @@ module.exports = {
 	 * @returns {Promise<Canvas>} Canvas
 	 */
 	async createCard(options) {
-		const canvas = createCanvas(1100, 500);
+		const canvas = createCanvas(800, 390);
 		const context = canvas.getContext("2d");
 
 		// Background
@@ -81,57 +81,48 @@ module.exports = {
 		const background = await loadImage(`${process.env.MainDir}/assets/images/background.png`);
 		context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-		context.fillStyle = "#fff719";
-		context.fillRect(canvas.width - 30, 0, 30, canvas.height);
-		context.fillRect(0, 0, 30, canvas.height);
-		context.fillRect(30, canvas.height - 30, canvas.width - 50, 30);
-		context.fillRect(30, 0, canvas.width - 50, 30);
+		// Global Text Settings
+		context.textAlign = "center";
+		context.fillStyle = "#fff";
+		context.shadowColor = "#000";
+		context.shadowOffsetX = 4;
+		context.shadowOffsetY = 3;
+		context.shadowBlur = 5;
 
 		// Username
-		context.fillStyle = "#5f9afa";
-		context.globalAlpha = 0.4;
-		context.fillRect(canvas.width - 680, canvas.height - 300, 600, 65);
-
-		context.globalAlpha = 1;
-		context.fillStyle = "#ffffff";
-		context.font = "50px Bold",
-		context.fillText(options.user.tag, canvas.width - 660, canvas.height - 248);
+		context.font = "40px Bold",
+		context.fillText(options.user.tag, (canvas.width / 2), (canvas.height / 2) + 100);
 
 		// Server
-		context.fillStyle = "#5f9afa";
-		context.globalAlpha = 0.4;
-		context.fillRect(canvas.width - 680, canvas.height - 200, 600, 65);
-
-		context.globalAlpha = 1;
-		context.fillStyle = "#ffffff";
-		context.font = "35px Bold",
-		context.fillText(options.text.desc, canvas.width - 660, canvas.height - 150);
+		context.font = "30px Bold",
+		context.fillText(options.text.desc, (canvas.width / 2), (canvas.height / 2) + 150);
 
 		// Bottom Text
-		context.font = "30px Bold";
-		context.fillStyle = "#0ea7ed";
-		context.fillText(options.text.footer, 50, canvas.height - 50);
+		context.font = "20px Bold";
+		context.textAlign = "start";
+		context.fillText(options.text.footer, (canvas.width / 2) - 390, (canvas.height / 2) + 185);
 
-		// Title Text
-		context.font = "80px Bold";
-		context.strokeStyle = "#000000";
-		context.lineWidth = 16;
-		context.strokeText(options.text.title, canvas.width - 620, canvas.height - 375);
-		context.fillStyle = "#0ea7ed";
-		context.fillText(options.text.title, canvas.width - 620, canvas.height - 375);
+		// Avatar //
+		/*  Shadow */
+		context.shadowColor = "#000";
+		context.shadowOffsetX = 4;
+		context.shadowOffsetY = 3;
+		context.shadowBlur = 5;
 
-		// Avatar
+		/*  Border & Clip */
 		context.beginPath();
-		context.lineWidth = 10;
+		context.lineWidth = 15;
 		context.strokeStyle = "#fff";
-		context.arc(215, (canvas.height / 2), 125, 0, Math.PI * 2, true);
+		context.arc((canvas.width / 2), (canvas.height / 2) - 65, 105, 0, Math.PI * 2, true);
 		context.stroke();
 		context.closePath();
 		context.clip();
 
-		const Avatar = await loadImage(options.user.displayAvatarURL({ format: "png" }));
-		context.drawImage(Avatar, 90, 125, 250, 250);
+		/* Avatar */
+		const Avatar = await loadImage("https://cdn.discordapp.com/avatars/571811686617710592/8d6a5f9894aa01b9f9c4cfd43c0ee366.png?size=1024"); // Options.user.displayAvatarURL({ format: "png" })
+		context.drawImage(Avatar, (canvas.width / 2) - 110, (canvas.height / 2) - 175, 220, 220);
 
+		// Done //
 		return canvas;
 	},
 
