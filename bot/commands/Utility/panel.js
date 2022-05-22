@@ -507,10 +507,6 @@ module.exports = new cmd(execute, {
 							value: "LUMINOUS_VIVID_PINK"
 						},
 						{
-							name: "dark_vivid_pink",
-							value: "DARK_VIVID_PINK"
-						},
-						{
 							name: "green",
 							value: "GREEN"
 						},
