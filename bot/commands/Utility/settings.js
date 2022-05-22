@@ -1124,7 +1124,6 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color);
 
 	collector.on("collect", async interaction => {
-		console.log(curSetting)
 		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
 
 		try {
