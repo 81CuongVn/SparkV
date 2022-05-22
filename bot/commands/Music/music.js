@@ -322,11 +322,7 @@ async function execute(bot, message, args, command, data) {
 					});
 
 				if (interaction.customId === "loop") {
-					const loopModes = [
-						0,
-						1,
-						2
-					];
+					const loopModes = [0, 1, 2];
 
 					const nextLoopMode = loopModes[(queue?.repeatMode ?? 0) + 1] || 0;
 					const loopMode = nextLoopMode === 0 ? "**DISABLED**" : (nextLoopMode === 1 ? "**ENABLED FOR SONG**" : "**ENABLED FOR SERVER QUEUE**");
