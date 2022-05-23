@@ -37,21 +37,6 @@ async function execute(bot, message, args, command, data) {
 		win = true;
 	}
 
-	if (number[0] === number[3] || number[1] === number[4] || number[2] === number[5]) {
-		amountWon = bet * 2;
-		win = true;
-	}
-
-	if (number[3] === number[4] || number[4] === number[5]) {
-		amountWon = bet * 2;
-		win = true;
-	}
-
-	if (number[6] === number[7] || number[7] === number[8]) {
-		amountWon = bet * 2;
-		win = true;
-	}
-
 	if (amountWon > 0) win = true;
 
 	const embed = new Discord.MessageEmbed()
