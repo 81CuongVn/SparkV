@@ -5,6 +5,8 @@ const cmd = require("@templates/musicCommand");
 const Emotes = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
 
 async function execute(bot, message, args, command, data) {
+	return await message.replyT("This command is currently disabled due to Discord taking action against music bots like SparkV. **Don't remove SparkV!** We're working on a solution that works both for SparkV and Discord.");
+
 	const state = message.options.getSubcommand();
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
