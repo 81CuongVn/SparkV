@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const akinator = require("discord.js-akinator");
 const axios = require("axios");
 
 const cmd = require("@templates/command");
@@ -97,6 +98,38 @@ async function execute(bot, message, args, command, data) {
 		await message.replyT({
 			embeds: [embed]
 		});
+	} else if (type === "truthordare") {
+		const msg = await message.replyT({
+			embeds: [embed.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\nSelect whether you want truth or dare.`)],
+			components: [new Discord.MessageActionRow().addComponents(
+				new Discord.MessageButton()
+					.setLabel("Truth")
+					.setStyle("SUCCESS")
+					.setCustomId("truth"),
+				new Discord.MessageButton()
+					.setLabel("Dare")
+					.setStyle("DANGER")
+					.setCustomId("dare")
+			)],
+			fetchReply: true
+		});
+
+		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
+		collector.on("collect", async interaction => {
+			if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+
+			const data = await axios.get(`https://api.truthordarebot.xyz/api/${interaction.customId}`).then(res => res.data).catch(err => bot.logger(`Truth or dare failed: ${err}`, "error"));
+			embed
+				.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\n${data.question}`)
+				.setColor(interaction.customId === "truth" ? "GREEN" : "RED");
+
+			await msg.edit({
+				embeds: [embed],
+				components: []
+			});
+		});
+
+		collector.on("end", async () => { });
 	} else if (type === "hangman") {
 		const word = words[Math.floor(Math.random() * words.length)];
 		const lettersRegExp = new RegExp(`^[A-Za-zÀ-ú](?:.{0}|.{${word.length - 1}})$`);
@@ -156,11 +189,9 @@ async function execute(bot, message, args, command, data) {
 			if (!m.content.match(lettersRegExp)) return;
 
 			const guess = m.content.toLowerCase();
-
 			if (guess.length === 1) {
 				if (misses.includes(`\`${guess}\``)) {
 					await m.replyT(`\`${guess}\` ${await message.translate("has already been guessed. Try again!")}`).then(async m => setTimeout(() => m.delete(), 5000));
-
 					return setTimeout(() => m.delete(), 5000);
 				}
 
@@ -172,15 +203,12 @@ async function execute(bot, message, args, command, data) {
 						}
 					}
 				} else {
-					if (!misses.includes(guess)) misses.push(`\`${guess}\``);
+					!misses.includes(guess) && misses.push(`\`${guess}\``);
 					lives--;
 				}
 
-				if (lives === 0) {
-					gameStatus = "lost";
-				} else if (remaining === 0) {
-					gameStatus = "won";
-				}
+				if (lives === 0) gameStatus = "lost";
+				else if (remaining === 0) gameStatus = "won";
 
 				m.delete();
 			}
@@ -204,7 +232,6 @@ async function execute(bot, message, args, command, data) {
 		chosenWord += `${words[Math.floor(Math.random() * words.length)]}`;
 
 		const gameCreation = Date.now();
-
 		const MenuEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: (message.user ? message.user : message.author).tag,
@@ -344,10 +371,7 @@ async function execute(bot, message, args, command, data) {
 			fetchReply: true
 		});
 
-		const collector = trivia.createMessageComponentCollector({
-			time: 60 * 1000
-		});
-
+		const collector = trivia.createMessageComponentCollector({ time: 60 * 1000 });
 		collector.on("collect", async interaction => {
 			await interaction.deferReply();
 
@@ -359,7 +383,6 @@ async function execute(bot, message, args, command, data) {
 				.setTimestamp();
 
 			const winningNumber = choices.indexOf(triviaData.correct_answer);
-
 			if ((parseInt(interaction.customId) - 1) === winningNumber) {
 				embed
 					.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}**${triviaData.correct_answer}**!`)
@@ -369,26 +392,16 @@ async function execute(bot, message, args, command, data) {
 					.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The answer was ")}**${triviaData.correct_answer}**.`)
 					.setColor("RED");
 
-				if ((parseInt(interaction.customId) - 1) === 0) {
-					answer1B.setStyle("DANGER");
-				} else if ((parseInt(interaction.customId) - 1) === 1) {
-					answer2B.setStyle("DANGER");
-				} else if ((parseInt(interaction.customId) - 1) === 2) {
-					answer3B.setStyle("DANGER");
-				} else if ((parseInt(interaction.customId) - 1) === 3) {
-					answer4B.setStyle("DANGER");
-				}
+				if ((parseInt(interaction.customId) - 1) === 0) answer1B.setStyle("DANGER");
+				else if ((parseInt(interaction.customId) - 1) === 1) answer2B.setStyle("DANGER");
+				else if ((parseInt(interaction.customId) - 1) === 2) answer3B.setStyle("DANGER");
+				else if ((parseInt(interaction.customId) - 1) === 3) answer4B.setStyle("DANGER");
 			}
 
-			if (winningNumber === 0) {
-				answer1B.setStyle("SUCCESS");
-			} else if (winningNumber === 1) {
-				answer2B.setStyle("SUCCESS");
-			} else if (winningNumber === 2) {
-				answer3B.setStyle("SUCCESS");
-			} else if (winningNumber === 3) {
-				answer4B.setStyle("SUCCESS");
-			}
+			if (winningNumber === 0) answer1B.setStyle("SUCCESS");
+			else if (winningNumber === 1) answer2B.setStyle("SUCCESS");
+			else if (winningNumber === 2) answer3B.setStyle("SUCCESS");
+			else if (winningNumber === 3) answer4B.setStyle("SUCCESS");
 
 			await trivia.edit({
 				components: [
@@ -404,48 +417,45 @@ async function execute(bot, message, args, command, data) {
 			});
 		});
 	} else if (type === "akinator") {
-		const gameTypes = ["animal", "character", "object"];
-
-		message.replyT("What type of akinator game would you like to play? You can play animal, character or object. Type cancel to stop.").then(async () => {
-			await message.channel.awaitMessages({
-				filter: async m => {
-					if (m.author.id === m.client.user.id) return false;
-
-					if (m.content) {
-						if (m.content.length > 35) {
-							await m.replyT(`${bot.config.emojis.error} | The game type cannot be longer than 35 characters.`);
-
-							return false;
-						}
-
-						if (m.content.toLowerCase("cancel")) return true;
-
-						if (!gameTypes.includes(m.content.toLowerCase())) {
-							await m.replyT(`${bot.config.emojis.error} | The game type must be one of the following: ${gameTypes.join(", ")}`);
-
-							return false;
-						}
-
-						return true;
-					} else {
-						await m.replyT("Dude... I need you to send a valid message.");
-						return false;
-					}
-				}, max: 1, time: 30 * 1000, errors: ["time"]
-			}).then(async collected => {
-				const gameType = collected.first().content.toLowerCase();
-
-				if (gameType === "cancel") return await message.replyT("Alright, I won't create an akinator game.");
-
-				await message.replyT(`Alright, let's play akinator ${gameType}! Loading...`).then(async () => {
-					akinator(message, {
-						gameType,
-						useButtons: true,
-						language: data.guild.language
-					});
-				});
-			}).catch(async collected => await message.replyT("Canceled due to no valid response within 30 seconds."));
+		const msg = await message.replyT({
+			embeds: [embed.setDescription(`${bot.config.emojis.question} | ${await message.translate("What type of game would you like to play? You can play animal, character or object.")}`)],
+			components: [new Discord.MessageActionRow().addComponents(
+				new Discord.MessageButton()
+					.setEmoji("🐶")
+					.setLabel("Animal")
+					.setStyle("SECONDARY")
+					.setCustomId("animal"),
+				new Discord.MessageButton()
+					.setEmoji("🧙‍♂️")
+					.setLabel("Character")
+					.setStyle("SECONDARY")
+					.setCustomId("character"),
+				new Discord.MessageButton()
+					.setEmoji("🎁")
+					.setLabel("Object")
+					.setStyle("SECONDARY")
+					.setCustomId("object")
+			)],
+			fetchReply: true
 		});
+
+		const collector = msg.createMessageComponentCollector({ time: 60 * 1000 });
+		collector.on("collect", async interaction => {
+			if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+
+			const gameType = interaction.customId.toLowerCase();
+			await msg.edit({
+				embeds: [embed.setDescription(`${bot.config.emojis.loading} | Alright, let's play akinator ${gameType}! Loading...`).setColor("GREEN")],
+				components: []
+			});
+
+			akinator(message, {
+				gameType,
+				useButtons: true,
+				language: data.guild.language
+			});
+		});
+		collector.on("end", async interaction => msg.edit({ embeds: [embed.setDescription(`${bot.config.emojis.alert} | Canceled due to no valid response within 30 seconds.`)] }));
 	}
 }
 
@@ -473,6 +483,10 @@ module.exports = new cmd(execute, {
 				{
 					name: "uselessfact",
 					value: "uselessfact"
+				},
+				{
+					name: "truth_or_dare",
+					value: "truthordare"
 				},
 				{
 					name: "hangman",
