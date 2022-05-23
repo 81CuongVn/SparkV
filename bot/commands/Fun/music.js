@@ -152,7 +152,7 @@ async function execute(bot, message, args, command, data) {
 		collector.on("end", async interaction => {
 			try {
 				interaction.edit({ components: [] });
-			} catch (err) {}
+			} catch (err) { }
 		});
 	} else if (state === "skip") {
 		const queue = await bot.distube.getQueue(message);
@@ -438,6 +438,24 @@ async function execute(bot, message, args, command, data) {
 
 			await message.replyT(`${bot.config.emojis.music} | Okay, I shuffled the queue.`);
 		}
+	} else if (state === "filter") {
+		if (!message.channel.permissionsFor(message.user).has("ADMINISTRATOR")) return await message.replyT(`${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`);
+
+		const state = data.options.getString("state");
+		const filter = data.options.getString("type");
+
+		const Queue = bot.distube.getQueue(message);
+		if (!Queue) return message.replyT(`${bot.config.emojis.error} | There is nothing playing right now.`);
+
+		if (state === "off" && Queue.filter) {
+			bot.distube.setFilter(message, Queue.filter);
+
+			return await message.replyT(`${bot.config.emojis.error} | Okay, I turned off the filter.`);
+		} else if (Object.keys(bot.distube.filters).includes(filter)) {
+			bot.distube.setFilter(message, filter);
+
+			return await message.replyT(`${bot.config.emojis.music} | Okay, I activated the ${filter} filter on the currently playing song.`);
+		}
 	}
 }
 
@@ -604,6 +622,61 @@ module.exports = new cmd(execute, {
 						{
 							name: "queue",
 							value: "queue"
+						}
+					]
+				}
+			]
+		},
+		{
+			type: 1,
+			name: "filter",
+			description: "Change what the song sounds like! This command requires you to have administrator to prevent abuse.",
+			options: [
+				{
+					type: 3,
+					name: "state",
+					description: "Whether the filter is on or off.",
+					required: true,
+					choices: [
+						{
+							name: "on",
+							value: "on"
+						},
+						{
+							name: "off",
+							value: "off"
+						}
+					]
+				},
+				{
+					type: 3,
+					name: "type",
+					description: "The type of filter to use.",
+					required: true,
+					choices: [
+						{
+							name: "3d",
+							value: "3d"
+						},
+						{
+							name: "echo",
+							value: "echo"
+						},
+						{
+							name: "bassboost",
+							value: "bassboost"
+						},
+						{
+							name: "vaporwave",
+							value: "vaporwave"
+						},
+						{
+							name: "nightcore",
+							value: "nightcore"
+						},
+						{
+							name: "karaoke",
+							value: "karaoke"
 						}
 					]
 				}
