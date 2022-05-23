@@ -153,21 +153,19 @@ async function execute(bot, message, args, command, data) {
 		fetchReply: true
 	});
 
-	const collector = helpMessage.createMessageComponentCollector({
-		filter: interaction => {
-			if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate().catch(err => {});
-
-			return true;
-		}, time: 300 * 1000
-	});
+	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
 
 	collector.on("collect", async interaction => {
-		if (interaction.customId) {
-			if (interaction.customId === "SelectHelpMenu") {
-				await interaction.update({
-					embeds: [pages.filter(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()))[0]]
-				});
-			}
+		if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate().catch(err => { });
+		if (interaction.customId === "SelectHelpMenu") {
+			const page = pages.find(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
+			if (!page) return;
+
+			await interaction.update({
+				embeds: [page],
+				components: [],
+				fetchReply: true
+			});
 		}
 	});
 
@@ -176,9 +174,7 @@ async function execute(bot, message, args, command, data) {
 			await helpMessage?.edit({
 				components: []
 			});
-		} catch (err) {
-			// Do nothing. This is just to stop errors from going into the console. It's mostly for the case where the message is deleted.
-		}
+		} catch (err) { }
 	});
 }
 
