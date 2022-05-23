@@ -15,7 +15,6 @@ async function execute(bot, message, args, command, data) {
 
 	if (!User) return await message.replyT(`${bot.config.emojis.error} | Please mention someone to view their warnings!`);
 	if (!UserData.infractionsCount === 0) return await message.replyT("This user doesn't have any infractions!");
-	if (UserData.infractionsCount >= 100) return await message.replyT("This user has over 100 infractions!");
 
 	const infractions = UserData.infractions.sort((a, b) => b.date - a.date).map(infraction => `**${infraction.type}** - <t:${~~(infraction.date / 1000)}:R>`).join("\n");
 
@@ -40,13 +39,10 @@ async function execute(bot, message, args, command, data) {
 	WarningsSubArray.map((i, v) => {
 		const SongEmbed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: `${(User.user ? User.user : User).tag}'s Warning${UserData.infractionsCount > 1 ? "s" : ""}`,
+				name: (User.user ? User.user : User).tag,
 				iconURL: (User.user ? User.user : User).displayAvatarURL({ dynamic: true })
 			})
-			.setDescription(`${User} has **${UserData.infractionsCount}** warning${UserData.infractionsCount > 1 ? "s" : ""}\n\n${i}`)
-			.setFooter({
-				text: bot.config.embed.footer
-			})
+			.setDescription(`${bot.config.emojis.warning} **Warnings**\n${User} has **${UserData.infractionsCount}** warning${UserData.infractionsCount > 1 ? "s" : ""}\n\n${i.replaceAll(undefined, "")}`)
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
 
@@ -75,35 +71,29 @@ async function execute(bot, message, args, command, data) {
 
 	const msg = await message.replyT({
 		embeds: [pages[0]],
-		components: [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)],
+		components: UserData.infractionsCount >= 100 ? [new Discord.MessageActionRow().addComponents(quickLeft, left, right, quickRight)] : [],
 		fetchReply: true
 	});
 
-	const collector = msg.createMessageComponentCollector({
-		filter: interaction => {
-			if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
+	if (UserData.infractionsCount >= 100) {
+		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
+		collector.on("collect", async interaction => {
+			if (interaction.customId === "quickLeft") PageNumber = 0;
+			else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
+			else if (interaction.customId === "right") (PageNumber + 1) < pages.length ? ++PageNumber : PageNumber = 0;
+			else if (interaction.customId === "quickRight") PageNumber = pages.length - 1;
 
-			return true;
-		}, time: 300 * 1000
-	});
-
-	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
-		if (interaction.customId === "quickLeft") PageNumber = 0;
-		else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
-		else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
-		else if (interaction.customId === "quickRight") PageNumber = pages.length - 1;
-
-		try {
-			interaction.update({
-				embeds: [
-					pages[PageNumber].setFooter({
-						text: `${bot.config.embed.footer} • Page ${PageNumber + 1}/${pages.length}`
-					})
-				]
-			});
-		} catch (err) {}
-	});
+			try {
+				interaction.update({
+					embeds: [
+						pages[PageNumber].setFooter({
+							text: `Page ${PageNumber + 1}/${pages.length}`
+						})
+					]
+				});
+			} catch (err) {}
+		});
+	}
 }
 
 module.exports = new cmd(execute, {
