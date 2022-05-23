@@ -119,7 +119,7 @@ module.exports = {
 		context.clip();
 
 		/* Avatar */
-		const Avatar = await loadImage("https://cdn.discordapp.com/avatars/571811686617710592/8d6a5f9894aa01b9f9c4cfd43c0ee366.png?size=1024"); // Options.user.displayAvatarURL({ format: "png" })
+		const Avatar = await loadImage(options.user.displayAvatarURL({ format: "png" }));
 		context.drawImage(Avatar, (canvas.width / 2) - 110, (canvas.height / 2) - 175, 220, 220);
 
 		// Done //
