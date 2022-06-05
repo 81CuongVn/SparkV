@@ -53,6 +53,7 @@ function markdown(table) {
 	}
 
 	rowIndex = -1;
+	// eslint-disable-next-line prefer-const
 	rows = [];
 
 	while (++rowIndex < rowLength) {
@@ -165,13 +166,12 @@ module.exports = {
    */
 	update(bot, MainDir) {
 		let cmdCount = 0;
-		bot.commands.each(cmd => !cmd.category.toLowerCase().includes("owner") && ++cmdCount);
+		bot.commands.each(cmd => ++cmdCount);
 
 		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
 		const cmdTable = {};
 
 		bot.categories
-			.filter(cat => !cat.name.toLowerCase().includes("owner"))
 			.sort((a, b) => {
 				if (bot.commands.filter(c => c.category === a).length > bot.commands.filter(c => c.category === b).length) return -1;
 				else return 1;
@@ -179,8 +179,7 @@ module.exports = {
 			.forEach(cat => {
 				const info = [];
 
-				if (cat.emoji.includes("<")) baseText += `\n## ${cat.name}\n\n`;
-				else baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
+				cat.emoji.includes("<") ? baseText += `\n## ${cat.name}\n\n` : baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
 
 				info.push(["Name", "Description", "Usage", "Cooldown"]);
 

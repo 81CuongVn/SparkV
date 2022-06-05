@@ -19,8 +19,7 @@ module.exports = {
 
 		bot = client;
 
-		registerFont(`${process.env.MainDir}/assets/fonts/LuckiestGuy-Regular.ttf`, { family: "luckiest guy" });
-		registerFont(`${process.env.MainDir}/assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
+		registerFont(`${process.env.MainDir}/src/Assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
 	},
 
 	/**
@@ -78,7 +77,7 @@ module.exports = {
 		// Background
 		context.fillStyle = "#3461eb";
 		context.fillRect(0, 0, canvas.width, canvas.height);
-		const background = await loadImage(`${process.env.MainDir}/assets/images/background.png`);
+		const background = await loadImage(`${process.env.MainDir}/src/Assets/images/background.png`);
 		context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
 		// Global Text Settings
@@ -215,23 +214,13 @@ module.exports = {
 		return await bot.users.fetch(key).catch(() => { });
 	},
 
-	// Plugins //
-
 	/**
    *
    * @param {string} String The String to check for a URL.
    * @returns {boolean}
    */
 	isURL(String) {
-		if (URLrgx.test(String)) {
-			return true;
-		}
-
-		if (URLrgx.test(String)) {
-			return true;
-		}
-
-		return false;
+		return URLrgx.test(String);
 	},
 
 	/**
