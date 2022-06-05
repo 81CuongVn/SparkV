@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const config = require("../../globalconfig.json");
+const config = require("../../config.json");
 
 const Schema = new mongoose.Schema({
 	// User Information //

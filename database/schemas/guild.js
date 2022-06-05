@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const config = require("../../globalconfig.json");
+const config = require("../../config.json");
 
 const Schema = new mongoose.Schema({
 	id: { type: String, required: true, unique: true },
@@ -28,8 +28,8 @@ const Schema = new mongoose.Schema({
 	},
 	antiSpam: {
 		enabled: { type: String, default: "false" },
-		action: { type: String, default: "timeout" },
-		// bypass: {
+		action: { type: String, default: "timeout" }
+		// Bypass: {
 		// 	roles: { type: Array, default: [] },
 		// 	channels: { type: Array, default: [] }
 		// }
