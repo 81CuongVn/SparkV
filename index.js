@@ -46,22 +46,20 @@ const path = require("path");
 
 const discord = require("discord.js");
 const Statcord = require("statcord.js");
-const Sentry = require("@sentry/node");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const figlet = require(`figlet`);
 
 // Varibles //
-const Config = require("./globalconfig.json");
-const Logger = require("./modules/logger");
-const PackageInfo = require("./package.json");
+const Config = require("./config.json");
+const Logger = require("./utils/logger");
 
 // Functions //
 async function checkForUpdate() {
 	try {
 		const tag_name = await axios.get("https://api.github.com/repos/Ch1ll-Studio/SparkV/releases/latest").then(response => response.data.tag_name);
 
-		if (Number(tag_name.slice(1)) > Number(PackageInfo.version)) {
+		if (Number(tag_name.slice(1)) > Number(require("./package.json")?.version)) {
 			console.log(require("chalk").grey("----------------------------------------"));
 			await Logger("WARNING - UPDATE_AVAILABLE => PLEASE UPDATE TO THE LATEST VERSION", "warn");
 			console.log(require("chalk").grey("----------------------------------------"));
@@ -76,15 +74,6 @@ async function checkForUpdate() {
 async function start() {
 	require("dotenv").config();
 
-	if (process.env.SENTRYTOKEN) {
-		Sentry.init({
-			dsn: process.env.SENTRYTOKEN,
-			release: `${PackageInfo.name}@${PackageInfo.version}`
-		});
-	} else {
-		Logger("WARNING - NO API KEY FOR SENTRY! SPARKV MAY BREAK WITHOUT SENTRY LOGGING KEY.", "warn");
-	}
-
 	if (process.env.MONGOOSEURL) {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,
@@ -94,16 +83,16 @@ async function start() {
 		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
 	}
 
-	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn"));
-	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error"));
-	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error"));
-	process.on("unhandledException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error"));
-	process.on("unhandledRejection", async err => await Logger(`Unhandled rejection error. ${err}.`, "error"));
+	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn", { data: warning }));
+	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error", err));
+	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
+	process.on("unhandledException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
+	process.on("unhandledRejection", async err => await Logger(`Unhandled rejection error. ${err}.`, "error", { data: err }));
 
 	process.env.MainDir = __dirname;
 
 	if (process.argv.includes("--sharding") === true) {
-		const manager = new discord.ShardingManager("./bot/bot.js", {
+		const manager = new discord.ShardingManager("./bot/app.js", {
 			token: process.env.TOKEN,
 			totalShards: "auto",
 			shardArgs: [...process.argv, ...["--sharding"]]
@@ -130,6 +119,6 @@ async function start() {
 
 		manager.spawn();
 	} else {
-		await require("./bot/bot");
+		await require("./src/app");
 	}
 }

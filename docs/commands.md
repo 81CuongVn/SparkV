@@ -1,6 +1,6 @@
 # Commands
 
-SparkV's Command List! SparkV contains more than **54 commands**!
+SparkV's Command List! SparkV contains more than **55 commands**!
 
 ## Economy
 
@@ -26,6 +26,7 @@ SparkV's Command List! SparkV contains more than **54 commands**!
 | **activity** | Play a Discord VC activity!                                    | (type (youtube, poker, chess, checkers, betrayal, fishing, lettertile, wordsnack, doodlecrew, spellcast, awkword, puttparty, sketchheads, ocho)) | 2 seconds |
 | **chatbot**  | Talk to me!                                                    |                                                                                                                                                  | 2 seconds |
 | **fun**      | Just a little fun.                                             | (type)                                                                                                                                           | 2 seconds |
+| **giveaway** | Create, delete, pause, resume, reroll, or reroll a giveaway.   |                                                                                                                                                  | 2 seconds |
 | **image**    | <:image:948004558884442142> Generate images with ease.         | (image type)                                                                                                                                     | 2 seconds |
 | **music**    | <:music:947988551805575189> Play music in your Discord server. |                                                                                                                                                  | 2 seconds |
 | **text**     | I will change the text depending on what you want to do.       | (text)                                                                                                                                           | 2 seconds" |
