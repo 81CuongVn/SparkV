@@ -147,17 +147,15 @@ module.exports = async bot => {
 		.on("socketClosed", (player, payload) => payload.byRemote === true && player.destroy());
 
 	bot.music.formatDuration = duration => {
-		if (!duration || !Number(duration)) return "00:00";
+		let seconds = parseInt((duration / 1000) % 60);
+		let minutes = parseInt((duration / (1000 * 60)) % 60);
+		let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
-		const format = d => d < 10 ? `0${d}` : d;
-		const seconds = Math.round(duration % 60);
-		const minutes = Math.floor((duration % 3600) / 60);
-		const hours = Math.floor(duration / 3600);
+		hours = (hours < 10) ? `0${hours}` : hours;
+		minutes = (minutes < 10) ? `0${minutes}` : minutes;
+		seconds = (seconds < 10) ? `0${seconds}` : seconds;
 
-		if (hours > 0) return `${format(hours)}:${format(minutes)}:${format(seconds)}`;
-		if (minutes > 0) return `${format(minutes)}:${format(seconds)}`;
-
-		return `00:${format(seconds)}`;
+		return duration < (3600 * 1000) ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
 	};
 	bot.music.handleMusic = async (playerData, track, mEmbed, options) => {
 		const TogglePlayingButton = new Discord.MessageButton()
