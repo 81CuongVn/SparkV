@@ -237,7 +237,7 @@ module.exports = async bot => {
 						.setDescription(`Looping is now ${loopMode}.`)
 						.setColor(bot.config.embed.color);
 				} else if (interaction.customId === "TP") {
-					const playerData = bot.music.players.get(player.guild);
+					const playerData = bot.music.players.get(interaction?.guild?.id);
 					if (!playerData) {
 						await interaction.editT("There is no music playing.");
 						collector.stop();
