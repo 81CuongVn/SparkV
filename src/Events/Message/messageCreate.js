@@ -42,6 +42,9 @@ module.exports = {
 		// If the message's author is a bot, return. This prevents SparkV from responding to himself.
 		if (message?.author?.bot) return;
 
+		// If the message's author is null, return. This prevents SparkV from responding to a message that doesn't have an author.
+		if (!message?.author?.id) return;
+
 		// If the message is from a DM, return. This prevents SparkV from responding to DMs.
 		if (message?.channel?.type === "dm") return;
 

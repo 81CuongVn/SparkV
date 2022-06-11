@@ -37,7 +37,7 @@ module.exports = async (content, type, moreData) => {
 			const errorChannel = await global.bot.channels.fetch("948686231892545547");
 			if (errorChannel) {
 				const ErrorEmbed = new Discord.MessageEmbed()
-					.setTitle(moreData?.data?.name || content || "Error")
+					.setTitle(`${(moreData?.data?.name || content) ?? "Error"}`)
 					.setDescription(`**An error occured!**`)
 					.addField("**Error**", `\`\`\`${content}\`\`\``)
 					.setColor("RED");
