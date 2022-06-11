@@ -11,31 +11,29 @@ const TIDAL = require("erela.js-tidal");
 module.exports = async bot => {
 	bot.lyricsClient = lyricsClient;
 
-	const nodes = [];
+	let nodes = [
+		{
+			host: "lavalink.kingch1ll.repl.co",
+			port: 443,
+			password: process.env.lavalink_password,
+			secure: true
+		},
+		{
+			host: "lavalink2.kingch1ll.repl.co",
+			port: 443,
+			password: process.env.lavalink_password,
+			secure: true
+		}
+	];
 	if (process.argv.includes("--dev") === true) {
+		nodes = [];
 		nodes.push({
 			host: "lavalink3.kingch1ll.repl.co",
 			port: 443,
 			password: process.env.lavalink_password,
 			secure: true
 		});
-	} else {
-		nodes.push(
-			{
-				host: "lavalink.kingch1ll.repl.co",
-				port: 443,
-				password: process.env.lavalink_password,
-				secure: true
-			},
-			{
-				host: "lavalink2.kingch1ll.repl.co",
-				port: 443,
-				password: process.env.lavalink_password,
-				secure: true
-			}
-		);
 	}
-
 
 	bot.music = new Manager({
 		nodes,
@@ -256,7 +254,7 @@ module.exports = async bot => {
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
-							.setDescription(`Resumed ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
+							.setDescription(`Resumed ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
 							.setColor("GREEN");
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
@@ -265,7 +263,7 @@ module.exports = async bot => {
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
-							.setDescription(`Paused ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
+							.setDescription(`Paused ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
 							.setColor("RED");
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
@@ -286,7 +284,7 @@ module.exports = async bot => {
 
 					embed
 						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
-						.setDescription(`Stopped playing ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
+						.setDescription(`Stopped playing ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
 						.setColor("RED");
 				} else if (interaction.customId === "lyrics") {
 					embed
