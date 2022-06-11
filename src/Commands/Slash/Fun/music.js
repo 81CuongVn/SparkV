@@ -74,7 +74,7 @@ async function execute(bot, message, args, command, data) {
 			query,
 			user: message.user
 		};
-		if (!(query.includes("http://") || query.includes("https://"))) searchData.source = "soundcloud";
+		// No YouTube: if (!(query.includes("http://") || query.includes("https://"))) searchData.source = "soundcloud";
 
 		const queryData = await bot.music.search(searchData);
 		const track = queryData.tracks[0];
