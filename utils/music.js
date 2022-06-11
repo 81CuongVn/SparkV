@@ -15,13 +15,13 @@ module.exports = async bot => {
 		{
 			host: "lavalink.kingch1ll.repl.co",
 			port: 443,
-			password: process.env.lavalink_password,
+			password: process.env.LAVALINK_PASSWORD,
 			secure: true
 		},
 		{
 			host: "lavalink2.kingch1ll.repl.co",
 			port: 443,
-			password: process.env.lavalink_password,
+			password: process.env.LAVALINK_PASSWORD,
 			secure: true
 		}
 	];
@@ -30,7 +30,7 @@ module.exports = async bot => {
 		nodes.push({
 			host: "lavalink3.kingch1ll.repl.co",
 			port: 443,
-			password: process.env.lavalink_password,
+			password: process.env.LAVALINK_PASSWORD,
 			secure: true
 		});
 	}
