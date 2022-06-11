@@ -252,7 +252,7 @@ module.exports = async bot => {
 					}
 
 					if (playerData?.paused === true) {
-						playerData?.pause(false).catch(err => { });
+						playerData?.pause(false);
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
@@ -261,7 +261,7 @@ module.exports = async bot => {
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 					} else {
-						playerData?.pause(true).catch(err => { });
+						playerData?.pause(true);
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
@@ -282,7 +282,7 @@ module.exports = async bot => {
 						collector.stop();
 					}
 
-					playerData?.stop().catch(err => { });
+					playerData?.stop();
 
 					embed
 						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
