@@ -10,27 +10,35 @@ const TIDAL = require("erela.js-tidal");
 
 module.exports = async bot => {
 	bot.lyricsClient = lyricsClient;
-	bot.music = new Manager({
-		nodes: [
+
+	const nodes = [];
+	if (process.argv.includes("--dev") === true) {
+		nodes.push({
+			host: "lavalink3.kingch1ll.repl.co",
+			port: 443,
+			password: process.env.lavalink_password,
+			secure: true
+		});
+	} else {
+		nodes.push(
 			{
 				host: "lavalink.kingch1ll.repl.co",
 				port: 443,
-				password: "youshallnotpass",
+				password: process.env.lavalink_password,
 				secure: true
 			},
 			{
 				host: "lavalink2.kingch1ll.repl.co",
 				port: 443,
-				password: "youshallnotpass",
-				secure: true
-			},
-			{
-				host: "lavalink3.kingch1ll.repl.co",
-				port: 443,
-				password: "youshallnotpass",
+				password: process.env.lavalink_password,
 				secure: true
 			}
-		],
+		);
+	}
+
+
+	bot.music = new Manager({
+		nodes,
 		plugins: [
 			new Spotify({
 				clientID: process.env.SPOTIFYID,
@@ -115,7 +123,7 @@ module.exports = async bot => {
 		})
 		.on("trackStuck", async (player, track) => {
 			const guild = bot.guilds.cache.get(player.guild);
-			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel).catch(err => {});
+			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel).catch(err => { });
 
 			channel && await channel.send({
 				embeds: [
@@ -220,7 +228,7 @@ module.exports = async bot => {
 					.setTimestamp();
 
 				if (interaction.customId === "loop") {
-					const playerData = bot.music.players.get(player.guild);
+					const playerData = bot.music.players.get(interaction?.guild?.id);
 					if (!playerData) {
 						await interaction.editT("There is no music playing.");
 						collector.stop();
@@ -244,20 +252,20 @@ module.exports = async bot => {
 					}
 
 					if (playerData?.paused === true) {
-						queue?.pause(false).catch(err => {});
+						playerData?.pause(false).catch(err => { });
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
-							.setDescription(`Resumed ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
+							.setDescription(`Resumed ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
 							.setColor("GREEN");
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 					} else {
-						queue?.pause(true).catch(err => {});
+						playerData?.pause(true).catch(err => { });
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
-							.setDescription(`Paused ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
+							.setDescription(`Paused ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
 							.setColor("RED");
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
@@ -268,7 +276,7 @@ module.exports = async bot => {
 						components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
 					});
 				} else if (interaction.customId === "stop") {
-					const playerData = bot.music.players.get(player.guild);
+					const playerData = bot.music.players.get(interaction?.guild?.id);
 					if (!playerData) {
 						await interaction.editT("There is no music playing.");
 						collector.stop();
