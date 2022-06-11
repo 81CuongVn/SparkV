@@ -47,8 +47,6 @@ module.exports = async bot => {
 	}).on("nodeConnect", node => bot.logger(`[Music System] Node ${node.options.identifier} connected`))
 		.on("nodeError", (node, error) => console.log(`[Music System] Error: Node ${node.options.identifier} had an error: ${error.message}`, "error"))
 		.on("trackStart", async (player, track) => {
-			console.log(track.duration, player?.queue?.current?.duration);
-			console.log(track.duration);
 			const playerData = bot.music.players.get(player.guild);
 			const NowPlayingEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${track.title}`)
@@ -222,9 +220,8 @@ module.exports = async bot => {
 					.setTimestamp();
 
 				if (interaction.customId === "loop") {
-					const queue = bot.music.getQueue(interaction);
-
-					if (!queue) {
+					const playerData = bot.music.players.get(player.guild);
+					if (!playerData) {
 						await interaction.editT("There is no music playing.");
 						collector.stop();
 					}
@@ -240,14 +237,14 @@ module.exports = async bot => {
 						.setDescription(`Looping is now ${loopMode}.`)
 						.setColor(bot.config.embed.color);
 				} else if (interaction.customId === "TP") {
-					const queue = bot.music.getQueue(interaction);
-					if (!queue) {
+					const playerData = bot.music.players.get(player.guild);
+					if (!playerData) {
 						await interaction.editT("There is no music playing.");
 						collector.stop();
 					}
 
-					if (queue?.paused ?? null) {
-						queue?.resume();
+					if (playerData?.paused === true) {
+						queue?.pause(false).catch(err => {});
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
@@ -256,13 +253,7 @@ module.exports = async bot => {
 
 						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
 					} else {
-						const queue = bot.music.getQueue(interaction);
-						if (!queue) {
-							await interaction.editT("There is no music playing.");
-							collector.stop();
-						}
-
-						queue?.pause().catch(err => { });
+						queue?.pause(true).catch(err => {});
 
 						embed
 							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
@@ -277,11 +268,17 @@ module.exports = async bot => {
 						components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
 					});
 				} else if (interaction.customId === "stop") {
-					queue?.stop().catch(err => { });
+					const playerData = bot.music.players.get(player.guild);
+					if (!playerData) {
+						await interaction.editT("There is no music playing.");
+						collector.stop();
+					}
+
+					playerData?.stop().catch(err => { });
 
 					embed
 						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
-						.setDescription(`Stopped playing ${queue.songs[0].playlist?.name || queue.songs[0].name} by ${queue.songs[0].uploader.name}.`)
+						.setDescription(`Stopped playing ${playerData?.queue?.current?.name} by ${playerData?.queue?.current[0].author}.`)
 						.setColor("RED");
 				} else if (interaction.customId === "lyrics") {
 					embed
