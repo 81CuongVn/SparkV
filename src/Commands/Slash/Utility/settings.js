@@ -1173,6 +1173,7 @@ async function execute(bot, message, args, command, data) {
 
 						if ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true) foundSetting = setting;
 					});
+					console.log(foundSetting);
 
 					curSetting = foundSetting;
 					curSetting && refreshSetting(curSetting);
