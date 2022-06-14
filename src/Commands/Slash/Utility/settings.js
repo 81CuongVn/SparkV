@@ -1164,11 +1164,9 @@ async function execute(bot, message, args, command, data) {
 				default:
 					let foundSetting;
 					settings.forEach(setting => {
-						switch (setting?.category === true) {
-							case ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true):
-								foundSetting = setting;
-								break;
-							case (setting?.categories.find(cat => cat.id.toLowerCase() === interaction.customId.toLowerCase())): foundSetting = setting?.categories.find(cat => cat.id.toLowerCase() === interaction.customId.toLowerCase());
+						if (setting?.category === true) {
+							if ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true) foundSetting = setting;
+							if (setting?.categories.find(cat => cat.id.toLowerCase() === interaction.customId.toLowerCase())) foundSetting = setting?.categories.find(cat => cat.id.toLowerCase() === interaction.customId.toLowerCase());
 						}
 
 						if ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true) foundSetting = setting;
