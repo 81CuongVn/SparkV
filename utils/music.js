@@ -25,45 +25,9 @@ module.exports = async bot => {
 			secure: true
 		},
 		{
-			host: "lavalink.oops.wtf",
-			port: 443,
-			password: "Usui#0256",
-			secure: true
-		},
-		{
-			host: "node01.marshalxp.xyz",
-			port: 443,
-			password: "marshal",
-			secure: true
-		},
-		{
-			host: "node02.marshalxp.xyz",
-			port: 443,
-			password: "marshal",
-			secure: true
-		},
-		{
-			host: "node03.marshalxp.xyz",
-			port: 443,
-			password: "marshal",
-			secure: true
-		},
-		{
 			host: "node1.kartadharta.xyz",
 			port: 443,
 			password: "kdlavalink",
-			secure: true
-		},
-		{
-			host: "ssl.dislavalink.gq",
-			port: 443,
-			password: "gemzandmj",
-			secure: true
-		},
-		{
-			host: "lavalink.synn.host",
-			port: 443,
-			password: "Binnic123!",
 			secure: true
 		},
 		{
@@ -76,18 +40,6 @@ module.exports = async bot => {
 			host: "www.lavalinknodepublic.ml",
 			port: 443,
 			password: "mrextinctcodes",
-			secure: true
-		},
-		{
-			host: "www.lavalinknodepublic2.ml",
-			port: 443,
-			password: "mrextinctcodes",
-			secure: true
-		},
-		{
-			host: "ssl.annnekkk.tech",
-			port: 443,
-			password: "lavafreefromannnekkk",
 			secure: true
 		}
 	];
