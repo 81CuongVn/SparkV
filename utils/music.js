@@ -41,6 +41,78 @@ module.exports = async bot => {
 			port: 443,
 			password: "mrextinctcodes",
 			secure: true
+		},
+		{
+			host: "lavalink.oops.wtf",
+			port: 2000,
+			password: "www.freelavalink.ga",
+			secure: false
+		},
+		{
+			host: "lavalink.gaproknetwork.xyz",
+			port: 2333,
+			password: "gaproklavalink",
+			secure: false
+		},
+		{
+			host: "lavalink.darrenofficial.com",
+			port: 80,
+			password: "lavalink",
+			secure: false
+		},
+		{
+			host: "lavalink.islantay.tk",
+			port: 8880,
+			password: "waifufufufu",
+			secure: false
+		},
+		{
+			host: "weez-node.cf",
+			port: 2333,
+			password: "FreeLava",
+			secure: false
+		},
+		{
+			host: "dislavalink.gq",
+			port: 2333,
+			password: "gemzandmj",
+			secure: false
+		},
+		{
+			host: "usa.lavalink.mitask.tech",
+			port: 2333,
+			password: "lvs",
+			secure: false
+		},
+		{
+			host: "lavalink.kapes.eu",
+			port: 2222,
+			password: "lavalinkplay",
+			secure: false
+		},
+		{
+			host: "181.214.231.105",
+			port: 6665,
+			password: "syslink",
+			secure: false
+		},
+		{
+			host: "lv.vellerius.tk",
+			port: 2333,
+			password: "derpilava",
+			secure: false
+		},
+		{
+			host: "lavalink.cloudblue.ml",
+			port: 1555,
+			password: "danbotbest",
+			secure: false
+		},
+		{
+			host: "lavalink.rukchadisa.live",
+			port: 8080,
+			password: "youshallnotpass",
+			secure: false
 		}
 	];
 	if (process.argv.includes("--dev") === true) {
