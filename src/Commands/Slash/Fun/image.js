@@ -7,6 +7,71 @@ async function capFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+async function generate(bot, message, data) {
+	const state = data.options.getSubcommand();
+
+	if (state === "text") {
+		const type = data.options.getString("type");
+		const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
+
+		if (type === "changemymind") return await canvacord.Canvas.changemymind(text);
+		else if (type === "ohno") return await canvacord.Canvas.ohno(text);
+		else if (type === "clyde") return await canvacord.Canvas.clyde(text);
+	} else if (state === "user") {
+		const type = data.options.getString("type");
+		const user = data.options.getUser("user") || message.user;
+
+		if (type === "jail") return await canvacord.Canvas.jail(user.displayAvatarURL({ format: "png" }));
+		else if (type === "garbage") return await canvacord.Canvas.shit(user.displayAvatarURL({ format: "png" }));
+		else if (type === "facepalm") return await canvacord.Canvas.facepalm(user.displayAvatarURL({ format: "png" }));
+		else if (type === "affect") return await canvacord.Canvas.affect(user.displayAvatarURL({ format: "png" }));
+		else if (type === "beautiful") return await canvacord.Canvas.beautiful(user.displayAvatarURL({ format: "png" }));
+		else if (type === "invert") return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
+		else if (type === "rainbow") return await canvacord.Canvas.rainbow(user.displayAvatarURL({ format: "png" }));
+		else if (type === "rip") return await canvacord.Canvas.rip(user.displayAvatarURL({ format: "png" }));
+		else if (type === "trash") return await canvacord.Canvas.trash(user.displayAvatarURL({ format: "png" }));
+		else if (type === "trigger") return await canvacord.Canvas.trigger(user.displayAvatarURL({ format: "png" }));
+		else if (type === "wasted") return await canvacord.Canvas.wasted(user.displayAvatarURL({ format: "png" }));
+		else if (type === "wanted") return await canvacord.Canvas.wanted(user.displayAvatarURL({ format: "png" }));
+	} else if (state === "slap") {
+		const user = data.options.getUser("user") || message.user;
+		const user2 = data.options.getUser("user2") || message.user;
+
+		return await canvacord.Canvas.slap(
+			user.displayAvatarURL({ format: "png" }),
+			user2.displayAvatarURL({ format: "png" })
+		);
+	} else if (state === "bed") {
+		const user = data.options.getUser("user") || message.user;
+		const user2 = data.options.getUser("user2");
+
+		return await canvacord.Canvas.bed(
+			user2.displayAvatarURL({ format: "png" }),
+			user.displayAvatarURL({ format: "png" })
+		);
+	} else if (state === "opinion") {
+		const user = data.options.getUser("user") || message.user;
+		const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
+
+		return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
+	} else if (state === "color") {
+		const hex = data.options.getString("hex");
+
+		return await canvacord.Canvas.color(hex);
+	} else if (state === "youtube") {
+		const user = data.options.getUser("user") || message.user;
+		const text = data.options.getString("text");
+		const dark = data.options.getBoolean("dark");
+
+		return await canvacord.Canvas.youtube({
+			username: user.username,
+			avatar: user.displayAvatarURL({ format: "png" }),
+			content: text,
+			dark
+		});
+	}
+}
+
 module.exports = new cmd(async (bot, message, args, command, data) => {
 	const loadingEmbed = new Discord.MessageEmbed()
 		.setAuthor({
@@ -27,16 +92,17 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 	});
 
 	try {
-		const generateImage = await this.settings.generate(bot, message, data);
-		const Image = new Discord.MessageAttachment(generateImage, `${this.settings.name}.${this.settings?.type || "png"}`);
+		const generateImage = await generate(bot, message, data);
+		const imageName = data.options.getString("type") || data.options.getSubcommand();
+		const Image = new Discord.MessageAttachment(generateImage, `${imageName}.${imageName === "trigger" ? "gif" : "png"}`);
 
 		const ImageEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: `${message.user.tag}`,
 				iconURL: message.user.displayAvatarURL({ format: "png" })
 			})
-			.setTitle(await message.translate(`${bot.config.emojis.stats} | ${capFirstLetter(this.settings.name)}`))
-			.setImage(`attachment://${this.settings.name}.${this.settings?.type || "png"}`)
+			.setTitle(await message.translate(`${bot.config.emojis.stats} | ${capFirstLetter(imageName)}`))
+			.setImage(`attachment://${imageName}.${imageName === "trigger" ? "gif" : "png"}`)
 			.setFooter({
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL({ format: "png" })
@@ -53,7 +119,7 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 		bot.logger(err, "error");
 
 		const ImageEmbed = new Discord.MessageEmbed()
-			.setTitle(await message.translate(`${bot.config.emojis.error} | ${capFirstLetter(this.settings.name)}`))
+			.setTitle(await message.translate(`${bot.config.emojis.error} | ${capFirstLetter(imageName === "trigger" ? "gif" : "png")}`))
 			.setDescription(await message.translate("An error occured while creating the image. Please try again later!"))
 			.setColor("RED");
 
@@ -263,69 +329,5 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 				}
 			]
 		}
-	],
-	generate: async function(bot, message, data) {
-		const state = data.options.getSubcommand();
-
-		if (state === "text") {
-			const type = data.options.getString("type");
-			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
-
-			if (type === "changemymind") return await canvacord.Canvas.changemymind(text);
-			else if (type === "ohno") return await canvacord.Canvas.ohno(text);
-			else if (type === "clyde") return await canvacord.Canvas.clyde(text);
-		} else if (state === "user") {
-			const type = data.options.getString("type");
-			const user = data.options.getUser("user") || message.user;
-
-			if (type === "jail") return await canvacord.Canvas.jail(user.displayAvatarURL({ format: "png" }));
-			else if (type === "garbage") return await canvacord.Canvas.shit(user.displayAvatarURL({ format: "png" }));
-			else if (type === "facepalm") return await canvacord.Canvas.facepalm(user.displayAvatarURL({ format: "png" }));
-			else if (type === "affect") return await canvacord.Canvas.affect(user.displayAvatarURL({ format: "png" }));
-			else if (type === "beautiful") return await canvacord.Canvas.beautiful(user.displayAvatarURL({ format: "png" }));
-			else if (type === "invert") return await canvacord.Canvas.invert(user.displayAvatarURL({ format: "png" }));
-			else if (type === "rainbow") return await canvacord.Canvas.rainbow(user.displayAvatarURL({ format: "png" }));
-			else if (type === "rip") return await canvacord.Canvas.rip(user.displayAvatarURL({ format: "png" }));
-			else if (type === "trash") return await canvacord.Canvas.trash(user.displayAvatarURL({ format: "png" }));
-			else if (type === "trigger") return await canvacord.Canvas.trigger(user.displayAvatarURL({ format: "png" }));
-			else if (type === "wasted") return await canvacord.Canvas.wasted(user.displayAvatarURL({ format: "png" }));
-			else if (type === "wanted") return await canvacord.Canvas.wanted(user.displayAvatarURL({ format: "png" }));
-		} else if (state === "slap") {
-			const user = data.options.getUser("user") || message.user;
-			const user2 = data.options.getUser("user2") || message.user;
-
-			return await canvacord.Canvas.slap(
-				user.displayAvatarURL({ format: "png" }),
-				user2.displayAvatarURL({ format: "png" })
-			);
-		} else if (state === "bed") {
-			const user = data.options.getUser("user") || message.user;
-			const user2 = data.options.getUser("user2");
-
-			return await canvacord.Canvas.bed(
-				user2.displayAvatarURL({ format: "png" }),
-				user.displayAvatarURL({ format: "png" })
-			);
-		} else if (state === "opinion") {
-			const user = data.options.getUser("user") || message.user;
-			const text = Discord.Util.cleanContent(data.options.getString("text"), message.channel);
-
-			return await canvacord.Canvas.opinion(user.displayAvatarURL({ format: "png" }), text);
-		} else if (state === "color") {
-			const hex = data.options.getString("hex");
-
-			return await canvacord.Canvas.color(hex);
-		} else if (state === "youtube") {
-			const user = data.options.getUser("user") || message.user;
-			const text = data.options.getString("text");
-			const dark = data.options.getBoolean("dark");
-
-			return await canvacord.Canvas.youtube({
-				username: user.username,
-				avatar: user.displayAvatarURL({ format: "png" }),
-				content: text,
-				dark
-			});
-		}
-	}
+	]
 });
