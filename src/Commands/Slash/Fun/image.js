@@ -93,7 +93,7 @@ module.exports = new cmd(async (bot, message, args, command, data) => {
 
 	try {
 		const generateImage = await generate(bot, message, data);
-		const imageName = data.options.getString("type") || data.options.getSubcommand();
+		const imageName = await data.options.getString("type") || await data.options.getSubcommand();
 		const Image = new Discord.MessageAttachment(generateImage, `${imageName}.${imageName === "trigger" ? "gif" : "png"}`);
 
 		const ImageEmbed = new Discord.MessageEmbed()
