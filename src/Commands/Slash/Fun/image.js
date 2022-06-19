@@ -3,6 +3,10 @@ const canvacord = require("canvacord");
 
 const cmd = require("@structures/command");
 
+async function capFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 module.exports = new cmd(async (bot, message, args, command, data) => {
 	const loadingEmbed = new Discord.MessageEmbed()
 		.setAuthor({
