@@ -25,15 +25,13 @@ export default class ModCommand {
 
 		for (const perm of this.settings.bot_perms) {
 			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
-				const table = {
+				return await message.replyT({
 					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,
-				};
-
-				return message?.applicationId ? await message.editT(table) : await message.replyT(table);
+				});
 			}
 		}
 
-		return this.execute(bot: any, message: any, args: string[], command: any, data: any);
+		return this.execute(bot, message, args, command, data);
 	}
 };
