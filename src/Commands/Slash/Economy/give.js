@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const user = data.options.getUser("user");
 	const money = data.options.getNumber("money");
 
@@ -25,7 +25,7 @@ async function execute(bot, message, args, command, data) {
 	await message.replyT(`${bot.config.emojis.success} | You gave ${user} ⏣${bot.functions.formatNumber(money)} coins!`);
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Give someone some money.",
 	dirname: __dirname,
 	usage: `(user) (money)`,

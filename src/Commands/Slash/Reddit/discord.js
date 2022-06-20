@@ -1,6 +1,6 @@
 const RedditCommand = require("@structures/redditCommand");
 
-module.exports = new RedditCommand({
+export default new RedditCommand({
 	description: "See what's going on on the Discord reddit!",
 	dirname: __dirname,
 	aliases: ["dailycord", "disdaily"],

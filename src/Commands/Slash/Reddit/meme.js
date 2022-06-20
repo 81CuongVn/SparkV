@@ -1,6 +1,6 @@
 const RedditCommand = require("@structures/redditCommand");
 
-module.exports = new RedditCommand({
+export default new RedditCommand({
 	description: "Funny internet memes from reddit.",
 	dirname: __dirname,
 	aliases: [],

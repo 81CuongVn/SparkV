@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const Replies = ["heads", "tails"];
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const Side = data.options.getString("side");
 	const Bet = data.options.getNumber("bet").toString();
 
@@ -39,7 +39,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Bet on a side and flip a coin! (heads/tails)",
 	dirname: __dirname,
 	aliases: ["CF"],

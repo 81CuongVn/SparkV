@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-module.exports = new cmd(
+export default new cmd(
 	async (bot, message) => {
 		const InvitesEmbend = new Discord.MessageEmbed()
 			.setTitle("Invites")

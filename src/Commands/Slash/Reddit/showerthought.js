@@ -1,6 +1,6 @@
 const RedditCommand = require("@structures/redditCommand");
 
-module.exports = new RedditCommand({
+export default new RedditCommand({
 	description: "You know that momment where you think/realize something crazy in the shower? Well, there is a whole subreddit full of them...",
 	dirname: __dirname,
 	aliases: ["shower", "thought"],

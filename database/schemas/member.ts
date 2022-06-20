@@ -44,4 +44,4 @@ Schema.pre("findOneAndUpdate", function() {
 	update.$inc.__v = 1;
 });
 
-module.exports = mongoose.model("Member", Schema);
+export default mongoose.model("Member", Schema);

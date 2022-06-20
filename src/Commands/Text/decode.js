@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const type = args[0];
 	const string = args.join(" ").slice(type.length + 1);
 
@@ -20,7 +20,7 @@ async function execute(bot, message, args, command, data) {
 	await message.replyT(decoded);
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Decode a string that was once encoded.",
 	dirname: __dirname,
 	usage: "(text) (type)",

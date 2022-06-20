@@ -1,8 +1,8 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = require("discord.js");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const Selections = [];
 	const pages = [];
 
@@ -156,7 +156,7 @@ async function execute(bot, message, args, command, data) {
 	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
 
 	collector.on("collect", async interaction => {
-		if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate().catch(err => { });
+		if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate().catch((): any => { });
 		if (interaction.customId === "SelectHelpMenu") {
 			const page = pages.find(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
 			if (!page) return;
@@ -178,7 +178,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `Get help with SparkV, or view SparkV's commands.`,
 	aliases: [`cmds`, `commands`, "vote"],
 	usage: `(optional: search)`,

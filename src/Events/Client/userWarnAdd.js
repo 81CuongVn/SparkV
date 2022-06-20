@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, guild, user, reason) {
 		const data = await bot.database.getGuild(guild.id);

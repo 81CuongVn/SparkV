@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const dbots = require("dbots");
 const { Client } = require("statcord.js");
 
-module.exports = {
+export default {
 	once: true,
 	async execute(bot) {
 		bot.user.setPresence({

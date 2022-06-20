@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, reaction, user) {
-		if (reaction?.partial) await reaction?.fetch().catch(err => { });
-		if (reaction.message?.partial) await reaction?.message.fetch().catch(err => { });
+		if (reaction?.partial) await reaction?.fetch().catch((): any => { });
+		if (reaction.message?.partial) await reaction?.message.fetch().catch((): any => { });
 
 		const message = reaction.message;
 

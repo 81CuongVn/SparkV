@@ -1,6 +1,6 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Permissions } = require("discord.js");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
 const numFilter = async m => {
 	if (m.author.id === m.client.user.id) return false;
@@ -121,7 +121,7 @@ async function setNewData(message, options) {
 	}
 }
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const botMessage = await message.replyT({
 		embeds: [
 			new MessageEmbed()
@@ -1048,7 +1048,7 @@ async function execute(bot, message, args, command, data) {
 			});
 
 			collector.on("collect", async interaction => {
-				if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+				if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 				if (interaction.customId === "no") {
 					await botMessage.edit({
 						embeds: [
@@ -1124,7 +1124,7 @@ async function execute(bot, message, args, command, data) {
 		.setColor(bot.config.embed.color);
 
 	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 
 		try {
 			buttons = [];
@@ -1207,7 +1207,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Personalize SparkV to suit your server!",
 	dirname: __dirname,
 	usage: "",

@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = data.options.getString("state");
 	const reason = data.options.getString("reason");
 
@@ -47,7 +47,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "I'll put the server in lockdown, or disable a previous lockdown.",
 	dirname: __dirname,
 	aliases: [],

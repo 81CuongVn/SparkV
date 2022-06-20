@@ -1,11 +1,11 @@
 const logger = require("@utils/logger");
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const fs = require("fs");
 const path = require("path");
 
 const cooldowns = [];
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, interaction) {
 		if (interaction.isCommand()) {

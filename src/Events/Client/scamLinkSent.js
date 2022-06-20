@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, message, data) {
 		if (!data?.logging?.enabled === "true") return;

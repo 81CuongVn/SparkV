@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const User = data.options.getUser("user") || message.user;
 
 	const UserData = await bot.database.getUser(User.id);
@@ -22,7 +22,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `View your balance.`,
 	dirname: __dirname,
 	aliases: ["bal"],

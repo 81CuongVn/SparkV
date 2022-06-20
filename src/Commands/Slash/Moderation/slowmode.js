@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const channel = data.options.getChannel("channel");
 	const seconds = data.options.getNumber("seconds");
 
@@ -16,7 +16,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Applies a slowmode to a channel.",
 	dirname: __dirname,
 	aliases: ["slow"],

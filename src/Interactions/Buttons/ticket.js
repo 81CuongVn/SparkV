@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 async function GetTicketOpen(bot, member) {
 	const ticket = await member.guild.channels.cache.filter(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map(c => c);
@@ -6,7 +6,7 @@ async function GetTicketOpen(bot, member) {
 	return ticket;
 }
 
-module.exports = {
+export default {
 	async execute(bot, interaction) {
 		if (interaction.customId === "ticket_create") {
 			await interaction.deferReply({
@@ -125,14 +125,14 @@ module.exports = {
 						// },
 					]
 				})
-				.catch(err => { });
+				.catch((): any => { });
 
 			interaction.reply({
 				embeds: [closedEmbed],
 				components: [
 					new Discord.MessageActionRow().addComponents(reopen, deleteinteraction)
 				]
-			}).catch(err => { });
+			}).catch((): any => { });
 		} else if (interaction.customId === `ticket_reopen_${interaction.channel.id}`) {
 			const createdBy = interaction.channel.topic.replace("'s Ticket", "");
 			console.log(interaction.channel.topic.split(" | ")[1]);
@@ -171,7 +171,7 @@ module.exports = {
 
 			try {
 				setTimeout(() => {
-					interaction.channel.delete().catch(err => { });
+					interaction.channel.delete().catch((): any => { });
 				}, 5000);
 			} catch (err) {
 				console.log("Attempted to delete a channel that didn't exist.");

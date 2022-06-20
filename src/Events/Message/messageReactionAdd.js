@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, reaction, user) {
 		if (reaction?.partial) await reaction?.fetch().catch(() => { });

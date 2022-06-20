@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const UserS = require("./schemas/user");
 const MemberS = require("./schemas/member");
 const GuildS = require("./schemas/guild");
 
-module.exports = {
+export default {
 	async init(bot) {
 		this.client = bot;
 	},

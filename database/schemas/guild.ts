@@ -63,4 +63,4 @@ const Schema = new mongoose.Schema({
 	tags: { type: Array, default: [] }
 });
 
-module.exports = new mongoose.model("Guild", Schema);
+export default new mongoose.model("Guild", Schema);

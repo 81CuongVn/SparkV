@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const pages = [];
 
 	bot.shop.each(item => {
@@ -51,7 +51,7 @@ async function execute(bot, message, args, command, data) {
 
 	const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 		if (interaction.customId === "quickLeft") PageNumber = 0;
 		else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
 		else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
@@ -77,7 +77,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `Displays the shop!`,
 	dirname: __dirname,
 	usage: "",

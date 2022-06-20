@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const path = require("path");
 
 const database = require("@database/handler");
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, oldMember, newMember) {
 		const data = await database.getGuild(newMember.guild.id);

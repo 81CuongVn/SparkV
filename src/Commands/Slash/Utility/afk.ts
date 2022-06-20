@@ -1,10 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord, { Message } from "discord.js";
 
-const user = require("@database/schemas/user");
+import cmd from "../../../structures/command";
 
-const cmd = require("@structures/command");
-
-async function execute(bot, message, args, command, data) {
+async function execute(bot:Discord.Client, message: Message, args: any[], command: string, data: any[]) {
 	const reason = data.options.getString("reason") || "No reason specified.";
 
 	if (data.user.afk) {
@@ -22,7 +20,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `Add/remove your AFK status. If anyone pings you in a server that has SparkV, that person will be notified that you are afk.`,
 	dirname: __dirname,
 	aliases: [],

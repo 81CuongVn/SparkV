@@ -23,4 +23,4 @@ const Schema = new mongoose.Schema({
 	inventory: { type: Object, default: {} }
 });
 
-module.exports = mongoose.model("User", Schema);
+export default mongoose.model("User", Schema);

@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const axios = require("axios");
 
 const cursewords = require("@src/cursewords.json");
@@ -23,11 +23,11 @@ function timeoutUser(offense, message, data) {
 
 			await message.channel.send({
 				embeds: [timeoutEmbed]
-			}).catch(err => { });
+			}).catch((): any => { });
 		}).catch(() => { });
 }
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, message) {
 		// If the application owner isn't ready yet, wait for it.
@@ -151,7 +151,7 @@ module.exports = {
 
 					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
 						try {
-							message.delete().catch(err => { });
+							message.delete().catch((): any => { });
 						} catch (err) {
 							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
 						}
@@ -237,7 +237,7 @@ module.exports = {
 			// 		await data.member.save();
 
 			// 		try {
-			// 			message.delete().catch(err => { });
+			// 			message.delete().catch((): any => { });
 			// 		} catch (err) {
 			// 			message
 			// 				.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
@@ -285,7 +285,7 @@ module.exports = {
 									const msg = channel.messages.cache.get(message.messageID);
 
 									if (msg) {
-										msg.delete().catch(err => { });
+										msg.delete().catch((): any => { });
 									}
 								}
 							});
@@ -355,7 +355,7 @@ module.exports = {
 		if (!bot.config.owners.includes(message?.author?.id)) return;
 
 		try {
-			await commandfile.run(bot, message, args, command, data);
+			await commandfile.run(bot: any, message: any, args: string[], command: any, data: any);
 		} catch (err) {
 			bot.logger(err, "error");
 

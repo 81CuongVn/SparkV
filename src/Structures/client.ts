@@ -1,35 +1,35 @@
-const fs = require("fs");
-const path = require("path");
-const util = require("util");
+import fs from "fs";
+import path from "path";
+import util from "util";
 
-const { Client, Collection, Intents, ApplicationCommand } = require("discord.js");
-const { DiscordTogether } = require("discord-together");
-const Statcord = require("statcord.js");
+import Discord, { Client, Collection, Intents, ApplicationCommand } from "discord.js";
+import { DiscordTogether } from "discord-together";
+import Statcord from "statcord.js";
 
-const shopdata = require("../shopdata.json");
+import shopdata from "../shopdata.json";
 
-const GuildSchema = require("@database/schemas/guild");
-const MemberSchema = require("@database/schemas/member");
-const UserSchema = require("@database/schemas/user");
+import GuildSchema from "../../database/schemas/guild";
+import MemberSchema from ",,/../database/schemas/member";
+import UserSchema from "../../database/schemas/user";
 
-module.exports = class bot extends Client {
-	constructor(settings) {
+export default class bot extends Client {
+	constructor(settings: any) {
 		super(settings);
 
 		// Config
-		this.config = require("@root/config.json");
+		this.config from "@root/config.json");
 
 		// Utils
-		this.logger = require("@utils/logger");
-		this.functions = require("@utils/functions");
+		this.logger from "@utils/logger");
+		this.functions from "@utils/functions");
 		this.wait = util.promisify(setTimeout);
 
 		// Database
-		this.database = require("@database/handler");
+		this.database from "@database/handler");
 
-		this.GuildSchema = require("@database/schemas/guild");
-		this.MemberSchema = require("@database/schemas/member");
-		this.UserSchema = require("@database/schemas/user");
+		this.GuildSchema from "@database/schemas/guild");
+		this.MemberSchema from "@database/schemas/member");
+		this.UserSchema from "@database/schemas/user");
 
 		// Collections
 		this.categories = new Collection();
@@ -75,7 +75,7 @@ module.exports = class bot extends Client {
 		this.discordTogether = new DiscordTogether(this);
 
 		if (process.env.REDIS_URL) {
-			this.redis = require("redis").createClient({
+			this.redis from "redis").createClient({
 				url: process.env.REDIS_URL
 			});
 
@@ -88,7 +88,7 @@ module.exports = class bot extends Client {
 	async LoadEvents(MainPath) {
 		for (const category of fs.readdirSync(`${MainPath}/Events`)) {
 			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`)) {
-				const event = require(path.resolve(`${MainPath}/Events/${category}/${file}`));
+				const event from path.resolve(`${MainPath}/Events/${category}/${file}`));
 				const handleArgs = (...args) => event.execute(this, ...args);
 
 				event.once ? this.once(file.split(".")[0], handleArgs) : this.on(file.split(".")[0], handleArgs);
@@ -98,13 +98,13 @@ module.exports = class bot extends Client {
 
 	async LoadCommands(MainPath) {
 		await fs.readdirSync(`${MainPath}/Commands/Slash`).forEach(async cat => {
-			const category = require(path.join(`${MainPath}/Commands/Slash/${cat}`));
+			const category from path.join(`${MainPath}/Commands/Slash/${cat}`));
 			this.categories.set(category.name, category);
 			await fs.readdirSync(`${MainPath}/Commands/Slash/${cat}`).forEach(async file => {
-				if (!file.endsWith(".js")) return;
+				if (!file.endsWith(".ts")) return;
 
 				const commandname = file.split(".")[0];
-				const command = require(path.resolve(`${MainPath}/Commands/Slash/${cat}/${commandname}`));
+				const command from path.resolve(`${MainPath}/Commands/Slash/${cat}/${commandname}`));
 
 				if (!command || !command.settings) return;
 
@@ -129,10 +129,10 @@ module.exports = class bot extends Client {
 		});
 
 		await fs.readdirSync(`${MainPath}/Commands/Text`).forEach(async file => {
-			if (!file.endsWith(".js")) return;
+			if (!file.endsWith(".ts")) return;
 
 			const commandname = file.split(".")[0];
-			const command = require(path.resolve(`${MainPath}/Commands/Text/${commandname}`));
+			const command from path.resolve(`${MainPath}/Commands/Text/${commandname}`));
 
 			if (!command || !command.settings) return;
 
@@ -156,10 +156,10 @@ module.exports = class bot extends Client {
 		// 	if (err) return this.logger(`App commands failed to load! ${err}`, "error");
 
 		// 	await files.forEach(async file => {
-		// 		if (!file.endsWith(".js")) return;
+		// 		if (!file.endsWith(".ts")) return;
 
 		// 		const commandname = file.split(".")[0];
-		// 		const command = require(path.resolve(`${MainPath}/appCommands/${commandname}`));
+		// 		const command from path.resolve(`${MainPath}/appCommands/${commandname}`));
 
 		// 		if (!command || !command.settings || command.config) return;
 

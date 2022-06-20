@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
@@ -9,7 +9,7 @@ const emojis = [
 	"➡️"
 ];
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const User = message?.applicationId ? (data.options.getMember("user") || message.user) : (message.mentions.members.first() || message.author);
 	const UserData = (User.user ? User.user.id : User.id) === (message.user ? message.user.id : message.author.id) ? data.member : await bot.database.getMember(User.user ? User.user.id : User.id, message.guild.id);
 
@@ -96,7 +96,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `I'll display a user's warnings.`,
 	dirname: __dirname,
 	aliases: ["infractions"],

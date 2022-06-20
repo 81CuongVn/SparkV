@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-module.exports = new cmd(
-	async (bot, message, args, command, data) => {
+export default new cmd(
+	async (bot: any, message: any, args: string[], command: any, data: any) => {
 		let itemName = data.options.getString("item").toLowerCase();
 		const amount = data.options.getNumber("amount") || 1;
 

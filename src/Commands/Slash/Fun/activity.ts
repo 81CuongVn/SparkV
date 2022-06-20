@@ -1,10 +1,31 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-module.exports = new cmd(async (bot, message, args, command, data) => {
-	const channel = data.options.getChannel("channel");
+export default new cmd(async (bot: any, message: any, args: string[], command: any, data: any) => {
+	const channel: Discord.GuildBasedChannel = data.options.getChannel("channel");
 	const type = data.options.getString("type");
+
+	await fetch(`https://discord.com/api/v8/channels/${channel.id}/invites`, {
+		method: 'POST',
+		body: JSON.stringify({
+		  max_age: 86400,
+		  max_uses: 0,
+		  target_application_id: type,
+		  target_type: 2,
+		  temporary: false,
+		  validate: null,
+		}),
+		headers: {
+		  Authorization: `Bot ${bot.client.token}`,
+		  'Content-Type': 'application/json',
+		},
+	  }).then((res) => res.json())
+		.then((invite) => {
+		  if (invite.error || !invite.code) throw new Error('An error occured while retrieving data !');
+		  if (Number(invite.code) === 50013) console.warn('Your bot lacks permissions to perform that action');
+		  returnData.code = `https://discord.com/invite/${invite.code}`;
+		});
 
 	bot.discordTogether.createTogetherCode(channel?.id, type?.toLowerCase())
 		.then(async invite => await message.replyT(`${bot.config.emojis.success} | Click [here](${invite.code}) to start playing **${type}** in ${channel}.`))

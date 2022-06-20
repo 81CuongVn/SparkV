@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const path = require("path");
 
 const database = require("@database/handler");
 
-module.exports = {
+export default {
 	once: false,
 	async execute(bot, member) {
 		const data = await database.getGuild(member.guild.id);
@@ -44,6 +44,6 @@ module.exports = {
 		channel.send({
 			content: msg,
 			files: [attachment]
-		}).catch(err => { });
+		}).catch((): any => { });
 	}
 };

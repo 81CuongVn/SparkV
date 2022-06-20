@@ -1,13 +1,13 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const NewCommand = require("./command");
 
-module.exports = class ModCommand {
+export default class ModCommand {
 	constructor(execute, sett) {
 		this.execute = execute;
 		this.settings = new NewCommand(execute, Object.assign({ cooldown: 2 * 1000 }, sett)).settings;
 	}
 
-	async run(bot, message, args, command, data) {
+	async run(bot: any, message: any, args: string[], command: any, data: any) {
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
@@ -34,6 +34,6 @@ module.exports = class ModCommand {
 			}
 		}
 
-		return this.execute(bot, message, args, command, data);
+		return this.execute(bot: any, message: any, args: string[], command: any, data: any);
 	}
 };

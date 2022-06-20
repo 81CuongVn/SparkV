@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const canvacord = require("canvacord");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const role = data.options.getRole("role");
 
 	try {
@@ -15,7 +15,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Give all users a role.",
 	dirname: __dirname,
 	aliases: ["rall"],

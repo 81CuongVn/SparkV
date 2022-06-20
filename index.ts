@@ -1,12 +1,11 @@
 // KingCh1ll //
 // 4/22/2021 //
-require("module-alias/register");
 
 async function loader(callback) {
-	const loading = ["\\", "|", "/", "-"];
-	let num = 0;
+	const loading: string[] = ["\\", "|", "/", "-"];
+	let num: number = 0;
 
-	const loader = setInterval(async () => {
+	const loader: NodeJS.Timer = setInterval(async () => {
 		process.stdout.write(`\r${loading[num++]} [App] Loading...`);
 		num %= loading.length;
 	}, 250);
@@ -18,6 +17,7 @@ async function loader(callback) {
 	}, 5000);
 }
 
+import figlet from "figlet";
 loader(async () => {
 	console.log(require("chalk").grey("​"));
 	console.log(figlet.textSync("SparkV"));
@@ -30,7 +30,8 @@ loader(async () => {
 
 	checkForUpdate();
 
-	if (process.version.slice(1, 3) - 0 < 16) {
+	const version:any = process.version.slice(1, 3);
+	if (version - 0 < 16) { // how to add typing?
 		console.log(require("chalk").grey("----------------------------------------"));
 		Logger("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
 		console.log(require("chalk").grey("----------------------------------------"));
@@ -41,18 +42,17 @@ loader(async () => {
 });
 
 // Libarys //
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
-const discord = require("discord.js");
-const Statcord = require("statcord.js");
-const mongoose = require("mongoose");
-const axios = require("axios");
-const figlet = require(`figlet`);
+import discord from "discord.js";
+import Statcord from "statcord.js";
+import mongoose from "mongoose";
+import axios from "axios";
 
 // Varibles //
-const Config = require("./config.json");
-const Logger = require("./utils/logger");
+import Config from "./config.json";
+import Logger from "./utils/logger";
 
 // Functions //
 async function checkForUpdate() {
@@ -84,7 +84,7 @@ async function start() {
 	}
 
 	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn", { data: warning }));
-	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error", err));
+	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error"));
 	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
 	process.on("unhandledException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
 	process.on("unhandledRejection", async err => await Logger(`Unhandled rejection error. ${err}.`, "error", { data: err }));

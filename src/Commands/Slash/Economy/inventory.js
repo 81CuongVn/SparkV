@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-module.exports = new cmd(
-	async (bot, message, args, command, data) => {
+export default new cmd(
+	async (bot: any, message: any, args: string[], command: any, data: any) => {
 		let user = data.options.getMember("user");
 		let userData;
 
@@ -72,7 +72,7 @@ module.exports = new cmd(
 
 		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 		collector.on("collect", async interaction => {
-			if (!interaction.deferred) interaction.deferUpdate().catch(err => { });
+			if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 			if (interaction.customId === "quickLeft") PageNumber = 0;
 			else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
 			else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;

@@ -1,14 +1,14 @@
-const Discord = require("discord.js");
-const Genius = require("genius-lyrics");
-const lyricsClient = new Genius.Client(process.env.GENIUS_TOKEN);
+import Discord from "discord.js";
+import Genius from "genius-lyrics";
+const lyricsClient: Genius.Client = new Genius.Client(process.env.GENIUS_TOKEN);
 
-const { Manager } = require("erela.js");
-const Spotify = require("erela.js-spotify");
-const AppleMusic = require("erela.js-apple");
-const Deezer = require("erela.js-deezer");
-const TIDAL = require("erela.js-tidal");
+import Erela, { Manager } from "erela.js";
+import Spotify from "erela.js-spotify";
+import AppleMusic from "erela.js-apple";
+import Deezer from "erela.js-deezer";
+import TIDAL from "erela.js-tidal";
 
-module.exports = async bot => {
+export default async (bot: any) => {
 	bot.lyricsClient = lyricsClient;
 
 	let nodes = [
@@ -61,12 +61,6 @@ module.exports = async bot => {
 			secure: false
 		},
 		{
-			host: "lavalink.islantay.tk",
-			port: 8880,
-			password: "waifufufufu",
-			secure: false
-		},
-		{
 			host: "weez-node.cf",
 			port: 2333,
 			password: "FreeLava",
@@ -88,12 +82,6 @@ module.exports = async bot => {
 			host: "lavalink.kapes.eu",
 			port: 2222,
 			password: "lavalinkplay",
-			secure: false
-		},
-		{
-			host: "181.214.231.105",
-			port: 6665,
-			password: "syslink",
 			secure: false
 		},
 		{
@@ -133,7 +121,7 @@ module.exports = async bot => {
 				clientSecret: process.env.SPOTIFYSECRET
 			}),
 			new TIDAL(),
-			new Deezer(),
+			new Deezer({}),
 			new AppleMusic()
 		],
 		send(id, payload) {
@@ -142,8 +130,9 @@ module.exports = async bot => {
 		}
 	}).on("nodeConnect", node => bot.logger(`[Music System] Node ${node.options.identifier} connected`))
 		.on("nodeError", (node, error) => console.log(`[Music System] Error: Node ${node.options.identifier} had an error: ${error.message}`, "error"))
-		.on("trackStart", async (player, track) => {
-			const playerData = bot.music.players.get(player.guild);
+		.on("trackStart", async (player: Erela.Player, track: Erela.Track) => {
+			const playerData: Erela.Player = bot.music.players.get(player.guild);
+			const requester: any = player.get<string>("requester");
 			const NowPlayingEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${track.title}`)
 				.setURL(track.uri)
@@ -154,8 +143,8 @@ module.exports = async bot => {
 				.addField(`${bot.config.emojis.volume} Volume`, `\`${playerData?.volume}%\``, true)
 				.addField(`${bot.config.emojis.loop} Loop`, `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`, true)
 				.setFooter({
-					text: `Requested by ${player.get("requester")?.tag} • ${bot.config.embed.footer}`,
-					iconURL: player.requester?.displayAvatarURL()
+					text: `Requested by ${requester?.tag} • ${bot.config.embed.footer}`,
+					iconURL: requester?.displayAvatarURL()
 				})
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
@@ -211,7 +200,7 @@ module.exports = async bot => {
 		})
 		.on("trackStuck", async (player, track) => {
 			const guild = bot.guilds.cache.get(player.guild);
-			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel).catch(err => { });
+			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel).catch((): any => { });
 
 			channel && await channel.send({
 				embeds: [
@@ -236,10 +225,10 @@ module.exports = async bot => {
 		})
 		.on("socketClosed", (player, payload) => payload.byRemote === true && player.destroy());
 
-	bot.music.formatDuration = duration => {
-		let seconds = parseInt((duration / 1000) % 60);
-		let minutes = parseInt((duration / (1000 * 60)) % 60);
-		let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+	bot.music.formatDuration = (duration: number) => {
+		let seconds: any = (duration / 1000) % 60;
+		let minutes: any = (duration / (1000 * 60)) % 60;
+		let hours: any = (duration / (1000 * 60 * 60)) % 24;
 
 		hours = (hours < 10) ? `0${hours}` : hours;
 		minutes = (minutes < 10) ? `0${minutes}` : minutes;
@@ -247,7 +236,7 @@ module.exports = async bot => {
 
 		return duration < (3600 * 1000) ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
 	};
-	bot.music.handleMusic = async (playerData, track, mEmbed, options) => {
+	bot.music.handleMusic = async (playerData: any, track: any, mEmbed: Discord.MessageEmbed, options: any) => {
 		const TogglePlayingButton = new Discord.MessageButton()
 			.setEmoji(bot.config.emojis.pause)
 			.setCustomId("TP")
@@ -294,7 +283,7 @@ module.exports = async bot => {
 				}
 			] : null,
 			fetchReply: true
-		}).catch(err => { });
+		}).catch((): any => { });
 
 		if (!MusicMessage) return;
 
@@ -321,10 +310,10 @@ module.exports = async bot => {
 					}
 
 					const loopModes = [0, 1, 2];
-					const nextLoopMode = loopModes[queue.repeatMode + 1] || 0;
+					const nextLoopMode = loopModes[track.queue.repeatMode + 1] || 0;
 					const loopMode = nextLoopMode === 0 ? `${bot.config.emojis.error} Disabled` : `${bot.config.emojis.success} ${nextLoopMode === 1 ? "\`Server Queue\`" : "\`Current Song\`"}`;
 
-					queue.setRepeatMode(nextLoopMode).catch(err => { });
+					track.queue.setRepeatMode(nextLoopMode).catch((): any => { });
 
 					embed
 						.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)

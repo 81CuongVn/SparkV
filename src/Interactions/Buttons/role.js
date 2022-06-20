@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = {
+export default {
 	async execute(bot, interaction) {
 		await interaction.deferReply({
 			ephemeral: true

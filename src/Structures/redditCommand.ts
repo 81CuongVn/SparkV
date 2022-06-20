@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const fetch = require("axios");
 
 const NewCommand = require("./command");
@@ -8,7 +8,7 @@ const filters = {
 	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256
 };
 
-module.exports = class RedditCommand {
+export default class RedditCommand {
 	constructor(sett) {
 		this.settings = new NewCommand(
 			null,
@@ -23,7 +23,7 @@ module.exports = class RedditCommand {
 		).settings;
 	}
 
-	async run(bot, message, args, command, data) {
+	async run(bot: any, message: any, args: string[], command: any, data: any) {
 		let endpoint = this.settings.endpoint;
 
 		if (data?.options?.getString("type")) endpoint = data?.options?.getString("type");

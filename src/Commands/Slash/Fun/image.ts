@@ -72,7 +72,7 @@ async function generate(bot, message, data) {
 	}
 }
 
-module.exports = new cmd(async (bot, message, args, command, data) => {
+module.exports = new cmd(async (bot: any, message: any, args: string[], command: any, data: any) => {
 	const loadingEmbed = new Discord.MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,

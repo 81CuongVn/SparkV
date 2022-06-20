@@ -1,10 +1,10 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 const { inspect } = require("util");
 const fetch = require("axios");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	let input = args.join(" ");
 
 	if (input.startsWith("```") && input.endsWith("```")) input = input.slice(3, -3);
@@ -45,7 +45,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `This is an owner only command.`,
 	dirname: __dirname,
 	aliases: [],

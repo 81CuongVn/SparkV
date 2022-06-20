@@ -1,8 +1,8 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const type = data.options.getString("action");
 
 	if (type === "beg") {
@@ -153,7 +153,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Work to recieve coins. (beg/search)",
 	dirname: __dirname,
 	usage: "",

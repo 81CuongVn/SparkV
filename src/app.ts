@@ -6,15 +6,14 @@ if (process.argv.includes("--sharding") === true) require("module-alias/register
 require("./Structures/extenders");
 
 // Librarys //
-const fs = require("fs");
-const path = require("path");
-const Statcord = require("statcord.js");
-const mongoose = require("mongoose");
-const { Collection, Intents, Permissions } = require("discord.js");
+import fs from "fs";
+import path from "path";
+import Statcord from "statcord.js";
+import mongoose from "mongoose";
+import Discord, { Collection, Intents, Permissions } from "discord.js";
 
-const Logger = require("../utils/logger");
-
-const Client = require("./Structures/client");
+import Logger from "../utils/logger";
+import Client from "./Structures/client";
 const SparkV = new Client({
 	intents: [
 		Intents.FLAGS.DIRECT_MESSAGES,
@@ -42,7 +41,7 @@ const SparkV = new Client({
 		status: "dnd"
 	}
 });
-global.bot = SparkV;
+(global as any).bot = SparkV;
 
 async function Start() {
 	if (process.argv.includes("--sharding") === true) {

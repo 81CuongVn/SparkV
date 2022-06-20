@@ -58,4 +58,4 @@
 // 	id: false
 // });
 
-// module.exports = mongoose.model("giveaways", Schema);
+// export default mongoose.model("giveaways", Schema);

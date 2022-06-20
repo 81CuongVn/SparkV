@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
@@ -60,7 +60,7 @@ async function execute(bot, interaction, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Moderate a user. (Warn/Kick/Ban)",
 	dirname: __dirname,
 	aliases: [],

@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const type = data.options.getString("type");
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
@@ -105,7 +105,7 @@ async function execute(bot, message, args, command, data) {
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Information for SparkV.",
 	dirname: __dirname,
 	usage: "",

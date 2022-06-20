@@ -1,4 +1,4 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 const ms = require("ms");
 
 const cmd = require("@structures/modCommand");
@@ -19,7 +19,7 @@ async function execute(bot, interaction, args, command, data) {
 		.catch(async () => await interaction.replyT(`Failed to put ${user} on timeout! Please check that I have the correct permissions and my role is higher than ${user}.`));
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `Timeout a user.`,
 	dirname: __dirname,
 	aliases: [],

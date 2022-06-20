@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const { createCanvas, loadImage, registerFont } = require("canvas");
 const fs = require("fs");
 const path = require("path");
@@ -9,7 +9,7 @@ const URLrgx = /(https?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}
 
 let bot;
 
-module.exports = {
+export default {
 	/**
    * Initilizes functions.
    * @param {Object} client Discord client.

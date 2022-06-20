@@ -1,44 +1,40 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
-const logger = require("./logger");
+import logger from "./logger";
 
 // A special thanks to markdown-table for this awesome code.
 // https://github.com/wooorm/markdown-table/
 // They switched to ESM only, so I can no longer use their package.
-function markdown(table) {
+function markdown(table: string[]) {
 	const rowLength = table.length;
 	const alignment = [];
 	const rule = [];
 	let cellCount = 0;
 	let rowIndex = -1;
 	let sizes = [];
-	let align;
-	let rows;
-	let row;
-	let cells;
-	let index;
-	let position;
-	let size;
-	let value;
-	let spacing;
-	let before;
-	let after;
+	let align: any;
+	let rows: any;
+	let row: any;
+	let cells: any;
+	let index: any;
+	let position: any;
+	let size: any;
+	let value: any;
+	let spacing: any;
+	let before: any;
+	let after: any;
 
 	while (++rowIndex < rowLength) {
 		row = table[rowIndex];
-
 		index = -1;
 
-		if (row.length > cellCount) {
-			cellCount = row.length;
-		}
-
+		if (row.length > cellCount) cellCount = row.length;
 		while (++index < cellCount) {
 			position = row[index] && dotindex(row[index]);
 
-			if (!sizes[index]) sizes[index] = 3;
-			if (position > sizes[index]) sizes[index] = position;
+			if (!sizes[index]) sizes[index as keyof typeof sizes] = 3;
+			if (position > sizes[index]) sizes[index as keyof typeof sizes] = position;
 		}
 	}
 
@@ -49,7 +45,7 @@ function markdown(table) {
 		align = alignment[index];
 
 		if (align !== "l" && align !== "r" && align !== "c" && align !== ".") align = "";
-		alignment[index] = align;
+		alignment[index as keyof typeof alignment] = align;
 	}
 
 	rowIndex = -1;
@@ -148,23 +144,23 @@ function markdown(table) {
 	return `| ${rows.join(" |\n| ")}" |`;
 }
 
-function pad(length, character) {
+function pad(length: number, character?: string) {
 	return new Array(length + 1).join(character || " ");
 }
 
-function dotindex(value) {
+function dotindex(value: any) {
 	const match = /\.[^.]*$/.exec(value);
 
 	return match ? match.index + 1 : value.length;
 }
 
-module.exports = {
+export default {
 	/**
    * Update the docs
    * @param {Object} bot The SparkV bot Instance.
    * @param {Dirname} MainDir The main directory.
    */
-	update(bot, MainDir) {
+	update(bot: any, MainDir: string) {
 		let cmdCount = 0;
 		bot.commands.each(cmd => ++cmdCount);
 

@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
-module.exports = class Command {
+export default class Command {
 	constructor(execute, sett) {
 		this.execute = execute;
 		this.settings = Object.assign(
@@ -18,7 +18,7 @@ module.exports = class Command {
 		);
 	}
 
-	async run(bot, message, args, command, data) {
+	async run(bot: any, message: any, args: string[], command: any, data: any) {
 		if (message?.channel?.type === "dm") return await message.replyT(`${bot.config.emojis.error} | This command cannot be used in DMs!`);
 
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
@@ -37,6 +37,6 @@ module.exports = class Command {
 			}
 		}
 
-		return this.execute(bot, message, args, command, data);
+		return this.execute(bot: any, message: any, args: string[], command: any, data: any);
 	}
 };

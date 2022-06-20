@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 const axios = require("axios");
 const os = require("os");
 
-const cmd = require("@structures/command");
+import cmd from "../../../structures/command";
 
-module.exports = new cmd(
+export default new cmd(
 	async (bot, message) => {
 		const loadingEmbed = new Discord.MessageEmbed()
 			.setAuthor({
@@ -25,7 +25,7 @@ module.exports = new cmd(
 			fetchReply: true
 		});
 
-		const statcord = await axios.get(`https://api.statcord.com/v3/${bot.user.id}`).then(res => res.data.data[0]).catch(err => { });
+		const statcord = await axios.get(`https://api.statcord.com/v3/${bot.user.id}`).then(res => res.data.data[0]).catch((): any => { });
 
 		// RamData = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)
 

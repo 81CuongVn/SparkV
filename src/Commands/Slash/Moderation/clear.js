@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	let number = data.options.getNumber("number");
 
 	const type = data.options.getString("type") || null;
@@ -42,7 +42,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: `I'll delete messages for you!`,
 	dirname: __dirname,
 	usage: `(# of messages) (Optional: Type (all, user only, pinned only))`,

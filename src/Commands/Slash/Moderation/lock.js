@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ")) || "No reason provided.";
 	const embed = new Discord.MessageEmbed()
 		.setAuthor({
@@ -29,7 +29,7 @@ async function execute(bot, message, args, command, data) {
 	}
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "I'll lock the current channel.",
 	dirname: __dirname,
 	aliases: [],

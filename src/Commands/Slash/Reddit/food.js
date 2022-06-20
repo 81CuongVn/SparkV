@@ -1,6 +1,6 @@
 const RedditCommand = require("@structures/redditCommand");
 
-module.exports = new RedditCommand({
+export default new RedditCommand({
 	description: "I will send some mouth-watering food selected from multible subreddits. Yum!",
 	dirname: __dirname,
 	aliases: [],

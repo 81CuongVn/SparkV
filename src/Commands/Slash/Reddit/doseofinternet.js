@@ -1,6 +1,6 @@
 const RedditCommand = require("@structures/redditCommand");
 
-module.exports = new RedditCommand({
+export default new RedditCommand({
 	description: "I'll send a dose of the internet.",
 	dirname: __dirname,
 	aliases: ["doi", "dinternet", "dosei"],

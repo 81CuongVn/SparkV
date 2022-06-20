@@ -1,8 +1,8 @@
-const Discord = require(`discord.js`);
+import Discord from "discord.js";
 
 const cmd = require("@structures/modCommand");
 
-async function execute(bot, message, args, command, data) {
+async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const User = data.options.getMember("user");
 	const NewNickname = data.options.getString("nickname");
 
@@ -18,7 +18,7 @@ async function execute(bot, message, args, command, data) {
 		});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "I'll change a user's nickname to your choice.",
 	dirname: __dirname,
 	aliases: ["setnick"],
