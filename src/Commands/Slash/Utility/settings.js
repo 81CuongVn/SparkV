@@ -1130,7 +1130,7 @@ async function execute(bot, message, args, command, data) {
 			buttons = [];
 
 			switch (interaction.customId) {
-				case "back":
+				case "back": {
 					setupSettings();
 
 					buttons.push({
@@ -1146,22 +1146,27 @@ async function execute(bot, message, args, command, data) {
 						components: buttons ?? [],
 						ephemeral: true
 					});
-				case "exit": return await collector.stop();
-				case interaction?.customId === "toggle" && curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === "toggle"):
-					if ((curSetting.getState() === "true" ? "false" : "true") === "true") {
-						await curSetting.setState("enable");
-						curSetting?.buttons?.forEach(async button => button?.required === true ? await button.setData() : null);
-					} else {
-						await curSetting.setState("disable");
+				} case "exit": return await collector.stop();
+				case "toggle": {
+					if (curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === "toggle")) {
+						console.log("toggled", interaction.customId);
+						if ((curSetting.getState() === "true" ? "false" : "true") === "true") {
+							await curSetting.setState("enable");
+							curSetting?.buttons?.forEach(async button => button?.required === true ? await button.setData() : null);
+						} else {
+							await curSetting.setState("disable");
+						}
+
+						refreshSetting(curSetting);
 					}
 
-					refreshSetting(curSetting);
 					break;
-				case curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase()):
-					await curSetting?.buttons?.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
-					refreshSetting(curSetting);
-					break;
-				default:
+				} default: {
+					if (curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase())) {
+						await curSetting?.buttons?.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
+						return refreshSetting(curSetting);
+					}
+
 					let foundSetting;
 					settings.forEach(setting => {
 						if (setting?.category === true) {
@@ -1171,11 +1176,10 @@ async function execute(bot, message, args, command, data) {
 
 						if ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true) foundSetting = setting;
 					});
-					console.log(foundSetting);
 
 					curSetting = foundSetting;
 					curSetting && refreshSetting(curSetting);
-					break;
+				}
 			}
 		} catch (error) {
 			bot.logger(error, "error");
