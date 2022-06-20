@@ -49,6 +49,13 @@ async function Start() {
 			await mongoose.connect(process.env.MONGOOSEURL, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
+			} as {
+				bufferCommands?: boolean;
+				dbName?: string;
+				user?: string;
+				pass?: string;
+				autoIndex?: boolean;
+				autoCreate?: boolean;
 			});
 
 			mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
@@ -58,9 +65,7 @@ async function Start() {
 		}
 	}
 
-	await SparkV.LoadModules({
-		sharding: process.argv.includes("--sharding")
-	});
+	await SparkV.LoadModules({ sharding: process.argv.includes("--sharding") });
 
 	await SparkV.LoadEvents(__dirname);
 	await SparkV.LoadCommands(__dirname);

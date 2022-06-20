@@ -19,11 +19,11 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	if (number < 1 || number > 100) return message.replyT(`${bot.config.emojis.success} | Next time, please provide a number greater than 0 and less than 100.`);
 
-	await message.deleteReply().catch(err => {});
+	await message.deleteReply().catch(() => {});
 
 	let messages = await message.channel.messages.fetch({
 		limit: 100
-	}).catch(err => {});
+	}).catch(() => {});
 	messages = messages.toJSON();
 
 	if (user) messages = messages.filter(m => m.author.id === user.user.id);

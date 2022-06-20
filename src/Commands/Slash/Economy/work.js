@@ -96,7 +96,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		const collector = SearchMessage.createMessageComponentCollector({
 			filter: interaction => {
-				if (!interaction.deferred) interaction.deferUpdate().catch(err => {});
+				if (!interaction.deferred) interaction.deferUpdate().catch(() => {});
 
 				return true;
 			}, time: 300 * 1000

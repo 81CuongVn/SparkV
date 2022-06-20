@@ -2,7 +2,7 @@ const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Permis
 
 import cmd from "../../../structures/command";
 
-const numFilter = async m => {
+const numFilter = async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | number; replyT: (arg0: string) => any; }) => {
 	if (m.author.id === m.client.user.id) return false;
 
 	if (m.content) {
@@ -18,7 +18,7 @@ const numFilter = async m => {
 	}
 };
 
-async function setNewData(message, options) {
+async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; replyT: (arg0: string) => any; channel: { awaitMessages: (arg0: { filter: any; max: number; time: number; errors: string[]; }) => Promise<any>; }; reply: (arg0: { embeds: any[]; }) => any; }, options: { title: any; id?: any; description: any; dropdownItems?: any; color: any; time?: any; handleData: any; filter?: any; }) {
 	const requestMsg = new MessageEmbed()
 		.setAuthor({
 			name: message.user.tag,
@@ -51,7 +51,7 @@ async function setNewData(message, options) {
 
 	if (options.dropdownItems) {
 		const collector = await channelMsg.createMessageComponentCollector({ max: 1, time: (options.time * 1000) });
-		collector.on("collect", async interaction => {
+		collector.on("collect", async (interaction: { customId: string; values: any[]; user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; }) => {
 			if (interaction.customId.split("_")[1] === options.id) {
 				try {
 					await options.handleData(interaction.values[0], requestMsg);
@@ -75,9 +75,7 @@ async function setNewData(message, options) {
 						.setColor("RED");
 
 					try {
-						return await message.replyT({
-							embeds: [ErrorEmbed]
-						});
+						return await message.replyT({ embeds: [ErrorEmbed] });
 					} catch (err) { }
 				}
 			}
@@ -91,7 +89,7 @@ async function setNewData(message, options) {
 			} catch (err) { }
 		});
 	} else {
-		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async collected => {
+		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async (collected: { first: () => { (): any; new(): any; delete: { (): void; new(): any; }; }; }) => {
 			try {
 				await options.handleData(collected.first(), requestMsg);
 				await channelMsg.edit({
@@ -117,7 +115,7 @@ async function setNewData(message, options) {
 					]
 				});
 			}
-		}).catch(async collected => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
+		}).catch(async (collected: any) => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
 	}
 }
 
@@ -218,7 +216,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							],
 							color: "BLUE",
 							time: 15,
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: any, requestMsg: { setTitle: (arg0: any) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
 								requestMsg
 									.setTitle(await message.translate(`${bot.config.emojis.config} | New Language Changed`))
 									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.language}**" ${await message.translate("to")} **${collected}**.`);
@@ -275,7 +273,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
 									color: "BLUE",
 									time: 60,
-									handleData: async (collected, requestMsg) => {
+									handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
 										if (!m?.mentions?.channels?.first()) {
 											return requestMsg
 												.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
@@ -297,7 +295,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						}
 					],
 					getState: () => data.guild.logging?.enabled,
-					setState: async type => {
+					setState: async (type: string) => {
 						if (type === "enable") data.guild.logging.enabled = "true";
 						else if (type === "disable") data.guild.logging.enabled = "false";
 
@@ -339,7 +337,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send text that will be said when a user levels up. You have 60 seconds to send some text. Default: `<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!`\n**Placeholders**\n{author} - The user who leveled up.\n{level} - The user's new level.",
 							color: "BLUE",
 							time: 60,
-							filter: async m => {
+							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => any; }) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (m.content) {
@@ -354,7 +352,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									return false;
 								}
 							},
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Leveling Message Setup`)
 									.setDescription(`Successfully setup leveling message to ${collected.content}.`);
@@ -380,7 +378,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send a channel to revieve level up notifications in. You have 60 seconds to send a channel.",
 							color: "BLUE",
 							time: 60,
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
 								if (!m?.mentions?.channels?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Leveling Channel Setup`)
@@ -402,7 +400,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}
 			],
 			getState: () => data.guild.leveling?.enabled,
-			setState: async type => {
+			setState: async (type: string) => {
 				if (type === "enable") data.guild.leveling.enabled = "true";
 				else if (type === "disable") data.guild.leveling.enabled = "false";
 
@@ -431,7 +429,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: await message.translate("Please send a category ID to setup the starboard in. **You can automaticly skip this step if you run the `/panel tickets` command. **You have 60 seconds to send a category ID."),
 							color: "BLUE",
 							time: 60,
-							filter: async m => {
+							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => void; guild: { channels: { cache: { has: (arg0: any) => any; }; }; }; }) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (!m?.content) {
@@ -451,7 +449,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 								return true;
 							},
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: any) => { (): any; new(): any; setDescription: { (arg0: any): void; new(): any; }; }; }) => {
 								requestMsg
 									.setTitle(await message.translate(`${bot.config.emojis.config} | Tickets Channel Setup`))
 									.setDescription(await message.translate(`Successfully setup tickets channel to ${collected.content}.`));
@@ -473,7 +471,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						.setCustomId("roles")
 						.setStyle("SECONDARY"),
 					getData: () => {
-						if (data.guild?.tickets?.roles) return data.guild?.tickets?.roles.map(r => `<@&${r}>`).join(", ");
+						if (data.guild?.tickets?.roles) return data.guild?.tickets?.roles.map((r: any) => `<@&${r}>`).join(", ");
 						else return "None";
 					},
 					setData: async () => {
@@ -482,7 +480,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: await message.translate("Please mention support role(s). Support roles are roles that will grant users access to see tickets. You have 60 seconds to send a channel."),
 							color: "BLUE",
 							time: 60,
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { mentions: { roles: any[]; }; content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
 								if (!m?.mentions?.roles?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Support Roles Setup`)
@@ -490,8 +488,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 										.setColor("RED");
 								}
 
-								const roles = [];
-								collected.mentions.roles.forEach(r => roles.push(r.id));
+								const roles: any[] = [];
+								collected.mentions.roles.forEach((r: { id: any; }) => roles.push(r.id));
 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Support Roles Setup`)
@@ -565,7 +563,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 											value: "ban"
 										}
 									],
-									handleData: async (collected, requestMsg) => {
+									handleData: async (collected: any, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): void; new(): any; }; }; new(): any; }; }; }) => {
 										requestMsg
 											.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 											.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
@@ -627,7 +625,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						// }
 					],
 					getState: () => data.guild.antiScam?.enabled,
-					setState: async type => {
+					setState: async (type: string) => {
 						if (type === "enable") data.guild.antiScam.enabled = "true";
 						else if (type === "disable") data.guild.antiScam.enabled = "false";
 
@@ -685,7 +683,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 											value: "ban"
 										}
 									],
-									handleData: async (collected, requestMsg) => {
+									handleData: async (collected: any, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): void; new(): any; }; }; new(): any; }; }; }) => {
 										requestMsg
 											.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
 											.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
@@ -701,7 +699,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						}
 					],
 					getState: () => data.guild.antiSpam?.enabled,
-					setState: async type => {
+					setState: async (type: string) => {
 						if (type === "enable") data.guild.antiSpam.enabled = "true";
 						else if (type === "disable") data.guild.antiSpam.enabled = "false";
 
@@ -744,7 +742,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send a channel to setup the starboard in. You have 60 seconds to send a channel.",
 							color: "GOLD",
 							time: 60,
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
 								if (!m?.mentions?.channels?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Starboard Channel Setup`)
@@ -778,7 +776,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.",
 							color: "GOLD",
 							time: 30,
-							filter: async m => {
+							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => any; }) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (m.content) {
@@ -793,7 +791,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									return false;
 								}
 							},
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
 								const newEmoji = collected.content;
 
 								requestMsg
@@ -823,7 +821,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							color: "GOLD",
 							time: 15,
 							filter: numFilter,
-							handleData: async (collected, requestMsg) => {
+							handleData: async (collected: { content: string; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
 								const min = collected.content.trim();
 
 								requestMsg
@@ -840,7 +838,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}
 			],
 			getState: () => data.guild.starboard?.enabled,
-			setState: async type => {
+			setState: async (type: string) => {
 				if (type === "enable") data.guild.starboard.enabled = "true";
 				else if (type === "disable") data.guild.starboard.enabled = "false";
 
@@ -851,20 +849,20 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		}
 	];
 
-	async function refreshSetting(curSetting) {
+	async function refreshSetting(curSetting: never) {
 		buttons = [];
 		pages = [];
 		await createPages();
 
-		function handleButton(button) {
+		function handleButton(button: { name: string; data: { setDisabled: (arg0: boolean) => { (): any; new(): any; setStyle: { (arg0: string): any; new(): any; }; }; }; getData: () => string; }) {
 			if (button.name.toLowerCase() === "toggle") return buttonsIncluded.push(button?.data?.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER"));
 			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button?.data?.setDisabled(false));
 			if (curSetting?.getState() === "true") buttonsIncluded.push(button?.data?.setDisabled(false));
 			else if (curSetting?.getState() === "false") buttonsIncluded.push(button?.data?.setDisabled(true));
 		}
 
-		const buttonsIncluded = [];
-		curSetting?.category === true ? curSetting.categories.forEach(button => handleButton(button)) : curSetting?.buttons?.forEach(button => handleButton(button));
+		const buttonsIncluded: any[] = [];
+		curSetting?.category === true ? curSetting.categories.forEach((button: any) => handleButton(button)) : curSetting?.buttons?.forEach((button: any) => handleButton(button));
 
 		buttons.push({
 			type: 1,
@@ -925,8 +923,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setLabel("Support")
 		.setStyle("LINK");
 
-	let pages = [];
-	let curSetting;
+	let pages: any[] = [];
+	let curSetting: { buttons: any[]; getState: () => string; setState: (arg0: string) => any; };
 
 	async function createPages() {
 		settings.forEach(setting => {
@@ -958,7 +956,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		});
 	}
 
-	let buttons = [];
+	let buttons: { components: any[]; }[] = [];
 	let rows = 0;
 	async function setupSettings() {
 		settings.forEach(async setting => {
@@ -1035,7 +1033,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 
 			const collector = botMessage.createMessageComponentCollector({
-				filter: async interaction => {
+				filter: async (interaction: { user: { id: any; }; reply: (arg0: { content: string; ephemeral: boolean; }) => any; }) => {
 					if (interaction.user.id !== message.user.id) {
 						await interaction.reply({
 							content: `Only ${message.user} can edit these settings!`,
@@ -1047,7 +1045,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}, time: 300 * 1000, max: 1
 			});
 
-			collector.on("collect", async interaction => {
+			collector.on("collect", async (interaction: { deferred: any; deferUpdate: () => Promise<any>; customId: string; }) => {
 				if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 				if (interaction.customId === "no") {
 					await botMessage.edit({
@@ -1103,7 +1101,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	}
 
 	const collector = botMessage.createMessageComponentCollector({
-		filter: async interaction => {
+		filter: async (interaction: { user: { id: any; }; reply: (arg0: { content: string; ephemeral: boolean; }) => any; }) => {
 			if (interaction.user.id !== message.user.id) {
 				await interaction.reply({
 					content: `Only ${message.user} can edit these settings!`,
@@ -1123,7 +1121,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setDescription(`${bot.config.emojis.alert} | Saved changes and exited the settings menu.`)
 		.setColor(bot.config.embed.color);
 
-	collector.on("collect", async interaction => {
+	collector.on("collect", async (interaction: { deferred: any; deferUpdate: () => Promise<any>; customId: string; user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; }) => {
 		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 
 		try {
@@ -1147,18 +1145,18 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						ephemeral: true
 					});
 				case "exit": return await collector.stop();
-				case interaction?.customId === "toggle" && curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === "toggle"):
+				case interaction?.customId === "toggle" && curSetting && curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button?.data?.customId?.toLowerCase() === "toggle"):
 					if ((curSetting.getState() === "true" ? "false" : "true") === "true") {
 						await curSetting.setState("enable");
-						curSetting?.buttons?.forEach(async button => button?.required === true ? await button.setData() : null);
+						curSetting?.buttons?.forEach(async (button: { required: boolean; setData: () => any; }) => button?.required === true ? await button.setData() : null);
 					} else {
 						await curSetting.setState("disable");
 					}
 
 					refreshSetting(curSetting);
 					break;
-				case curSetting && curSetting?.buttons?.find(button => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase()):
-					await curSetting?.buttons?.find(button => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
+				case curSetting && curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase()):
+					await curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
 					refreshSetting(curSetting);
 					break;
 				default:
@@ -1197,7 +1195,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		}
 	});
 
-	collector.on("end", async interaction => {
+	collector.on("end", async (interaction: any) => {
 		try {
 			return await botMessage.edit({
 				embeds: [exitEmbed],

@@ -198,7 +198,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				const guess = m.content.toLowerCase();
 				if (guess.length === 1) {
 					if (misses.includes(`\`${guess}\``)) {
-						await m.replyT(`\`${guess}\` ${await message.translate("has already been guessed. Try again!")}`).then(async m => setTimeout(() => m.delete(), 5000));
+						await m.replyT(`\`${guess}\` ${await message.translate("has already been guessed. Try again!")}`).then(async (m: { delete: () => void; }) => setTimeout(() => m.delete(), 5000));
 						return setTimeout(() => m.delete(), 5000);
 					}
 
@@ -227,7 +227,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}
 			});
 
-			collector.on("end", async collected => {
+			collector.on("end", async (collected: any) => {
 				gameOver = true;
 				await updateGame();
 			});
@@ -254,7 +254,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 
 			const Guess = await message.channel.awaitMessages({
-				filter: m => {
+				filter: (m: { author: { bot: any; }; content: any; }) => {
 					if (m.author.bot) return false;
 					if (!m?.content) return false;
 
@@ -263,7 +263,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				max: 1,
 				time: 60 * 1000,
 				errors: ["time"]
-			}).then(async collected => {
+			}).then(async (collected: { first: () => any; }) => {
 				const colMessage = collected.first();
 				const embed = new Discord.MessageEmbed()
 					.setAuthor({
@@ -331,8 +331,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			const triviaData = await axios.get(`https://opentdb.com/api.php?amount=1&type=multiple`).then(res => res.data.results[0]);
 
-			const choices = [];
-			triviaData.incorrect_answers.forEach(async answer => choices.push(await message.translate(answer)));
+			const choices: any[] = [];
+			triviaData.incorrect_answers.forEach(async (answer: any) => choices.push(await message.translate(answer)));
 			choices.push(await message.translate(triviaData.correct_answer));
 
 			shuffle(choices);
@@ -381,7 +381,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 
 			const collector = trivia.createMessageComponentCollector({ time: 60 * 1000 });
-			collector.on("collect", async interaction => {
+			collector.on("collect", async (interaction: { deferReply: () => any; customId: string; replyT: (arg0: { embeds: Discord.MessageEmbed[]; }) => any; }) => {
 				await interaction.deferReply();
 
 				const embed = new Discord.MessageEmbed()

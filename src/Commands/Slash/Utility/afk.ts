@@ -2,7 +2,7 @@ import Discord, { Message } from "discord.js";
 
 import cmd from "../../../structures/command";
 
-async function execute(bot:Discord.Client, message: Message, args: any[], command: string, data: any[]) {
+async function execute(bot: any, message: any, args: string[], command: string, data: any) {
 	const reason = data.options.getString("reason") || "No reason specified.";
 
 	if (data.user.afk) {

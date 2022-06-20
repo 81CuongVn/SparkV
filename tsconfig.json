@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "ES2015",
+        "target": "ES2022",
         "sourceMap": true,
         "outDir": "./dist",
         "noImplicitAny": true,
         "declaration": true,
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "strict": true
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "wip/**"]

@@ -40,14 +40,14 @@ async function execute(bot, interaction, args, command, data) {
 
 		bot.emit("userWarnAdd", interaction.guild, user, reason);
 	} else if (action === "kick") {
-		user.send(`${bot.config.emojis.alert} | You have been kicked from ${interaction.guild.name}. **${reason}**.`).catch(err => {});
+		user.send(`${bot.config.emojis.alert} | You have been kicked from ${interaction.guild.name}. **${reason}**.`).catch(() => {});
 		user.kick({
 			reason
 		}).catch(async err => await message.editT(`${bot.config.emojis.error} | Failed to kick user. Please check my permisions and try again.`));
 
 		embed.setDescription(`**${bot.config.emojis.alert} | Warn Successful**\nSuccessfully warned ${user}. **${reason}*.`);
 	} else if (action === "ban") {
-		user.send(`${bot.config.emojis.alert} | You have been banned from **${interaction.guild.name}**. **${reason}**`).catch(err => {});
+		user.send(`${bot.config.emojis.alert} | You have been banned from **${interaction.guild.name}**. **${reason}**`).catch(() => {});
 		user.ban({
 			reason
 		}).catch(async err => await interaction.editT(`${bot.config.emojis.error} | Failed to ban user. Please check my permissions and try again.`));

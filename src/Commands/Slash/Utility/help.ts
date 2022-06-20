@@ -4,17 +4,17 @@ import cmd from "../../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const Selections = [];
-	const pages = [];
+	const pages: any = [] = [];
 
-	bot.categories.map(cat => {
+	bot.categories.map((cat: { name: string; emojiID: any; emoji: any; }) => {
 		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
 
-		const commands = [];
+		const commands: { name: string; value: string; }[] = [];
 		bot.commands
-			.filter(command => command.settings.enabled && command.category === cat.name)
-			.map(async command => commands.push({
+			.filter((command: { settings: { enabled: any; }; category: any; }) => command.settings.enabled && command.category === cat.name)
+			.map(async (command: { settings: { name: any; usage: any; description: any; options: any[]; }; }) => commands.push({
 				name: `\`\`\`/${command.settings.name} ${command.settings.usage}\`\`\``,
-				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter(option => option.type === 1).map(option => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map(op => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
+				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter((option: { type: number; }) => option.type === 1).map((option: { name: any; options: any[]; }) => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map((op: { name: any; }) => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
 			}));
 
 		const user = message.applicationId ? message.user : message.author;
@@ -85,7 +85,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				})
 				.setColor(bot.config.embed.color);
 		} else if (category) {
-			embed = pages.filter(p => p.author.name.includes(category.name))[0];
+			embed = pages.filter((p: { author: { name: string | any[]; }; }) => p.author.name.includes(category.name))[0];
 		} else if (!cmd && !category) {
 			embed
 				.setAuthor({
@@ -105,7 +105,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		});
 	}
 
-	bot.categories.map(async cat => {
+	bot.categories.map(async (cat: { name: string; commands: string | any[]; description: any; emoji: any; }) => {
 		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
 
 		Selections.push({
@@ -155,10 +155,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
 
-	collector.on("collect", async interaction => {
-		if (!interaction.deferred && !interaction.customId === "SelectHelpMenu") interaction.deferUpdate().catch((): any => { });
+	collector.on("collect", async (interaction: { deferred: any; customId: string; deferUpdate: () => Promise<any>; values: string[]; update: (arg0: { embeds: any[]; components: any[]; fetchReply: boolean; }) => any; }) => {
+		if (!interaction.deferred && !(interaction.customId === "SelectHelpMenu")) interaction.deferUpdate().catch((): any => { });
 		if (interaction.customId === "SelectHelpMenu") {
-			const page = pages.find(p => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
+			const page = pages.find((p: { footer: { text: string; }; }) => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
 			if (!page) return;
 
 			await interaction.update({

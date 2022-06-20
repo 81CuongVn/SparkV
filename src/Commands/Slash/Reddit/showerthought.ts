@@ -1,4 +1,4 @@
-const RedditCommand = require("@structures/redditCommand");
+import RedditCommand from "../../.././structures/redditCommand";
 
 export default new RedditCommand({
 	description: "You know that momment where you think/realize something crazy in the shower? Well, there is a whole subreddit full of them...",

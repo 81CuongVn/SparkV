@@ -78,7 +78,17 @@ async function start() {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true
-		});
+		} as {
+            bufferCommands?: boolean;
+            dbName?: string;
+            user?: string;
+            pass?: string;
+            autoIndex?: boolean;
+            autoCreate?: boolean;
+        });
+
+		mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
+		mongoose.connection.on("open", () => console.log("[Datebase] Connected and ready."));
 	} else {
 		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
 	}
@@ -100,7 +110,7 @@ async function start() {
 
 		const StatClient = await new Statcord.ShardingClient({
 			manager,
-			key: process.env.STATCORDAPIKEY,
+			key: (process.env.STATCORDAPIKEY as any),
 			postCpuStatistics: true,
 			postMemStatistics: true,
 			postNetworkStatistics: true,
@@ -113,7 +123,6 @@ async function start() {
 
 			shard.on("ready", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - READY`));
 			shard.on("disconnect", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED\n${event}`, "error"));
-			shard.on("reconnecting", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - RECONNECTING`, "warn"));
 			shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
 		});
 

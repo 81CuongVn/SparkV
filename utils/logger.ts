@@ -2,12 +2,12 @@ import Discord from "discord.js";
 import chalk from "chalk";
 
 interface moreData {
-	data: {
-		name: string;
-		stack: string;
-		path: string;
+	data?: {
+		name?: string;
+		stack?: string;
+		path?: string;
 	};
-	interaction: Discord.Interaction;
+	interaction?: Discord.Interaction;
 }
 
 export default async (content: string, type?: string, moreData?: moreData) => {
@@ -40,7 +40,7 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 				// 	}
 				// };
 
-				const errorChannel: Discord.TextChannel = await bot.channels.fetch("948686231892545547");
+				const errorChannel: any = await bot.channels.fetch("948686231892545547");
 				if (errorChannel) {
 					const ErrorEmbed = new Discord.MessageEmbed()
 						.setTitle(`${(moreData?.data?.name || content) ?? "Error"}`)

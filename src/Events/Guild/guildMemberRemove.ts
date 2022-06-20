@@ -34,6 +34,6 @@ export default {
 		channel.send({
 			content: msg,
 			files: [attachment],
-		}).catch(err => {});
+		}).catch(() => {});
 	},
 };

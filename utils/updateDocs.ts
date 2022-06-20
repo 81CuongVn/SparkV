@@ -173,7 +173,7 @@ export default {
 				else return 1;
 			})
 			.forEach(cat => {
-				const info = [];
+				const info: string[] = [];
 
 				cat.emoji.includes("<") ? baseText += `\n## ${cat.name}\n\n` : baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
 

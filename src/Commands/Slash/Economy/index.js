@@ -5,6 +5,6 @@ export default {
 	emojiID: "948362336736006144",
 	commands: require("fs")
 		.readdirSync(__dirname)
-		.filter(c => c !== "index.ts")
-		.map(c => require(`${__dirname}/${c}`))
+		.filter((c: string) => c !== "index.ts")
+		.map((c: string) => require(`${__dirname}/${c}`))
 };

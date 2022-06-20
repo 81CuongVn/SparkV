@@ -9,27 +9,27 @@ import Statcord from "statcord.js";
 import shopdata from "../shopdata.json";
 
 import GuildSchema from "../../database/schemas/guild";
-import MemberSchema from ",,/../database/schemas/member";
+import MemberSchema from "../../database/schemas/member";
 import UserSchema from "../../database/schemas/user";
 
-export default class bot extends Client {
+export default class bot extends (Client as any) {
 	constructor(settings: any) {
 		super(settings);
 
 		// Config
-		this.config from "@root/config.json");
+		this.config = require("@root/config.json");
 
 		// Utils
-		this.logger from "@utils/logger");
-		this.functions from "@utils/functions");
+		this.logger = require("@utils/logger");
+		this.functions = require("@utils/functions");
 		this.wait = util.promisify(setTimeout);
 
 		// Database
-		this.database from "@database/handler");
+		this.database = require("@database/handler");
 
-		this.GuildSchema from "@database/schemas/guild");
-		this.MemberSchema from "@database/schemas/member");
-		this.UserSchema from "@database/schemas/user");
+		this.GuildSchema = require("@database/schemas/guild");
+		this.MemberSchema = require("@database/schemas/member");
+		this.UserSchema  = require("@database/schemas/user");
 
 		// Collections
 		this.categories = new Collection();
@@ -61,9 +61,9 @@ export default class bot extends Client {
 		if (settings?.sharding === true) {
 			this.StatClient = Statcord.ShardingClient;
 		} else {
-			this.StatClient = await new Statcord.Client({
-				client: this,
-				key: process.env.STATCORDAPIKEY,
+			this.StatClient = new Statcord.Client({
+				client: (this as any),
+				key: (process.env.STATCORDAPIKEY as any),
 				postCpuStatistics: true,
 				postMemStatistics: true,
 				postNetworkStatistics: true,
@@ -75,7 +75,7 @@ export default class bot extends Client {
 		this.discordTogether = new DiscordTogether(this);
 
 		if (process.env.REDIS_URL) {
-			this.redis from "redis").createClient({
+			this.redis = require("redis").createClient({
 				url: process.env.REDIS_URL
 			});
 
@@ -88,7 +88,7 @@ export default class bot extends Client {
 	async LoadEvents(MainPath) {
 		for (const category of fs.readdirSync(`${MainPath}/Events`)) {
 			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`)) {
-				const event from path.resolve(`${MainPath}/Events/${category}/${file}`));
+				const event = require(path.resolve(`${MainPath}/Events/${category}/${file}`));
 				const handleArgs = (...args) => event.execute(this, ...args);
 
 				event.once ? this.once(file.split(".")[0], handleArgs) : this.on(file.split(".")[0], handleArgs);
@@ -98,13 +98,13 @@ export default class bot extends Client {
 
 	async LoadCommands(MainPath) {
 		await fs.readdirSync(`${MainPath}/Commands/Slash`).forEach(async cat => {
-			const category from path.join(`${MainPath}/Commands/Slash/${cat}`));
+			const category = require(path.join(`${MainPath}/Commands/Slash/${cat}`));
 			this.categories.set(category.name, category);
 			await fs.readdirSync(`${MainPath}/Commands/Slash/${cat}`).forEach(async file => {
 				if (!file.endsWith(".ts")) return;
 
 				const commandname = file.split(".")[0];
-				const command from path.resolve(`${MainPath}/Commands/Slash/${cat}/${commandname}`));
+				const command = require(path.resolve(`${MainPath}/Commands/Slash/${cat}/${commandname}`));
 
 				if (!command || !command.settings) return;
 
@@ -132,7 +132,7 @@ export default class bot extends Client {
 			if (!file.endsWith(".ts")) return;
 
 			const commandname = file.split(".")[0];
-			const command from path.resolve(`${MainPath}/Commands/Text/${commandname}`));
+			const command = require(path.resolve(`${MainPath}/Commands/Text/${commandname}`));
 
 			if (!command || !command.settings) return;
 
@@ -151,7 +151,7 @@ export default class bot extends Client {
 		});
 
 		// Coming soon: App commands
-		// These commands will be accessable from right-clicking on a user/message in Discord.
+		// These commands will be accessable = require(right-clicking on a user/message in Discord.
 		// await fs.readdir(path.join(`${MainPath}/appCommands`), async (err, files) => {
 		// 	if (err) return this.logger(`App commands failed to load! ${err}`, "error");
 
@@ -159,7 +159,7 @@ export default class bot extends Client {
 		// 		if (!file.endsWith(".ts")) return;
 
 		// 		const commandname = file.split(".")[0];
-		// 		const command from path.resolve(`${MainPath}/appCommands/${commandname}`));
+		// 		const command = require(path.resolve(`${MainPath}/appCommands/${commandname}`));
 
 		// 		if (!command || !command.settings || command.config) return;
 
@@ -180,7 +180,7 @@ export default class bot extends Client {
 		await ready;
 
 		// Dev: process.argv.includes("--dev") === true && { guildId: "763803059876397056" }
-		const currentCmds = await this.application.commands.fetch().catch(err => {});
+		const currentCmds = await this.application.commands.fetch().catch(() => {});
 
 		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
 		for (const newCmd of newCmds) await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
