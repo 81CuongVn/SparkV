@@ -44,19 +44,19 @@ export default new cmd(async (bot: any, message: any, args: string[], command: a
 			choices: [
 				{
 					name: "youtube",
-					value: "youtube"
+					value: "880218394199220334"
 				},
 				{
 					name: "poker",
-					value: "poker"
+					value: "755827207812677713"
 				},
 				{
 					name: "chess",
-					value: "chess"
+					value: "832012774040141894"
 				},
 				{
 					name: "checkers",
-					value: "checkers"
+					value: "832013003968348200"
 				},
 				{
 					name: "betrayal",

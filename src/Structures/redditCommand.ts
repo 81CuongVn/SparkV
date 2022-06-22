@@ -1,7 +1,7 @@
 import Discord from "discord.js";
-const fetch = require("axios");
+import fetch from "axios";
 
-const NewCommand = require("./command");
+import NewCommand from "./command";
 
 const filters = {
 	image: (post: any) => post.data.post_hint === "image",

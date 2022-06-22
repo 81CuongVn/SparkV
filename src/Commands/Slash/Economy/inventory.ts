@@ -4,8 +4,8 @@ import cmd from "../../../structures/command";
 
 export default new cmd(
 	async (bot: any, message: any, args: string[], command: any, data: any) => {
-		let user = data.options.getMember("user");
-		let userData;
+		let user: any = data.options.getMember("user");
+		let userData: any;
 
 		if (user) {
 			if (user.bot) return await message.editT("You cannot check the inventory of a bot.");
@@ -21,9 +21,9 @@ export default new cmd(
 		const items = Object.keys(userData.inventory);
 		const inventory = items.filter(i => userData.inventory[i] > 0);
 
-		const pages = [];
+		const pages: any[] = [];
 		inventory.forEach(item => {
-			const itemData = bot.shop.filter(i => i.name === item).first();
+			const itemData = bot.shop.filter((i: any) => i.name === item).first();
 
 			const itemEmbed = new Discord.MessageEmbed()
 				.setTitle(`Inventory - ${item}`)
@@ -35,7 +35,6 @@ export default new cmd(
 
 			pages.push(itemEmbed);
 		});
-
 		if (pages.length < 1) return await message.editT("This user does not have any items in their inventory.");
 
 		const quickLeft = new Discord.MessageButton()
@@ -72,7 +71,7 @@ export default new cmd(
 
 		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 		collector.on("collect", async (interaction: any) => {
-			if (!interaction.deferred) interaction.deferUpdate().catch((): any: any => { });
+			if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 			if (interaction.customId === "quickLeft") PageNumber = 0;
 			else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
 			else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;

@@ -9,9 +9,9 @@ export default new cmd(
 
 		if (amount === 0 || amount > 100) return await message.editT(`${bot.config.emojis.error} | That's not a valid number for the quantity of the item you want to buy.`);
 
-		if (!bot.shop.some(i => i.ids.includes(itemName))) return await message.editT(`${bot.config.emojis.error} | That's not an existing item you can buy in shop!`);
+		if (!bot.shop.some((i: any) => i.ids.includes(itemName))) return await message.editT(`${bot.config.emojis.error} | That's not an existing item you can buy in shop!`);
 
-		const item = bot.shop.find(i => i.ids.includes(itemName));
+		const item = bot.shop.find((i: any) => i.ids.includes(itemName));
 
 		if (!item.sale) return await message.editT(`${bot.config.emojis.error} | This item is not for sale right now.`);
 		if (data.user.money.balance < item.price) return await message.editT(`${bot.config.emojis.error} | You don't have enough money to buy this item!`);

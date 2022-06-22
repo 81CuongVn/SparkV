@@ -17,7 +17,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter((option: { type: number; }) => option.type === 1).map((option: { name: any; options: any[]; }) => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map((op: { name: any; }) => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
 			}));
 
-		const user = message.applicationId ? message.user : message.author;
 		const NewEmbed = new MessageEmbed()
 			.setAuthor({
 				name: (message?.applicationId ? message.user : message.author).tag,
@@ -155,7 +154,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
 
-	collector.on("collect", async (interaction: { deferred: any; customId: string; deferUpdate: () => Promise<any>; values: string[]; update: (arg0: { embeds: any[]; components: any[]; fetchReply: boolean; }) => any; }) => {
+	collector.on("collect", async (interaction: any) => {
 		if (!interaction.deferred && !(interaction.customId === "SelectHelpMenu")) interaction.deferUpdate().catch((): any => { });
 		if (interaction.customId === "SelectHelpMenu") {
 			const page = pages.find((p: { footer: { text: string; }; }) => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
@@ -163,7 +162,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			await interaction.update({
 				embeds: [page],
-				components: [],
 				fetchReply: true
 			});
 		}

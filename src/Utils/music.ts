@@ -1,13 +1,11 @@
 import Discord from "discord.js";
-import Genius from "genius-lyrics";
-const lyricsClient: Genius.Client = new Genius.Client(process.env.GENIUS_TOKEN);
+import { Client } from "genius-lyrics";
 
-import Erela, { Manager } from "erela.js";
+import { Manager } from "erela.js";
 import Spotify from "erela.js-spotify";
-import AppleMusic from "erela.js-apple";
 
-export default async (bot: any) => {
-	bot.lyricsClient = lyricsClient;
+export default (bot: any) => {
+	bot.lyricsClient = new Client(process.env.GENIUS_TOKEN);
 
 	let nodes = [
 		{
@@ -121,7 +119,6 @@ export default async (bot: any) => {
 				clientID: string,
 				clientSecret: string
 			}),
-			//new AppleMusic() // fuck this mate
 		],
 		send(id, payload) {
 			const guild = bot.guilds.cache.get(id);
@@ -263,12 +260,7 @@ export default async (bot: any) => {
 		if (options?.includeLoop === true) buttons.push(LoopButton);
 
 		let lyrics: any;
-		try {
-			lyrics = await (await lyricsClient.songs.search(track.title))[0].lyrics();
-		} catch (e) {
-			lyrics = null;
-		}
-
+		try { lyrics = await (await bot.lyricsClient.songs.search(track.title))[0].lyrics(); } catch (e) { lyrics = null; }
 		if (lyrics && options?.includeLyrics === true) buttons.push(LyricsButton);
 
 		const guild = bot.guilds.cache.get(playerData.guild);

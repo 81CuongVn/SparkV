@@ -160,23 +160,17 @@ export default {
    * @param {Object} bot The SparkV bot Instance.
    * @param {Dirname} MainDir The main directory.
    */
-	update(bot: any, MainDir: string) {
+	update(bot: any) {
 		let cmdCount = 0;
 		bot.commands.each((cmd: any) => ++cmdCount);
 
-		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
-		let cmdTable: any;
+		let baseText: string = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
+		let cmdTable: any = [];
 
 		bot.categories
-			.sort((a: any, b: any) => {
-				if (bot.commands.filter((c: { category: any; }) => c.category === a).length > bot.commands.filter((c: { category: any; }) => c.category === b).length) return -1;
-				else return 1;
-			})
+			.sort((a: any, b: any) => bot.commands.filter((c: any) => c.category === a).length > bot.commands.filter((c: any) => c.category === b).length ? -1 : 1)
 			.forEach((cat: { emoji: string | string[]; name: string | number; }) => {
 				const info: any[] = [];
-
-				cat.emoji.includes("<") ? baseText += `\n## ${cat.name}\n\n` : baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
-
 				info.push(["Name", "Description", "Usage", "Cooldown"]);
 
 				if (!cmdTable?.[cat.name]) cmdTable[cat.name] = [];
@@ -203,7 +197,7 @@ export default {
 				baseText += `${markdown(info)}\n`;
 			});
 
-		fs.writeFileSync(path.join(`${MainDir}/docs/commands.md`), baseText);
-		fs.writeFileSync(path.join(`${MainDir}/docs/commandsdata.json`), JSON.stringify(cmdTable));
+		fs.writeFileSync(path.join(`${path.join(__dirname, "..", "..")}/docs/commands.md`), baseText);
+		fs.writeFileSync(path.join(`${path.join(__dirname, "..", "..")}/docs/commandsdata.json`), JSON.stringify(cmdTable));
 	}
 };

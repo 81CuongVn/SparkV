@@ -50,7 +50,7 @@ export default {
 			const WelcomeEmbed = new Discord.MessageEmbed()
 				.setDescription(`I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, you can type \`/settings\`.\n\nSimply type the command \`/help\` to get a list of my commands.\nIf you have any questions, feel free to join our [Discord server](https://discord.gg/PPtzT8Mu3h).`)
 				.setThumbnail(bot.user.displayAvatarURL())
-				.setImage("https://www.sparkv.tk/assets/images/banner.gif")
+				.setImage("https://www.sparkv.tk/images/banner.gif")
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 

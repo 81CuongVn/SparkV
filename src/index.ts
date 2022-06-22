@@ -75,9 +75,8 @@ async function checkForUpdate() {
 }
 
 async function start() {
-	dotenv.config({ path: path.join(__dirname, "../.env") });
-	console.log(path.join(__dirname, "../.env"), process.env)
-	
+	dotenv.config();
+
 	if (process.env.MONGOOSEURL) {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,

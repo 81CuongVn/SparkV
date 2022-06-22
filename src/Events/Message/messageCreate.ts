@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import axios from "axios";
 
-const cursewords = require("@src/cursewords.json");
+import cursewords from "../../cursewords.json";
 
 const messages: any[] = [];
 
@@ -233,8 +233,7 @@ export default {
 			// 		try {
 			// 			message.delete().catch((): any: any => { });
 			// 		} catch (err: any) {
-			// 			message
-			// 				.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
+			// 			message.replyT("Invalid permsissions to delete this message.");
 			// 		}
 			// 		timeoutUser("sending links", message, data);
 			// 	}

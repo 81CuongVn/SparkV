@@ -9,9 +9,9 @@ export default new cmd(
 
 		const items = Object.keys(data.user.inventory);
 
-		if (!bot.shop.some(i => i.ids.includes(itemName) && i.usable) || !items.includes(itemName)) return await message.editT("That's not a valid item to use. Please run the command inventory to see the items you have.");
+		if (!bot.shop.some((i: any) => i.ids.includes(itemName) && i.usable) || !items.includes(itemName)) return await message.editT("That's not a valid item to use. Please run the command inventory to see the items you have.");
 
-		itemName = bot.shop.find(i => i.ids.includes(itemName)).name;
+		itemName = bot.shop.find((i: any) => i.ids.includes(itemName)).name;
 
 		const inventory = items.filter(i => parseInt(data.user.inventory[i]) > 0);
 
@@ -30,7 +30,7 @@ export default new cmd(
 
 			return await message.editT(`You turn in a note from SparkV to your local Spark Bank. The bank calls you back and says you gained ${10000 * amount} more bank space.`);
 		} else {
-			const itemData = bot.shop.filter(i => i.name === itemName || i.ids.includes(itemName)).first();
+			const itemData = bot.shop.filter((i: any) => i.name === itemName || i.ids.includes(itemName)).first();
 
 			return await message.editT(itemData.usedMessage || "You used this item.");
 		}

@@ -2,15 +2,10 @@
   "version": "3.0.0",
   "owners": ["571811686617710592"],
   "ID": "884525761694933073",
-  "prefix": "^",
   "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=294074575990",
   "support": {
     "id": 763803059876397056,
     "invite": "https://discord.gg/PPtzT8Mu3h"
-  },
-  "sharding": {
-    "shardingEnabled": false,
-    "totalShards": "auto"
   },
   "embed": {
     "color": "#1fa9ff",
@@ -79,17 +74,10 @@
   "responses": {
     "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
     "AFKMessage": "Hey dude, **{userMentioned}** is currently AFK. Their reason: {reason}",
-    "AFKWelcomeMessage": "Hey bud, welcome back! I removed your AFK status.",
-    "InvalidPermisions": {
-      "bot": "Uh oh! I don't have permission to do that. Please select my role and allow **{permission}**.",
-      "User": "Uh oh! You don't have permission to do that. You need **{permission}**.",
-      "URL": "{author} sent a url, but I cannot delete it. Please give me permision to delete messages. (MANAGE_MESSAGES)"
-    }
+    "AFKWelcomeMessage": "Hey bud, welcome back! I removed your AFK status."
   },
   "blacklist": {
-    "guilds": {
-      "898782595750428712": "1024 Say Command Exploit (SCE1024)."
-    },
+    "guilds": { "898782595750428712": "1024 Say Command Exploit (SCE1024)." },
     "users": {}
   }
 }

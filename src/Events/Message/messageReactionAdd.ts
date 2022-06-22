@@ -11,11 +11,7 @@ export default {
 		const data = await bot.database.getGuild(message.guildId);
 
 		switch (reaction.emoji.name) {
-			case "🎉":
-				console.log("Yes!", message)
-
-				break;
-			case (reaction.emoji.name === (data.starboard?.emoji || "⭐")):
+			case data.starboard?.emoji || "⭐":
 				if (data.starboard?.enabled === "true") {
 					if ((reaction.count >= (parseInt(data.starboard?.min) || 2)) === false) return;
 

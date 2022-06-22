@@ -21,9 +21,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	const number = [];
 	let amountWon = 0;
 
-	for (i = 0; i < 3; i++) {
-		number[i] = Math.floor(Math.random() * SlotItems.length);
-	}
+	for (let i = 0; i < 3; i++) number[i] = Math.floor(Math.random() * SlotItems.length);
 
 	// All the same in each row
 	if (number[0] === number[1] && number[1] === number[2] && number[2] === number[3]) {

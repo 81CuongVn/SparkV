@@ -170,9 +170,7 @@ export default {
 
 			try {
 				setTimeout(() => interaction.channel.delete().catch((): any => { }), 5000);
-			} catch (err: any) {
-				console.log("Attempted to delete a channel that didn't exist.");
-			}
+			} catch (err: any) { }
 		}
 	}
 };

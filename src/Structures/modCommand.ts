@@ -1,5 +1,5 @@
 import Discord, { Permissions } from "discord.js";
-const NewCommand = require("./command");
+import NewCommand from "./command";
 
 export default class ModCommand {
 	execute: any;

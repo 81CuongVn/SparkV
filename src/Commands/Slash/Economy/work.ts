@@ -95,7 +95,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		});
 
 		const collector = SearchMessage.createMessageComponentCollector({
-			filter: interaction => {
+			filter: (interaction: any) => {
 				if (!interaction.deferred) interaction.deferUpdate().catch((): any => {});
 
 				return true;
@@ -144,7 +144,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			try {
 				await SearchMessage?.edit({
 					embeds: [
-						NewEmbed.setTitle(await message.translate("You didn't search anywhere."), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate(`${bot.config.emojis.alert} | You have gone inactive! Please rerun command to use this command again.`)).setColor("RED")
+						SearchEmbed.setTitle(await message.translate("You didn't search anywhere."), bot.user.displayAvatarURL({ dynamic: true })).setDescription(await message.translate(`${bot.config.emojis.alert} | You have gone inactive! Please rerun command to use this command again.`)).setColor("RED")
 					],
 					components: []
 				});

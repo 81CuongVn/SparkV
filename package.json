@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "npm run build && cd dist && node index",
-    "dev": "doppler run -- npm run build && cd dist && node index --dev",
+    "dev": "npm run build && cd dist && doppler run -- node index --dev",
     "build": "tsc --build",
     "watch": "tsc --watch",
     "lint": "eslint . --fix",
@@ -32,7 +32,6 @@
     "discord.js": "^13.8.0",
     "dotenv": "^16.0.1",
     "erela.js": "^2.3.3",
-    "erela.js-apple": "^1.2.6",
     "erela.js-spotify": "^1.2.0",
     "express": "^4.18.1",
     "figlet": "^1.5.2",

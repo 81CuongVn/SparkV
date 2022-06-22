@@ -4,12 +4,14 @@
         "target": "ES2021",
         "sourceMap": true,
         "outDir": "./dist",
+        "baseUrl": "./",
         "noImplicitAny": true,
-        "declaration": true,
+        // "declaration": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+		"incremental": true,
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "dist"]
 }

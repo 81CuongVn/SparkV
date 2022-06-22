@@ -1,4 +1,5 @@
 import Canvas from "canvas";
+import path from "path";
 
 const Invitergx =
 	/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite|discord.com\/invite)\/+[a-zA-Z0-9]{6,16}/g;
@@ -6,7 +7,7 @@ const URLrgx = /(https?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}
 
 let bot: any;
 
-export default {
+module.exports = {
 	/**
    * Initilizes functions.
    * @param {Object} client Discord client.
@@ -16,7 +17,7 @@ export default {
 
 		bot = client;
 
-		Canvas.registerFont(`${process.env.MainDir}/Assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
+		Canvas.registerFont(`${path.join(__dirname, "../../")}/assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
 	},
 
 	/**
@@ -71,7 +72,7 @@ export default {
 		// Background
 		context.fillStyle = "#3461eb";
 		context.fillRect(0, 0, canvas.width, canvas.height);
-		const background = await Canvas.loadImage(`${process.env.MainDir}/Assets/images/background.png`);
+		const background = await Canvas.loadImage(`${path.join(__dirname, "../../")}/assets/images/background.png`);
 		context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
 		// Global Text Settings
@@ -218,10 +219,9 @@ export default {
    * @returns {string} Server count
    */
 	async GetServerCount() {
-		if (bot.config.sharding.shardingEnabled === false) return bot.guilds.cache.size;
+		if (!(process.argv.includes("--sharding") === true)) return bot.guilds.cache.size;
 
 		const promises = [bot.shard.fetchClientValues("guilds.cache.size")];
-
 		return Promise.all(promises).then(results => results.flat().reduce((acc, ServerCount) => acc + ServerCount, 0));
 	},
 
@@ -230,7 +230,7 @@ export default {
    * @returns {string} User count
    */
 	async GetUserCount() {
-		if (bot.config.sharding.shardingEnabled === false) {
+		if (!(process.argv.includes("--sharding") === true)) {
 			let CollectedUsers = 0;
 
 			bot.guilds.cache.map((server: { memberCount: number; }, id: any) => (CollectedUsers = server.memberCount + CollectedUsers));

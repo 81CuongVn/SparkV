@@ -67,7 +67,7 @@ async function Start() {
 	await SparkV.LoadModules({ sharding: process.argv.includes("--sharding") });
 
 	await SparkV.LoadEvents(__dirname);
-	await SparkV.LoadCommands(__dirname);
+	await SparkV.LoadCommands();
 }
 
 Start();

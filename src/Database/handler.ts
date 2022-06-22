@@ -4,58 +4,26 @@ import UserS from "./schemas/user";
 import MemberS from "./schemas/member";
 import GuildS from "./schemas/guild";
 
-export default {
-	async init(this: any, bot: any) { // Would that work?
-		this.client = bot;
-	},
+async function getUser(id: string | number) {
+	const data = await UserS.findOne({ id });
+	if (data) return data;
 
-	async getUser(UserID: any) {
-		let data = await UserS.findOne({
-			id: UserID,
-		});
+	return new UserS({ id });
+}
 
-		if (data) {
-			return data;
-		} else {
-			data = new UserS({
-				id: UserID,
-			});
+async function getMember(id: string | number, guildID: string | number) {
+	const member = await MemberS.findOne({ id, guildID });
+	if (member) return member;
 
-			return data;
-		}
-	},
+	return new MemberS({ id, guildID });
+}
 
-	async getMember(MemberID: any, GuildID: any) {
-		let member = await MemberS.findOne({
-			id: MemberID,
-			guildID: GuildID,
-		});
+async function getGuild(id: string | number) {
+	const guild = await GuildS.findOne({ id });
+	if (guild) return guild;
 
-		if (member) {
-			return member;
-		} else {
-			member = new MemberS({
-				id: MemberID,
-				guildID: GuildID,
-			});
+	return new GuildS({ id });
+}
 
-			return member;
-		}
-	},
-
-	async getGuild(GuildID: any) {
-		let guild = await GuildS.findOne({
-			id: GuildID,
-		});
-
-		if (guild) {
-			return guild;
-		} else {
-			guild = new GuildS({
-				id: GuildID,
-			});
-
-			return guild;
-		}
-	},
-};
+export default { getUser, getMember, getGuild };
+export { getUser, getMember, getGuild };

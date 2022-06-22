@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-const logger = require("@utils/logger");
+import logger from "../../utils/logger";
 
 export default {
 	once: false,

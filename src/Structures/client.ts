@@ -5,19 +5,23 @@ import util from "util";
 import { Client, Collection, ApplicationCommand } from "discord.js";
 import Statcord from "statcord.js";
 
-import functions from "../Utils/functions";
+import loadMusicSystem from "../Utils/music";
 import shopdata from "../shopdata.json";
+
+import config from "../config.json";
+import logger from "../utils/logger";
+import updateDocs from "../Utils/updateDocs";
 
 export default class bot extends (Client as any) {
 	constructor(settings: any) {
 		super(settings);
 
 		// Config
-		this.config = require("../config.json");
+		this.config = config;
 
 		// Utils
-		this.logger = require("../utils/logger");
-		this.functions = require("../utils/functions");
+		this.logger = logger;
+		this.functions = require("../Utils/functions");
 		this.wait = util.promisify(setTimeout);
 
 		// Database
@@ -25,7 +29,7 @@ export default class bot extends (Client as any) {
 
 		this.GuildSchema = require("../Database/schemas/guild");
 		this.MemberSchema = require("../Database/schemas/member");
-		this.UserSchema  = require("../Database/schemas/user");
+		this.UserSchema = require("../Database/schemas/user");
 
 		// Collections
 		this.categories = new Collection();
@@ -37,20 +41,17 @@ export default class bot extends (Client as any) {
 
 		this.slashCommands = [];
 
-		// Start functions
-		functions.init(this);
+		// Init functions
+		this.functions.init(this);
 
 		return this;
 	}
 
 	async LoadModules(settings: any) {
-		// Functions
-		this.database.init(this);
-		require("../Utils/music")(this);
+		loadMusicSystem(this);
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);
-
 			this.shop.set(shopdata[i].name, shopdata[i]);
 		}
 
@@ -89,8 +90,8 @@ export default class bot extends (Client as any) {
 
 	async LoadEvents(MainPath: string) {
 		for (const category of fs.readdirSync(`${MainPath}/Events`)) {
-			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`)) {
-				const event = require(path.resolve(`${MainPath}/Events/${category}/${file}`));
+			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`).filter(file => file.endsWith(".js"))) {
+				const event = (await import(path.resolve(`${MainPath}/Events/${category}/${file}`))).default;
 				const handleArgs = (...args: any) => event.execute(this, ...args);
 
 				event.once ? this.once(file.split(".")[0], handleArgs) : this.on(file.split(".")[0], handleArgs);
@@ -98,31 +99,29 @@ export default class bot extends (Client as any) {
 		}
 	}
 
-	async LoadCommands(MainPath: string) {
-		fs.readdirSync(`${MainPath}/Commands/Slash`).forEach(cat => {
-			const category = require(path.join(`${MainPath}/Commands/Slash/${cat}`));
-			this.categories.set(category.name, category);
-			fs.readdirSync(`${MainPath}/Commands/Slash/${cat}`).forEach(async file => {
-				if (!file.endsWith(".ts")) return;
+	async LoadCommands() {
+		fs.readdirSync("./Commands/Slash/").map((cat: any) => {
+			const category = require(`../Commands/Slash/${cat}/index.js`)?.default;
+			this.categories.set(cat, category);
 
-				const commandname = file.split(".")[0];
-				const command = require(path.resolve(`${MainPath}/Commands/Slash/${cat}/${commandname}`));
+			fs.readdirSync(`./Commands/Slash/${cat}/`).filter(f => f.endsWith(".js") && !(f.startsWith("index"))).map((cmd: any) => {
+				let command: any = require(`../Commands/Slash/${cat}/${cmd}`).default;
+				let commandName: any = cmd.split(".")[0]; // name
 
-				if (!command || !command.settings) return;
+				if (!command) return;
 
 				command.category = category.name;
-				command.settings.name = commandname;
+				command.settings.name = commandName; //wait
 				command.description = category.description;
 
 				if (!this.categories.has(command.category)) this.categories.set(command.category, category);
-				if (this.commands.has(commandname)) return this.logger(`You cannot set command ${commandname} because it is already in use by the command ${this.commands.get(commandname).settings.name}. This is most likely due to a accidental clone of a command with the same name.`, "error");
+				if (this.commands.has(commandName)) return this.logger(`You cannot set command ${commandName} because it is already in use by the command ${this.commands.get(commandName).settings.name}. This is most likely due to a accidental clone of a command with the same name.`, "error");
 
-				this.commands.set(commandname, command);
+				this.commands.set(commandName, command);
 
 				if (command.settings.description.length >= 100) command.settings.description = `${command.settings.description.slice(0, 96)}...`;
-
-				await this.slashCommands.push({
-					name: commandname,
+				this.slashCommands.push({
+					name: commandName,
 					description: command.settings.description,
 					options: command.settings.options || [],
 					type: command.settings.type || 1
@@ -130,12 +129,9 @@ export default class bot extends (Client as any) {
 			});
 		});
 
-		fs.readdirSync(`${MainPath}/Commands/Text`).forEach(file => {
-			if (!file.endsWith(".ts")) return;
-
+		fs.readdirSync(`./Commands/Text`).filter(file => file.endsWith(".js")).forEach(file => {
 			const commandname = file.split(".")[0];
-			const command = require(path.resolve(`${MainPath}/Commands/Text/${commandname}`));
-
+			const command = require(`../Commands/Text/${file}`);
 			if (!command || !command.settings) return;
 
 			command.settings.name = commandname;
@@ -182,7 +178,7 @@ export default class bot extends (Client as any) {
 		await ready;
 
 		// Dev: process.argv.includes("--dev") === true && { guildId: "763803059876397056" }
-		const currentCmds = await this.application.commands.fetch().catch((): any => {});
+		const currentCmds = await this.application.commands.fetch().catch((): any => { });
 
 		const newCmds = slashCommands.filter((cmd: any) => !currentCmds.some((c: any) => c.name === cmd.name));
 		for (const newCmd of newCmds) await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
@@ -201,7 +197,7 @@ export default class bot extends (Client as any) {
 			if (previousCmd && modified) await previousCmd.edit(updatedCmd);
 		}
 
-		require("@utils/updateDocs").update(this, process.env.MainDir);
+		updateDocs.update(this);
 		this.logger(`[App] ${currentCmds.size + newCmds.length - removedCmds.length} Slash commands updated and ready!`);
 	}
 };
