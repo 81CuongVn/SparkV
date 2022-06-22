@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-const { inspect } = require("util");
-const fetch = require("axios");
+import { inspect } from "util";
+import fetch from "axios";
 
-import cmd from "../../../structures/command";
+import cmd from "../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	let input = args.join(" ");
@@ -24,7 +24,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				)
 			});
 		}
-	} catch (err) {
+	} catch (err: any) {
 		result = err.message;
 	}
 

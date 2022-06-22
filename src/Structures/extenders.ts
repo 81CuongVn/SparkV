@@ -1,18 +1,15 @@
 /* eslint-disable no-return-assign */
-const { Message, MessageEmbed, Interaction } = require("discord.js");
-const translate = require("@vitalets/google-translate-api");
+import { Message, Interaction } from "discord.js";
+import translate from "@vitalets/google-translate-api";
 
-async function translateContent(content) {
+async function translateContent(this: any, content: any) {
 	if (!this?.guild?.data?.language) return content;
-
-	// Native languge
 	if (this.guild.data.language === "en") return content;
 
-	let content1, content2;
-
-	if (content.includes(" | ")) {
-		content1 = content.split(" | ")[0];
-		content2 = content.split(" | ")[1];
+	let content1: string, content2: any;
+	if (content?.includes(" | ")) {
+		content1 = content?.split(" | ")[0];
+		content2 = content?.split(" | ")[1];
 	}
 
 	const cache = await this.client.redis.get(`${content2 || content}-${this.guild.data.language}`);
@@ -20,11 +17,10 @@ async function translateContent(content) {
 
 	if (cache) {
 		translation = cache;
-
 		return translation;
 	} else {
 		try {
-			await translate(content2 || content, {
+			await translate((content2 || content), {
 				from: "en",
 				to: this.guild.data.language
 			}).then(res => {
@@ -33,20 +29,20 @@ async function translateContent(content) {
 				} else {
 					translation = res.text;
 				}
-			}).catch(err => bot.logger(err, "error"));
+			}).catch((err: any) => this.client.logger(err, "error"));
 
 			try {
 				await this.client.redis.set(`${content2 || content}-${this.guild.data.language}`, translation);
-			} catch (err) { }
+			} catch (err: any) { }
 
 			return translation;
-		} catch (err) {
+		} catch (err: any) {
 			return content;
 		}
 	}
 }
 
-async function replyTranslate(options) {
+async function replyTranslate(this: any, options: any) {
 	if (typeof options === "string") {
 		const newOptions = {
 			content: options,
@@ -59,7 +55,7 @@ async function replyTranslate(options) {
 		options = newOptions;
 	}
 
-	let data = {
+	let data: any = {
 		fetchReply: true,
 		allowedMentions: {
 			repliedUser: false
@@ -70,18 +66,14 @@ async function replyTranslate(options) {
 
 	if (options.content) {
 		const translation = await translateContent(options.content);
-
 		data.content = translation;
 	}
 
-	if (this?.applicationId) {
-		return this.followUp(data);
-	} else {
-		return this.reply(data);
-	}
+	if (this?.applicationId) return this.followUp(data);
+	else return this.reply(data);
 }
 
-async function editTranslate(options) {
+async function editTranslate(this: any, options: any) {
 	if (typeof options === "string") {
 		const newOptions = {
 			content: options,
@@ -94,7 +86,7 @@ async function editTranslate(options) {
 		options = newOptions;
 	}
 
-	let data = {
+	let data: any = {
 		fetchReply: true,
 		allowedMentions: {
 			repliedUser: false
@@ -102,24 +94,19 @@ async function editTranslate(options) {
 	};
 
 	data = Object.assign(data, options);
-
 	if (options.content) {
 		const translation = await translateContent(options.content);
-
 		data.content = translation;
 	}
 
-	if (this?.applicationId) {
-		return this.editReply(data);
-	} else {
-		return this.edit(data);
-	}
+	if (this?.applicationId) return this.editReply(data);
+	else return this.edit(data);
 }
 
-Interaction.prototype.replyT = replyTranslate;
-Interaction.prototype.editT = editTranslate;
-Interaction.prototype.translate = translateContent;
+(Interaction as any).prototype.replyT = replyTranslate;
+(Interaction as any).prototype.editT = editTranslate;
+(Interaction as any).prototype.translate = translateContent;
 
-Message.prototype.replyT = replyTranslate;
-Message.prototype.editT = editTranslate;
-Message.prototype.translate = translateContent;
+(Message as any).prototype.replyT = replyTranslate;
+(Message as any).prototype.editT = editTranslate;
+(Message as any).prototype.translate = translateContent;

@@ -4,12 +4,13 @@ const fetch = require("axios");
 const NewCommand = require("./command");
 
 const filters = {
-	image: post => post.data.post_hint === "image",
-	text: post => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256
+	image: (post: any) => post.data.post_hint === "image",
+	text: (post: any) => post.data.post_hint !== "image" && post.data.selftext.length <= 2000 && post.data.title.length <= 256
 };
 
 export default class RedditCommand {
-	constructor(sett) {
+	settings: any;
+	constructor(sett: any) {
 		this.settings = new NewCommand(
 			null,
 			Object.assign(
@@ -29,14 +30,14 @@ export default class RedditCommand {
 		if (data?.options?.getString("type")) endpoint = data?.options?.getString("type");
 
 		let res;
-		const cache = await bot.redis.get(endpoint).then(res => JSON.parse(res));
+		const cache = await bot.redis.get(endpoint).then((res: any) => JSON.parse(res));
 
 		if (cache) {
 			res = cache;
 		} else {
 			res = await fetch.get(`https://www.reddit.com${endpoint}`)
-				.then(res => res.data)
-				.catch(() => null);
+				.then((res: any) => res.data)
+				.catch((): any => {});
 
 			await bot.redis.set(endpoint, JSON.stringify(res), {
 				EX: 15 * 60
@@ -45,7 +46,7 @@ export default class RedditCommand {
 
 		if (!res) return;
 
-		const posts = res.data.children.filter(filters[this.settings.type]);
+		const posts = res.data.children.filter(filters[this.settings.type as keyof typeof filters]);
 		let selectedPost = posts[Math.floor(Math.random() * Object.keys(posts).length)];
 		if (selectedPost) selectedPost = selectedPost.data;
 		else return;

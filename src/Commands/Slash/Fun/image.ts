@@ -3,11 +3,11 @@ const canvacord = require("canvacord");
 
 const cmd = require("@structures/command");
 
-async function capFirstLetter(string) {
+async function capFirstLetter(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-async function generate(bot, message, data) {
+async function generate(bot: any, message: any, data: any) {
 	const state = data.options.getSubcommand();
 
 	if (state === "text") {
@@ -82,7 +82,7 @@ module.exports = new cmd(async (bot: any, message: any, args: string[], command:
 		.setDescription(await message.translate(`Please wait while I generate the image...`))
 		.setFooter({
 			text: bot.config.embed.footer,
-			icon_url: bot.user.displayAvatarURL({ dynamic: true })
+			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
 		.setColor(bot.config.embed.color)
 		.setTimestamp();
@@ -91,12 +91,12 @@ module.exports = new cmd(async (bot: any, message: any, args: string[], command:
 		embeds: [loadingEmbed]
 	});
 
+	const imageName: string = await data.options.getString("type") || await data.options.getSubcommand();
 	try {
-		const generateImage = await generate(bot, message, data);
-		const imageName = await data.options.getString("type") || await data.options.getSubcommand();
-		const Image = new Discord.MessageAttachment(generateImage, `${imageName}.${imageName === "trigger" ? "gif" : "png"}`);
+		const generateImage: any = await generate(bot, message, data);
+		const Image: any = new Discord.MessageAttachment(generateImage, `${imageName}.${imageName === "trigger" ? "gif" : "png"}`);
 
-		const ImageEmbed = new Discord.MessageEmbed()
+		const ImageEmbed: any = new Discord.MessageEmbed()
 			.setAuthor({
 				name: `${message.user.tag}`,
 				iconURL: message.user.displayAvatarURL({ format: "png" })
@@ -114,8 +114,8 @@ module.exports = new cmd(async (bot: any, message: any, args: string[], command:
 				embeds: [ImageEmbed],
 				files: [Image]
 			});
-		} catch (err) { }
-	} catch (err) {
+		} catch (err: any) { }
+	} catch (err: any) {
 		bot.logger(err, "error");
 
 		const ImageEmbed = new Discord.MessageEmbed()
@@ -127,7 +127,7 @@ module.exports = new cmd(async (bot: any, message: any, args: string[], command:
 			await ImageLoading?.edit({
 				embeds: [ImageEmbed]
 			});
-		} catch (err) { }
+		} catch (err: any) { }
 	}
 }, {
 	description: "<:image:948004558884442142> Generate images with ease.",

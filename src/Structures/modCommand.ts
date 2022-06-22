@@ -1,8 +1,10 @@
-import Discord from "discord.js";
+import Discord, { Permissions } from "discord.js";
 const NewCommand = require("./command");
 
 export default class ModCommand {
-	constructor(execute, sett) {
+	execute: any;
+	settings: any
+	constructor(execute: any, sett: any) {
 		this.execute = execute;
 		this.settings = new NewCommand(execute, Object.assign({ cooldown: 2 * 1000 }, sett)).settings;
 	}
@@ -11,7 +13,7 @@ export default class ModCommand {
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
-			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!perms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
 				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
 					ephemeral: true,
@@ -24,7 +26,7 @@ export default class ModCommand {
 		const botperms = message.channel.permissionsFor(message.guild.me);
 
 		for (const perm of this.settings.bot_perms) {
-			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!botperms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
 				return await message.replyT({
 					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,

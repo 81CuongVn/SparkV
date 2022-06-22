@@ -5,8 +5,6 @@ const lyricsClient: Genius.Client = new Genius.Client(process.env.GENIUS_TOKEN);
 import Erela, { Manager } from "erela.js";
 import Spotify from "erela.js-spotify";
 import AppleMusic from "erela.js-apple";
-import Deezer from "erela.js-deezer";
-import TIDAL from "erela.js-tidal";
 
 export default async (bot: any) => {
 	bot.lyricsClient = lyricsClient;
@@ -119,10 +117,11 @@ export default async (bot: any) => {
 			new Spotify({
 				clientID: process.env.SPOTIFYID,
 				clientSecret: process.env.SPOTIFYSECRET
+			} as {
+				clientID: string,
+				clientSecret: string
 			}),
-			new TIDAL(),
-			new Deezer({}),
-			new AppleMusic()
+			//new AppleMusic() // fuck this mate
 		],
 		send(id, payload) {
 			const guild = bot.guilds.cache.get(id);
@@ -130,9 +129,9 @@ export default async (bot: any) => {
 		}
 	}).on("nodeConnect", node => bot.logger(`[Music System] Node ${node.options.identifier} connected`))
 		.on("nodeError", (node, error) => console.log(`[Music System] Error: Node ${node.options.identifier} had an error: ${error.message}`, "error"))
-		.on("trackStart", async (player: Erela.Player, track: Erela.Track) => {
-			const playerData: Erela.Player = bot.music.players.get(player.guild);
-			const requester: any = player.get<string>("requester");
+		.on("trackStart", async (player: any, track: any) => {
+			const playerData: any = bot.music.players.get(player.guild);
+			const requester: any = player.get("requester");
 			const NowPlayingEmbed = new Discord.MessageEmbed()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${track.title}`)
 				.setURL(track.uri)
@@ -158,7 +157,7 @@ export default async (bot: any) => {
 			});
 			player.set("message", msg);
 
-			const updateMusic = setInterval(async () => {
+			const updateMusic: any = setInterval(async () => {
 				if (player?.queue?.playing === false && player?.queue?.paused === false) return clearInterval(updateMusic);
 				if (player?.queue?.paused === true) return;
 				NowPlayingEmbed.fields = [
@@ -263,7 +262,7 @@ export default async (bot: any) => {
 		if (options?.includeStop === true) buttons.push(StopButton);
 		if (options?.includeLoop === true) buttons.push(LoopButton);
 
-		let lyrics;
+		let lyrics: any;
 		try {
 			lyrics = await (await lyricsClient.songs.search(track.title))[0].lyrics();
 		} catch (e) {
@@ -287,10 +286,10 @@ export default async (bot: any) => {
 
 		if (!MusicMessage) return;
 
-		let collector;
+		let collector: any;
 		if (options?.createCollector === true) {
 			collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
-			collector.on("collect", async interaction => {
+			collector.on("collect", async (interaction: any) => {
 				await interaction.deferReply({
 					ephemeral: true
 				});
@@ -376,7 +375,7 @@ export default async (bot: any) => {
 				});
 			});
 
-			collector.on("end", async collected => {
+			collector.on("end", async (collected: any) => {
 				if (MusicMessage) {
 					try {
 						MusicMessage?.edit({

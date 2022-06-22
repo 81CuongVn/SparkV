@@ -1,6 +1,6 @@
-import Discord from "discord.js";
+import Discord, { Role } from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const embed = new Discord.MessageEmbed()
@@ -16,12 +16,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setColor("GREEN");
 
 	try {
-		await message.guild.roles.cache.forEach(role => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: true }));
+		await message.guild.roles.cache.forEach((role: Role) => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: true }));
 
 		return await message.replyT({
 			embeds: [embed]
 		});
-	} catch (err) {
+	} catch (err: any) {
 		message.replyT(`${bot.config.emojis.error} | Failed to unlock channel. Please make sure I have the correct permissions.`);
 	}
 }

@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const User = data.options.getMember("user");
@@ -11,11 +11,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	User.setNickname(NewNickname)
 		.then(async () => await message.editT(`${bot.config.emojis.success} | Successfully changed ${User}\`s nickname to ${NewNickname}!`))
-		.catch(async err => {
-			bot.logger(err, "error");
-
-			await message.editT(`${bot.config.emojis.error} | Uh oh! I cannot change their nickname. Please check my permissions and try again.`);
-		});
+		.catch(async (err: any) => await message.editT(`${bot.config.emojis.error} | Uh oh! I cannot change their nickname. Please check my permissions and try again.`));
 }
 
 export default new cmd(execute, {

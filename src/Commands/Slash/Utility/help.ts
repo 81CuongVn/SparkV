@@ -174,7 +174,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			await helpMessage?.edit({
 				components: []
 			});
-		} catch (err) { }
+		} catch (err: any) { }
 	});
 }
 

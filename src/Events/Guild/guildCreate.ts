@@ -2,7 +2,7 @@ import Discord from "discord.js";
 
 export default {
 	once: false,
-	async execute(bot, guild) {
+	async execute(bot: any, guild: any) {
 		if (!guild.available) return;
 
 		console.log(`SparkV has been added to ${guild.name} (Id: ${guild.id}).`);
@@ -16,7 +16,7 @@ export default {
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
-		const Owner = await guild?.fetchOwner().catch(err => null) || null;
+		const Owner = await guild?.fetchOwner().catch((): any => null) || null;
 
 		if (Logger) {
 			const ServerAddedEmbed = new Discord.MessageEmbed()
@@ -82,7 +82,7 @@ export default {
 			await guild.systemChannel.send({
 				embeds: [WelcomeEmbed],
 				components: [new Discord.MessageActionRow().addComponents(InviteButton, SupportButton, WebsiteButton)]
-			}).catch(err => console.log(`Failed to send message to ${guild.name} (${guild.id})! ${err.message}`));
+			}).catch((err: any) => console.log(`Failed to send message to ${guild.name} (${guild.id})! ${err.message}`));
 		}
 	}
 };

@@ -21,7 +21,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				id: data.id,
 				xp: data.xp,
 				level: data.level,
-				rank: TopMembers.findIndex(i => i.guildID === data.guildID && i.id === data.id) + 1,
+				rank: TopMembers.findIndex((i: any) => i.guildID === data.guildID && i.id === data.id) + 1,
 				username: user.username,
 				discriminator: user.discriminator
 			});
@@ -44,30 +44,29 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		let Leaderboard = await bot.UserSchema.find({});
 
 		Leaderboard = Leaderboard
-			.sort((a, b) => b.money.balance - a.money.balance)
-			.filter(user => bot.users.cache.has(user.id))
+			.sort((a: any, b: any) => b.money.balance - a.money.balance)
+			.filter((user: any) => bot.users.cache.has(user.id))
 			.slice(0, 10);
 
-		if (global === false) Leaderboard = Leaderboard.filter(user => message.guild.members.cache.has(user.id));
+		if (global === false) Leaderboard = Leaderboard.filter((user: any) => message.guild.members.cache.has(user.id));
 
 		let rank = 0;
-		const LeaderboardEmbed = new Discord.MessageEmbed()
-			.setTitle(`${message.guild.name}'s Money Leaderboard`)
-			.setDescription(Leaderboard.map(data => {
-				rank++;
-				const user = bot.users.cache.get(data.id);
-
-				return `${Emotes[rank - 1] || "🏅"} **⏣${bot.functions.formatNumber(data.money.balance)}** - ${user.tag}`;
-			}).join("\n"))
-			.setFooter({
-				text: `${bot.user.username} • ${bot.config.embed.footer}`,
-				iconURL: bot.user.displayAvatarURL({ dynamic: true })
-			})
-			.setColor("GREEN")
-			.setTimestamp();
-
 		await message.replyT({
-			embeds: [LeaderboardEmbed]
+			embeds: [{
+				title: `${message.guild.name}'s Money Leaderboard`,
+				description: Leaderboard.map(async (data: any) => {
+					rank++;
+					const user = await bot.users.fetch(data.id);
+
+					return `${Emotes[rank - 1] || "🏅"} **⏣${bot.functions.formatNumber(data.money.balance)}** - ${user.tag}`;
+				}).join("\n"),
+				color: "GREEN",
+				timestamp: new Date(),
+				footer: {
+					text: `${bot.user.username} • ${bot.config.embed.footer}`,
+					icon_url: bot.user.displayAvatarURL({ dynamic: true })
+				}
+			}]
 		});
 	}
 }

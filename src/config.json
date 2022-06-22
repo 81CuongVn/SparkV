@@ -1,5 +1,6 @@
 {
-  "owners": ["571811686617710592", "622903645268344835"],
+  "version": "3.0.0",
+  "owners": ["571811686617710592"],
   "ID": "884525761694933073",
   "prefix": "^",
   "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=294074575990",

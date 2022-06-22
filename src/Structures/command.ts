@@ -1,7 +1,9 @@
-import Discord from "discord.js";
+import { Permissions } from "discord.js";
 
 export default class Command {
-	constructor(execute, sett) {
+	execute: any;
+	settings: any;
+	constructor(execute: any, sett: any) {
 		this.execute = execute;
 		this.settings = Object.assign(
 			{
@@ -22,21 +24,19 @@ export default class Command {
 		if (message?.channel?.type === "dm") return await message.replyT(`${bot.config.emojis.error} | This command cannot be used in DMs!`);
 
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
-
 		for (const perm of this.settings.perms) {
-			if (!perms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!perms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
 				return message?.applicationId ? await message.editT(`${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`) : await message.replyT(`${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`);
 			}
 		}
 
 		const botperms = message.channel.permissionsFor(message.guild.me);
-
 		for (const perm of this.settings.bot_perms) {
-			if (!botperms.has(Discord.Permissions.FLAGS[perm])) {
+			if (!botperms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
 				return message?.applicationId ? await message.editT(`${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`) : await message.replyT(`${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`);
 			}
 		}
 
-		return this.execute(bot: any, message: any, args: string[], command: any, data: any);
+		return this.execute(bot, message, args, command, data);
 	}
 };

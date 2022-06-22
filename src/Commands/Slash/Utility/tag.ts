@@ -27,21 +27,21 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	} else if (state === "view") {
 		const name = message.options.getString("name");
 
-		const tag = data.guild.tags.find(t => t.name.toLowerCase() === name.toLowerCase());
+		const tag = data.guild.tags.find((t: any) => t.name.toLowerCase() === name.toLowerCase());
 		if (!tag) return await message.editT(`${bot.config.emojis.error} | That tag doesn't exist!`);
 
 		embed.setDescription(`**${tag.name}**\n${tag.content.replace("<br>", "\n")}`).setColor(bot.config.embed.color);
 	} else if (state === "list") {
 		if (data.guild?.tags?.length < 1) return await message.editT(`${bot.config.emojis.error} | There are no tags for this server!`);
 
-		embed.setDescription(`**Server Tags**\n${data.guild?.tags.map(tag => tag.name).setColor(bot.config.embed.color)}`);
+		embed.setDescription(`**Server Tags**\n${data.guild?.tags.map((tag: any) => tag.name).setColor(bot.config.embed.color)}`);
 	} else if (state === "delete") {
 		const name = message.options.getString("name");
-		const tag = data.guild.tags.find(tag => tag.name.toLowerCase() === name.toLowerCase());
+		const tag = data.guild.tags.find((tag: any) => tag.name.toLowerCase() === name.toLowerCase());
 
 		if (!tag) return await message.editT(`${bot.config.emojis.error} | That tag doesn't exist!`);
 
-		data.guild.tags = data.guild.tags.filter(tag => tag.name.toLowerCase() !== name.toLowerCase());
+		data.guild.tags = data.guild.tags.filter((tag: any) => tag.name.toLowerCase() !== name.toLowerCase());
 		data.guild.markModified("tags");
 		await data.guild.save();
 

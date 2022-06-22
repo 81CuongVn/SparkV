@@ -1,15 +1,15 @@
 import Discord from "discord.js";
 
-const UserS = require("./schemas/user");
-const MemberS = require("./schemas/member");
-const GuildS = require("./schemas/guild");
+import UserS from "./schemas/user";
+import MemberS from "./schemas/member";
+import GuildS from "./schemas/guild";
 
 export default {
-	async init(bot) {
+	async init(this: any, bot: any) { // Would that work?
 		this.client = bot;
 	},
 
-	async getUser(UserID) {
+	async getUser(UserID: any) {
 		let data = await UserS.findOne({
 			id: UserID,
 		});
@@ -25,7 +25,7 @@ export default {
 		}
 	},
 
-	async getMember(MemberID, GuildID) {
+	async getMember(MemberID: any, GuildID: any) {
 		let member = await MemberS.findOne({
 			id: MemberID,
 			guildID: GuildID,
@@ -43,7 +43,7 @@ export default {
 		}
 	},
 
-	async getGuild(GuildID) {
+	async getGuild(GuildID: any) {
 		let guild = await GuildS.findOne({
 			id: GuildID,
 		});

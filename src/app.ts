@@ -2,8 +2,7 @@
 // Last Edited: 2/25/2021 //
 // Index.js //
 
-if (process.argv.includes("--sharding") === true) require("module-alias/register");
-require("./Structures/extenders");
+import "./Structures/extenders";
 
 // Librarys //
 import fs from "fs";
@@ -12,7 +11,7 @@ import Statcord from "statcord.js";
 import mongoose from "mongoose";
 import Discord, { Collection, Intents, Permissions } from "discord.js";
 
-import Logger from "../utils/logger";
+import Logger from "./Utils/logger";
 import Client from "./Structures/client";
 const SparkV = new Client({
 	intents: [

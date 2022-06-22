@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import figlet from "figlet"; // lol
+import figlet from "figlet";
 
 import cmd from "../../../structures/command";
 
@@ -22,7 +22,7 @@ const chars = {
 	" ": "   "
 };
 
-const zalgo = {
+const zalgo: any = {
 	up: [
 		"̍", "̎", "̄", "̅", "̿", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "̊",
 		"͂", "̓", "̈́", "͊", "͋", "͌", "̃", "̂", "̌", "͐", "̀", "́", "̋", "̏",
@@ -47,8 +47,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	if (!text) return await message.replyT(`${bot.config.emojis.error} | Please supply text.`);
 	if (text.length > 500) return await message.replyT(`${bot.config.emojis.error} | Please keep the text under 500 characters.`);
 
-	let editedText: string;
-
+	let editedText: string | null | undefined;
 	switch (type) {
 		case "reverse":
 			editedText = text.split("").reverse().join("");
@@ -60,7 +59,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				return letter;
 			}).join("");
 		case "asciify":
-			figlet.text(text, async (err: any, data: string) => {
+			figlet.text(text, async (err: any, data: any) => {
 				if (err) {
 					console.log(`Failed to figlet text: ${err}`);
 
@@ -76,26 +75,23 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			// https://github.com/michaelrhodes/to-zalgo/blob/master/index.ts
 			// It had some useless packages that I didn't want taking up my node_modules folder.
 
-			let counts;
-			let result = "";
-			const types = [];
+			let counts: any = {
+				up: 0,
+				middle: 0,
+				down: 0
+			};
+			let result: string = "";
+			const types: any[] = [];
 			types.push("up");
 			types.push("middle");
 			types.push("down");
 
 			for (let i = 0, l = text.length; i < l; i++) {
-				if (RegExp(`(${[].concat(zalgo.up, zalgo.middle, zalgo.down).join("|")})`, "g").test(text[i])) continue;
-
+				if (RegExp(`(${[].concat(zalgo?.up, zalgo.middle, zalgo.down).join("|")})`, "g").test(text[i])) continue;
 				if (text[i].length > 1) {
 					result += text[i];
 					continue;
 				}
-
-				counts = {
-					up: 0,
-					middle: 0,
-					down: 0
-				};
 
 				counts.up = ~~(Math.random() * 8) + 1;
 				counts.middle = ~~(Math.random() * 3);
@@ -104,7 +100,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				result += text[i];
 				for (let j = 0, m = types.length; j < m; j++) {
 					const type = types[j];
-					let count = counts[type];
+					let count: any = counts[type];
 					const tchars = zalgo[type as keyof typeof zalgo];
 
 					while (count--) result += tchars[~~(Math.random() * (tchars.length - 1))];
@@ -116,7 +112,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			editedText = `That text has **${text.length} characters**.`;
 	}
 
-	await message.replyT(editedText.length >= 2000 ? `${editedText.slice(0, 1990)}...` : editedText);
+	await message.replyT((editedText?.length ?? 0) >= 2000 ? `${editedText?.slice(0, 1990)}...` : editedText);
 }
 
 export default new cmd(execute, {

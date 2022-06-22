@@ -71,8 +71,8 @@ export default new cmd(
 		});
 
 		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
-		collector.on("collect", async interaction => {
-			if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
+		collector.on("collect", async (interaction: any) => {
+			if (!interaction.deferred) interaction.deferUpdate().catch((): any: any => { });
 			if (interaction.customId === "quickLeft") PageNumber = 0;
 			else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
 			else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
@@ -86,7 +86,7 @@ export default new cmd(
 						})
 					]
 				});
-			} catch (err) {}
+			} catch (err: any) {}
 		});
 
 		collector.on("end", async () => {
@@ -94,7 +94,7 @@ export default new cmd(
 				await msg?.edit({
 					components: []
 				});
-			} catch (err) {}
+			} catch (err: any) {}
 		});
 	},
 	{

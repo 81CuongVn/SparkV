@@ -2,8 +2,7 @@ import Discord from "discord.js";
 import axios from "axios";
 
 import cmd from "../../../structures/command";
-
-const words = require("@src/words.json");
+import words from "../../../words.json";
 
 function shuffle(array: string[]) {
 	let currentIndex = array.length, randomIndex;
@@ -75,7 +74,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			break;
 		} case "advice": {
-			const data = await axios.get("https://api.adviceslip.com/advice").then(res => res.data).catch(err => bot.logger(`Advice failed: ${err}`, "error"));
+			const data = await axios.get("https://api.adviceslip.com/advice").then(res => res.data).catch((err: any) => bot.logger(`Advice failed: ${err}`, "error"));
 
 			embed
 				.setDescription(`**Here's an advice.**\n${data.slip.advice}`)
@@ -90,7 +89,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			break;
 		} case "uselessfact": {
-			const data = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en").then(res => res.data).catch(err => bot.logger(`Useless fact failed: ${err}`, "error"));
+			const data = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en").then(res => res.data).catch((err: any) => bot.logger(`Useless fact failed: ${err}`, "error"));
 
 			embed
 				.setDescription(`**${bot.config.emojis.question} | Did you know?**\n${data.text}`)
@@ -122,9 +121,9 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 			collector.on("collect", async (interaction: any) => {
-				if (!interaction.deferred) interaction.deferUpdate().catch(() => { });
+				if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 
-				const data = await axios.get(`https://api.truthordarebot.xyz/api/${interaction.customId}`).then(res => res.data).catch(err => bot.logger(`Truth or dare failed: ${err}`, "error"));
+				const data = await axios.get(`https://api.truthordarebot.xyz/api/${interaction.customId}`).then(res => res.data).catch((err: any) => bot.logger(`Truth or dare failed: ${err}`, "error"));
 				embed
 					.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\n${data.question}`)
 					.setColor(interaction.customId === "truth" ? "GREEN" : "RED");
@@ -323,7 +322,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						.setDescription(await message.translate(`Please wait...`))
 						.setFooter({
 							text: bot.config.embed.footer,
-							icon_url: bot.user.displayAvatarURL({ dynamic: true })
+							iconURL: bot.user.displayAvatarURL({ dynamic: true })
 						})
 						.setColor("BLUE")
 				]

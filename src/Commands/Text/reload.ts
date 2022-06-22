@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-import cmd from "../../../structures/command";
+import cmd from "../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const Command = args[0];
@@ -24,7 +24,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		return await message.replyT({
 			embeds: [embed]
 		});
-	} catch (err) {
+	} catch (err: any) {
 		bot.logger(err, "error");
 
 		const ErrorEmbed = new Discord.MessageEmbed()

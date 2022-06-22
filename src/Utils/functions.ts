@@ -1,25 +1,22 @@
-import Discord from "discord.js";
-const { createCanvas, loadImage, registerFont } = require("canvas");
-const fs = require("fs");
-const path = require("path");
+import Canvas from "canvas";
 
 const Invitergx =
 	/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite|discord.com\/invite)\/+[a-zA-Z0-9]{6,16}/g;
 const URLrgx = /(https?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
 
-let bot;
+let bot: any;
 
 export default {
 	/**
    * Initilizes functions.
    * @param {Object} client Discord client.
    */
-	init(client) {
+	init(client: any) {
 		if (!client) throw new TypeError("Discord client must be valid.");
 
 		bot = client;
 
-		registerFont(`${process.env.MainDir}/src/Assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
+		Canvas.registerFont(`${process.env.MainDir}/Assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
 	},
 
 	/**
@@ -28,17 +25,14 @@ export default {
    * @param {Object} data Guild's data souced from the guild data collection using mongoose.
    * @returns {string} Prefix.
    */
-	getPrefix(message, data) {
+	getPrefix(message: any, data: any) {
 		const acceptedPrefixes = [
 			process.argv.includes("--dev") === true ? "_" : "sv!"
 		];
 
-		let prefix = null;
-
+		let prefix: any = null;
 		acceptedPrefixes.forEach(p => {
-			if (message.content.startsWith(p) || message.content.toLowerCase().startsWith(p)) {
-				prefix = p;
-			}
+			if (message.content.startsWith(p) || message.content.toLowerCase().startsWith(p)) prefix = p;
 		});
 
 		return prefix;
@@ -53,7 +47,7 @@ export default {
 	 * @param {string} slider The slider emoji. Default: 🔘
 	 * @returns {string} The progress bar, as a string.
 	 */
-	splitBar(current, total, size = 40, line = "▬", slider = "🔘") {
+	splitBar(current: number, total: number, size = 40, line = "▬", slider = "🔘") {
 		if (current > total) {
 			return line.repeat(size + 2);
 		} else {
@@ -70,14 +64,14 @@ export default {
 	 * @param {Object} options Options.
 	 * @returns {Promise<Canvas>} Canvas
 	 */
-	async createCard(options) {
-		const canvas = createCanvas(800, 390);
+	async createCard(options: { user: { tag: any; displayAvatarURL: (arg0: { format: string; }) => any; }; text: { desc: any; footer: any; }; }) {
+		const canvas = Canvas.createCanvas(800, 390);
 		const context = canvas.getContext("2d");
 
 		// Background
 		context.fillStyle = "#3461eb";
 		context.fillRect(0, 0, canvas.width, canvas.height);
-		const background = await loadImage(`${process.env.MainDir}/src/Assets/images/background.png`);
+		const background = await Canvas.loadImage(`${process.env.MainDir}/Assets/images/background.png`);
 		context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
 		// Global Text Settings
@@ -118,7 +112,7 @@ export default {
 		context.clip();
 
 		/* Avatar */
-		const Avatar = await loadImage(options.user.displayAvatarURL({ format: "png" }));
+		const Avatar = await Canvas.loadImage(options.user.displayAvatarURL({ format: "png" }));
 		context.drawImage(Avatar, (canvas.width / 2) - 110, (canvas.height / 2) - 175, 220, 220);
 
 		// Done //
@@ -130,10 +124,8 @@ export default {
    * @param {number} Number The number to format.
    * @returns {string} The formatted number.
    */
-	formatNumber(Number) {
-		if (typeof Number === "string") {
-			Number = parseInt(Number);
-		}
+	formatNumber(Number: any) {
+		if (typeof Number === "string") Number = parseInt(Number);
 
 		const DecPlaces = Math.pow(10, 1);
 		const Abbrev = ["k", "m", "g", "t", "p", "e"];
@@ -163,7 +155,7 @@ export default {
    * @param {string} type The type of formatted time. (long/short)
    * @returns {string} The time.
    */
-	MSToTime(ms, type = "long") {
+	MSToTime(ms: number, type = "long") {
 		const RoundNumber = ms > 0 ? Math.floor : Math.ceil;
 		const Months = RoundNumber(ms / 2629800000);
 		const Days = RoundNumber(ms / 86400000) % 30.4167;
@@ -194,24 +186,22 @@ export default {
    * @param {string} key The search quarry.
    * @returns {Object} User if found.
    */
-	async fetchUser(key) {
+	async fetchUser(key: any) {
 		if (!key || typeof key !== "string") return;
 
-		if (key.match(/^<@!?(\d+)>$/)) {
-			const user = bot.users.fetch(key.match(/^<@!?(\d+)>$/)[1]).catch(() => { });
-
+		const match = key.match(/^<@!?(\d+)>$/);
+		if (match) {
+			const user = bot.users.fetch(match[1]).catch((): any => { });
 			if (user) return user;
 		}
 
-		if (key.match(/^!?(\w+)#(\d+)$/)) {
-			const user = bot.users.cache.find(
-				u => u.username === key.match(/^!?(\w+)#(\d+)$/)[0] && u.discriminator === key.match(/^!?(\w+)#(\d+)$/)[1]
-			);
-
+		const match2 = key.match(/^!?(\w+)#(\d+)$/);
+		if (match2) {
+			const user = bot.users.cache.find((u: any) => u.username === match2[0] && u.discriminator === match2[1]);
 			if (user) return user;
 		}
 
-		return await bot.users.fetch(key).catch(() => { });
+		return await bot.users.fetch(key).catch((): any => { });
 	},
 
 	/**
@@ -219,7 +209,7 @@ export default {
    * @param {string} String The String to check for a URL.
    * @returns {boolean}
    */
-	isURL(String) {
+	isURL(String: string) {
 		return URLrgx.test(String);
 	},
 
@@ -243,7 +233,7 @@ export default {
 		if (bot.config.sharding.shardingEnabled === false) {
 			let CollectedUsers = 0;
 
-			bot.guilds.cache.map((server, id) => (CollectedUsers = server.memberCount + CollectedUsers));
+			bot.guilds.cache.map((server: { memberCount: number; }, id: any) => (CollectedUsers = server.memberCount + CollectedUsers));
 
 			return CollectedUsers;
 		}
@@ -273,7 +263,7 @@ export default {
    * @param {string} ms The amount of ms to wait for.
    * @returns {promise} Sets timeout.
    */
-	async wait(ms) {
+	async wait(ms: number | undefined) {
 		return new Promise(r => setTimeout(r, ms));
 	},
 
@@ -282,7 +272,7 @@ export default {
    * @param {Date} date The date.
    * @returns {string} Formatted date.
    */
-	async FormatDate(date) {
+	async FormatDate(date: number | Date | undefined) {
 		return new Intl.DateTimeFormat("en-US").format(date);
 	}
 };

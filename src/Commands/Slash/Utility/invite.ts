@@ -3,7 +3,7 @@ import Discord from "discord.js";
 import cmd from "../../../structures/command";
 
 export default new cmd(
-	async (bot, message) => {
+	async (bot: any, message: any) => {
 		const InvitesEmbend = new Discord.MessageEmbed()
 			.setTitle("Invites")
 			.setDescription(`The following are links for SparkV!`)

@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const channel = data.options.getChannel("channel");
@@ -11,7 +11,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	try {
 		channel.setRateLimitPerUser(seconds);
 		await message.replyT(`${bot.config.emojis.success} | Slowmode is now ${seconds} seconds.`);
-	} catch (err) {
+	} catch (err: any) {
 		return await message.replyT(`${bot.config.emojis.error} | I cannot set the slowmode for this channel! Please check my permissions and try again.`);
 	}
 }

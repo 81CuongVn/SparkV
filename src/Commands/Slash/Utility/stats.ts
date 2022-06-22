@@ -5,7 +5,7 @@ const os = require("os");
 import cmd from "../../../structures/command";
 
 export default new cmd(
-	async (bot, message) => {
+	async (bot: any, message: any) => {
 		const loadingEmbed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: message.user.tag,
@@ -15,7 +15,7 @@ export default new cmd(
 			.setDescription(await message.translate(`Please wait while I load my statistics...`))
 			.setFooter({
 				text: bot.config.embed.footer,
-				icon_url: bot.user.displayAvatarURL({ dynamic: true })
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
 			})
 			.setColor(bot.config.embed.color)
 			.setTimestamp();
@@ -25,7 +25,7 @@ export default new cmd(
 			fetchReply: true
 		});
 
-		const statcord = await axios.get(`https://api.statcord.com/v3/${bot.user.id}`).then(res => res.data.data[0]).catch((): any => { });
+		const statcord = await axios.get(`https://api.statcord.com/v3/${bot.user.id}`).then((res: any) => res.data.data[0]).catch((): any => { });
 
 		// RamData = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)
 

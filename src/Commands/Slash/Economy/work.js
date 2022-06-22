@@ -96,13 +96,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		const collector = SearchMessage.createMessageComponentCollector({
 			filter: interaction => {
-				if (!interaction.deferred) interaction.deferUpdate().catch(() => {});
+				if (!interaction.deferred) interaction.deferUpdate().catch((): any => {});
 
 				return true;
 			}, time: 300 * 1000
 		});
 
-		collector.on("collect", async interaction => {
+		collector.on("collect", async (interaction: any) => {
 			const placeNum = parseInt(interaction.customId.split("_")[0]) - 1;
 			const place = places.find(p => p.toLowerCase() === interaction.customId.split("_")[1]);
 
@@ -148,7 +148,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 					],
 					components: []
 				});
-			} catch (err) { }
+			} catch (err: any) { }
 		});
 	}
 }

@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { Track } from "erela.js";
 
 import cmd from "../../../structures/command";
 
@@ -24,29 +25,27 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		if (!playerData) return message.replyT(`${bot.config.emojis.alert} | There is nothing in the queue right now!`);
 
 		if (type === "volume") {
-			if (parseInt(number) > 100) return message.replyT(`${bot.config.emojis.alert} | Songs cannot go louder than 100%.`);
+			if (number > 100) return message.replyT(`${bot.config.emojis.alert} | Songs cannot go louder than 100%.`);
 
-			playerData.setVolume(parseInt(number));
+			playerData.setVolume(number);
 			return await message.replyT({
 				embeds: [embed.setDescription(`${bot.config.emojis.music} | The volume is now set to ${number}%.`).setColor("GREEN")]
 			});
 		} else if (type === "forward") {
-			let forward = queue.currentTime + number;
-			if (forward < 0) rewind = 0;
-			if (forward >= queue.songs[0].duration) forward = queue.songs[0].duration - 1;
+			let forward = playerData.queue.currentTime + number;
+			if (forward < 0) forward = 0;
+			if (forward >= playerData.queue.songs[0].duration) forward = playerData.queue.songs[0].duration - 1;
 
-			await queue.seek(forward);
+			await playerData.queue.seek(forward);
 			return await message.replyT({
 				embeds: [embed.setDescription(`${bot.config.emojis.music} | I forwarded the song by ${number} seconds ahead.`).setColor("GREEN")]
 			});
 		} else if (type === "rewind") {
-			const number = data.options.getNumber("number");
-			let rewind = queue.currentTime - number;
-
+			let rewind = playerData.queue.currentTime - number;7
 			if (rewind < 0) rewind = 0;
-			if (rewind >= queue.songs[0].duration - queue.currentTime) rewind = 0;
+			if (rewind >= playerData.queue.songs[0].duration - playerData.queue.currentTime) rewind = 0;
 
-			await queue.seek(rewind);
+			await playerData.queue.seek(rewind);
 			return await message.replyT({
 				embeds: [embed.setDescription(`${bot.config.emojis.music} | I rewinded the song by ${number} seconds.`).setColor("GREEN")]
 			});
@@ -109,15 +108,15 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		let lyrics;
 		try {
 			lyrics = await (await bot.lyricsClient.songs.search(query))[0].lyrics();
-		} catch (err) {
+		} catch (err: any) {
 			lyrics = null;
 		}
 
 		if (!lyrics) return await message.replyT(`${bot.config.emojis.error} | I couldn't find the lyrics for **${query}**!`);
 
 		const LyricsArray = lyrics.split(`\n`);
-		const LyricsSubArray = [];
-		const pages = [];
+		const LyricsSubArray: any[] = [];
+		const pages: any[] = [];
 
 		let curLine = 0;
 		let charCount = 0;
@@ -160,7 +159,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		let PageNumber = 0;
 		const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
-		collector.on("collect", async interaction => {
+		collector.on("collect", async (interaction: any) => {
 			if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 			if (interaction.customId === "quickLeft") PageNumber = 0;
 			else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
@@ -175,12 +174,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						})
 					]
 				});
-			} catch (err) { }
+			} catch (err: any) { }
 		});
-		collector.on("end", async interaction => {
+		collector.on("end", async (interaction: any) => {
 			try {
 				interaction.edit({ components: [] });
-			} catch (err) { }
+			} catch (err: any) { }
 		});
 	} else if (state === "skip") {
 		if (!playerData) return message.replyT(`${bot.config.emojis.alert} | There is nothing in the queue right now!`);
@@ -191,12 +190,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				bot.music.jump(message, number);
 
 				return await message.replyT(`${bot.config.emojis.music} | I successfully jumped to song #${number} in queue!`);
-			} catch (err) {
+			} catch (err: any) {
 				return await message.replyT(`${bot.config.emojis.error} | Invalid song number!`);
 			}
 		}
 
-		queue.skip();
+		playerData.stop();
 		await message.replyT({
 			embeds: [
 				embed
@@ -219,7 +218,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			mode = 0;
 		}
 
-		Queue.settrackRepeat(mode);
+		playerData.settrackRepeat(mode);
 		await message.replyT({
 			embeds: [
 				embed
@@ -243,7 +242,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				player.connect();
 
 				message.replyT(`${bot.config.emojis.music} | Successfully joined the voice channel.`);
-			} catch (err) {
+			} catch (err: any) {
 				return message.editT(`${bot.config.emojis.error} | I cannot join the voice channel! Please make sure I have the permission to join the voice channel nad that the voice channel is not full.`);
 			}
 		} else if (type === "leave") {
@@ -253,7 +252,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				bot.music.disconnect(message.member.voice.channel);
 
 				return await message.replyT("Successfully left voice channel.");
-			} catch (err) {
+			} catch (err: any) {
 				return message.replyT(`${bot.config.emojis.error} | I cannot join the voice channel! Please make sure I have the permission to join the voice channel nad that the voice channel is not full.`);
 			}
 		} else if (type === "stop") {
@@ -264,7 +263,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		} else if (type === "queue") {
 			if (!playerData) return message.replyT(`${bot.config.emojis.alert} | There is nothing in the queue right now!`);
 
-			const queueSongs = queue.songs.map((song, id) => `${Emotes[id] || (id + 1)} **${song.name}** - ${song.formattedDuration}`).slice(0, 10);
+			const queueSongs = playerData?.queue?.songs?.map((song: Track, id: number) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10);
 			const queueEmbed = new Discord.MessageEmbed()
 				.setAuthor({
 					name: message.user.tag,
@@ -292,10 +291,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				.setThumbnail(track?.thumbnail)
 				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${track?.author}\`\`\``, true)
 				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`${track?.duration}\`\`\``, true)
-				.addField(`${bot.config.emojis.music} Songs [${playerData?.queue?.totalSize}]`, `\`${playerData?.queue?.map((song, id) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10)}\``, false)
+				.addField(`${bot.config.emojis.music} Songs [${playerData?.queue?.totalSize}]`, `\`${playerData?.queue?.map((song: Track, id: number) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10)}\``, false)
 				.addField(`${bot.config.emojis.volume} Volume`, `\`${playerData?.volume}%\``, true)
 				.addField(`${bot.config.emojis.loop} Loop`, `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`, true)
-				.setURL(song.url)
+				.setURL(track.uri)
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 

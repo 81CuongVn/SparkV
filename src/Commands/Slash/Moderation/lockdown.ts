@@ -1,6 +1,6 @@
-import Discord from "discord.js";
+import Discord, { GuildBasedChannel } from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = data.options.getString("state");
@@ -16,12 +16,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		});
 
-	const Channels = message.guild.channels.cache.filter(channel => channel.type !== "GUILD_CATEGORY");
+	const Channels = message.guild.channels.cache.filter((channel: any) => channel.type !== "GUILD_CATEGORY");
 
 	try {
 		if (state.toLowerCase() === "on") {
-			Channels.forEach(Channel => {
-				Channel.permissionOverwrites.create(message.guild.roles.everyone, {
+			Channels.forEach((channel: any) => {
+				channel.permissionOverwrites.create(message.guild.roles.everyone, {
 					SEND_MESSAGES: false
 				});
 			});
@@ -30,7 +30,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				.setDescription(`This server is on lockdown! Reason: ${reason}`)
 				.setColor("RED");
 		} else if (state.toLowerCase() === "off") {
-			Channels.forEach(channel => {
+			Channels.forEach((channel: any) => {
 				channel.permissionOverwrites.create(message.guild.roles.everyone, {
 					SEND_MESSAGES: true
 				});
@@ -42,7 +42,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		} else {
 			await message.replyT("Invalid command usage. Please specify a valid state (on/off).");
 		}
-	} catch (err) {
+	} catch (err: any) {
 		message.replyT(`${bot.config.emojis.error} | Failed to put server in lockdown. Please make sure I have the correct permissions.`);
 	}
 }

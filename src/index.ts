@@ -1,7 +1,8 @@
 // KingCh1ll //
-// 4/22/2021 //
+// 6/20/2022 //
 
-async function loader(callback) {
+import 'dotenv/config';
+async function loader(callback: any) {
 	const loading: string[] = ["\\", "|", "/", "-"];
 	let num: number = 0;
 
@@ -18,23 +19,24 @@ async function loader(callback) {
 }
 
 import figlet from "figlet";
+import chalk from "chalk";
 loader(async () => {
-	console.log(require("chalk").grey("​"));
+	console.log(chalk.grey("​"));
 	console.log(figlet.textSync("SparkV"));
 
 	if (process.argv.includes("--dev") === true) {
-		console.log(require("chalk").grey("----------------------------------------"));
+		console.log(chalk.grey("----------------------------------------"));
 		Logger("[DEV] - Developer mode enabled. Some features may not work right on this mode.");
-		console.log(require("chalk").grey("----------------------------------------"));
+		console.log(chalk.grey("----------------------------------------"));
 	}
 
 	checkForUpdate();
 
 	const version:any = process.version.slice(1, 3);
 	if (version - 0 < 16) { // how to add typing?
-		console.log(require("chalk").grey("----------------------------------------"));
+		console.log(chalk.grey("----------------------------------------"));
 		Logger("WARNING - VERSION_ERROR => UNSUPPORTED NODE.JS VERSION. PLEASE UPGRADE TO v16.6");
-		console.log(require("chalk").grey("----------------------------------------"));
+		console.log(chalk.grey("----------------------------------------"));
 		return;
 	}
 
@@ -47,33 +49,35 @@ import path from "path";
 
 import discord from "discord.js";
 import Statcord from "statcord.js";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import axios from "axios";
 
 // Varibles //
 import Config from "./config.json";
-import Logger from "./utils/logger";
+import Logger from "./Utils/logger";
 
 // Functions //
 async function checkForUpdate() {
 	try {
 		const tag_name = await axios.get("https://api.github.com/repos/Ch1ll-Studio/SparkV/releases/latest").then(response => response.data.tag_name);
 
-		if (Number(tag_name.slice(1)) > Number(require("./package.json")?.version)) {
-			console.log(require("chalk").grey("----------------------------------------"));
+		if (Number(tag_name.slice(1)) > Number(require("./config.json")?.version)) {
+			console.log(chalk.grey("----------------------------------------"));
 			await Logger("WARNING - UPDATE_AVAILABLE => PLEASE UPDATE TO THE LATEST VERSION", "warn");
-			console.log(require("chalk").grey("----------------------------------------"));
+			console.log(chalk.grey("----------------------------------------"));
 		}
-	} catch (err) {
-		console.log(require("chalk").grey("----------------------------------------"));
+	} catch (err: any) {
+		console.log(chalk.grey("----------------------------------------"));
 		await Logger(`WARNING - UPDATE_CHECK_ERROR => FAILED TO CHECK FOR UPDATE. ${err}`, "warn");
-		console.log(require("chalk").grey("----------------------------------------"));
+		console.log(chalk.grey("----------------------------------------"));
 	}
 }
 
 async function start() {
-	require("dotenv").config();
-
+	dotenv.config({ path: path.join(__dirname, "../.env") });
+	console.log(path.join(__dirname, "../.env"), process.env)
+	
 	if (process.env.MONGOOSEURL) {
 		await mongoose.connect(process.env.MONGOOSEURL, {
 			useNewUrlParser: true,
@@ -93,11 +97,11 @@ async function start() {
 		Logger("WARNING - NO API KEY FOR MONGOOSE! SPARKV MAY BREAK WITHOUT MONGODB KEY.", "warn");
 	}
 
-	process.on("warning", async warning => await Logger(`${warning.name} - ${warning.message}`, "warn", { data: warning }));
-	process.on("exit", async code => await Logger(`Process exited with code ${code}.`, "error"));
-	process.on("uncaughtException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
-	process.on("unhandledException", async err => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
-	process.on("unhandledRejection", async err => await Logger(`Unhandled rejection error. ${err}.`, "error", { data: err }));
+	process.on("warning", async (warning: any) => await Logger(`${warning.name} - ${warning.message}`, "warn", { data: warning }));
+	process.on("exit", async (code: any) => await Logger(`Process exited with code ${code}.`, "error"));
+	process.on("uncaughtException", async (err: any) => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
+	process.on("unhandledException", async (err: any) => await Logger(`Unhandled exception error. ${err.stack}.`, "error", { data: err }));
+	process.on("unhandledRejection", async (err: any) => await Logger(`Unhandled rejection error. ${err}.`, "error", { data: err }));
 
 	process.env.MainDir = __dirname;
 
@@ -122,12 +126,12 @@ async function start() {
 			Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DEPLOYING`);
 
 			shard.on("ready", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - READY`));
-			shard.on("disconnect", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED\n${event}`, "error"));
+			shard.on("disconnect", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED`, "error"));
 			shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
 		});
 
 		manager.spawn();
 	} else {
-		await require("./src/app");
+		await require("./app");
 	}
 }

@@ -8,11 +8,11 @@ import logger from "./logger";
 // They switched to ESM only, so I can no longer use their package.
 function markdown(table: string[]) {
 	const rowLength = table.length;
-	const alignment = [];
+	const alignment: any[] = [];
 	const rule = [];
 	let cellCount = 0;
 	let rowIndex = -1;
-	let sizes = [];
+	let sizes: any[] = [];
 	let align: any;
 	let rows: any;
 	let row: any;
@@ -162,30 +162,30 @@ export default {
    */
 	update(bot: any, MainDir: string) {
 		let cmdCount = 0;
-		bot.commands.each(cmd => ++cmdCount);
+		bot.commands.each((cmd: any) => ++cmdCount);
 
 		let baseText = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
-		const cmdTable = {};
+		let cmdTable: any;
 
 		bot.categories
-			.sort((a, b) => {
-				if (bot.commands.filter(c => c.category === a).length > bot.commands.filter(c => c.category === b).length) return -1;
+			.sort((a: any, b: any) => {
+				if (bot.commands.filter((c: { category: any; }) => c.category === a).length > bot.commands.filter((c: { category: any; }) => c.category === b).length) return -1;
 				else return 1;
 			})
-			.forEach(cat => {
-				const info: string[] = [];
+			.forEach((cat: { emoji: string | string[]; name: string | number; }) => {
+				const info: any[] = [];
 
 				cat.emoji.includes("<") ? baseText += `\n## ${cat.name}\n\n` : baseText += `\n## ${cat.emoji} ${cat.name}\n\n`;
 
 				info.push(["Name", "Description", "Usage", "Cooldown"]);
 
-				if (!cmdTable[cat.name]) cmdTable[cat.name] = [];
+				if (!cmdTable?.[cat.name]) cmdTable[cat.name] = [];
 
 				bot.commands
-					.filter(cmd => cmd.category === cat.name)
-					.sort((a, b) => a.settings.name < b.settings.name ? -1 : 1)
-					.forEach(cmd => {
-						cmdTable[cat.name].push({
+					.filter((cmd: { category: any; }) => cmd.category === cat.name)
+					.sort((a: { settings: { name: number; }; }, b: { settings: { name: number; }; }) => a.settings.name < b.settings.name ? -1 : 1)
+					.forEach((cmd: { settings: { name: any; description: any; usage: string; cooldown: number; }; }) => {
+						cmdTable?.[cat.name]?.push({
 							name: cmd.settings?.name || "Untitled Command",
 							description: cmd.settings.description || "No description for this command",
 							usage: cmd.settings.usage.replaceAll("<", "(").replaceAll(">", ")") || "",

@@ -2,7 +2,7 @@ import Discord from "discord.js";
 
 export default {
 	once: false,
-	async execute(bot, guild) {
+	async execute(bot: any, guild: any) {
 		if (!guild.available) return;
 
 		console.log(`SparkV has been removed from ${guild.name} (Id: ${guild.id}).`);
@@ -18,7 +18,7 @@ export default {
 		});
 
 		const Logger = bot.channels.cache.get("831314946624454656");
-		const Owner = await guild?.fetchOwner().catch(err => null) || null;
+		const Owner = await guild?.fetchOwner().catch((): any => null) || null;
 
 		if (Logger) {
 			const ServerRemovedEmbed = new Discord.MessageEmbed()

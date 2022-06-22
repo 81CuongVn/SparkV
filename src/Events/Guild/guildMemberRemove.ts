@@ -1,17 +1,15 @@
-import Discord from "discord.js";
-const path = require("path");
+import Discord, { GuildMember, TextChannel } from "discord.js";
+import path from "path";
 
-const database = require("@database/handler");
+import database from "../../Database/handler";
 
 export default {
 	once: false,
-	async execute(bot, member) {
+	async execute(bot: any, member: GuildMember) {
 		const data = await database.getGuild(member.guild.id);
-
 		if (data.goodbye.enabled === "false") return;
 
-		const channel = member?.guild?.channels?.cache.get(data.goodbye?.channel);
-
+		const channel: any | undefined | null = member?.guild?.channels?.cache.get(data.goodbye?.channel) as TextChannel;
 		if (!channel) return;
 
 		const image = await bot.functions.createCard({
@@ -34,6 +32,6 @@ export default {
 		channel.send({
 			content: msg,
 			files: [attachment],
-		}).catch(() => {});
+		}).catch((): any => {});
 	},
 };

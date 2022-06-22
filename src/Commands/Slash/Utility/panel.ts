@@ -1,5 +1,5 @@
-import Discord from "discord.js";
-const canvacord = require("canvacord");
+import Discord, { CategoryChannel, Channel, GuildBasedChannel } from "discord.js";
+import canvacord from "canvacord";
 
 import cmd from "../../../structures/command";
 
@@ -7,15 +7,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	const state = data.options.getSubcommand();
 
 	if (state === "tickets") {
-		const title = data.options.getString("title") || await message.translate(`${bot.config.emojis.ticket} | Get Support`);
-		const description = data.options.getString("description") || await message.translate("Need help? Click the button below to create a support ticket.");
-		const color = data.options.getString("color") || bot.config.embed.color;
-
-		const ticketEmbed = new Discord.MessageEmbed()
-			.setTitle(title)
-			.setDescription(description)
-			.setColor(color);
-
 		const ticketCreateButton = new Discord.MessageButton()
 			.setLabel(await message.translate("Create Ticket"))
 			.setEmoji(bot.config.emojis.ticket)
@@ -23,85 +14,94 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			.setCustomId("ticket_create");
 
 		await message.channel.send({
-			embeds: [ticketEmbed],
-			components: [new Discord.MessageActionRow().addComponents(ticketCreateButton)]
+			embeds: [{
+				title: data.options.getString("title") || await message.translate(`${bot.config.emojis.ticket} | Get Support`),
+				description: data.options.getString("description") || await message.translate("Need help? Click the button below to create a support ticket."),
+				color: data.options.getString("color") || bot.config.embed.color
+			}],
+			components: [{
+				type: 1,
+				components: [{
+					type: 2,
+
+				}]
+			}]
 		});
 
-		const category = await message.guild.channels.cache.find(c => (c.name.toLowerCase().includes("support") || c.name.toLowerCase().includes("tickets")) && c.type === "GUILD_CATEGORY") || await message.guild.channels.create("Tickets", {
-			type: "GUILD_CATEGORY"
-		});
-
+		const category = await message.guild.channels.cache.find((c: Channel | any) => (c.name.toLowerCase().includes("support") || c.name.toLowerCase().includes("tickets")) && c.type === "GUILD_CATEGORY") || await message.guild.channels.create("Tickets", { type: "GUILD_CATEGORY" });
 		data.guild.tickets.category = category.id;
 		data.guild.markModified("tickets.category");
 		await data.guild.save();
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created ticket panel.`);
 	} else if (state === "roles") {
-		const title = data.options.getString("title") || `${bot.config.emojis.special} | Role Select`;
-		const description = data.options.getString("description") || "Click the button(s) below to give yourself a role!";
-		const color = data.options.getString("color") || bot.config.embed.color;
-
-		const embed = new Discord.MessageEmbed()
-			.setTitle(title)
-			.setDescription(description)
-			.setColor(color);
-
 		const buttons = [];
-		const button1 = new Discord.MessageButton()
-			.setLabel(data.options.getString("role1_text"))
-			.setStyle("SECONDARY")
-			.setCustomId(`role_${data.options.getRole("role1").id}`);
-
-		if (data.options.getString("role1_emoji")) button1.setEmoji(data.options.getString("role1_emoji"));
-
-		buttons.push(button1);
+		buttons.push({
+			type: 2,
+			label: data.options.getString("role1_text") || "React to get a role",
+			customId: `role_${await data.options.getRole("role1").id}`,
+			style: "SECONDARY",
+			emoji: data.options.getString("role1_emoji") || null,
+			url: null,
+			disabled: false
+		});
 
 		if (data.options.getRole("role2") && data.options.getString("role2_text")) {
-			const button = new Discord.MessageButton()
-				.setLabel(data.options.getString("role2_text") || "React to get a role")
-				.setStyle("SECONDARY")
-				.setCustomId(`role_${await data.options.getRole("role2").id}`);
-
-			if (data.options.getString("role2_emoji")) button.setEmoji(data.options.getString("role2_emoji"));
-
-			buttons.push(button);
+			buttons.push({
+				type: 2,
+				label: data.options.getString("role2_text") || "React to get a role",
+				customId: `role_${await data.options.getRole("role2").id}`,
+				style: "SECONDARY",
+				emoji: data.options.getString("role2_emoji") || null,
+				url: null,
+				disabled: false
+			});
 		}
 
 		if (data.options.getRole("role3") && data.options.getString("role3_text")) {
-			const button = new Discord.MessageButton()
-				.setLabel(data.options.getString("role3_text") || "React to get a role")
-				.setStyle("SECONDARY")
-				.setCustomId(`role_${await data.options.getRole("role3").id}`);
-
-			if (data.options.getString("role3_emoji")) button.setEmoji(data.options.getString("role3_emoji"));
-
-			buttons.push(button);
+			buttons.push({
+				type: 2,
+				label: data.options.getString("role3_text") || "React to get a role",
+				customId: `role_${await data.options.getRole("role3").id}`,
+				style: "SECONDARY",
+				emoji: data.options.getString("role3_emoji") || null,
+				url: null,
+				disabled: false
+			});
 		}
 
 		if (data.options.getRole("role4") && data.options.getString("role4_text")) {
-			const button = new Discord.MessageButton()
-				.setLabel(data.options.getString("role4_text") || "React to get a role")
-				.setStyle("SECONDARY")
-				.setCustomId(`role_${await data.options.getRole("role4").id}`);
-
-			if (data.options.getString("role4_emoji")) button.setEmoji(data.options.getString("role4_emoji"));
-
-			buttons.push(button);
+			buttons.push({
+				type: 2,
+				label: data.options.getString("role4_text") || "React to get a role",
+				customId: `role_${await data.options.getRole("role4").id}`,
+				style: "SECONDARY",
+				emoji: data.options.getString("role4_emoji") || null,
+				url: null,
+				disabled: false
+			});
 		}
 
 		if (data.options.getRole("role5") && data.options.getString("role5_text")) {
-			const button = new Discord.MessageButton()
-				.setLabel(data.options.getString("role5_text") || "React to get a role")
-				.setStyle("SECONDARY")
-				.setCustomId(`role_${await data.options.getRole("role5").id}`);
-
-			if (data.options.getString("role5_emoji")) button.setEmoji(data.options.getString("role5_emoji"));
-
-			buttons.push(button);
+			buttons.push({
+				type: 2,
+				label: data.options.getString("role5_text") || "React to get a role",
+				customId: `role_${await data.options.getRole("role5").id}`,
+				style: "SECONDARY",
+				emoji: data.options.getString("role5_emoji") || null,
+				url: null,
+				disabled: false
+			});
 		}
 
 		await message.channel.send({
-			embeds: [embed],
+			embeds: [
+				{
+					title: data.options.getString("title") || `${bot.config.emojis.special} | Role Select`,
+					description: data.options.getString("description") || "Click the button(s) below to give yourself a role!",
+					color: data.options.getString("color") || bot.config.embed.color
+				}
+			],
 			components: [
 				{
 					type: 1,
@@ -112,17 +112,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created roles select panel.`);
 	} else if (state === "embed") {
-		const description = data.options.getString("description");
-
-		const embed = new Discord.MessageEmbed()
-			.setDescription(description.replaceAll("<br>", "\n"))
-			.setColor(data.options.getString("color") || bot.config.embed.color);
-
-		if (data.options.getString("title")) embed.setTitle(data.options.getString("title"));
-		if (data.options.getString("image")) embed.setThumbnail(data.options.getString("image"));
-
 		await message.channel.send({
-			embeds: [embed]
+			embeds: [{
+				title: data.options.getString("title"),
+				description: data.options.getString("description").replaceAll("<br>", "\n"),
+				color: data.options.getString("color") || bot.config.embed.color,
+				thumbnail: { url: data.options.getString("image") }
+			}]
 		});
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created embed.`);

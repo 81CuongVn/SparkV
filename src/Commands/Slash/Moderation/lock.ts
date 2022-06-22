@@ -1,6 +1,6 @@
-import Discord from "discord.js";
+import Discord, { Role } from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ")) || "No reason provided.";
@@ -17,12 +17,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setColor("RED");
 
 	try {
-		await message.guild.roles.cache.forEach(role => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: false }));
+		await message.guild.roles.cache.forEach((role: Role) => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: false }));
 
 		return await message.replyT({
 			embeds: [embed]
 		});
-	} catch (err) {
+	} catch (err: any) {
 		bot.logger(err, "error");
 
 		message.replyT(`${bot.config.emojis.error} | Failed to lock channel. Please make sure I have the correct permissions.`);

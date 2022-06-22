@@ -1,9 +1,9 @@
 import Discord from "discord.js";
 const ms = require("ms");
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
-async function execute(bot, interaction, args, command, data) {
+async function execute(bot: any, interaction: any, args: string[], command: string, data: any) {
 	const user = data.options.getMember("user");
 	const time = ms(data.options.getString("time"));
 	const reason = data.options.getString("reason");

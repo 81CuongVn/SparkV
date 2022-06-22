@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	let number = data.options.getNumber("number");
@@ -14,21 +14,21 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		await clonedChannel.setPosition(message.channel.position);
 		await message.channel.delete();
 
-		return clonedChannel.send(`${bot.config.emojis.success} | Successfully cleared **all** messages.`).then(m => setTimeout(() => m.delete(), 5 * 1000));
+		return clonedChannel.send(`${bot.config.emojis.success} | Successfully cleared **all** messages.`).then((m: any) => setTimeout(() => m.delete(), 5 * 1000));
 	}
 
 	if (number < 1 || number > 100) return message.replyT(`${bot.config.emojis.success} | Next time, please provide a number greater than 0 and less than 100.`);
 
-	await message.deleteReply().catch(() => {});
+	await message.deleteReply().catch((): any => {});
 
 	let messages = await message.channel.messages.fetch({
 		limit: 100
-	}).catch(() => {});
+	}).catch((): any => {});
 	messages = messages.toJSON();
 
-	if (user) messages = messages.filter(m => m.author.id === user.user.id);
-	if (type === "pinned") messages = messages.filter(m => !m.pinned);
-	if (data.options.getString("content")) messages = messages.filter(m => m.content.toLowerCase().includes(data.options.getString("content").toLowerCase()));
+	if (user) messages = messages.filter((m: any) => m.author.id === user.user.id);
+	if (type === "pinned") messages = messages.filter((m: any) => !m.pinned);
+	if (data.options.getString("content")) messages = messages.filter((m: any) => m.content.toLowerCase().includes(data.options.getString("content").toLowerCase()));
 
 	if (messages.length > number) messages.length = parseInt(number, 10);
 	number++;
@@ -36,8 +36,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	try {
 		message.channel.bulkDelete(messages, true);
 
-		await message.replyT(`${bot.config.emojis.success} | Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`).then(m => setTimeout(() => m.delete().catch(err => err), 5 * 1000));
-	} catch (err) {
+		await message.replyT(`${bot.config.emojis.success} | Successfully cleared **${--number}** messages${user ? ` from ${user.user.tag}.` : "."}`).then((m: any) => setTimeout(() => m.delete().catch((err: any) => err), 5 * 1000));
+	} catch (err: any) {
 		await message.replyT(`${bot.config.emojis.error} | Uh oh! I failed to clear **${--number}** messages${user ? ` from ${user.user.tag}` : ""}. Please check my permissions and try again.`);
 	}
 }

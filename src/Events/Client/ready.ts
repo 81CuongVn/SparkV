@@ -1,10 +1,9 @@
 import Discord from "discord.js";
-const dbots = require("dbots");
-const { Client } = require("statcord.js");
+import dbots from "dbots";
 
 export default {
 	once: true,
-	async execute(bot) {
+	async execute(bot: any) {
 		bot.user.setPresence({
 			status: "online",
 			activities: [
@@ -22,7 +21,13 @@ export default {
 
 		// Bot Lists //
 		if (process.argv.includes("--dev") === false) {
-			const apiKeys = {};
+			const apiKeys = {} as {
+				topgg: string,
+				voidbots: string,
+				discordlabs: string,
+				discordbotsgg: string,
+				DiscordBotlistEU: string
+			};
 			if (process.env.DBLKEY) apiKeys.topgg = process.env.DBLKEY;
 			if (process.env.VBLKEY) apiKeys.voidbots = process.env.VBLKEY;
 			if (process.env.DLBLKEY) apiKeys.discordlabs = process.env.DLBLKEY;

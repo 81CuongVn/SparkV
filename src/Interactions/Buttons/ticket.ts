@@ -1,13 +1,13 @@
-import Discord from "discord.js";
+import Discord, { Channel, Guild, GuildBasedChannel, Role, TextBasedChannel } from "discord.js";
 
-async function GetTicketOpen(bot, member) {
-	const ticket = await member.guild.channels.cache.filter(c => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map(c => c);
+async function GetTicketOpen(bot: any, member: any) {
+	const ticket = await member.guild.channels.cache.filter((c: any) => c.name.includes("ticket") && !c.name.includes("closed") && c.topic.includes(member.user.tag)).map((c: GuildBasedChannel) => c);
 
 	return ticket;
 }
 
 export default {
-	async execute(bot, interaction) {
+	async execute(bot: any, interaction: any) { // i made you some prank lmao, good luck
 		if (interaction.customId === "ticket_create") {
 			await interaction.deferReply({
 				ephemeral: true
@@ -15,18 +15,17 @@ export default {
 
 			const guild = await bot.database.getGuild(interaction.guild.id);
 
-			const allChannels = await interaction.guild.channels.cache.filter(c => c.name.includes("ticket")).map(c => c);
-			const already = await interaction.guild.channels.cache.some(c => (c.name ?? "unknown").includes("ticket") && !(c.name ?? "unknown").includes("closed") && (c.topic ?? "unknown").includes(interaction.member.user.tag));
-
+			const allChannels = await interaction.guild.channels.cache.filter((c: GuildBasedChannel) => c.name.includes("ticket")).map((c: GuildBasedChannel) => c);
+			const already = await interaction.guild.channels.cache.some((c: any) => (c.name ?? "unknown").includes("ticket") && !(c.name ?? "unknown").includes("closed") && (c.topic ?? "unknown").includes(interaction.member.user.tag));
 			if (already === true) return await interaction.followUp(`You already have a ticket open in ${await GetTicketOpen(bot, interaction.member)}`);
 
 			let category;
 
 			try {
-				category = await interaction.guild.channels.cache.find(c => c.id === guild.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
+				category = await interaction.guild.channels.cache.find((c: GuildBasedChannel) => c.id === guild.tickets.category && c.type === "GUILD_CATEGORY") || await interaction.guild.channels.create("Tickets", {
 					type: "GUILD_CATEGORY"
 				});
-			} catch (err) {
+			} catch (err: any) {
 				return interaction.followUp(`${bot.config.emojis.error} | I couldn't create the ticket category. Please make sure I have the correct permissions.`);
 			}
 
@@ -46,7 +45,7 @@ export default {
 			];
 
 			if (guild?.tickets?.roles.length > 0) {
-				guild.tickets.roles.forEach(role => {
+				guild.tickets.roles.forEach((role: Role) => {
 					permissionOverwrites.push({
 						id: role,
 						allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
@@ -170,10 +169,8 @@ export default {
 			});
 
 			try {
-				setTimeout(() => {
-					interaction.channel.delete().catch((): any => { });
-				}, 5000);
-			} catch (err) {
+				setTimeout(() => interaction.channel.delete().catch((): any => { }), 5000);
+			} catch (err: any) {
 				console.log("Attempted to delete a channel that didn't exist.");
 			}
 		}

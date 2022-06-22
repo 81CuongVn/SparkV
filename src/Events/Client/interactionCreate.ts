@@ -1,16 +1,14 @@
-const logger = require("@utils/logger");
 import Discord from "discord.js";
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
-const cooldowns = [];
+const cooldowns: any[] = [];
 
 export default {
 	once: false,
-	async execute(bot, interaction) {
+	async execute(bot: any, interaction: any) {
 		if (interaction.isCommand()) {
 			const command = bot.commands.get(interaction.commandName);
-
 			if (!command) return;
 
 			try {
@@ -18,39 +16,22 @@ export default {
 					await interaction.deferReply({
 						ephemeral: command.settings.ephemeral || false
 					});
-				} else {
-					return;
-				}
-			} catch (err) {
-				return;
-			}
+				} else { return; }
+			} catch (err: any) { return; }
 
-			const data = {};
-
-			// Get the Guild
+			const data = {} as { guild: any[], member: any[], user: any[], options: any[] };
 			if (interaction.inGuild()) {
-				const guild = await bot.database.getGuild(interaction.guild.id);
-
-				data.guild = guild;
+				data.guild = await bot.database.getGuild(interaction.guild.id);
 				data.member = await bot.database.getMember(interaction.user.id, interaction.guild.id);
-
-				interaction.guild.data = data.guild;
 			}
 
-			// User data
 			data.user = await bot.database.getUser(interaction.user.id);
-
-			// Data Old Options
 			data.options = interaction.options;
-
 			if (!data) return;
 
 			// Cooldown System
 			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
-
-			const userCooldown = cooldowns[interaction.user.id];
-			const time = userCooldown[command.settings.name] || 0;
-
+			const time = cooldowns[interaction.user.id][command.settings.name] || 0;
 			if (time && (time > Date.now())) {
 				const cooldownEmbed = new Discord.MessageEmbed()
 					.setAuthor({
@@ -73,21 +54,7 @@ export default {
 
 			cooldowns[interaction.user.id][command.settings.name] = Date.now() + command.settings.cooldown;
 
-			// Get the command's args
-			const args = [];
-
 			if (!command.settings.options) command.settings.options = [];
-
-			// For (const arg of command.settings.options) {
-			// 	const gotArg = await interaction.options.get(arg.name);
-
-			// 	if (gotArg) {
-			// 		args.push([
-			// 			[arg.name] = gotArg.value
-			// 		]);
-			// 	}
-			// }
-
 			if (command.settings.enabled === false) return await interaction.replyT(`${bot.config.emojis.error} | This command is currently disabled! Please try again later.`);
 			if (command.settings.guildOnly && !interaction.guild) return await interaction.replyT("This command is guild only. Please join a server with SparkV in it or invite SparkV to your own server.");
 			if (command.settings.ownerOnly && !bot.config.owners.includes(interaction.user.id)) return await interaction.replyT("This command is restricted. Only the owners (KingCh1ll, Unbreakablenight) can use this command.");
@@ -95,8 +62,8 @@ export default {
 			bot.StatClient.postCommand(command.settings.name, interaction.user.id, process.argv.includes("--sharding") === true && bot);
 
 			try {
-				await command.run(bot, interaction, args, interaction.commandName, data);
-			} catch (error) {
+				await command.run(bot, interaction, [], interaction.commandName, data);
+			} catch (error: any) {
 				bot.logger(error, "error");
 
 				const ErrorEmbed = new Discord.MessageEmbed()
@@ -115,9 +82,9 @@ export default {
 				});
 			}
 		} else if (interaction.isButton()) {
-			for (const file of fs.readdirSync(`${process.env.MainDir}/src/Interactions/Buttons`)) {
+			for (const file of fs.readdirSync(`${process.env.MainDir}/Interactions/Buttons`)) {
 				if (interaction.customId.startsWith(file.split(".")[0]) || interaction.customId.includes(file.split(".")[0])) {
-					const event = require(path.resolve(`${process.env.MainDir}/src/Interactions/Buttons/${file}`));
+					const event = require(path.resolve(`${process.env.MainDir}/Interactions/Buttons/${file}`));
 
 					event.execute(bot, interaction);
 				}

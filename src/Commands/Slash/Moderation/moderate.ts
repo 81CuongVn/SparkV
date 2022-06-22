@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 
-const cmd = require("@structures/modCommand");
+import cmd from "../../../structures/modCommand";
 
-async function execute(bot, interaction, args, command, data) {
+async function execute(bot: any, interaction: any, args: string[], command: string, data: any) {
 	const action = data.options.getString("action");
 	const user = data.options.getMember("user");
 	const reason = data.options.getString("reason") || "No reason provided.";
@@ -34,23 +34,19 @@ async function execute(bot, interaction, args, command, data) {
 
 		user
 			.send(`${bot.config.emojis.warning} | You were warned in **${interaction.guild.name}**. **${reason}**`)
-			.catch(async err => await interaction.replyT(`${user}, you were warned in **${interaction.guild.name}**. I would've sent this to you in your DMs, but they were off. ${reason}.`));
+			.catch(async (err: any) => await interaction.replyT(`${user}, you were warned in **${interaction.guild.name}**. I would've sent this to you in your DMs, but they were off. ${reason}.`));
 
 		embed.setDescription(`**${bot.config.emojis.alert} | Warn Successful**\nSuccessfully warned ${user}. **${reason}**`).setColor("GREEN");
 
 		bot.emit("userWarnAdd", interaction.guild, user, reason);
 	} else if (action === "kick") {
-		user.send(`${bot.config.emojis.alert} | You have been kicked from ${interaction.guild.name}. **${reason}**.`).catch(() => {});
-		user.kick({
-			reason
-		}).catch(async err => await message.editT(`${bot.config.emojis.error} | Failed to kick user. Please check my permisions and try again.`));
+		user.send(`${bot.config.emojis.alert} | You have been kicked from ${interaction.guild.name}. **${reason}**.`).catch((): any => {});
+		user.kick({ reason }).catch(async (err: any) => await interaction.editT(`${bot.config.emojis.error} | Failed to kick user. Please check my permisions and try again.`));
 
 		embed.setDescription(`**${bot.config.emojis.alert} | Warn Successful**\nSuccessfully warned ${user}. **${reason}*.`);
 	} else if (action === "ban") {
-		user.send(`${bot.config.emojis.alert} | You have been banned from **${interaction.guild.name}**. **${reason}**`).catch(() => {});
-		user.ban({
-			reason
-		}).catch(async err => await interaction.editT(`${bot.config.emojis.error} | Failed to ban user. Please check my permissions and try again.`));
+		user.send(`${bot.config.emojis.alert} | You have been banned from **${interaction.guild.name}**. **${reason}**`).catch((): any => {});
+		user.ban({ reason }).catch(async (err: any) => await interaction.editT(`${bot.config.emojis.error} | Failed to ban user. Please check my permissions and try again.`));
 
 		embed.setDescription(`**${bot.config.emojis.alert} | Ban Successful**\nSuccessfully banned ${user}. **${reason}*`);
 	}

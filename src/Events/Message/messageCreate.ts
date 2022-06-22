@@ -1,13 +1,12 @@
 import Discord from "discord.js";
-const axios = require("axios");
+import axios from "axios";
 
 const cursewords = require("@src/cursewords.json");
 
-const cooldowns = [];
-const messages = [];
+const messages: any[] = [];
 
 // Timeout user
-function timeoutUser(offense, message, data) {
+function timeoutUser(offense: string, message: any, data: any) {
 	if (message.member.isCommunicationDisabled()) return;
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${message.client.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
@@ -24,20 +23,18 @@ function timeoutUser(offense, message, data) {
 			await message.channel.send({
 				embeds: [timeoutEmbed]
 			}).catch((): any => { });
-		}).catch(() => { });
+		}).catch((): any => { });
 }
 
 export default {
 	once: false,
-	async execute(bot, message) {
+	async execute(bot: any, message: any) {
 		// If the application owner isn't ready yet, wait for it.
-		if (!bot.application?.owner) await bot.application?.fetch().catch(() => { });
+		if (!bot.application?.owner) await bot.application?.fetch().catch((): any => { });
 
-		// If the channel is a partial, wait for the channel to fetch.
-		if (message.channel?.partial) await message.channel.fetch().catch(() => { });
-
-		// If the message is a partial, wait for the message to fetch.
-		if (message?.partial) await message.fetch().catch(() => { });
+		// If the message and/or channel are partials, fetch them.
+		if (message.channel?.partial) await message.channel.fetch().catch((): any => { });
+		if (message?.partial) await message.fetch().catch((): any => { });
 
 		// If the message's author is a bot, return. This prevents SparkV from responding to himself.
 		if (message?.author?.bot) return;
@@ -58,7 +55,7 @@ export default {
 		if (message.guild && !message.member) await message.guild.members.fetch(message?.author?.id);
 
 		// Data
-		const data = {};
+		const data: any = {};
 
 		// Get the Guild
 		if (message.guild) {
@@ -120,7 +117,7 @@ export default {
 			}
 
 			// Check mentions for AFK
-			message.mentions.users.forEach(async u => {
+			message.mentions.users.forEach(async (u: any) => {
 				const mentionedUserData = await bot.database.getUser(u.id);
 
 				if (mentionedUserData.afk) {
@@ -135,14 +132,11 @@ export default {
 			// Check for scam links.
 			if (data.guild?.antiScam.enabled === "true") {
 				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
-					let scamLinks = await bot.redis.get("bot_scamlinks").then(res => JSON.parse(res));
-
+					let scamLinks = await bot.redis.get("bot_scamlinks").then((res: any) => JSON.parse(res));
 					if (!scamLinks) {
-						scamLinks = await axios.get("https://phish.sinking.yachts/v2/all").then(res => res.data).catch(() => message.replyT("Failed to fetch scam links."));
+						scamLinks = await axios.get("https://phish.sinking.yachts/v2/all").then(res => res.data).catch((): any => message.replyT("Failed to fetch scam links."));
 
-						await bot.redis.set("bot_scamlinks", JSON.stringify(scamLinks), {
-							EX: 172800
-						});
+						await bot.redis.set("bot_scamlinks", JSON.stringify(scamLinks), { EX: 172800 });
 					}
 
 					const httpsRegex = /(https?:\/\/)?(www\.)?/g;
@@ -152,7 +146,7 @@ export default {
 					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
 						try {
 							message.delete().catch((): any => { });
-						} catch (err) {
+						} catch (err: any) {
 							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
 						}
 
@@ -237,8 +231,8 @@ export default {
 			// 		await data.member.save();
 
 			// 		try {
-			// 			message.delete().catch((): any => { });
-			// 		} catch (err) {
+			// 			message.delete().catch((): any: any => { });
+			// 		} catch (err: any) {
 			// 			message
 			// 				.replyT(bot.config.responses.InvalidPermisions.bot.toString().replaceAll(`{author}`, message.author));
 			// 		}
@@ -250,8 +244,6 @@ export default {
 			if (data.guild.antiSpam.enabled === "true") {
 				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
 					if (!message.channel.name.startsWith("spam") && !message.channel.name.endsWith("spam")) {
-						const member = message.member || (await message.guild.members.fetch(message.author));
-
 						messages.push({
 							messageID: message.id,
 							guildID: message.guild.id,
@@ -259,14 +251,19 @@ export default {
 							channelID: message.channel.id,
 							content: message.content,
 							sendTimestamp: message.createdTimestamp
+						} as {
+							messageID: string,
+							guildID: string,
+							authorID: string,
+							channelID: string,
+							content: string,
+							sendTimestamp: string
 						});
 
-						const foundMatches = messages.filter(msg => msg.authorID === message.author.id && msg.guildID === message.guild.id);
-
+						const foundMatches = messages.filter((msg: any) => msg.authorID === message.author.id && msg.guildID === message.guild.id);
 						if (!foundMatches) return;
 
-						const matches = foundMatches.filter(msg => msg.sendTimestamp > Date.now() - 6500);
-
+						const matches = foundMatches.filter((msg: any) => msg.sendTimestamp > Date.now() - 6500);
 						if (matches.length >= 5) {
 							++data.member.infractionsCount;
 							data.member.infractions.push({
@@ -278,15 +275,11 @@ export default {
 							data.member.markModified("infractions");
 							await data.member.save();
 
-							matches.forEach(message => {
+							matches.forEach((message: any) => {
 								const channel = bot.channels.cache.get(message.channelID);
-
 								if (channel) {
 									const msg = channel.messages.cache.get(message.messageID);
-
-									if (msg) {
-										msg.delete().catch((): any => { });
-									}
+									msg && msg.delete().catch((): any => { });
 								}
 							});
 
@@ -313,7 +306,7 @@ export default {
 
 			// Leveling!
 			if (data.guild.leveling.enabled === "true") {
-				const RandomXP = Math.floor(Math.random() * 15) + 5;
+				const RandomXP: any = Math.floor(Math.random() * 15) + 5;
 
 				data.member.xp += parseInt(RandomXP, 10);
 				data.member.level = Math.floor(0.1 * Math.sqrt(data.member.xp));
@@ -322,12 +315,12 @@ export default {
 				if ((Math.floor(0.1 * Math.sqrt(data.member.xp -= RandomXP)) < data.member.level)) {
 					const levelMsg = data.guild.leveling.message || "<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!";
 
-					if (data.guild.leveling?.channel && message.guild.channels.cache.find(c => c.id === data.guild.leveling?.channel)) {
-						const channel = message.guild.channels.cache.find(c => c.id === data.guild.leveling.channel);
+					if (data.guild.leveling?.channel && message.guild.channels.cache.find((c: any) => c.id === data.guild.leveling?.channel)) {
+						const channel = message.guild.channels.cache.find((c: any) => c.id === data.guild.leveling.channel);
 
 						try {
 							await channel.send(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
-						} catch (err) {
+						} catch (err: any) {
 							await message.replyT("Uh oh! I don't have access to the channel you've setup for leveling messages. If you need help fixing this, you can always contact support. Support Server: https://discord.gg/PPtzT8Mu3h");
 							await message.replyT(levelMsg.toString().replaceAll(`{author}`, message.author).replaceAll(`{level}`, bot.functions.formatNumber(data.member.level)));
 						}
@@ -355,8 +348,8 @@ export default {
 		if (!bot.config.owners.includes(message?.author?.id)) return;
 
 		try {
-			await commandfile.run(bot: any, message: any, args: string[], command: any, data: any);
-		} catch (err) {
+			await commandfile.run(bot, message, args, command, data);
+		} catch (err: any) {
 			bot.logger(err, "error");
 
 			await message.replyT({

@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Role } from "discord.js";
 import canvacord from "canvacord";
 
 import cmd from "../../../structures/command";
@@ -16,47 +16,29 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	let user: any = data.options.getUser("user") || message.user;
 
 	const pages: any[] = [];
-	const mainEmbed: any = new Discord.MessageEmbed()
-		.setAuthor({
-			name: `${user.tag} (${user.bot ? await message.translate("Robot") : await message.translate("Human")})`,
-			iconURL: user.displayAvatarURL({ dynamic: true })
-		})
-		.setFooter({
-			text: bot.config.embed.footer,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		});
+	pages.push({
+		title: `${user.username}#${user.discriminator}`,
 
-	user = user.user ? await user.user.fetch().catch(() => { }) : await user.fetch().catch(() => { });
+	})
+
+	user = user.user ? await user.user.fetch().catch((): any => { }) : await user.fetch().catch((): any => { });
 	const member = message.channel.guild.members.cache.get(user.id);
 
-	let num = 0;
 	let addedRoles = 0;
 	let roleCount = 0;
-	let plusRoles = false;
-	let roleColor;
-	let roles = member.roles.cache
-		.sort((a, b) => b.comparePositionTo(a))
-		.filter(r => r.id !== message.guild.id)
-		.map((r, id) => {
+	let roles = member.roles.cache.sort((a: Role, b: Role) => b.comparePositionTo(a)).filter((r: Role) => r.id !== message.guild.id).map((r: any, num: number) => {
 			roleCount++;
-			if (num === 0) roleColor = r.hexColor;
-			if (num < 4) {
-				num++;
-
-				return `<@&${r.id}>`;
-			} else {
-				plusRoles = true;
-				addedRoles++;
-			}
+			if (num < 4) return `<@&${r?.id}>`;
+			else addedRoles++;
 		}).join(" ");
 
-	if (plusRoles) roles += `+${addedRoles}`;
+	if (addedRoles > 0) roles += `+${addedRoles}`;
 	const infoEmbed = new Discord.MessageEmbed()
 		.setThumbnail((user.user ? user.user : user).displayAvatarURL({ dynamic: true }))
-		.addField(`${bot.config.emojis.player} ${await message.translate("User")} ${user.flags.toArray().length > 0 && user.flags.toArray().map(b => badges[b] ? badges[b] : b)}`, `\`\`\`${user?.tag}\`\`\``, true)
+		.addField(`${bot.config.emojis.player} ${await message.translate("User")} ${user.flags.toArray().length > 0 && user.flags.toArray().map((b: any) => badges[b as keyof typeof badges] ? badges[b as keyof typeof badges] : b)}`, `\`\`\`${user?.tag}\`\`\``, true)
 		.addField(`${statuses[member?.presence?.status || "offline"]} ${await message.translate("Presence")}`, `\`\`\`${member?.presence?.status === "dnd" ? "Do Not Disturb" : (member?.presence?.status ? (member?.presence?.status.charAt(0).toUpperCase() + member?.presence?.status.slice(1)) : "Offline")}\`\`\``, true)
 		.addField(`${bot.config.emojis.id} ${await message.translate("ID")}`, `\`\`\`${user?.id}\`\`\``, false)
-		.setColor(roleColor || bot.config.embed.color)
+		.setColor(member.roles.cache.first().hexColor || bot.config.embed.color)
 		.setTimestamp();
 
 	infoEmbed
@@ -70,48 +52,48 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		embeds: [infoEmbed]
 	});
 
-	if (icon === "yes") {
-		const avatar = user.displayAvatarURL({ dynamic: true, format: "png" });
+	// if (icon === "yes") {
+	// 	const avatar = user.displayAvatarURL({ dynamic: true, format: "png" });
 
-		embed
-			.setDescription(`[32px](${avatar}?size=32) | [64px](${avatar}?size=64) | [128px](${avatar}?size=128) | [256px](${avatar}?size=256) | [512px](${avatar}?size=512) | [1024px](${avatar}?size=1024)\n[png](${avatar.replace(".gif", ".png")}) | [jpg](${avatar.replace(".png", ".jpg").replace(".gif", ".jpg")}) | [gif](${avatar.replace(".png", ".gif")})`)
-			.setThumbnail(`${avatar}?size=512`)
-			.setColor(bot.config.embed.color);
+	// 	embed
+	// 		.setDescription(`[32px](${avatar}?size=32) | [64px](${avatar}?size=64) | [128px](${avatar}?size=128) | [256px](${avatar}?size=256) | [512px](${avatar}?size=512) | [1024px](${avatar}?size=1024)\n[png](${avatar.replace(".gif", ".png")}) | [jpg](${avatar.replace(".png", ".jpg").replace(".gif", ".jpg")}) | [gif](${avatar.replace(".png", ".gif")})`)
+	// 		.setThumbnail(`${avatar}?size=512`)
+	// 		.setColor(bot.config.embed.color);
 
-		return message.replyT({
-			embeds: [embed]
-		});
-	} else if (rank === "yes") {
-		if (data.guild.leveling.enabled === "false") return await message.replyT(`${bot.config.emojis.alert} | Leveling is disabled. Please ask a server admin, or server owner, to enable it on the \`/settings\` panel.`);
+	// 	return message.replyT({
+	// 		embeds: [embed]
+	// 	});
+	// } else if (rank === "yes") {
+	// 	if (data.guild.leveling.enabled === "false") return await message.replyT(`${bot.config.emojis.alert} | Leveling is disabled. Please ask a server admin, or server owner, to enable it on the \`/settings\` panel.`);
 
-		const Target = data.options.getMember("user") || message.member;
-		const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id).catch(() => { });
+	// 	const Target = data.options.getMember("user") || message.member;
+	// 	const TargetMember = await message.guild.members.fetch(Target.user ? Target.user.id : Target.id).catch((): any => { });
 
-		const userData = await bot.database.getMember(Target.user ? Target.user.id : Target.id, message.guild.id);
+	// 	const userData = await bot.database.getMember(Target.user ? Target.user.id : Target.id, message.guild.id);
 
-		const leaderboard = await bot.MemberSchema.find({
-			guildID: message.guild.id
-		}).sort([["xp", "descending"]]).exec();
+	// 	const leaderboard = await bot.MemberSchema.find({
+	// 		guildID: message.guild.id
+	// 	}).sort([["xp", "descending"]]).exec();
 
-		const Rank = new canvacord.Rank()
-			.setUsername(Target.user ? Target.user.username : Target.username)
-			.setDiscriminator(Target.user ? Target.user.discriminator : Target.discriminator)
-			.setAvatar(Target.displayAvatarURL({ dynamic: false, format: "png" }))
-			.setStatus(TargetMember?.presence?.status || "offline")
-			.setRank(leaderboard.findIndex(i => i.guildID === message.guild.id && i.id === (Target.user ? Target.user.id : Target.id)) + 1)
-			.setLevel(userData.level || 0)
-			.setCurrentXP(userData.xp || 0)
-			.setRequiredXP(((parseInt(userData.level) + 1) * (parseInt(userData.level) + 1) * 100) || 100)
-			.setProgressBar(`#0099ff`, `COLOR`);
+	// 	const Rank = new canvacord.Rank()
+	// 		.setUsername(Target.user ? Target.user.username : Target.username)
+	// 		.setDiscriminator(Target.user ? Target.user.discriminator : Target.discriminator)
+	// 		.setAvatar(Target.displayAvatarURL({ dynamic: false, format: "png" }))
+	// 		.setStatus(TargetMember?.presence?.status || "offline")
+	// 		.setRank(leaderboard.findInd(e: any)x(i => i.guildID === message.guild.id && i.id === (Target.user ? Target.user.id : Target.id)) + 1)
+	// 		.setLevel(userData.level || 0)
+	// 		.setCurrentXP(userData.xp || 0)
+	// 		.setRequiredXP(((parseInt(userData.level) + 1) * (parseInt(userData.level) + 1) * 100) || 100)
+	// 		.setProgressBar(`#0099ff`, `COLOR`);
 
-		Rank.build().then(async data => {
-			const Attachment = new Discord.MessageAttachment(data, `RankCard.png`);
+	// 	Rank.build().then(async data => {
+	// 		const Attachment = new Discord.MessageAttachment(data, `RankCard.png`);
 
-			return await message.replyT({
-				files: [Attachment]
-			});
-		});
-	}
+	// 		return await message.replyT({
+	// 			files: [Attachment]
+	// 		});
+	// 	});
+	// }
 
 	/*
 		Function handleAnimated(url) {

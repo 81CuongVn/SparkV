@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = new mongoose.Schema({
+export default mongoose.model("User", new mongoose.Schema({
 	id: { type: String, unique: true },
 	registrationDate: { type: Number, default: Date.now() },
 	cooldowns: {
@@ -21,6 +21,4 @@ const Schema = new mongoose.Schema({
 		reminded: { type: String, default: "false" }
 	},
 	inventory: { type: Object, default: {} }
-});
-
-export default mongoose.model("User", Schema);
+}));

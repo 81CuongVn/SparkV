@@ -2,34 +2,30 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 
-import Discord, { Client, Collection, Intents, ApplicationCommand } from "discord.js";
-import { DiscordTogether } from "discord-together";
+import { Client, Collection, ApplicationCommand } from "discord.js";
 import Statcord from "statcord.js";
 
+import functions from "../Utils/functions";
 import shopdata from "../shopdata.json";
-
-import GuildSchema from "../../database/schemas/guild";
-import MemberSchema from "../../database/schemas/member";
-import UserSchema from "../../database/schemas/user";
 
 export default class bot extends (Client as any) {
 	constructor(settings: any) {
 		super(settings);
 
 		// Config
-		this.config = require("@root/config.json");
+		this.config = require("../config.json");
 
 		// Utils
-		this.logger = require("@utils/logger");
-		this.functions = require("@utils/functions");
+		this.logger = require("../utils/logger");
+		this.functions = require("../utils/functions");
 		this.wait = util.promisify(setTimeout);
 
 		// Database
-		this.database = require("@database/handler");
+		this.database = require("../Database/handler");
 
-		this.GuildSchema = require("@database/schemas/guild");
-		this.MemberSchema = require("@database/schemas/member");
-		this.UserSchema  = require("@database/schemas/user");
+		this.GuildSchema = require("../Database/schemas/guild");
+		this.MemberSchema = require("../Database/schemas/member");
+		this.UserSchema  = require("../Database/schemas/user");
 
 		// Collections
 		this.categories = new Collection();
@@ -42,15 +38,15 @@ export default class bot extends (Client as any) {
 		this.slashCommands = [];
 
 		// Start functions
-		require("@utils/functions").init(this);
+		functions.init(this);
 
 		return this;
 	}
 
-	async LoadModules(settings) {
+	async LoadModules(settings: any) {
 		// Functions
 		this.database.init(this);
-		require("@utils/music")(this);
+		require("../Utils/music")(this);
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);
@@ -68,11 +64,17 @@ export default class bot extends (Client as any) {
 				postMemStatistics: true,
 				postNetworkStatistics: true,
 				autopost: true
+			} as {
+				client: any,
+				key: string,
+				postCpuStatistics: boolean,
+				postMemStatistics: boolean,
+				postNetworkStatistics: boolean,
+				autopost: boolean
 			});
 		}
 
 		// This.StatClient.registerCustomFieldHandler(1, async client => await this.distube.voices.collection.size.toString() ?? "0");
-		this.discordTogether = new DiscordTogether(this);
 
 		if (process.env.REDIS_URL) {
 			this.redis = require("redis").createClient({
@@ -85,22 +87,22 @@ export default class bot extends (Client as any) {
 		}
 	}
 
-	async LoadEvents(MainPath) {
+	async LoadEvents(MainPath: string) {
 		for (const category of fs.readdirSync(`${MainPath}/Events`)) {
 			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`)) {
 				const event = require(path.resolve(`${MainPath}/Events/${category}/${file}`));
-				const handleArgs = (...args) => event.execute(this, ...args);
+				const handleArgs = (...args: any) => event.execute(this, ...args);
 
 				event.once ? this.once(file.split(".")[0], handleArgs) : this.on(file.split(".")[0], handleArgs);
 			}
 		}
 	}
 
-	async LoadCommands(MainPath) {
-		await fs.readdirSync(`${MainPath}/Commands/Slash`).forEach(async cat => {
+	async LoadCommands(MainPath: string) {
+		fs.readdirSync(`${MainPath}/Commands/Slash`).forEach(cat => {
 			const category = require(path.join(`${MainPath}/Commands/Slash/${cat}`));
 			this.categories.set(category.name, category);
-			await fs.readdirSync(`${MainPath}/Commands/Slash/${cat}`).forEach(async file => {
+			fs.readdirSync(`${MainPath}/Commands/Slash/${cat}`).forEach(async file => {
 				if (!file.endsWith(".ts")) return;
 
 				const commandname = file.split(".")[0];
@@ -128,7 +130,7 @@ export default class bot extends (Client as any) {
 			});
 		});
 
-		await fs.readdirSync(`${MainPath}/Commands/Text`).forEach(async file => {
+		fs.readdirSync(`${MainPath}/Commands/Text`).forEach(file => {
 			if (!file.endsWith(".ts")) return;
 
 			const commandname = file.split(".")[0];
@@ -175,34 +177,28 @@ export default class bot extends (Client as any) {
 		await this.LoadSlashCommands(this.slashCommands);
 	}
 
-	async LoadSlashCommands(slashCommands) {
+	async LoadSlashCommands(slashCommands: string[]) {
 		const ready = this.readyAt ? Promise.resolve() : new Promise(r => this.once("ready", r));
 		await ready;
 
 		// Dev: process.argv.includes("--dev") === true && { guildId: "763803059876397056" }
-		const currentCmds = await this.application.commands.fetch().catch(() => {});
+		const currentCmds = await this.application.commands.fetch().catch((): any => {});
 
-		const newCmds = slashCommands.filter(cmd => !currentCmds.some(c => c.name === cmd.name));
+		const newCmds = slashCommands.filter((cmd: any) => !currentCmds.some((c: any) => c.name === cmd.name));
 		for (const newCmd of newCmds) await this.application.commands.create(newCmd, process.argv.includes("--dev") === true && "763803059876397056");
 
-		const removedCmds = currentCmds.filter(cmd => !slashCommands.some(c => c.name === cmd.name)).toJSON();
+		const removedCmds = currentCmds.filter((cmd: any) => !slashCommands.some((c: any) => c.name === cmd.name)).toJSON();
 		for (const removedCmd of removedCmds) await removedCmd.delete();
 
-		const updatedCmds = slashCommands.filter(cmd => slashCommands.some(c => c.name === cmd.name));
-		let updatedCount = 0;
+		const updatedCmds = slashCommands.filter((cmd: any) => slashCommands.some((c: any) => c.name === cmd.name));
 		for (const updatedCmd of updatedCmds) {
-			const newCmd = updatedCmd;
-
-			const previousCmd = currentCmds.find(c => c.name === updatedCmd.name);
+			const newCmd: any = updatedCmd;
+			const previousCmd = currentCmds.find((c: any) => c.name === newCmd.name);
 			let modified = false;
 
 			if (previousCmd && previousCmd.description !== newCmd.description) modified = true;
 			if (!ApplicationCommand.optionsEqual(previousCmd?.options || [], newCmd?.options || [])) modified = true;
-
-			if (previousCmd && modified) {
-				await previousCmd.edit(updatedCmd);
-				updatedCount++;
-			}
+			if (previousCmd && modified) await previousCmd.edit(updatedCmd);
 		}
 
 		require("@utils/updateDocs").update(this, process.env.MainDir);

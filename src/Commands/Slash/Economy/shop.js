@@ -50,8 +50,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	});
 
 	const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
-	collector.on("collect", async interaction => {
-		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
+	collector.on("collect", async (interaction: any) => {
+		if (!interaction.deferred) interaction.deferUpdate().catch((): any: any => { });
 		if (interaction.customId === "quickLeft") PageNumber = 0;
 		else if (interaction.customId === "left") PageNumber > 0 ? --PageNumber : PageNumber = (pages.length - 1);
 		else if (interaction.customId === "right") PageNumber + 1 < pages.length ? ++PageNumber : PageNumber = 0;
@@ -65,7 +65,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 					})
 				]
 			});
-		} catch (err) {}
+		} catch (err: any) {}
 	});
 
 	collector.on("end", async () => {
@@ -73,7 +73,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			await msg?.edit({
 				components: []
 			});
-		} catch (err) {}
+		} catch (err: any) {}
 	});
 }
 

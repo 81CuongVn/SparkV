@@ -1,8 +1,67 @@
-const mongoose = require("mongoose");
+import { model, Document, Schema } from "mongoose";
 
-const config = require("../../config.json");
+export interface IGuildModel extends Document {
+	id: string,
+	registrationDate: Number
 
-const Schema = new mongoose.Schema({
+	// Data //
+	language: string,
+	casesCount: Number,
+	welcome: {
+		enabled: string,
+		message: string,
+		roles: Array<[]>,
+		channel: string,
+	},
+	goodbye: {
+		enabled: string,
+		message: string,
+		channel: string
+	},
+	antiScam: {
+		enabled: string,
+		action: string,
+		custom: Array<[]>,
+		bypass: Array<[]>
+	},
+	antiSpam: {
+		enabled: string,
+		action: string,
+		// Bypass: {
+		// 	roles: Array, default: [] },
+		// 	channels: Array, default: [] }
+		// }
+	},
+	automod: {
+		removeLinks: string,
+		removeProfanity: string,
+		removeDuplicateText: string
+	},
+	leveling: {
+		enabled: string,
+		message: string,
+		channel: string
+	},
+	starboard: {
+		enabled: string,
+		channel: string,
+		emoji: string,
+		min: Number
+	},
+	logging: {
+		enabled: string,
+		channel: string,
+		level: string
+	},
+	chatbot: string,
+	tickets: {
+		category: string,
+		roles: Array<[]>
+	},
+	tags: Array<[]>
+}
+
+export default model<IGuildModel>("Guild", new Schema({
 	id: { type: String, required: true, unique: true },
 	registrationDate: { type: Number, default: Date.now() },
 
@@ -60,7 +119,5 @@ const Schema = new mongoose.Schema({
 		category: { type: String, default: "null" },
 		roles: { type: Array, default: [] }
 	},
-	tags: { type: Array, default: [] }
-});
-
-export default new mongoose.model("Guild", Schema);
+	tags: [{ type: Array, default: [] }]
+}));

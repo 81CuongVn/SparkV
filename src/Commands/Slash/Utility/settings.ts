@@ -1,8 +1,8 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, Permissions } = require("discord.js");
+import Discord, { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed, ButtonInteraction, MessageButtonOptions } from "discord.js";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
-const numFilter = async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | number; replyT: (arg0: string) => any; }) => {
+const numFilter = async (m: any, bot: any) => {
 	if (m.author.id === m.client.user.id) return false;
 
 	if (m.content) {
@@ -18,31 +18,37 @@ const numFilter = async (m: { author: { id: any; }; client: { user: { id: any; }
 	}
 };
 
-async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; replyT: (arg0: string) => any; channel: { awaitMessages: (arg0: { filter: any; max: number; time: number; errors: string[]; }) => Promise<any>; }; reply: (arg0: { embeds: any[]; }) => any; }, options: { title: any; id?: any; description: any; dropdownItems?: any; color: any; time?: any; handleData: any; filter?: any; }) {
-	const requestMsg = new MessageEmbed()
-		.setAuthor({
+async function setNewData(message?: any, options?: any, bot?: any) {
+	const requestMsg = {
+		author: {
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
-		})
-		.setTitle(options.title)
-		.setDescription(options.description)
-		.setFooter({
+			icon_url: message.user.displayAvatarURL({ dynamic: true })
+		},
+		title: options.title,
+		description: options.description,
+		footer: {
 			text: bot.config.embed.footer,
 			icon_url: bot.user.displayAvatarURL({ dynamic: true })
-		})
-		.setColor(options.color);
+		}
+	};
 
 	const components = [];
-	if (options.dropdownItems) {
-		components.push(
-			new MessageActionRow().addComponents(
-				new MessageSelectMenu()
-					.setCustomId(`SelectMenu_${options.id}`)
-					.setPlaceholder("Select an option.")
-					.addOptions(options.dropdownItems)
-			)
-		);
-	}
+	if (options.dropdownItems) components.push({
+		type: 1,
+		components: [{
+			type: 3,
+			customId: `SelectMenu_${options.id}`,
+			placeholder: "Select an option.",
+			options: options.dropdownItems,
+			disabled: false
+		} as {
+			type: number,
+			customId: string,
+			placeholder: string,
+			options: any[],
+			disabled: boolean
+		}]
+	});
 
 	const channelMsg = await message.replyT({
 		embeds: [requestMsg],
@@ -51,7 +57,7 @@ async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: 
 
 	if (options.dropdownItems) {
 		const collector = await channelMsg.createMessageComponentCollector({ max: 1, time: (options.time * 1000) });
-		collector.on("collect", async (interaction: { customId: string; values: any[]; user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; }) => {
+		collector.on("collect", async (interaction: any) => {
 			if (interaction.customId.split("_")[1] === options.id) {
 				try {
 					await options.handleData(interaction.values[0], requestMsg);
@@ -65,18 +71,20 @@ async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: 
 							channelMsg.delete();
 						}, 5 * 1000);
 					} catch (err) { }
-				} catch (err) {
+				} catch (err: any) {
 					const ErrorEmbed = new MessageEmbed()
 						.setAuthor({
 							name: interaction.user.tag,
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						})
-						.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+						.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err?.message}`)
 						.setColor("RED");
 
 					try {
-						return await message.replyT({ embeds: [ErrorEmbed] });
-					} catch (err) { }
+						return await message.replyT({
+							embeds: [ErrorEmbed]
+						});
+					} catch (err: any) { }
 				}
 			}
 		});
@@ -86,10 +94,10 @@ async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: 
 				await channelMsg?.edit({
 					components: []
 				});
-			} catch (err) { }
+			} catch (err: any) { }
 		});
 	} else {
-		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async (collected: { first: () => { (): any; new(): any; delete: { (): void; new(): any; }; }; }) => {
+		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async (collected: any) => {
 			try {
 				await options.handleData(collected.first(), requestMsg);
 				await channelMsg.edit({
@@ -102,40 +110,38 @@ async function setNewData(message: { user: { tag: any; displayAvatarURL: (arg0: 
 						collected.first().delete();
 					}, 5 * 1000);
 				} catch (err) { }
-			} catch (err) {
+			} catch (err: any) {
 				return await message.reply({
 					embeds: [
 						new MessageEmbed()
 							.setAuthor({
-								name: interaction.user.tag,
-								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+								name: message.author.tag,
+								iconURL: message.message.displayAvatarURL({ dynamic: true })
 							})
-							.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+							.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err?.message}`)
 							.setColor("RED")
 					]
 				});
 			}
-		}).catch(async (collected: any) => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
+		}).catch(async () => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
 	}
 }
 
-async function execute(bot: any, message: any, args: string[], command: any, data: any) {
+async function execute(bot: any, message?: any, args?: string[], command?: any, data?: any) {
 	const botMessage = await message.replyT({
-		embeds: [
-			new MessageEmbed()
-				.setAuthor({
-					name: message.user.tag,
-					iconURL: message.user.displayAvatarURL({ dynamic: true })
-				})
-				.setTitle(await message.translate(`${bot.config.emojis.config} | Loading settings...`))
-				.setDescription(await message.translate(`Please wait while I load the settings...`))
-				.setFooter({
-					text: bot.config.embed.footer,
-					icon_url: bot.user.displayAvatarURL({ dynamic: true })
-				})
-				.setColor(bot.config.embed.color)
-				.setTimestamp()
-		],
+		embeds: [{
+			author: {
+				name: message.author.tag,
+				icon_url: message.author.displayAvatarURL({ dynamic: true })
+			},
+			title: await message.translate(`${bot.config.emojis.config} | Loading settings...`),
+			description: await message.translate(`Please wait while I load the settings...`),
+			footer: {
+				text: bot.config.embed.footer,
+				icon_url: bot.user.displayAvatarURL({ dynamic: true })
+			},
+			color: bot.config.embed.color
+		}],
 		ephemeral: true
 	});
 
@@ -216,7 +222,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							],
 							color: "BLUE",
 							time: 15,
-							handleData: async (collected: any, requestMsg: { setTitle: (arg0: any) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
+							handleData: async (collected: any, requestMsg?: any) => {
 								requestMsg
 									.setTitle(await message.translate(`${bot.config.emojis.config} | New Language Changed`))
 									.setDescription(`${await message.translate("Successfully changed language from")} "**${data.guild.language}**" ${await message.translate("to")} **${collected}**.`);
@@ -273,8 +279,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
 									color: "BLUE",
 									time: 60,
-									handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
-										if (!m?.mentions?.channels?.first()) {
+									handleData: async (collected: any, requestMsg?: any) => {
+										if (!message?.mentions?.channels?.first()) {
 											return requestMsg
 												.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
 												.setDescription(`Setup failed because the input provided was not a channel.`)
@@ -295,7 +301,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						}
 					],
 					getState: () => data.guild.logging?.enabled,
-					setState: async (type: string) => {
+					setState: async (type: any) => {
 						if (type === "enable") data.guild.logging.enabled = "true";
 						else if (type === "disable") data.guild.logging.enabled = "false";
 
@@ -337,7 +343,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send text that will be said when a user levels up. You have 60 seconds to send some text. Default: `<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!`\n**Placeholders**\n{author} - The user who leveled up.\n{level} - The user's new level.",
 							color: "BLUE",
 							time: 60,
-							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => any; }) => {
+							filter: async (m: any) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (m.content) {
@@ -352,7 +358,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									return false;
 								}
 							},
-							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
+							handleData: async (collected: any, requestMsg?: any) => {
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Leveling Message Setup`)
 									.setDescription(`Successfully setup leveling message to ${collected.content}.`);
@@ -378,8 +384,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send a channel to revieve level up notifications in. You have 60 seconds to send a channel.",
 							color: "BLUE",
 							time: 60,
-							handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
-								if (!m?.mentions?.channels?.first()) {
+							handleData: async (collected: any, requestMsg?: any) => {
+								if (!message?.mentions?.channels?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Leveling Channel Setup`)
 										.setDescription(`Setup failed because the imput provided was not a channel.`)
@@ -400,7 +406,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}
 			],
 			getState: () => data.guild.leveling?.enabled,
-			setState: async (type: string) => {
+			setState: async (type: any) => {
 				if (type === "enable") data.guild.leveling.enabled = "true";
 				else if (type === "disable") data.guild.leveling.enabled = "false";
 
@@ -429,7 +435,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: await message.translate("Please send a category ID to setup the starboard in. **You can automaticly skip this step if you run the `/panel tickets` command. **You have 60 seconds to send a category ID."),
 							color: "BLUE",
 							time: 60,
-							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => void; guild: { channels: { cache: { has: (arg0: any) => any; }; }; }; }) => {
+							filter: async (m: any) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (!m?.content) {
@@ -449,7 +455,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 								return true;
 							},
-							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: any) => { (): any; new(): any; setDescription: { (arg0: any): void; new(): any; }; }; }) => {
+							handleData: async (collected: any, requestMsg?: any) => {
 								requestMsg
 									.setTitle(await message.translate(`${bot.config.emojis.config} | Tickets Channel Setup`))
 									.setDescription(await message.translate(`Successfully setup tickets channel to ${collected.content}.`));
@@ -480,8 +486,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: await message.translate("Please mention support role(s). Support roles are roles that will grant users access to see tickets. You have 60 seconds to send a channel."),
 							color: "BLUE",
 							time: 60,
-							handleData: async (collected: { mentions: { roles: any[]; }; content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
-								if (!m?.mentions?.roles?.first()) {
+							handleData: async (collected: any, requestMsg?: any) => {
+								if (!message?.mentions?.roles?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Support Roles Setup`)
 										.setDescription(`Setup failed because the input provided was not a role.`)
@@ -489,7 +495,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 								}
 
 								const roles: any[] = [];
-								collected.mentions.roles.forEach((r: { id: any; }) => roles.push(r.id));
+								collected.mentions.roles.forEach((r: any) => roles.push(r.id));
 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | Support Roles Setup`)
@@ -563,7 +569,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 											value: "ban"
 										}
 									],
-									handleData: async (collected: any, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): void; new(): any; }; }; new(): any; }; }; }) => {
+									handleData: async (collected: any, requestMsg?: any) => {
 										requestMsg
 											.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 											.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
@@ -625,7 +631,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						// }
 					],
 					getState: () => data.guild.antiScam?.enabled,
-					setState: async (type: string) => {
+					setState: async (type: any) => {
 						if (type === "enable") data.guild.antiScam.enabled = "true";
 						else if (type === "disable") data.guild.antiScam.enabled = "false";
 
@@ -683,7 +689,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 											value: "ban"
 										}
 									],
-									handleData: async (collected: any, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): void; new(): any; }; }; new(): any; }; }; }) => {
+									handleData: async (collected: any, requestMsg?: any) => {
 										requestMsg
 											.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
 											.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
@@ -699,7 +705,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						}
 					],
 					getState: () => data.guild.antiSpam?.enabled,
-					setState: async (type: string) => {
+					setState: async (type: any) => {
 						if (type === "enable") data.guild.antiSpam.enabled = "true";
 						else if (type === "disable") data.guild.antiSpam.enabled = "false";
 
@@ -742,8 +748,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send a channel to setup the starboard in. You have 60 seconds to send a channel.",
 							color: "GOLD",
 							time: 60,
-							handleData: async (collected: { content: string | any[]; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): { (): any; new(): any; setColor: { (arg0: string): any; new(): any; }; }; new(): any; }; }; }) => {
-								if (!m?.mentions?.channels?.first()) {
+							handleData: async (collected: any, requestMsg?: any) => {
+								if (!message?.mentions?.channels?.first()) {
 									return requestMsg
 										.setTitle(`${bot.config.emojis.config} | Starboard Channel Setup`)
 										.setDescription(`Setup failed because the input provided was not a channel.`)
@@ -776,7 +782,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							description: "Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.",
 							color: "GOLD",
 							time: 30,
-							filter: async (m: { author: { id: any; }; client: { user: { id: any; }; }; content: string | any[]; replyT: (arg0: string) => any; }) => {
+							filter: async (m: any) => {
 								if (m.author.id === m.client.user.id) return false;
 
 								if (m.content) {
@@ -791,7 +797,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 									return false;
 								}
 							},
-							handleData: async (collected: { content: any; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
+							handleData: async (collected: any, requestMsg?: any) => {
 								const newEmoji = collected.content;
 
 								requestMsg
@@ -821,7 +827,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 							color: "GOLD",
 							time: 15,
 							filter: numFilter,
-							handleData: async (collected: { content: string; }, requestMsg: { setTitle: (arg0: string) => { (): any; new(): any; setDescription: { (arg0: string): void; new(): any; }; }; }) => {
+							handleData: async (collected: any, requestMsg?: any) => {
 								const min = collected.content.trim();
 
 								requestMsg
@@ -838,7 +844,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}
 			],
 			getState: () => data.guild.starboard?.enabled,
-			setState: async (type: string) => {
+			setState: async (type: any) => {
 				if (type === "enable") data.guild.starboard.enabled = "true";
 				else if (type === "disable") data.guild.starboard.enabled = "false";
 
@@ -849,17 +855,17 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		}
 	];
 
-	async function refreshSetting(curSetting: never) {
-		buttons = [];
-		pages = [];
+	async function refreshSetting(curSetting: any) {
+		let buttons: any[] = [];
+		let pages: any[] = []; // you cannot just have like that since its special function idiot
 		await createPages();
 
-		function handleButton(button: { name: string; data: { setDisabled: (arg0: boolean) => { (): any; new(): any; setStyle: { (arg0: string): any; new(): any; }; }; }; getData: () => string; }) {
+		function handleButton(button: any) {
 			if (button.name.toLowerCase() === "toggle") return buttonsIncluded.push(button?.data?.setDisabled(false).setStyle(button.getData() === "true" ? "SUCCESS" : "DANGER"));
 			if (curSetting?.stateDisabled === true) return buttonsIncluded.push(button?.data?.setDisabled(false));
 			if (curSetting?.getState() === "true") buttonsIncluded.push(button?.data?.setDisabled(false));
 			else if (curSetting?.getState() === "false") buttonsIncluded.push(button?.data?.setDisabled(true));
-		}
+		};
 
 		const buttonsIncluded: any[] = [];
 		curSetting?.category === true ? curSetting.categories.forEach((button: any) => handleButton(button)) : curSetting?.buttons?.forEach((button: any) => handleButton(button));
@@ -881,15 +887,15 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			components: buttons,
 			ephemeral: true
 		});
-	}
+	};
 
 	const Menu = new MessageEmbed()
 		.setAuthor({
 			name: "SparkV Settings Menu",
 			iconURL: bot.user.displayAvatarURL({ dynamic: true })
 		})
-		.setDescription(`**Personalize ${message.guild.name}**\nSelect a setting using the buttons below.\n${settings.map(setting => {
-			const state = setting?.stateDisabled === true ? bot.config.emojis.slash : (setting.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
+		.setDescription(`**Personalize ${message.guild.name}**\nSelect a setting using the buttons below.\n${settings.map((setting: any) => {
+			const state = setting?.stateDisabled === true ? bot.config.emojis.slash : (setting?.getState() === "true" ? bot.config.emojis.success : bot.config.emojis.error);
 
 			return `${state ? `${state} ` : ""}${setting.name}`;
 		}).join("\n")}`)
@@ -923,30 +929,30 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setLabel("Support")
 		.setStyle("LINK");
 
-	let pages: any[] = [];
-	let curSetting: { buttons: any[]; getState: () => string; setState: (arg0: string) => any; };
+	let pages: any[] = []; // again, not same function, so you can redeclare idiot
+	let curSetting: any;
 
 	async function createPages() {
-		settings.forEach(setting => {
+		settings.forEach((setting: any) => {
 			const embed = new MessageEmbed()
 				.setAuthor({
 					name: `${setting.emojiID ? "" : setting.emoji}SparkV ${setting.name}`,
 					iconURL: `https://cdn.discordapp.com/emojis/${setting.emojiID}.webp?size=56&quality=lossless`
 				})
-				.setDescription(`${setting.description}\n\n${(setting?.category === true ? setting.categories.map(cat => `${cat.name}`) : setting.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`)).join("\n")}`)
+				.setDescription(`${setting.description}\n\n${(setting?.category === true ? setting.categories.map((cat: any) => `${cat.name}`) : setting?.buttons?.map((button: any) => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`)).join("\n")}`)
 				.setColor(bot.config.embed.color)
 				.setTimestamp();
 
 			pages.push(embed);
 
 			if (setting.category === true) {
-				setting.categories.forEach(category => {
+				setting.categories.forEach((category: any) => {
 					const catEmbed = new MessageEmbed()
 						.setAuthor({
 							name: `${category.emojiID ? "" : category.emoji}SparkV ${category.name}`,
 							iconURL: `https://cdn.discordapp.com/emojis/${category.emojiID}.webp?size=56&quality=lossless`
 						})
-						.setDescription(`${category.description}\n\n${category.buttons.map(button => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`).join("\n")}`)
+						.setDescription(`${category.description}\n\n${category.buttons.map((button: any) => `${button.getData() === "true" ? bot.config.emojis.success : (button.getData() === "false" ? bot.config.emojis.error : bot.config.emojis.slash)} ${button.name}: **${button.getData()}**`).join("\n")}`)
 						.setColor(bot.config.embed.color)
 						.setTimestamp();
 
@@ -956,8 +962,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		});
 	}
 
-	let buttons: { components: any[]; }[] = [];
-	let rows = 0;
+	let buttons: any[] = [];
+	let rows: number = 0;
 	async function setupSettings() {
 		settings.forEach(async setting => {
 			const SettingButton = new MessageButton()
@@ -1033,7 +1039,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 
 			const collector = botMessage.createMessageComponentCollector({
-				filter: async (interaction: { user: { id: any; }; reply: (arg0: { content: string; ephemeral: boolean; }) => any; }) => {
+				filter: async (interaction: ButtonInteraction) => {
 					if (interaction.user.id !== message.user.id) {
 						await interaction.reply({
 							content: `Only ${message.user} can edit these settings!`,
@@ -1045,8 +1051,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				}, time: 300 * 1000, max: 1
 			});
 
-			collector.on("collect", async (interaction: { deferred: any; deferUpdate: () => Promise<any>; customId: string; }) => {
-				if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
+			collector.on("collect", async (interaction: any) => {
+				if (!interaction.deferred) interaction.deferUpdate().catch(() => { });
 				if (interaction.customId === "no") {
 					await botMessage.edit({
 						embeds: [
@@ -1101,7 +1107,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	}
 
 	const collector = botMessage.createMessageComponentCollector({
-		filter: async (interaction: { user: { id: any; }; reply: (arg0: { content: string; ephemeral: boolean; }) => any; }) => {
+		filter: async (interaction: any) => {
 			if (interaction.user.id !== message.user.id) {
 				await interaction.reply({
 					content: `Only ${message.user} can edit these settings!`,
@@ -1121,14 +1127,14 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		.setDescription(`${bot.config.emojis.alert} | Saved changes and exited the settings menu.`)
 		.setColor(bot.config.embed.color);
 
-	collector.on("collect", async (interaction: { deferred: any; deferUpdate: () => Promise<any>; customId: string; user: { tag: any; displayAvatarURL: (arg0: { dynamic: boolean; }) => any; }; }) => {
-		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
+	collector.on("collect", async (interaction: any) => {
+		if (!interaction.deferred) interaction.deferUpdate().catch(() => { });
 
 		try {
 			buttons = [];
 
 			switch (interaction.customId) {
-				case "back":
+				case "back": {
 					setupSettings();
 
 					buttons.push({
@@ -1144,22 +1150,27 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						components: buttons ?? [],
 						ephemeral: true
 					});
-				case "exit": return await collector.stop();
-				case interaction?.customId === "toggle" && curSetting && curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button?.data?.customId?.toLowerCase() === "toggle"):
-					if ((curSetting.getState() === "true" ? "false" : "true") === "true") {
-						await curSetting.setState("enable");
-						curSetting?.buttons?.forEach(async (button: { required: boolean; setData: () => any; }) => button?.required === true ? await button.setData() : null);
-					} else {
-						await curSetting.setState("disable");
+				} case "exit": return await collector.stop();
+				case "toggle": {
+					if (curSetting && curSetting?.buttons?.find((button: any) => button?.data?.customId?.toLowerCase() === "toggle")) {
+						console.log("toggled", interaction.customId);
+						if ((curSetting.getState() === "true" ? "false" : "true") === "true") {
+							await curSetting.setState("enable");
+							curSetting?.buttons?.forEach(async (button: any) => button?.required === true ? await button.setData() : null);
+						} else {
+							await curSetting.setState("disable");
+						}
+
+						refreshSetting(curSetting);
 					}
 
-					refreshSetting(curSetting);
 					break;
-				case curSetting && curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase()):
-					await curSetting?.buttons?.find((button: { data: { customId: string; }; }) => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
-					refreshSetting(curSetting);
-					break;
-				default:
+				} default: {
+					if (curSetting?.buttons?.find((button: any) => button?.data?.customId?.toLowerCase() === interaction?.customId?.toLowerCase())) {
+						await curSetting?.buttons?.find((button: any) => button.data.customId.toLowerCase() === interaction.customId.toLowerCase()).setData();
+						return refreshSetting(curSetting);
+					}
+
 					let foundSetting;
 					settings.forEach(setting => {
 						if (setting?.category === true) {
@@ -1169,13 +1180,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 						if ((setting.id.toLowerCase() === interaction.customId.toLowerCase()) === true) foundSetting = setting;
 					});
-					console.log(foundSetting);
 
 					curSetting = foundSetting;
 					curSetting && refreshSetting(curSetting);
-					break;
+				}
 			}
-		} catch (error) {
+		} catch (error: any) {
 			bot.logger(error, "error");
 
 			const ErrorEmbed = new MessageEmbed()
@@ -1183,7 +1193,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 					name: interaction.user.tag,
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 				})
-				.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
+				.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error?.message}`)
 				.setColor("RED");
 
 			try {
@@ -1205,7 +1215,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	});
 }
 
-export default new cmd(execute, {
+module.exports = new cmd(execute, {
 	description: "Personalize SparkV to suit your server!",
 	dirname: __dirname,
 	usage: "",
