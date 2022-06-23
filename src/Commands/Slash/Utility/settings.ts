@@ -18,121 +18,120 @@ const numFilter = async (m: any, bot: any) => {
 	}
 };
 
-async function setNewData(message?: any, options?: any, bot?: any) {
-	const requestMsg = {
-		author: {
-			name: message.user.tag,
-			icon_url: message.user.displayAvatarURL({ dynamic: true })
-		},
-		title: options.title,
-		description: options.description,
-		footer: {
-			text: bot.config.embed.footer,
-			icon_url: bot.user.displayAvatarURL({ dynamic: true })
-		}
-	};
+async function execute(bot: any, message?: any, args?: string[], command?: any, data?: any) {
+	async function setNewData(message?: any, options?: any) {
+		const requestMsg = new MessageEmbed()
+			.setAuthor({
+				name: message.user.tag,
+				iconURL: message.user.displayAvatarURL({ dynamic: true })
+			})
+			.setTitle(options.title)
+			.setDescription(options.description)
+			.setColor(options?.color || bot.config.embed.color)
+			.setFooter({
+				text: bot.config.embed.footer,
+				iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			})
 
-	const components = [];
-	if (options.dropdownItems) components.push({
-		type: 1,
-		components: [{
-			type: 3,
-			customId: `SelectMenu_${options.id}`,
-			placeholder: "Select an option.",
-			options: options.dropdownItems,
-			disabled: false
-		} as {
-			type: number,
-			customId: string,
-			placeholder: string,
-			options: any[],
-			disabled: boolean
-		}]
-	});
+		const components = [];
+		if (options.dropdownItems) components.push({
+			type: 1,
+			components: [{
+				type: 3,
+				customId: `SelectMenu_${options.id}`,
+				placeholder: "Select an option.",
+				options: options.dropdownItems,
+				disabled: false
+			} as {
+				type: number,
+				customId: string,
+				placeholder: string,
+				options: any[],
+				disabled: boolean
+			}]
+		});
 
-	const channelMsg = await message.replyT({
-		embeds: [requestMsg],
-		components: components
-	});
+		const channelMsg = await message.replyT({
+			embeds: [requestMsg],
+			components: components
+		});
 
-	if (options.dropdownItems) {
-		const collector = await channelMsg.createMessageComponentCollector({ max: 1, time: (options.time * 1000) });
-		collector.on("collect", async (interaction: any) => {
-			if (interaction.customId.split("_")[1] === options.id) {
+		if (options.dropdownItems) {
+			const collector = await channelMsg.createMessageComponentCollector({ max: 1, time: (options.time * 1000) });
+			collector.on("collect", async (interaction: any) => {
+				if (interaction.customId.split("_")[1] === options.id) {
+					try {
+						await options.handleData(interaction.values[0], requestMsg);
+						await channelMsg.edit({
+							embeds: [requestMsg],
+							components: []
+						});
+
+						try { setTimeout(() => channelMsg.delete(), 5 * 1000); } catch (err) { }
+					} catch (err: any) {
+						bot.logger(err, "error", { data: err, interaction });
+						const ErrorEmbed = new MessageEmbed()
+							.setAuthor({
+								name: interaction.user.tag,
+								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+							})
+							.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).\n\n${err?.message ?? err}`)
+							.setColor("RED");
+
+						try {
+							return await message.replyT({
+								embeds: [ErrorEmbed]
+							});
+						} catch (err: any) { }
+					}
+				}
+			});
+
+			collector.on("end", async () => {
 				try {
-					await options.handleData(interaction.values[0], requestMsg);
-					await channelMsg.edit({
-						embeds: [requestMsg],
+					await channelMsg?.edit({
 						components: []
+					});
+				} catch (err: any) { }
+			});
+		} else {
+			await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async (collected: any) => {
+				try {
+					await options.handleData(collected.first(), requestMsg);
+					await channelMsg.edit({
+						embeds: [requestMsg]
 					});
 
 					try {
 						setTimeout(() => {
 							channelMsg.delete();
+							collected.first().delete();
 						}, 5 * 1000);
 					} catch (err) { }
 				} catch (err: any) {
-					const ErrorEmbed = new MessageEmbed()
-						.setAuthor({
-							name: interaction.user.tag,
-							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-						})
-						.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err?.message}`)
-						.setColor("RED");
+					bot.logger(err, "error", { data: err });
 
-					try {
-						return await message.replyT({
-							embeds: [ErrorEmbed]
-						});
-					} catch (err: any) { }
+					return await message.reply({
+						embeds: [
+							new MessageEmbed()
+								.setAuthor({
+									name: message.user.tag,
+									iconURL: message.user.displayAvatarURL({ dynamic: true })
+								})
+								.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).\n\n${err?.message ?? err}`)
+								.setColor("RED")
+						]
+					});
 				}
-			}
-		});
-
-		collector.on("end", async () => {
-			try {
-				await channelMsg?.edit({
-					components: []
-				});
-			} catch (err: any) { }
-		});
-	} else {
-		await message.channel.awaitMessages({ filter: options.filter, max: 1, time: (options.time * 1000), errors: ["time"] }).then(async (collected: any) => {
-			try {
-				await options.handleData(collected.first(), requestMsg);
-				await channelMsg.edit({
-					embeds: [requestMsg]
-				});
-
-				try {
-					setTimeout(() => {
-						channelMsg.delete();
-						collected.first().delete();
-					}, 5 * 1000);
-				} catch (err) { }
-			} catch (err: any) {
-				return await message.reply({
-					embeds: [
-						new MessageEmbed()
-							.setAuthor({
-								name: message.author.tag,
-								iconURL: message.message.displayAvatarURL({ dynamic: true })
-							})
-							.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err?.message}`)
-							.setColor("RED")
-					]
-				});
-			}
-		}).catch(async () => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
+			}).catch(async () => await message.replyT(`${bot.config.emojis.alert} | Canceled due to no valid response within ${options.time} seconds.`));
+		}
 	}
-}
 
-async function execute(bot: any, message?: any, args?: string[], command?: any, data?: any) {
 	const botMessage = await message.replyT({
 		embeds: [{
 			author: {
-				name: message.author.tag,
-				icon_url: message.author.displayAvatarURL({ dynamic: true })
+				name: message.user.tag,
+				icon_url: message.user.displayAvatarURL({ dynamic: true })
 			},
 			title: await message.translate(`${bot.config.emojis.config} | Loading settings...`),
 			description: await message.translate(`Please wait while I load the settings...`),
@@ -229,7 +228,6 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 
 								data.guild.language = collected;
 								data.guild.markModified("language");
-
 								await data.guild.save();
 
 								return true;
@@ -304,9 +302,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					setState: async (type: any) => {
 						if (type === "enable") data.guild.logging.enabled = "true";
 						else if (type === "disable") data.guild.logging.enabled = "false";
-
 						data.guild.markModified("logging.enabled");
-
 						await data.guild.save();
 					}
 				}
@@ -855,9 +851,12 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 		}
 	];
 
+	let pages: any[] = [];
+	let buttons: any[] = [];
+	let curSetting: any;
 	async function refreshSetting(curSetting: any) {
-		let buttons: any[] = [];
-		let pages: any[] = []; // you cannot just have like that since its special function idiot
+		buttons = [];
+		pages = [];
 		await createPages();
 
 		function handleButton(button: any) {
@@ -880,10 +879,11 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 			components: [BackButton, WebsiteButton, SupportButton]
 		});
 
+		const page = pages.find(page => page.author.name.toLowerCase().includes(curSetting.name.toLowerCase()));
+		if (!page) return;
+
 		await botMessage.edit({
-			embeds: [
-				pages.filter(page => page.author.name.toLowerCase().includes(curSetting.name.toLowerCase()))[0]
-			],
+			embeds: [page],
 			components: buttons,
 			ephemeral: true
 		});
@@ -929,9 +929,6 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 		.setLabel("Support")
 		.setStyle("LINK");
 
-	let pages: any[] = []; // again, not same function, so you can redeclare idiot
-	let curSetting: any;
-
 	async function createPages() {
 		settings.forEach((setting: any) => {
 			const embed = new MessageEmbed()
@@ -962,7 +959,6 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 		});
 	}
 
-	let buttons: any[] = [];
 	let rows: number = 0;
 	async function setupSettings() {
 		settings.forEach(async setting => {
@@ -1186,14 +1182,13 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 				}
 			}
 		} catch (error: any) {
-			bot.logger(error, "error");
-
+			bot.logger(error, "error", { data: error, interaction });
 			const ErrorEmbed = new MessageEmbed()
 				.setAuthor({
 					name: interaction.user.tag,
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 				})
-				.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error?.message}`)
+				.setDescription(`${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).\n\n${error?.message ?? error}`)
 				.setColor("RED");
 
 			try {
@@ -1215,7 +1210,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 	});
 }
 
-module.exports = new cmd(execute, {
+export default new cmd(execute, {
 	description: "Personalize SparkV to suit your server!",
 	dirname: __dirname,
 	usage: "",

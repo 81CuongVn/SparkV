@@ -153,7 +153,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	});
 
 	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
-
 	collector.on("collect", async (interaction: any) => {
 		if (!interaction.deferred && !(interaction.customId === "SelectHelpMenu")) interaction.deferUpdate().catch((): any => { });
 		if (interaction.customId === "SelectHelpMenu") {
@@ -166,7 +165,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 		}
 	});
-
 	collector.on("end", async () => {
 		try {
 			await helpMessage?.edit({
