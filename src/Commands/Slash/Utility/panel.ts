@@ -7,12 +7,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	const state = data.options.getSubcommand();
 
 	if (state === "tickets") {
-		const ticketCreateButton = new Discord.MessageButton()
-			.setLabel(await message.translate("Create Ticket"))
-			.setEmoji(bot.config.emojis.ticket)
-			.setStyle("SECONDARY")
-			.setCustomId("ticket_create");
-
 		await message.channel.send({
 			embeds: [{
 				title: data.options.getString("title") || await message.translate(`${bot.config.emojis.ticket} | Get Support`),
@@ -23,7 +17,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				type: 1,
 				components: [{
 					type: 2,
-
+					label: await message.translate("Create Ticket"),
+					emoji: bot.config.emojis.ticket,
+					style: "SECONDARY",
+					customId: "ticket_create"
 				}]
 			}]
 		});
