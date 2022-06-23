@@ -17,7 +17,7 @@ export default {
 		bot?.music?.init(bot.user.id) && bot.logger(`[App] Music System online and ready.`);
 
 		bot.logger(`[App] Connected to Discord as ${bot.user.tag}.`);
-		bot.logger(`[App] Playing with ${bot.functions.formatNumber(await bot.functions.GetServerCount())} guilds and ${bot.functions.formatNumber(await bot.functions.GetUserCount())}.`);
+		bot.logger(`[App] Playing with ${bot.functions.formatNumber(await bot.functions.GetServerCount())} guilds and ${bot.functions.formatNumber(await bot.functions.GetUserCount())} users.`);
 
 		// Bot Lists //
 		if (process.argv.includes("--dev") === false) {

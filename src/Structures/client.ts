@@ -27,9 +27,9 @@ export default class bot extends (Client as any) {
 		// Database
 		this.database = require("../Database/handler");
 
-		this.GuildSchema = require("../Database/schemas/guild");
-		this.MemberSchema = require("../Database/schemas/member");
-		this.UserSchema = require("../Database/schemas/user");
+		this.GuildSchema = require("../Database/schemas/guild")?.default;
+		this.MemberSchema = require("../Database/schemas/member")?.default;
+		this.UserSchema = require("../Database/schemas/user")?.default;
 
 		// Collections
 		this.categories = new Collection();
