@@ -85,42 +85,44 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	};
 
 	/* -------------------------------------------------- SEND MESSAGE --------------------------------------------------*/
+	const components = [{
+		type: 2,
+		label: await message.translate("Avatar"),
+		emoji: bot.config.emojis.image,
+		style: "LINK",
+		url: (user.user ? user.user : user).displayAvatarURL({ dynamic: true, size: 1024 })
+	}, {
+		type: 2,
+		emoji: bot.config.emojis.info,
+		label: await message.translate("General"),
+		customId: "info",
+		style: "SECONDARY",
+	}, {
+		type: 2,
+		emoji: bot.config.emojis.backpack,
+		label: await message.translate("Backpack"),
+		customId: "backpack",
+		style: "SECONDARY",
+	}, {
+		type: 2,
+		emoji: bot.config.emojis.ban,
+		label: await message.translate("Moderation History"),
+		customId: "mod_history",
+		style: "SECONDARY",
+	}]
+	if (data.guild.leveling.enabled === "true") components.push({
+		type: 2,
+		emoji: bot.config.emojis.arrows.up,
+		label: await message.translate("Rank"),
+		customId: "rank",
+		style: "SECONDARY",
+	})
+
 	const msg = await message.replyT({
 		embeds: [infoEmbed],
 		components: [{
 			type: 1,
-			components: [
-				{
-					type: 2,
-					label: await message.translate("Avatar"),
-					emoji: bot.config.emojis.image,
-					style: "LINK",
-					url: (user.user ? user.user : user).displayAvatarURL({ dynamic: true, size: 1024 })
-				}, {
-					type: 2,
-					emoji: bot.config.emojis.info,
-					label: await message.translate("General"),
-					customId: "info",
-					style: "SECONDARY",
-				}, {
-					type: 2,
-					emoji: bot.config.emojis.backpack,
-					label: await message.translate("Backpack"),
-					customId: "backpack",
-					style: "SECONDARY",
-				}, {
-					type: 2,
-					emoji: bot.config.emojis.arrows.up,
-					label: await message.translate("Rank"),
-					customId: "rank",
-					style: "SECONDARY",
-				}, {
-					type: 2,
-					emoji: bot.config.emojis.ban,
-					label: await message.translate("Moderation History"),
-					customId: "mod_history",
-					style: "SECONDARY",
-				}]
+			components
 		}],
 		fetchReply: true
 	});
@@ -128,7 +130,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	/* -------------------------------------------------- HANDLE BUTTONS --------------------------------------------------*/
 	const collector = msg.createMessageComponentCollector({ time: 300 * 1000 });
 	collector.on("collect", async (interaction: any) => {
-		if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
+		if (!interaction.deferred && interaction.customId !== "rank") interaction.deferUpdate().catch((): any => { });
 
 		switch (interaction.customId) {
 			case "info": {
@@ -175,14 +177,9 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				break;
 			} case "rank": {
 				/* -------------------------------------------------- RANK PAGE --------------------------------------------------*/
-				msg.edit({
-					embeds: [{
-						title: `${bot.config.emojis.arrows.up} ${await message.translate("Rank")}`,
-						color: user.accentColor || bot.config.embed.color,
-						timestamp: new Date(),
-						image: { url: "attachment://rank.png" }
-					}],
-					files: data.guild.leveling.enabled === "true" ? [new Discord.MessageAttachment(rankImage, `rank.png`)] : []
+				interaction.reply({
+					files: [new Discord.MessageAttachment(rankImage, `rank.png`)],
+					ephemeral: true
 				})
 			}
 		}
