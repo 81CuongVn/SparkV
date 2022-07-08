@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 import chalk from "chalk";
 
 interface moreData {
@@ -50,11 +50,12 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 						description: `**An error occured!**`,
 						fields: [{
 							name: "**Error**",
-							value: `\`\`\`${content}\`\`\``,
-							inline: true
-						}]
+							value: `\`\`\`${content}\`\`\``
+						}],
+						color: Colors.Red,
+						timestamp: new Date()
 					}
-					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\``, inline: true });
+					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\`` });
 
 					await errorChannel.send({ embeds: [embed] });
 				}
