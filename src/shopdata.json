@@ -22,6 +22,7 @@
     {
         "name": "banknote",
         "description": "A banknote. Used to expand your bank storage.",
+        "emoji": "🗒️",
         "ids": [ "bn" ],
         "sale": false,
         "price": 0,
@@ -30,6 +31,7 @@
     {
         "name": "topmedal",
         "description": "Why would you even buy this.",
+        "emoji": "🏆",
         "ids": [ "medal" ],
         "sale": true,
         "price": 10000000,

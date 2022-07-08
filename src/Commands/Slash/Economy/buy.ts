@@ -33,7 +33,6 @@ export default new cmd(
 		aliases: [],
 		usage: `(item) (optional: quantity)`,
 		slash: true,
-		slashOnly: true,
 		ephemeral: true,
 		options: [
 			{

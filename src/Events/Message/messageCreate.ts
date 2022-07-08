@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors, ButtonStyle, ChannelType } from "discord.js";
 import axios from "axios";
 
 import cursewords from "../../cursewords.json";
@@ -11,13 +11,13 @@ function timeoutUser(offense: string, message: any, data: any) {
 
 	message.member.timeout((10 * data.member.infractionsCount) * 1000, `Placed on timeout for ${message.client.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
 		.then(async () => {
-			const timeoutEmbed = new Discord.MessageEmbed()
+			const timeoutEmbed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
-					iconURL: message.author.displayAvatarURL({ dynamic: true })
+					iconURL: message.author.displayAvatarURL()
 				})
 				.setDescription(`${message.client.config.emojis.alert} | You've been placed on timeout for ${message.client.functions.MSToTime((10 * data.member.infractionsCount) * 1000)} for ${offense}.`)
-				.setColor("RED")
+				.setColor(Colors.Red)
 				.setTimestamp();
 
 			await message.channel.send({
@@ -39,14 +39,12 @@ export default {
 		// If the message's author is a bot, return. This prevents SparkV from responding to himself.
 		if (message?.author?.bot) return;
 
-		// If the message's author is null, return. This prevents SparkV from responding to a message that doesn't have an author.
-		if (!message?.author?.id) return;
-
 		// If the message is from a DM, return. This prevents SparkV from responding to DMs.
-		if (message?.channel?.type === "dm") return;
+		if (message?.channel?.type === ChannelType.DM) return;
 
 		// If the bot cannot send messages, return.
-		if (!(await message.guild.members.fetch(bot.user.id)).permissionsIn(message.channel).has("SEND_MESSAGES")) return;
+		const botMember = await message.guild.members.fetch(bot.user.id)
+		if (!botMember.permissionsIn(message.channel).has("SendMessages")) return;
 
 		// If the guild is part of the guild blacklist, return.
 		if (bot.config.blacklist.guilds[message.guild.id]) return await message.replyT(`Your server has been blacklisted. Reason: ${bot.config.blacklist.guilds[message.guild.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
@@ -75,63 +73,73 @@ export default {
 		// Plugins
 		if (message.guild) {
 			// Vote reminder
-			if (data.user.votes.reminded === "true" && !(43200000 - (Date.now() - data.user.votes.voted) > 0)) {
+			if (data.user.votes.reminded === "true" && (43200000 - (Date.now() - data.user.votes.voted)) > 0) {
 				data.user.votes.reminded = "false";
+				data.user.markModified("votes.reminded");
 				await data.user.save();
 			}
 
 			if (data.user.votes.remind === "true" && data.user.votes.reminded === "false") {
-				if (!(43200000 - (Date.now() - data.user.votes.voted) > 0)) {
-					const voteEmbed = new Discord.MessageEmbed()
-						.setAuthor({
-							name: message.author.tag,
-							iconURL: message.author.displayAvatarURL({ dynamic: true })
-						})
-						.setDescription(`${bot.config.emojis.alert} | **Hi there!**\nYou're able to vote for me on top.gg. You've voted **${data.user.votes.total} times**, and **last voted <t:${~~(data.user.votes.voted / 1000)}:R>**.`)
-						.setColor(bot.config.embed.color)
-						.setTimestamp();
-
-					const VoteButton = new Discord.MessageButton()
-						.setEmoji("<:topgg:946558388261769227>")
-						.setLabel("Vote")
-						.setURL("https://top.gg/bot/884525761694933073/vote")
-						.setStyle("LINK");
-
+				if ((43200000 - (Date.now() - data.user.votes.voted)) > 0) {
 					message.author.send({
-						embeds: [voteEmbed],
-						components: [new Discord.MessageActionRow().addComponents(VoteButton)]
+						embeds: [{
+							author: { name: message.author.tag, icon_url: message.author.displayAvatarURL() },
+							description: `${bot.config.emojis.alert} | **Hi there!**\nYou're able to vote for me on top.gg. You've voted **${data.user.votes.total} times**, and **last voted <t:${~~(data.user.votes.voted / 1000)}:R>**.`,
+							color: Colors.Blue,
+							timestamp: new Date()
+						}],
+						components: [{
+							type: 1,
+							components: [{
+								type: 2,
+								label: "Vote",
+								emoji: "<:topgg:946558388261769227>",
+								url: "https://top.gg/bot/884525761694933073/vote",
+								style: 5
+							}]
+						}]
 					});
 
 					data.user.votes.reminded = "true";
+					data.user.markModified("votes.reminded");
 					await data.user.save();
 				}
 			}
 
 			// Check user for AFK Status
-			if (data.user.afk) {
-				data.user.afk = null;
-				data.user.markModified("afk");
-
+			if (data.user.afk?.enabled === "true") {
+				data.user.afk.enabled = "false";
+				data.user.afk.reason = null;
+				data.user.markModified("afk.enabled");
+				data.user.markModified("afk.reason");
 				await data.user.save();
-				await message.replyT(bot.config.responses.AFKWelcomeMessage);
+
+				await message.replyT({
+					embeds: [{
+						author: { name: message.author.tag, icon_url: message.author.displayAvatarURL() },
+						description: `${bot.config.emojis.wave} | Hey **${message.author}**, welcome back! I removed your AFK status.`,
+						color: Colors.Blue,
+						timestamp: new Date()
+					}]
+				});
 			}
 
 			// Check mentions for AFK
 			message.mentions.users.forEach(async (u: any) => {
 				const mentionedUserData = await bot.database.getUser(u.id);
-
-				if (mentionedUserData.afk) {
-					await message.replyT(
-						bot.config.responses.AFKMessage.toString()
-							.replaceAll(`{userMentioned}`, u.username)
-							.replaceAll(`{reason}`, mentionedUserData.afk || "Reason data not found!")
-					);
-				}
+				if (mentionedUserData?.afk?.enabled === "true") await message.replyT({
+					embeds: [{
+						author: { name: message.author.tag, icon_url: message.author.displayAvatarURL() },
+						description: `${bot.config.emojis.alert} | **${u.tag}** is currently AFK.${mentionedUserData?.afk?.reason ? ` **${mentionedUserData?.afk?.reason}**` : ""}`,
+						color: Colors.Red,
+						timestamp: new Date()
+					}]
+				});
 			});
 
 			// Check for scam links.
 			if (data.guild?.antiScam.enabled === "true") {
-				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
+				if (!message.channel.permissionsFor(message.member).has("ManageMessages")) {
 					let scamLinks = await bot.redis.get("bot_scamlinks").then((res: any) => JSON.parse(res));
 					if (!scamLinks) {
 						scamLinks = await axios.get("https://phish.sinking.yachts/v2/all").then(res => res.data).catch((): any => message.replyT("Failed to fetch scam links."));
@@ -144,10 +152,8 @@ export default {
 					cleanMessage.endsWith("/") && (cleanMessage = cleanMessage.slice(0, -1));
 
 					if (scamLinks.includes(cleanMessage) || data.guild?.antiScam?.custom.includes(cleanMessage)) {
-						try {
-							message.delete().catch((): any => { });
-						} catch (err: any) {
-							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`MANAGE_MESSAGES\` enabled for me.`);
+						try { message.delete().catch((): any => { }); } catch (err: any) {
+							message.replyT(`${bot.config.emojis.error} | Uh oh! This URL is known to be a scam link. I cannot delete it due to invalid permissions. Please make sure I have \`ManageMessages\` enabled for me.`);
 						}
 
 						++data.member.infractionsCount;
@@ -164,16 +170,10 @@ export default {
 							timeoutUser("sending a scam link", message, data);
 							bot.emit("scamLinkSent", message, data);
 						} else if (data.guild?.antiScam?.action === "kick") {
-							message.member.kick({
-								reason: `Sent a scam link. (${cleanMessage})`
-							});
-
+							message.member.kick({ reason: `Sent a scam link. (${cleanMessage})` });
 							bot.emit("scamLinkSent", message, data);
 						} else if (data.guild?.antiScam?.action === "ban") {
-							message.member.ban({
-								reason: `Sent a scam link. (${cleanMessage})`
-							});
-
+							message.member.ban({ reason: `Sent a scam link. (${cleanMessage})` });
 							bot.emit("scamLinkSent", message, data);
 						}
 					}
@@ -182,20 +182,16 @@ export default {
 
 			// Check for profanity (curse words)
 			if (data.guild.automod.removeProfanity === "true") {
-				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
+				if (!message.channel.permissionsFor(message.member).has("ManageMessages")) {
 					const ignoredWords = ["hello"];
 					let cursed = false;
 
 					for (var i in cursewords) {
-						if (message.content.toLowerCase().includes(cursewords[i].toLowerCase())) {
-							cursed = true;
-						}
+						if (message.content.toLowerCase().includes(cursewords[i].toLowerCase())) cursed = true;
 					}
 
 					for (var i in ignoredWords) {
-						if (message.content.toLowerCase().includes(ignoredWords[i].toLowerCase())) {
-							cursed = false;
-						}
+						if (message.content.toLowerCase().includes(ignoredWords[i].toLowerCase())) cursed = false;
 					}
 
 					if (cursed) {
@@ -207,7 +203,7 @@ export default {
 
 						data.member.markModified("infractionsCount");
 						data.member.markModified("infractions");
-
+						await data.member.save();
 						timeoutUser("cursing", message, data);
 					}
 				}
@@ -216,7 +212,7 @@ export default {
 			// // Check for links
 			// if (data.guild.automod.removeLinks === "true") {
 			// 	if (
-			// 		!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") &&
+			// 		!message.channel.permissionsFor(message.member).has("ManageMessages") &&
 			// 		!message.channel.permissionsFor(message.member).has("ADMINISTRATOR") &&
 			// 		bot.functions.isURL(message.content)
 			// 	) {
@@ -241,7 +237,7 @@ export default {
 
 			// Check for spam
 			if (data.guild.antiSpam.enabled === "true") {
-				if (!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) {
+				if (!message.channel.permissionsFor(message.member).has("ManageMessages")) {
 					if (!message.channel.name.startsWith("spam") && !message.channel.name.endsWith("spam")) {
 						messages.push({
 							messageID: message.id,
@@ -250,14 +246,7 @@ export default {
 							channelID: message.channel.id,
 							content: message.content,
 							sendTimestamp: message.createdTimestamp
-						} as {
-							messageID: string,
-							guildID: string,
-							authorID: string,
-							channelID: string,
-							content: string,
-							sendTimestamp: string
-						});
+						} as { messageID: string, guildID: string, authorID: string, channelID: string, content: string, sendTimestamp: string });
 
 						const foundMatches = messages.filter((msg: any) => msg.authorID === message.author.id && msg.guildID === message.guild.id);
 						if (!foundMatches) return;
@@ -282,21 +271,19 @@ export default {
 								}
 							});
 
-							if (data.guild?.antiSpam?.action === "timeout") {
-								timeoutUser("spamming", message, data);
-								bot.emit("userSpammed", message, data);
-							} else if (data.guild?.antiSpam?.action === "kick") {
-								message.member.kick({
-									reason: `Spammed multiple times.`
-								});
-
-								bot.emit("userSpammed", message, data);
-							} else if (data.guild?.antiSpam?.action === "ban") {
-								message.member.ban({
-									reason: `Spammed multiple times.`
-								});
-
-								bot.emit("userSpammed", message, data);
+							switch (data.guild?.antiSpam?.action) {
+								case "timeout": {
+									timeoutUser("spamming", message, data);
+									bot.emit("userSpammed", message, data);
+									break;
+								} case "kick": {
+									message.member.kick({ reason: `Spammed multiple times.` });
+									bot.emit("userSpammed", message, data);
+									break;
+								} case "ban": {
+									message.member.ban({ reason: `Spammed multiple times.` });
+									bot.emit("userSpammed", message, data);
+								}
 							}
 						}
 					}
@@ -334,12 +321,12 @@ export default {
 		if (bot.config.blacklist.users[message.author.id]) return await message.replyT(`You have been blacklisted. Reason: ${bot.config.blacklist.users[message.author.id]}\n\nIf you think this ban wasn't correct, please contact support. (https://discord.gg/PPtzT8Mu3h)`);
 
 		// Check for a prefix
-		const prefix = bot.functions.getPrefix(message, data);
-		if (!prefix && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do.\It took me ${new Date().getTime() - message.createdTimestamp}ms to send this message.`);
-		if (!prefix) return;
+		const prefix = process.argv.includes("--dev") === true ? "_" : "sv!";
+		if (!message.content.toLowerCase().startsWith(prefix) && message.content.match(new RegExp(`^<@!?${bot.user.id}>( |)$`))) return message.replyT(`**Hi there!**\nPlease run \`/help\` to see what I can do. \It took me ${new Date().getTime() - message.createdTimestamp}ms to send this message.`);
+		if (!message.content.toLowerCase().startsWith(prefix)) return;
 
 		// Command Handler
-		const args = message.content.slice(prefix?.length).trim().split(/ +/g);
+		const args: string[] = message.content.slice(prefix?.length).trim().split(/ +/g);
 		const command = args.shift().toLowerCase();
 		const commandfile = bot.commands.get(command) || bot.aliases.get(command);
 
@@ -352,16 +339,15 @@ export default {
 			bot.logger(err, "error");
 
 			await message.replyT({
-				embeds: [
-					new Discord.MessageEmbed()
-						.setAuthor({
-							name: message.author.tag,
-							iconURL: message.author.displayAvatarURL({ dynamic: true })
-						})
-						.setTitle("Uh oh!")
-						.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`)
-						.setColor("RED")
-				]
+				embeds: [{
+					author: {
+						name: message.author.tag,
+						iconURL: message.author.displayAvatarURL()
+					},
+					title: "Uh oh!",
+					description: `**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`,
+					color: "RED"
+				}]
 			});
 		}
 	}

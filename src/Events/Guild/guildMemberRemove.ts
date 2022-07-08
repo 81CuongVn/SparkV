@@ -21,7 +21,7 @@ export default {
 			}
 		});
 
-		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Goodbye-${member.user.tag}.png`);
+		const attachment = new Discord.AttachmentBuilder(image.toBuffer());
 		const msg = data.goodbye.message
 			.replaceAll("{mention}", `${member}`)
 			.replaceAll("{tag}", `${member.user.tag}`)
@@ -31,7 +31,7 @@ export default {
 
 		channel.send({
 			content: msg,
-			files: [attachment],
+			files: [attachment.setName(`Goodbye-${member.user.tag}.png`)],
 		}).catch((): any => {});
 	},
 };

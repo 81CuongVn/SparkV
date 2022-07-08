@@ -1,5 +1,5 @@
 /* eslint-disable no-return-assign */
-import { Message, Interaction } from "discord.js";
+import { Message, BaseInteraction } from "discord.js";
 import translate from "@vitalets/google-translate-api";
 
 async function translateContent(this: any, content: any) {
@@ -103,9 +103,9 @@ async function editTranslate(this: any, options: any) {
 	else return this.edit(data);
 }
 
-(Interaction as any).prototype.replyT = replyTranslate;
-(Interaction as any).prototype.editT = editTranslate;
-(Interaction as any).prototype.translate = translateContent;
+(BaseInteraction as any).prototype.replyT = replyTranslate;
+(BaseInteraction as any).prototype.editT = editTranslate;
+(BaseInteraction as any).prototype.translate = translateContent;
 
 (Message as any).prototype.replyT = replyTranslate;
 (Message as any).prototype.editT = editTranslate;

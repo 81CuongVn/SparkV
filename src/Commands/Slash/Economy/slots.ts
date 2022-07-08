@@ -1,12 +1,6 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
-const SlotItems = [
-	"🍎",
-	"🍏",
-	"🍓",
-	"🍒",
-	"🍑",
-];
+const SlotItems = ["🍎", "🍏", "🍓", "🍒", "🍑"];
 
 import cmd from "../../../structures/command";
 
@@ -37,54 +31,51 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	if (amountWon > 0) win = true;
 
-	const embed = new Discord.MessageEmbed()
-		.setAuthor({
+	let embed: any = {
+		author: {
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
-		})
-		.addField("Slot Machine", `${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}`)
-		.addField("Want More?", "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!", true)
-		.setFooter({
-			text: bot.config.embed.footer,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		});
+			icon_url: message.user.displayAvatarURL()
+		},
+		description: ``,
+		fields: [{
+			name: "Slot Machine",
+			value: `${SlotItems[number[0]]} | ${SlotItems[number[1]]} | ${SlotItems[number[2]]}`,
+			inline: true
+		}, {
+			name: "Want More?",
+			value: "Get an extra ⏣25,000 by voting for SparkV [here](https://top.gg/bot/884525761694933073/vote)!",
+			inline: true
+		}],
+		timestamp: new Date(),
+		color: Colors.Red
+	}
 
 	if (win) {
 		data.user.money.balance += amountWon;
-
-		embed
-			.setColor("GREEN")
-			.setDescription(`Congrats, you won **⏣${await bot.functions.formatNumber(amountWon)}** coins!\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and won, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`);
+		embed.color = Colors.Green
+		embed.description = `Congrats, you won **⏣${await bot.functions.formatNumber(amountWon)}** coins!\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and won, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`;
 	} else {
 		data.user.money.balance -= parseInt(bet);
-
-		embed
-			.setColor("RED")
-			.setDescription(`Aww, you lost **⏣${await bot.functions.formatNumber(bet)}** coins.\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and lost, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`);
+		embed.description = `Aww, you lost **⏣${await bot.functions.formatNumber(bet)}** coins.\nBecause you bet ⏣${await bot.functions.formatNumber(bet)} and lost, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`;
 	}
 
 	data.user.markModified("money.balance");
 	await data.user.save();
 
-	await message.replyT({
-		embeds: [embed],
-	});
+	await message.replyT({ embeds: [embed] });
 }
 
 export default new cmd(execute, {
-	description: "Don't gamble kids!",
+	description: "Gamble your hard-earned money.",
 	dirname: __dirname,
 	usage: `(amount)`,
 	aliases: ["bet"],
 	perms: [],
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 10,
-			name: "amount",
-			description: "The amount of coins to bet.",
-			required: true
-		}
-	]
+	options: [{
+		type: 10,
+		name: "amount",
+		description: "The amount of coins to bet.",
+		required: true
+	}]
 });

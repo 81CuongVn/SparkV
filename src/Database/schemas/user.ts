@@ -1,13 +1,42 @@
-import mongoose from "mongoose";
+import { model, Document, Schema } from "mongoose";
 
-export default mongoose.model("User", new mongoose.Schema({
+export interface IUserModel extends Document {
+	id: string,
+	registrationDate: number,
+	cooldowns: {
+		daily: number,
+		weekly: number
+	},
+	afk: {
+		enabled: string,
+		reason: string
+	},
+	money: {
+		balance: number,
+		bank: number,
+		bankMax: number,
+		multiplier: number
+	},
+	votes: {
+		voted: number,
+		total: number,
+		remind: string,
+		reminded: string
+	},
+	inventory: object
+}
+
+export default model<IUserModel>("User", new Schema({
 	id: { type: String, unique: true },
 	registrationDate: { type: Number, default: Date.now() },
 	cooldowns: {
 		daily: { type: Number, default: 0 },
 		weekly: { type: Number, default: 0 }
 	},
-	afk: { type: String, default: null },
+	afk: {
+		enabled: { type: String, default: "false" },
+		reason: { type: String, default: null }
+	},
 	money: {
 		balance: { type: Number, default: 100 },
 		bank: { type: Number, default: 0 },

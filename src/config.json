@@ -3,12 +3,8 @@
   "owners": ["571811686617710592"],
   "ID": "884525761694933073",
   "bot_invite": "https://discord.com/oauth2/authorize?client_id=884525761694933073&scope=bot+applications.commands&response_type=code&redirect_uri=https://www.sparkv.tk/api/callback&permissions=294074575990",
-  "support": {
-    "id": 763803059876397056,
-    "invite": "https://discord.gg/PPtzT8Mu3h"
-  },
+  "support": "https://discord.gg/PPtzT8Mu3h",
   "embed": {
-    "color": "#1fa9ff",
     "footer": "Issues/suggestions? Join our server! discord.gg/PPtzT8Mu3h"
   },
   "emojis": {
@@ -76,9 +72,7 @@
     }
   },
   "responses": {
-    "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!",
-    "AFKMessage": "Hey dude, **{userMentioned}** is currently AFK. Their reason: {reason}",
-    "AFKWelcomeMessage": "Hey bud, welcome back! I removed your AFK status."
+    "InvalidArguments": "Uh oh! {user}, it looks like you didn't use this command's proper arguments. Here's an example to help you out: `{prefix}{command}{arguments}`!"
   },
   "blacklist": {
     "guilds": { "898782595750428712": "1024 Say Command Exploit (SCE1024)." },

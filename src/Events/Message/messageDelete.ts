@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -24,18 +24,18 @@ export default {
 			const channel = message.channel?.guild?.channels?.cache.get(data.logging?.channel);
 			if (!channel) return;
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.author.tag,
-					iconURL: message.author.displayAvatarURL({ dynamic: true })
+					iconURL: message.author.displayAvatarURL()
 				})
 				.setDescription(`**Message Deleted in ${message.channel}**`)
-				.addField("Content", message.content, true)
+				.addFields([ { name: "Content", value: message.content, inline: true } ])
 				.setFooter({
 					text: `User ID: ${message.author.id} | Message ID: ${message.id}`,
-					iconURL: message.author.displayAvatarURL({ dynamic: true })
+					iconURL: message.author.displayAvatarURL()
 				})
-				.setColor("RED")
+				.setColor(Colors.Red)
 				.setTimestamp();
 
 			await channel.send({

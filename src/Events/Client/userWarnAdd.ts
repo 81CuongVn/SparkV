@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -8,18 +8,18 @@ export default {
 			const channel = guild?.channels?.cache.get(data.logging?.channel);
 			if (!channel) return;
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: user.user.tag,
-					iconURL: user.user.displayAvatarURL({ dynamic: true })
+					iconURL: user.user.displayAvatarURL()
 				})
 				.setDescription(`**${user} has been warned!**`)
-				.addField("Reason", reason, true)
+				.addFields([ { name: "Reason", value: reason, inline: true } ])
 				.setFooter({
 					text: `User ID: ${user.user.id}`,
-					iconURL: user.user.displayAvatarURL({ dynamic: true })
+					iconURL: user.user.displayAvatarURL()
 				})
-				.setColor("YELLOW")
+				.setColor(Colors.Yellow)
 				.setTimestamp();
 
 			await channel.send({

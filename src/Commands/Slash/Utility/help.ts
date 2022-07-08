@@ -1,181 +1,261 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, MessageEmbed } = require("discord.js");
+import { ButtonBuilder, EmbedBuilder, ButtonStyle, Colors, PermissionsBitField } from "discord.js";
+import os from "os";
+import axios from "axios";
 
 import cmd from "../../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
-	const Selections = [];
 	const pages: any = [] = [];
 
-	bot.categories.map((cat: { name: string; emojiID: any; emoji: any; }) => {
-		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
+	/* -------------------------------------------------- BUTTONS --------------------------------------------------*/
+	const InviteButton = new ButtonBuilder().setEmoji(bot.config.emojis.plus).setLabel(await message.translate("Invite"))
+		.setURL(bot.config.bot_invite).setStyle(ButtonStyle.Link);
+	const SupportButton = new ButtonBuilder().setEmoji(bot.config.emojis.question).setLabel(await message.translate("Support Server"))
+		.setURL(bot.config.support).setStyle(ButtonStyle.Link);
+	const VoteButton = new ButtonBuilder().setEmoji(bot.config.emojis.stats).setLabel(await message.translate("Vote"))
+		.setURL("https://top.gg/bot/884525761694933073").setStyle(ButtonStyle.Link);
+	const WebsiteButton = new ButtonBuilder().setEmoji(bot.config.emojis.globe).setLabel(await message.translate("Website"))
+		.setURL("https://www.sparkv.tk/").setStyle(ButtonStyle.Link)
 
-		const commands: { name: string; value: string; }[] = [];
-		bot.commands
-			.filter((command: { settings: { enabled: any; }; category: any; }) => command.settings.enabled && command.category === cat.name)
-			.map(async (command: { settings: { name: any; usage: any; description: any; options: any[]; }; }) => commands.push({
-				name: `\`\`\`/${command.settings.name} ${command.settings.usage}\`\`\``,
-				value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter((option: { type: number; }) => option.type === 1).map((option: { name: any; options: any[]; }) => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map((op: { name: any; }) => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
-			}));
-
-		const NewEmbed = new MessageEmbed()
-			.setAuthor({
-				name: (message?.applicationId ? message.user : message.author).tag,
-				iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
-			})
-			.addFields(commands)
-			.setThumbnail(bot.user.displayAvatarURL())
-			.setImage("https://www.sparkv.tk/images/banner.gif")
-			.setFooter({
-				text: `${cat.emojiID ? "" : cat.emoji}SparkV ${cat.name}`,
-				iconURL: `https://cdn.discordapp.com/emojis/${cat.emojiID}.webp?size=56&quality=lossless`
-			})
-			.setColor(bot.config.embed.color)
-			.setTimestamp();
-
-		pages.push(NewEmbed);
+	/* -------------------------------------------------- CREATE MENU --------------------------------------------------*/
+	pages.push({
+		author: {
+			name: message.user.tag,
+			icon_url: message.user.displayAvatarURL()
+		},
+		title: `${bot.config.emojis.wave} | ${await message.translate("Hi there!")}`,
+		description: `${bot.config.emojis.info} | **${await message.translate("About SparkV")}**\n> ${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique.\n> If you want to setup/configure SparkV, run")} \`/settings\`.\n\n${bot.config.emojis.award} | **${await message.translate("Credits")}**\n> [Danu](https://discord.gg/mm5QWaCWF5) • ${await message.translate("Made black and white icons.")}\n> [Unbreakablenight](https://unbreakable.tk/) • ${await message.translate("Made new SparkV Logo.")}\n\n${bot.config.emojis.question} | **${await message.translate("Join Our Community!")}**\n> ${await message.translate("Feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`,
+		color: Colors.Blue,
+		timestamp: new Date(),
+		image: { url: "https://www.sparkv.tk/images/banner.gif" },
+		footer: {
+			text: `SparkV Menu • ${await message.translate("The bot that has everything!")}`,
+			icon_url: bot.user.displayAvatarURL()
+		}
 	});
 
-	const InviteButton = new MessageButton()
-		.setURL(bot.config.bot_invite)
-		.setEmoji(bot.config.emojis.plus)
-		.setLabel(await message.translate("Invite"))
-		.setStyle("LINK");
+	/* -------------------------------------------------- CREATE COMMANDS --------------------------------------------------*/
+	/* OLD: commands.push({
+		name: `\`\`\`/${command.settings.name} ${command.settings.usage}\`\`\``,
+		value: `${command.settings.description}${command.settings.options ? `\n\n${command.settings.options.filter((option: any) => option.type === 1).map((option: any) => `${bot.config.emojis.circle} \`/${command.settings.name} ${option.name} ${option?.options ? option.options.map((op: any) => `(${op.name})`).join(" ") : ""}\``).join("\n")}` : ""}`
+	}) */
+	const commands: any[] = [];
+	let totalCmds: number = 0;
+	bot.categories.map((cat: any) => commands.push({
+		name: `${cat.emoji} **${cat.name}**`,
+		value: bot.commands.filter((command: any) => command.settings.enabled && command.category === cat.name).map((command: any) => { totalCmds++; return `\`/${command?.settings?.name}\`` }).join(", ")
+	}));
 
-	const SupportButton = new MessageButton()
-		.setURL(bot.config.support.invite)
-		.setEmoji(bot.config.emojis.question)
-		.setLabel(await message.translate("Support Server"))
-		.setStyle("LINK");
+	pages.push({
+		author: {
+			name: message.user.tag,
+			icon_url: message.user.displayAvatarURL()
+		},
+		fields: commands,
+		thumbnail: { url: bot.user.displayAvatarURL() },
+		image: { url: "https://www.sparkv.tk/images/banner.gif" },
+		color: Colors.Blue,
+		timestamp: new Date(),
+		footer: {
+			text: `SparkV Commands • ${await message.translate("The bot that has everything!")}`,
+			icon_url: bot.user.displayAvatarURL()
+		}
+	});
 
-	const VoteButton = new MessageButton()
-		.setURL("https://top.gg/bot/884525761694933073")
-		.setEmoji(bot.config.emojis.stats)
-		.setLabel(await message.translate("Vote"))
-		.setStyle("LINK");
+	/* -------------------------------------------------- CREATE STATS --------------------------------------------------*/
+	const statcord = await axios.get(`https://api.statcord.com/v3/${bot.user.id}`).then((res: any) => res.data.data[0]).catch((): any => { });
+	pages.push({
+		author: {
+			name: message.user.tag,
+			icon_url: message.user.displayAvatarURL()
+		},
+		fields: [{
+			name: `**${await message.translate("Server")}**`,
+			value: `${bot.config.emojis.rocket} ${await message.translate("CPU")}: **${statcord.cpuload}%**\n${bot.config.emojis.stats} Memory: **${(((os.totalmem() - os.freemem()) / (os.totalmem())) * 100).toFixed(2)}%**\n${bot.config.emojis.clock} Uptime: **${bot.functions.MSToTime(bot.uptime, "short")}**`,
+			inline: true
+		}, {
+			name: `**${await message.translate("Bot Statistics")}**`,
+			value: `${bot.config.emojis.globe} ${await message.translate("Servers")}: **${bot.functions.formatNumber(await bot.functions.GetServerCount())}**\n${bot.config.emojis.player} Users: **${bot.functions.formatNumber(await bot.functions.GetUserCount())}**`,
+			inline: true
+		}],
+		thumbnail: { url: bot.user.displayAvatarURL() },
+		image: { url: `https://dblstatistics.com/bot/${bot.user.id}/widget/servers?width=1500&height=700&titleFontSize=20&labelFontSize=40&fillColor=0a1227?&lineColor=4752cc&backgroundColor=00000000` },
+		color: Colors.Blue,
+		timestamp: new Date(),
+		footer: {
+			text: `SparkV Stats • ${await message.translate("The bot that has everything!")}`,
+			iconURL: bot.user.displayAvatarURL()
+		}
+	});
 
-	const WebsiteButton = new MessageButton()
-		.setURL("https://www.sparkv.tk/")
-		.setEmoji(bot.config.emojis.globe)
-		.setLabel(await message.translate("Website"))
-		.setStyle("LINK");
+	/* -------------------------------------------------- CREATE PERMISSIONS --------------------------------------------------*/
+	const requiredPerms = ["KickMembers", "BanMembers", "ManageChannel", "ManageGuild", "AddReactions", "ViewChannel",
+		"SendMessages", "ManageMessages", "EmbedLinks", "AttachFiles", "ReadMessageHistory", "UseExternalEmojis", "Connect",
+		"Speak", "ManageNicknames", "ManageRoles"];
 
+	let permDescription = "";
+	Object.keys(PermissionsBitField.Flags).forEach(perm => {
+		if (requiredPerms.filter(p => p === perm).length > 0) {
+			if (message.channel.permissionsFor(message.guild.members.cache.get(bot.user.id)).has(perm)) permDescription += `> ${bot.config.emojis.success} ${perm}\n`;
+			else permDescription += `> ${bot.config.emojis.alert} **${perm}**\n`;
+		}
+	});
+
+	pages.push({
+		author: {
+			name: message.user.tag,
+			icon_url: message.user.displayAvatarURL()
+		},
+		description: `**Permissions**\n> *Below are a list of permissions SparkV needs in order to work correctly in this server.*\n\n${permDescription}`,
+		thumbnail: { url: bot.user.displayAvatarURL() },
+		image: { url: "https://www.sparkv.tk/images/banner.gif" },
+		color: Colors.Blue,
+		timestamp: new Date(),
+		footer: {
+			text: `SparkV Permissions • ${await message.translate("The bot that has everything!")}`,
+			iconURL: bot.user.displayAvatarURL()
+		}
+	});
+
+	/* -------------------------------------------------- CREATE RULES --------------------------------------------------*/
+	const rules = [
+		"No Automation. Using automation (Ex: auto-typers) is forbidden. Using automation (and with found proof) will cause a wipe of your data and a ban from using SparkV.",
+		"No spamming commands. Spamming SparkV's commands will result with a warning. If continued, a complete wipe of your data and a ban from SparkV will be given to you.",
+		"No using alternate accounts to earn yourself money. If proof is found, your data will be wiped and you will be banned from SparkV."
+	];
+
+	let ruleDescription: string = "";
+	let number: number = 0;
+	rules.forEach(rule => {
+		number++;
+		ruleDescription += `**${number}.** ${rule}\n`;
+	});
+
+	pages.push({
+		author: {
+			name: message.user.tag,
+			icon_url: message.user.displayAvatarURL()
+		},
+		description: `**Rules**\n> *Here's a simple list of rules for SparkV.*\n\n> ${ruleDescription}`,
+		thumbnail: { url: bot.user.displayAvatarURL() },
+		image: { url: "https://www.sparkv.tk/images/banner.gif" },
+		color: Colors.Blue,
+		timestamp: new Date(),
+		footer: {
+			text: `SparkV Rules • ${await message.translate("The bot that has everything!")}`,
+			iconURL: bot.user.displayAvatarURL()
+		}
+	});
+
+	/* -------------------------------------------------- SEARCH --------------------------------------------------*/
 	if (data.options.getString("search")) {
 		const name = data.options.getString("search").toString().toLowerCase();
 		const cmd = bot.commands.get(name) || bot.aliases.get(name);
 		const category = bot.categories.get(name.charAt(0).toUpperCase() + name.slice(1));
 
-		let embed = new MessageEmbed();
-
+		let embed = new EmbedBuilder().setAuthor({ name: message.user.tag, iconURL: message.user.displayAvatarURL() }).setTimestamp().setColor(Colors.Blue);
 		if (cmd) {
 			embed
-				.setAuthor({
-					name: message?.applicationId ? message.user.tag : message.author.tag,
-					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
-				})
 				.setTitle(`\`\`\`/${cmd.settings.name} ${cmd.settings.usage}\`\`\``)
 				.setDescription(await message.translate(cmd.settings.description))
-				.addField(await message.translate("Category"), await message.translate(`\`\`\`${cmd.category}\`\`\``), true)
-				.addField(await message.translate("Aliases"), cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``, true)
-				.addField(await message.translate("Cooldown"), await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``), true)
-				.addField(await message.translate("Permissions"), await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``), true)
-				.setFooter({
-					text: await message.translate(`Type /help to get a list of all commands • ${bot.config.embed.footer}`),
-					iconURL: bot.user.displayAvatarURL()
-				})
-				.setColor(bot.config.embed.color);
+				.addFields([
+					{
+						name: await message.translate("Category"),
+						value: await message.translate(`\`\`\`${cmd.category}\`\`\``),
+						inline: true
+					}, {
+						name: await message.translate("Aliases"),
+						value: cmd.settings.aliases ? await message.translate(`\`\`\`${cmd.settings.aliases.join(`,\n`)}\`\`\``) : `\`\`\`None.\`\`\``,
+						inline: true
+					}, {
+						name: await message.translate("Cooldown"),
+						value: await message.translate(`\`\`\`${cmd.settings.cooldown / 1000} second(s)\`\`\``),
+						inline: true
+					}, {
+						name: await message.translate("Permissions"),
+						value: await message.translate(`\`\`\`${cmd.perms ? cmd.perms.join("\n") : "None required."}\`\`\``),
+						inline: true
+					}
+				])
 		} else if (category) {
 			embed = pages.filter((p: { author: { name: string | any[]; }; }) => p.author.name.includes(category.name))[0];
 		} else if (!cmd && !category) {
 			embed
-				.setAuthor({
-					name: message?.applicationId ? message.user.tag : message.author.tag,
-					iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
-				})
 				.setTitle(await message.translate("Uh oh!"))
 				.setDescription(await message.translate("**The command/category you requested could not be found. Need help? Contact support [here](https://discord.gg/PPtzT8Mu3h).**"))
-				.setColor("RED");
+				.setColor(Colors.Red);
 		}
 
 		return await message.replyT({
 			embeds: [embed],
-			components: [
-				new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
-			]
+			components: [{
+				type: 1,
+				components: [InviteButton, SupportButton, VoteButton, WebsiteButton]
+			}]
 		});
 	}
 
-	bot.categories.map(async (cat: { name: string; commands: string | any[]; description: any; emoji: any; }) => {
-		if (cat.name.toLowerCase().includes("owner") && !bot.config.owners.includes(message.author?.id || message.user.id)) return;
-
-		Selections.push({
-			label: `${await message.translate(cat.name)} [${cat.commands.length}]`,
-			description: cat.description,
-			value: cat.name,
-			emoji: cat.emoji ? cat.emoji : null
-		});
-	});
-
-	const Menu = new MessageEmbed()
-		.setAuthor({
-			name: (message?.applicationId ? message.user : message.author).tag,
-			iconURL: (message?.applicationId ? message.user : message.author).displayAvatarURL({ dynamic: true })
-		})
-		.setDescription(`**${await message.translate("Hi there!")}**\n${await message.translate("I'm a powerful Discord bot with the purpose to make your server better and more unique, without making things complicated. I have many features which have been proven to boost your server's activity. If you want to setup/configure SparkV, run")} \`/settings\`.\n\n${await message.translate("A special thanks to")} [Danu](https://discord.gg/mm5QWaCWF5) ${await message.translate("for making most of our cool icons.")}\n${await message.translate("If you have any questions, feel free to join our")} [Discord ${await message.translate("server")}](https://discord.gg/PPtzT8Mu3h).`)
-		.setImage("https://www.sparkv.tk/images/banner.gif")
-		.setFooter({
-			text: await message.translate(`SparkV Main Menu • ${await message.translate(`${bot.config.embed.footer}`)}`),
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		})
-		.setColor(bot.config.embed.color)
-		.setTimestamp();
-
-	Selections.push({
-		label: await message.translate(`Menu`),
-		description: await message.translate("Return to the main menu."),
-		value: "menu",
-		emoji: bot.config.emojis.leave
-	});
-
-	pages.push(Menu);
-
-	const CatSelect = new MessageSelectMenu()
-		.setCustomId("SelectHelpMenu")
-		.setPlaceholder(await message.translate("Select a category to view its commands."))
-		.addOptions(Selections);
-
+	/* -------------------------------------------------- SEND MESSAGE --------------------------------------------------*/
 	const helpMessage = await message.replyT({
-		embeds: [Menu],
-		components: [
-			new MessageActionRow().addComponents(CatSelect),
-			new MessageActionRow().addComponents(InviteButton, SupportButton, VoteButton, WebsiteButton)
-		],
+		embeds: [pages[0]],
+		components: [{
+			type: 1,
+			components: [{
+				type: 3,
+				customId: "SelectHelpMenu",
+				placeholder: await message.translate("Select a page to view more information."),
+				options: [{
+					label: `${await message.translate("Commands")} [${totalCmds}]`,
+					description: "View SparkV's command list.",
+					value: "commands",
+					emoji: bot.config.emojis.slash
+				}, {
+					label: `${await message.translate("Stats")}`,
+					description: "View SparkV's statistics.",
+					value: "stats",
+					emoji: bot.config.emojis.stats
+				}, {
+					label: `${await message.translate("Permissions")}`,
+					description: "View SparkV's permissions for the server.",
+					value: "permissions",
+					emoji: bot.config.emojis.alert
+				}, {
+					label: `${await message.translate("Rules")}`,
+					description: "View SparkV's rules you must follow to use SparkV.",
+					value: "rules",
+					emoji: bot.config.emojis.ban
+				}, {
+					label: await message.translate("Menu"),
+					description: await message.translate("Return to the main menu."),
+					value: "menu",
+					emoji: bot.config.emojis.leave
+				}]
+			}],
+		}, {
+			type: 1,
+			components: [InviteButton, SupportButton, VoteButton, WebsiteButton]
+		}],
 		fetchReply: true
 	});
 
-	const collector = helpMessage.createMessageComponentCollector({ ime: 300 * 1000 });
+	/* -------------------------------------------------- HANDLE SELECT MENU --------------------------------------------------*/
+	const collector = helpMessage.createMessageComponentCollector({ time: 300 * 1000 });
 	collector.on("collect", async (interaction: any) => {
-		if (!interaction.deferred && !(interaction.customId === "SelectHelpMenu")) interaction.deferUpdate().catch((): any => { });
-		if (interaction.customId === "SelectHelpMenu") {
-			const page = pages.find((p: { footer: { text: string; }; }) => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
-			if (!page) return;
+		const page = pages.find((p: any) => p.footer.text.toLowerCase().includes(interaction.values[0].toLowerCase()));
+		if (!page) return;
 
-			await interaction.update({
-				embeds: [page],
-				fetchReply: true
-			});
-		}
+		await interaction.update({
+			embeds: [page],
+			fetchReply: true
+		});
 	});
 	collector.on("end", async () => {
-		try {
-			await helpMessage?.edit({
-				components: []
-			});
-		} catch (err: any) { }
+		try { await helpMessage?.edit({ components: [] }); } catch (err: any) { }
 	});
 }
 
 export default new cmd(execute, {
-	description: `Get help with SparkV, or view SparkV's commands.`,
+	description: `Get help with SparkV, or view SparkV's list of commands.`,
 	aliases: [`cmds`, `commands`, "vote"],
 	usage: `(optional: search)`,
 	perms: [],

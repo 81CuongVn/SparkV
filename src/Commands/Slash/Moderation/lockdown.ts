@@ -1,4 +1,4 @@
-import Discord, { GuildBasedChannel } from "discord.js";
+import Discord, { ChannelType, Colors } from "discord.js";
 
 import cmd from "../../../structures/modCommand";
 
@@ -6,17 +6,17 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	const state = data.options.getString("state");
 	const reason = data.options.getString("reason");
 
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
-			name: (message?.user ? message.user : message.author).tag,
-			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
+			name: message.user.tag,
+			iconURL: message.user.displayAvatarURL()
 		})
 		.setFooter({
 			text: bot.config.embed.footer,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
+			iconURL: bot.user.displayAvatarURL()
 		});
 
-	const Channels = message.guild.channels.cache.filter((channel: any) => channel.type !== "GUILD_CATEGORY");
+	const Channels = message.guild.channels.cache.filter((channel: any) => channel.type !== ChannelType.GuildCategory);
 
 	try {
 		if (state.toLowerCase() === "on") {
@@ -28,7 +28,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			embed
 				.setDescription(`This server is on lockdown! Reason: ${reason}`)
-				.setColor("RED");
+				.setColor(Colors.Red);
 		} else if (state.toLowerCase() === "off") {
 			Channels.forEach((channel: any) => {
 				channel.permissionOverwrites.create(message.guild.roles.everyone, {
@@ -38,7 +38,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			embed
 				.setDescription(`This server is on lockdown! Reason: ${reason}`)
-				.setColor("RED");
+				.setColor(Colors.Red);
 		} else {
 			await message.replyT("Invalid command usage. Please specify a valid state (on/off).");
 		}
@@ -52,8 +52,8 @@ export default new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: `<on | off>`,
-	perms: ["MANAGE_CHANNELS"],
-	bot_perms: ["MANAGE_CHANNELS"],
+	perms: ["ManageChannels"],
+	bot_perms: ["ManageChannels"],
 	slash: true,
 	options: [
 		{

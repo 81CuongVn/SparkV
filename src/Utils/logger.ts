@@ -42,16 +42,19 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 
 				const errorChannel: any = await bot.channels.fetch("948686231892545547");
 				if (errorChannel) {
-					const ErrorEmbed = new Discord.MessageEmbed()
-						.setTitle(`${(moreData?.data?.name || content) ?? "Error"}`)
-						.setDescription(`**An error occured!**`)
-						.addField("**Error**", `\`\`\`${content}\`\`\``)
-						.setColor("RED");
-
-					if (moreData?.data?.stack) ErrorEmbed.addField("**Stack**", `\`\`\`${moreData?.data.stack}\`\`\``);
+					let embed = {
+						title: `${(moreData?.data?.name || content) ?? "Error"}`,
+						description: `**An error occured!**`,
+						fields: [{
+							name: "**Error**",
+							value: `\`\`\`${content}\`\`\``,
+							inline: true
+						}]
+					}
+					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\``, inline: true });
 
 					await errorChannel.send({
-						embeds: [ErrorEmbed]
+						embeds: [embed]
 					});
 				}
 			}

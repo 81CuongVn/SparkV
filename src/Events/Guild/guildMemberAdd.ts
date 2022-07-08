@@ -26,7 +26,7 @@ export default {
 			}
 		});
 
-		const attachment = new Discord.MessageAttachment(image.toBuffer(), `Welcome-${member.user.tag}.png`);
+		const attachment = new Discord.AttachmentBuilder(image.toBuffer());
 		const msg = data.welcome.message
 			.replaceAll("{mention}", `${member}`)
 			.replaceAll("{tag}", `${member.user.tag}`)
@@ -36,7 +36,7 @@ export default {
 
 		channel.send({
 			content: msg,
-			files: [attachment]
+			files: [attachment.setName(`Welcome-${member.user.tag}.png`)]
 		}).catch((): any => { });
 	}
 };

@@ -1,4 +1,4 @@
-import Discord, { Permissions } from "discord.js";
+import Discord, { PermissionsBitField } from "discord.js";
 import NewCommand from "./command";
 
 export default class ModCommand {
@@ -13,7 +13,7 @@ export default class ModCommand {
 		const perms = message.channel.permissionsFor(message.user ? message.user : message.author);
 
 		for (const perm of this.settings.perms) {
-			if (!perms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
+			if (!perms.has(PermissionsBitField.Flags[perm as keyof typeof PermissionsBitField.Flags])) {
 				const table = {
 					content: `${bot.config.emojis.error} | Uh oh! You're missing the \`${perm}\` permission!`,
 					ephemeral: true,
@@ -23,10 +23,9 @@ export default class ModCommand {
 			}
 		}
 
-		const botperms = message.channel.permissionsFor(message.guild.me);
-
+		const botperms = message.channel.permissionsFor(message.guild.members.cache.get(bot.user.id));
 		for (const perm of this.settings.bot_perms) {
-			if (!botperms.has(Permissions.FLAGS[perm as keyof typeof Permissions.FLAGS])) {
+			if (!botperms.has(PermissionsBitField.Flags[perm as keyof typeof PermissionsBitField.Flags])) {
 				return await message.replyT({
 					content: `${bot.config.emojis.error} | Uh oh! I'm missing the \`${perm}\` permission!`,
 					ephemeral: true,

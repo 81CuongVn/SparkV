@@ -1,26 +1,23 @@
-import Discord, { Role } from "discord.js";
+import Discord, { Role, Colors } from "discord.js";
 
 import cmd from "../../../structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ")) || "No reason provided.";
-	const embed = new Discord.MessageEmbed()
-		.setAuthor({
-			name: (message?.user ? message.user : message.author).tag,
-			iconURL: (message?.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
-		})
-		.setDescription(`This channel has been locked. Reason: ${reason}`)
-		.setFooter({
-			text: bot.config.embed.footer,
-			iconURL: bot.user.displayAvatarURL({ dynamic: true })
-		})
-		.setColor("RED");
 
 	try {
 		await message.guild.roles.cache.forEach((role: Role) => message.channel.permissionOverwrites.create(role, { SEND_MESSAGES: false }));
 
 		return await message.replyT({
-			embeds: [embed]
+			embeds: [{
+				author: {
+					name: message.user.tag,
+					icon_url: message.user.displayAvatarURL()
+				},
+				description: `This channel has been locked. Reason: ${reason}`,
+				color: Colors.Red,
+				timestamp: new Date()
+			}]
 		});
 	} catch (err: any) {
 		bot.logger(err, "error");
@@ -34,8 +31,8 @@ export default new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: "",
-	perms: ["MANAGE_CHANNELS"],
-	bot_perms: ["MANAGE_CHANNELS"],
+	perms: ["ManageChannels"],
+	bot_perms: ["ManageChannels"],
 	slash: true,
 	options: [
 		{

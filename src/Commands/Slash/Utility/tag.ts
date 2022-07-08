@@ -1,15 +1,15 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = message.options.getSubcommand();
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			iconURL: message.user.displayAvatarURL()
 		})
-		.setColor("GREEN")
+		.setColor(Colors.Green)
 		.setTimestamp();
 
 	if (state === "create") {
@@ -30,11 +30,11 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		const tag = data.guild.tags.find((t: any) => t.name.toLowerCase() === name.toLowerCase());
 		if (!tag) return await message.editT(`${bot.config.emojis.error} | That tag doesn't exist!`);
 
-		embed.setDescription(`**${tag.name}**\n${tag.content.replace("<br>", "\n")}`).setColor(bot.config.embed.color);
+		embed.setDescription(`**${tag.name}**\n${tag.content.replace("<br>", "\n")}`).setColor(Colors.Blue);
 	} else if (state === "list") {
 		if (data.guild?.tags?.length < 1) return await message.editT(`${bot.config.emojis.error} | There are no tags for this server!`);
 
-		embed.setDescription(`**Server Tags**\n${data.guild?.tags.map((tag: any) => tag.name).setColor(bot.config.embed.color)}`);
+		embed.setDescription(`**Server Tags**\n${data.guild?.tags.map((tag: any) => tag.name).setColor(Colors.Blue)}`);
 	} else if (state === "delete") {
 		const name = message.options.getString("name");
 		const tag = data.guild.tags.find((tag: any) => tag.name.toLowerCase() === name.toLowerCase());
@@ -45,12 +45,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		data.guild.markModified("tags");
 		await data.guild.save();
 
-		embed.setDescription(`**Deleted ${tag.name}**\nI successfully deleted **${tag.name}**.`).setColor("RED");
+		embed.setDescription(`**Deleted ${tag.name}**\nI successfully deleted **${tag.name}**.`).setColor(Colors.Red);
 	}
 
-	await message.replyT({
-		embeds: [embed]
-	});
+	await message.replyT({ embeds: [embed] });
 }
 
 export default new cmd(execute, {
@@ -60,56 +58,44 @@ export default new cmd(execute, {
 	usage: "(create) (name) (content)",
 	slash: false,
 	enabled: false,
-	options: [
-		{
-			type: 1,
-			name: "create",
-			description: "Create a tag.",
-			options: [
-				{
-					type: 3,
-					name: "name",
-					description: "The name of the tag.",
-					required: true
-				},
-				{
-					type: 3,
-					name: "content",
-					description: "The content of the tag. PRO TIP: use <br> to create a new line.",
-					required: true
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "view",
-			description: "View a tag.",
-			options: [
-				{
-					type: 3,
-					name: "name",
-					description: "The name of the tag to view.",
-					required: true
-				}
-			]
-		},
-		{
-			type: 1,
-			name: "list",
-			description: "List the guild's tags."
-		},
-		{
-			type: 1,
-			name: "delete",
-			description: "Delete a tag.",
-			options: [
-				{
-					type: 3,
-					name: "name",
-					description: "The name of the tag to delete.",
-					required: true
-				}
-			]
-		}
-	]
+	options: [{
+		type: 1,
+		name: "create",
+		description: "Create a tag.",
+		options: [{
+			type: 3,
+			name: "name",
+			description: "The name of the tag.",
+			required: true
+		}, {
+			type: 3,
+			name: "content",
+			description: "The content of the tag. PRO TIP: use <br> to create a new line.",
+			required: true
+		}]
+	}, {
+		type: 1,
+		name: "view",
+		description: "View a tag.",
+		options: [{
+			type: 3,
+			name: "name",
+			description: "The name of the tag to view.",
+			required: true
+		}]
+	}, {
+		type: 1,
+		name: "list",
+		description: "List the guild's tags."
+	}, {
+		type: 1,
+		name: "delete",
+		description: "Delete a tag.",
+		options: [{
+			type: 3,
+			name: "name",
+			description: "The name of the tag to delete.",
+			required: true
+		}]
+	}]
 });

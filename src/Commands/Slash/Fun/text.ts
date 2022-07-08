@@ -121,45 +121,34 @@ export default new cmd(execute, {
 	dirname: __dirname,
 	usage: "(text)",
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 3,
-			name: "text",
-			description: "The text to change.",
-			required: true
-		},
-		{
-			type: 3,
-			name: "type",
-			description: "What you want to do to the text. (reverse, emojify, asciify)",
-			required: true,
-			choices: [
-				{
-					name: "reverse",
-					value: "reverse"
-				},
-				{
-					name: "emojify",
-					value: "emojify"
-				},
-				{
-					name: "asciify",
-					value: "asciify"
-				},
-				{
-					name: "clapify",
-					value: "clapify"
-				},
-				{
-					name: "zalgo",
-					value: "zalgo"
-				},
-				{
-					name: "char_count",
-					value: "char_count"
-				}
-			]
-		}
-	]
+	options: [{
+		type: 3,
+		name: "text",
+		description: "The text to change.",
+		required: true
+	}, {
+		type: 3,
+		name: "type",
+		description: "What you want to do to the text. (reverse, emojify, asciify)",
+		required: true,
+		choices: [{
+			name: "reverse",
+			value: "reverse"
+		}, {
+			name: "emojify",
+			value: "emojify"
+		}, {
+			name: "asciify",
+			value: "asciify"
+		}, {
+			name: "clapify",
+			value: "clapify"
+		}, {
+			name: "zalgo",
+			value: "zalgo"
+		}, {
+			name: "char_count",
+			value: "char_count"
+		}]
+	}]
 });

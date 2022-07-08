@@ -1,16 +1,16 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../../structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const action = data.options.getString("action");
 	const amount = data.options.getNumber("money");
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			iconURL: message.user.displayAvatarURL()
 		})
-		.setColor("GREEN")
+		.setColor(Colors.Green)
 		.setTimestamp();
 
 	if (action === "deposit") {

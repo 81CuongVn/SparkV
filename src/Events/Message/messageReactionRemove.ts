@@ -25,10 +25,10 @@ export default {
 			const stars = fetchedMessages.find((m: Discord.Message) => m.embeds[0]?.description?.includes(message.url));
 			if (stars) {
 				const foundStar = stars.embeds[0];
-				const embed = new Discord.MessageEmbed()
+				const embed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: message.author.tag,
-						iconURL: message.author.displayAvatarURL({ dynamic: true })
+						iconURL: message.author.displayAvatarURL()
 					})
 					.setDescription(`[${message.channel.name}](${message.url}) | ${data.starboard?.emoji} **${reaction.count}**${foundStar?.description.includes("\n\n") ? `\n\n${foundStar?.description.split(`\n\n`)[1]}` : ""}`)
 					.setImage(message.attachments.first()?.url || null)

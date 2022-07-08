@@ -4,6 +4,7 @@ import util from "util";
 
 import { Client, Collection, ApplicationCommand } from "discord.js";
 import Statcord from "statcord.js";
+import { DiscordTogether } from "discord-together";
 
 import loadMusicSystem from "../Utils/music";
 import shopdata from "../shopdata.json";
@@ -47,8 +48,10 @@ export default class bot extends (Client as any) {
 		return this;
 	}
 
+	/* -------------------------------------------------- LOAD MODULES --------------------------------------------------*/
 	async LoadModules(settings: any) {
 		loadMusicSystem(this);
+		this.activities = new DiscordTogether((this as any));
 
 		for (let i = 0; i < shopdata.length; i++) {
 			shopdata[i].ids.push(shopdata[i].name);
@@ -88,6 +91,7 @@ export default class bot extends (Client as any) {
 		}
 	}
 
+	/* -------------------------------------------------- LOAD EVENTS --------------------------------------------------*/
 	async LoadEvents(MainPath: string) {
 		for (const category of fs.readdirSync(`${MainPath}/Events`)) {
 			for (const file of fs.readdirSync(`${MainPath}/Events/${category}`).filter(file => file.endsWith(".js"))) {
@@ -99,6 +103,7 @@ export default class bot extends (Client as any) {
 		}
 	}
 
+	/* -------------------------------------------------- LOAD COMMANDS --------------------------------------------------*/
 	async LoadCommands() {
 		fs.readdirSync("./Commands/Slash/").map((cat: any) => {
 			const category = require(`../Commands/Slash/${cat}/index.js`)?.default;
@@ -106,32 +111,31 @@ export default class bot extends (Client as any) {
 
 			fs.readdirSync(`./Commands/Slash/${cat}/`).filter(f => f.endsWith(".js") && !(f.startsWith("index"))).map((cmd: any) => {
 				let command: any = require(`../Commands/Slash/${cat}/${cmd}`).default;
-				let commandName: any = cmd.split(".")[0]; // name
+				let commandName: any = cmd.split(".")[0];
 
 				if (!command) return;
 
 				command.category = category.name;
-				command.settings.name = commandName; //wait
+				command.settings.name = commandName;
 				command.description = category.description;
 
 				if (!this.categories.has(command.category)) this.categories.set(command.category, category);
 				if (this.commands.has(commandName)) return this.logger(`You cannot set command ${commandName} because it is already in use by the command ${this.commands.get(commandName).settings.name}. This is most likely due to a accidental clone of a command with the same name.`, "error");
-
 				this.commands.set(commandName, command);
 
 				if (command.settings.description.length >= 100) command.settings.description = `${command.settings.description.slice(0, 96)}...`;
-				this.slashCommands.push({
+				command.settings.slash === true && this.slashCommands.push({
 					name: commandName,
 					description: command.settings.description,
 					options: command.settings.options || [],
-					type: command.settings.type || 1
+					type: 1
 				});
 			});
 		});
 
 		fs.readdirSync(`./Commands/Text`).filter(file => file.endsWith(".js")).forEach(file => {
 			const commandname = file.split(".")[0];
-			const command = require(`../Commands/Text/${file}`);
+			const command = require(`../Commands/Text/${file}`)?.default;
 			if (!command || !command.settings) return;
 
 			command.settings.name = commandname;

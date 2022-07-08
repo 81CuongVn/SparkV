@@ -8,7 +8,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			embeds: [{
 				author: {
 					name: message.user.tag,
-					iconURL: message.user.displayAvatarURL({ dynamic: true })
+					icon_url: message.user.displayAvatarURL()
 				},
 				title: "Daily Reward",
 				description: `You've already claimed your daily reward today.\nCheck back <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:R> at <t:${~~((data.user.cooldowns.daily / 1000) + 43200)}:t>.`,
@@ -33,7 +33,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		embeds: [{
 			author: {
 				name: message.user.tag,
-				iconURL: message.user.displayAvatarURL({ dynamic: true })
+				icon_url: message.user.displayAvatarURL()
 			},
 			title: "Daily Reward",
 			description: `You obtained your daily reward of ⏣15,000 coins!${data.user.money.multiplier > 1 ? ` Wow, it also seems you also have a **${data.user.money.multiplier}x** coin multiplier!` : ""}\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`,

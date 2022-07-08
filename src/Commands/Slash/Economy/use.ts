@@ -20,7 +20,6 @@ export default new cmd(
 
 		data.user.inventory[itemName] -= parseInt(amount);
 		data.user.markModified(`inventory.${itemName}`);
-
 		await data.user.save();
 
 		if (itemName === "banknote") {
@@ -31,7 +30,6 @@ export default new cmd(
 			return await message.editT(`You turn in a note from SparkV to your local Spark Bank. The bank calls you back and says you gained ${10000 * amount} more bank space.`);
 		} else {
 			const itemData = bot.shop.filter((i: any) => i.name === itemName || i.ids.includes(itemName)).first();
-
 			return await message.editT(itemData.usedMessage || "You used this item.");
 		}
 	},
@@ -41,20 +39,16 @@ export default new cmd(
 		aliases: [],
 		usage: "(item) (optional: quantity)",
 		slash: true,
-		slashOnly: true,
 		ephemeral: true,
-		options: [
-			{
-				type: 3,
-				name: "item",
-				description: "The item to use. To find items to use, open the shop (/shop).",
-				required: true
-			},
-			{
-				type: 10,
-				name: "amount",
-				description: "How many times you want to use the item."
-			}
-		]
+		options: [{
+			type: 3,
+			name: "item",
+			description: "The item to use. To find items to use, open the shop (/shop).",
+			required: true
+		}, {
+			type: 10,
+			name: "amount",
+			description: "How many times you want to use the item."
+		}]
 	},
 );

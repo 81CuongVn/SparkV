@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import Discord, { Colors } from 'discord.js';
 
 export default {
 	once: false,
@@ -8,17 +8,17 @@ export default {
 			const channel = guild?.channels?.cache.get(data.logging?.channel);
 			if (!channel) return;
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: user.tag,
-					iconURL: user.displayAvatarURL({ dynamic: true }),
+					iconURL: user.displayAvatarURL(),
 				})
 				.setDescription(`**User banned!**\n\n**User:** ${user}`)
 				.setFooter({
 					text: `User ID: ${user.id}`,
-					iconURL: user.displayAvatarURL({ dynamic: true }),
+					iconURL: user.displayAvatarURL(),
 				})
-				.setColor('RED')
+				.setColor(Colors.Red)
 				.setTimestamp();
 
 			await channel

@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -13,28 +13,27 @@ export default {
 		if (newM.content.includes("@everyone") || newM.content.includes("@here")) newM.content = newM.cleanContent;
 
 		const data = await bot.database.getGuild(newM.guildId);
-
 		if (data?.logging?.enabled === "true") {
 			const channel = newM.channel?.guild?.channels?.cache.get(data.logging?.channel);
 			if (!channel) return;
 
-			const embed = new Discord.MessageEmbed()
-				.setAuthor({
-					name: newM.author.tag,
-					iconURL: newM.author.displayAvatarURL({ dynamic: true })
-				})
-				.setDescription(`**Message Edited in ${newM.channel}**`)
-				.addField("Before", oldM.content, true)
-				.addField("After", newM.content, true)
-				.setFooter({
-					text: `User ID: ${newM.author.id} | Message ID: ${newM.id}`,
-					iconURL: newM.author.displayAvatarURL({ dynamic: true })
-				})
-				.setColor("YELLOW")
-				.setTimestamp();
-
 			await channel.send({
-				embeds: [embed]
+				embeds: [{
+					author: { name: newM.author.tag, icon_url: newM.author.displayAvatarURL() },
+					description: `**Message Edited in ${newM.channel}**`,
+					fields: [{
+						name: "Before",
+						value: oldM?.content,
+						inline: true
+					}, {
+						name: "After",
+						value: newM?.content,
+						inline: true
+					}],
+					footer: { text: `User ID: ${newM.author.id} | Message ID: ${newM.id}`, icon_url: newM.author.displayAvatarURL() },
+					color: Colors.Yellow,
+					timestamp: new Date()
+				}]
 			}).catch((): any => { });
 		}
 	},

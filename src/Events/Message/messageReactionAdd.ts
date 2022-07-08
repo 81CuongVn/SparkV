@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -29,10 +29,10 @@ export default {
 						const foundStar = stars.embeds[0];
 						const msg = await channel.messages.fetch(stars.id);
 
-						const embed = new Discord.MessageEmbed()
+						const embed = new Discord.EmbedBuilder()
 							.setAuthor({
 								name: message.author.tag,
-								iconURL: message.author.displayAvatarURL({ dynamic: true })
+								iconURL: message.author.displayAvatarURL()
 							})
 							.setDescription(`[${message.channel.name}](${message.url}) | ${data.starboard?.emoji} **${reaction.count}**${foundStar?.description.includes("\n\n") ? `\n\n${foundStar?.description.split(`\n\n`)[1]}` : ""}`)
 							.setImage(message.attachments.first()?.url || null)
@@ -45,14 +45,14 @@ export default {
 							embeds: [embed]
 						}).catch((): any => { });
 					} else {
-						const embed = new Discord.MessageEmbed()
+						const embed = new Discord.EmbedBuilder()
 							.setAuthor({
 								name: message.author.tag,
-								iconURL: message.author.displayAvatarURL({ dynamic: true })
+								iconURL: message.author.displayAvatarURL()
 							})
 							.setDescription(`[${message.channel.name}](${message.url}) | ${data.starboard?.emoji} **${reaction.count}**${message?.content ? `\n\n${message?.content}` : ""}`)
 							.setImage(message.attachments.first()?.url || null)
-							.setColor("BLUE")
+							.setColor(Colors.Blue)
 							.setTimestamp();
 
 						await channel?.send({

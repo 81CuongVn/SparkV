@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../structures/command";
 
@@ -14,13 +14,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		await UserData.save();
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: User.user ? User.user.tag : User.tag,
-				iconURL: User.displayAvatarURL({ dynamic: true })
+				iconURL: User.displayAvatarURL()
 			})
 			.setTitle(`Successfuly set coins to ⏣${bot.functions.formatNumber(UserData.money.balance)}.`)
-			.setColor("GREEN");
+			.setColor(Colors.Green);
 
 		return await message.replyT({
 			embeds: [embed]
@@ -28,15 +28,15 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	} catch (err: any) {
 		bot.logger(err, "error");
 
-		const ErrorEmbed = new Discord.MessageEmbed()
+		const ErrorEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.author.tag,
-				iconURL: message.author.displayAvatarURL({ dynamic: true })
+				iconURL: message.author.displayAvatarURL()
 			})
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to set ${message.author.tag}'s coins!**`)
-			.addField("**Error**", `\`\`\`${err.message}\`\`\``)
-			.setColor("RED");
+			.addFields([ { name: "**Error**", value: `\`\`\`${err.message}\`\`\``, inline: true } ])
+			.setColor(Colors.Red);
 
 		return await message.replyT({
 			embeds: [ErrorEmbed]

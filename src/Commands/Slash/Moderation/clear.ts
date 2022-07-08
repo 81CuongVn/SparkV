@@ -19,11 +19,11 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 	if (number < 1 || number > 100) return message.replyT(`${bot.config.emojis.success} | Next time, please provide a number greater than 0 and less than 100.`);
 
-	await message.deleteReply().catch((): any => {});
+	await message.deleteReply().catch((): any => { });
 
 	let messages = await message.channel.messages.fetch({
 		limit: 100
-	}).catch((): any => {});
+	}).catch((): any => { });
 	messages = messages.toJSON();
 
 	if (user) messages = messages.filter((m: any) => m.author.id === user.user.id);
@@ -47,41 +47,32 @@ export default new cmd(execute, {
 	dirname: __dirname,
 	usage: `(# of messages) (Optional: Type (all, user only, pinned only))`,
 	aliases: [`purge`, `clr`],
-	perms: ["MANAGE_MESSAGES"],
-	bot_perms: ["MANAGE_MESSAGES"],
+	perms: ["ManageMessages"],
+	bot_perms: ["ManageMessages"],
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 10,
-			name: "number",
-			description: "The number of messages to delete.",
-			required: true
-		},
-		{
-			type: 3,
-			name: "type",
-			description: "The type of messages to delete. (All, Pinned, or Embeds)",
-			choices: [
-				{
-					name: "all",
-					value: "all"
-				},
-				{
-					name: "pinned",
-					value: "pinned"
-				}
-			]
-		},
-		{
-			type: 6,
-			name: "user",
-			description: "The user to delete the messages of."
-		},
-		{
-			type: 3,
-			name: "content",
-			description: "Only delete messages that contain this content."
-		}
-	]
+	options: [{
+		type: 10,
+		name: "number",
+		description: "The number of messages to delete.",
+		required: true
+	}, {
+		type: 3,
+		name: "type",
+		description: "The type of messages to delete. (All, Pinned, or Embeds)",
+		choices: [{
+			name: "all",
+			value: "all"
+		}, {
+			name: "pinned",
+			value: "pinned"
+		}]
+	}, {
+		type: 6,
+		name: "user",
+		description: "The user to delete the messages of."
+	}, {
+		type: 3,
+		name: "content",
+		description: "Only delete messages that contain this content."
+	}]
 });

@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors, InteractionType } from "discord.js";
 import fs from "fs";
 import path from "path";
 
@@ -7,7 +7,7 @@ const cooldowns: any[] = [];
 export default {
 	once: false,
 	async execute(bot: any, interaction: any) {
-		if (interaction.isCommand()) {
+		if (interaction.type === InteractionType.ApplicationCommand) {
 			const command = bot.commands.get(interaction.commandName);
 			if (!command) return;
 
@@ -33,15 +33,15 @@ export default {
 			if (!cooldowns[interaction.user.id]) cooldowns[interaction.user.id] = [];
 			const time = cooldowns[interaction.user.id][command.settings.name] || 0;
 			if (time && (time > Date.now())) {
-				const cooldownEmbed = new Discord.MessageEmbed()
+				const cooldownEmbed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: interaction.user.tag,
-						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+						iconURL: interaction.user.displayAvatarURL()
 					})
 					.setTitle(`${bot.config.emojis.error} | Whoa there ${interaction.user.username}!`)
 					.setDescription(`Please wait **${((time - Date.now()) / 1000 % 60).toFixed(2)} **more seconds to use that command again.`)
-					.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-					.setColor("RED")
+					.setThumbnail(interaction.user.displayAvatarURL())
+					.setColor(Colors.Red)
 					.setFooter({
 						text: bot.config.embed.footer,
 						iconURL: bot.user.displayAvatarURL()
@@ -66,15 +66,15 @@ export default {
 			} catch (error: any) {
 				bot.logger(error, "error");
 
-				const ErrorEmbed = new Discord.MessageEmbed()
+				const ErrorEmbed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: interaction.user.tag,
-						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+						iconURL: interaction.user.displayAvatarURL()
 					})
 					.setTitle("Uh oh!")
 					.setDescription(`**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${error.message}`)
-					.addField("**Error**", `\`\`\`${error.message}\`\`\``)
-					.setColor("RED");
+					.addFields([ { name: "**Error**", value: `\`\`\`${error.message}\`\`\``, inline: true } ])
+					.setColor(Colors.Red);
 
 				await interaction.replyT({
 					embeds: [ErrorEmbed],

@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { ButtonStyle, Colors } from "discord.js";
 import { Client } from "genius-lyrics";
 
 import { Manager } from "erela.js";
@@ -7,110 +7,83 @@ import Spotify from "erela.js-spotify";
 export default (bot: any) => {
 	bot.lyricsClient = new Client(process.env.GENIUS_TOKEN);
 
-	let nodes = [
-		{
+	bot.music = new Manager({
+		nodes: [{
 			host: "lavalink.kingch1ll.repl.co",
 			port: 443,
 			password: process.env.LAVALINK_PASSWORD,
 			secure: true
-		},
-		{
+		}, {
 			host: "lavalink2.kingch1ll.repl.co",
 			port: 443,
 			password: process.env.LAVALINK_PASSWORD,
 			secure: true
-		},
-		{
+		}, {
 			host: "node1.kartadharta.xyz",
 			port: 443,
 			password: "kdlavalink",
 			secure: true
-		},
-		{
+		}, {
 			host: "www.exlink.ml",
 			port: 443,
 			password: "exlava",
 			secure: true
-		},
-		{
+		}, {
 			host: "www.lavalinknodepublic.ml",
 			port: 443,
 			password: "mrextinctcodes",
 			secure: true
-		},
-		{
+		}, {
 			host: "lavalink.oops.wtf",
 			port: 2000,
 			password: "www.freelavalink.ga",
 			secure: false
-		},
-		{
+		}, {
 			host: "lavalink.gaproknetwork.xyz",
 			port: 2333,
 			password: "gaproklavalink",
 			secure: false
-		},
-		{
+		}, {
 			host: "lavalink.darrenofficial.com",
 			port: 80,
 			password: "lavalink",
 			secure: false
-		},
-		{
+		}, {
 			host: "weez-node.cf",
 			port: 2333,
 			password: "FreeLava",
 			secure: false
-		},
-		{
+		}, {
 			host: "dislavalink.gq",
 			port: 2333,
 			password: "gemzandmj",
 			secure: false
-		},
-		{
+		}, {
 			host: "usa.lavalink.mitask.tech",
 			port: 2333,
 			password: "lvs",
 			secure: false
-		},
-		{
+		}, {
 			host: "lavalink.kapes.eu",
 			port: 2222,
 			password: "lavalinkplay",
 			secure: false
-		},
-		{
+		}, {
 			host: "lv.vellerius.tk",
 			port: 2333,
 			password: "derpilava",
 			secure: false
-		},
-		{
+		}, {
 			host: "lavalink.cloudblue.ml",
 			port: 1555,
 			password: "danbotbest",
 			secure: false
-		},
-		{
+		}, {
 			host: "lavalink.rukchadisa.live",
 			port: 8080,
 			password: "youshallnotpass",
 			secure: false
-		}
-	];
-	if (process.argv.includes("--dev") === true) {
-		nodes = [];
-		nodes.push({
-			host: "lavalink3.kingch1ll.repl.co",
-			port: 443,
-			password: process.env.LAVALINK_PASSWORD,
-			secure: true
-		});
-	}
-
-	bot.music = new Manager({
-		nodes,
+		}],
 		plugins: [
 			new Spotify({
 				clientID: process.env.SPOTIFYID,
@@ -129,20 +102,38 @@ export default (bot: any) => {
 		.on("trackStart", async (player: any, track: any) => {
 			const playerData: any = bot.music.players.get(player.guild);
 			const requester: any = player.get("requester");
-			const NowPlayingEmbed = new Discord.MessageEmbed()
+			const NowPlayingEmbed: any = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.music} | Now Playing ${track.title}`)
 				.setURL(track.uri)
 				.setThumbnail(track.displayThumbnail())
-				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${track?.author}\`\`\``, true)
-				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`00:00/${bot.music.formatDuration(track?.duration)}\`\`\``, true)
-				.addField(`${bot.config.emojis.clock} Song Progress`, `\`\`\`${bot.functions.splitBar(0, track.duration, 45)}\`\`\``, false)
-				.addField(`${bot.config.emojis.volume} Volume`, `\`${playerData?.volume}%\``, true)
-				.addField(`${bot.config.emojis.loop} Loop`, `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`, true)
+				.addFields([
+					{
+						name: `${bot.config.emojis.player} Uploader`,
+						value: `\`\`\`${track?.author}\`\`\``,
+						inline: true
+					}, {
+						name: `${bot.config.emojis.clock} Duration`,
+						value: `\`\`\`00:00/${bot.music.formatDuration(track?.duration)}\`\`\``,
+						inline: true
+					}, {
+						name: `${bot.config.emojis.clock} Song Progress`,
+						value: `\`\`\`${bot.functions.splitBar(0, track.duration, 45)}\`\`\``,
+						inline: false
+					}, {
+						name: `${bot.config.emojis.volume} Volume`,
+						value: `\`${playerData?.volume}%\``,
+						inline: true
+					}, {
+						name: `${bot.config.emojis.loop} Loop`,
+						value: `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`,
+						inline: true
+					}
+				])
 				.setFooter({
 					text: `Requested by ${requester?.tag} • ${bot.config.embed.footer}`,
 					iconURL: requester?.displayAvatarURL()
 				})
-				.setColor(bot.config.embed.color)
+				.setColor(Colors.Blue)
 				.setTimestamp();
 
 			const { msg } = await bot.music.handleMusic(playerData, track, NowPlayingEmbed, {
@@ -200,9 +191,9 @@ export default (bot: any) => {
 
 			channel && await channel.send({
 				embeds: [
-					new Discord.MessageEmbed()
+					new Discord.EmbedBuilder()
 						.setDescription(`${bot.config.emojis.alert} | **Error Occured**\nAn error occurred while playing the song.`)
-						.setColor("RED")
+						.setColor(Colors.Red)
 				]
 			});
 		})
@@ -212,9 +203,9 @@ export default (bot: any) => {
 
 			await channel.send({
 				embeds: [
-					new Discord.MessageEmbed()
+					new Discord.EmbedBuilder()
 						.setDescription(`${bot.config.emojis.alert} | **Queue Ended**\nAdd more songs to keep playing more music.`)
-						.setColor("RED")
+						.setColor(Colors.Red)
 				]
 			});
 			player.destroy();
@@ -232,26 +223,26 @@ export default (bot: any) => {
 
 		return duration < (3600 * 1000) ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
 	};
-	bot.music.handleMusic = async (playerData: any, track: any, mEmbed: Discord.MessageEmbed, options: any) => {
-		const TogglePlayingButton = new Discord.MessageButton()
+	bot.music.handleMusic = async (playerData: any, track: any, mEmbed: Discord.EmbedBuilder, options: any) => {
+		const TogglePlayingButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.pause)
 			.setCustomId("TP")
-			.setStyle("DANGER");
+			.setStyle(ButtonStyle.Danger);
 
-		const LoopButton = new Discord.MessageButton()
+		const LoopButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.loop)
 			.setCustomId("loop")
-			.setStyle("SECONDARY");
+			.setStyle(ButtonStyle.Secondary);
 
-		const LyricsButton = new Discord.MessageButton()
+		const LyricsButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.queue)
 			.setCustomId("lyrics")
-			.setStyle("SECONDARY");
+			.setStyle(ButtonStyle.Secondary);
 
-		const StopButton = new Discord.MessageButton()
+		const StopButton = new Discord.ButtonBuilder()
 			.setEmoji(bot.config.emojis.music_stop)
 			.setCustomId("stop")
-			.setStyle("DANGER");
+			.setStyle(ButtonStyle.Danger);
 
 		const buttons = [];
 
@@ -282,16 +273,16 @@ export default (bot: any) => {
 		if (options?.createCollector === true) {
 			collector = MusicMessage.createMessageComponentCollector({ time: 1800 * 1000 });
 			collector.on("collect", async (interaction: any) => {
-				await interaction.deferReply({
-					ephemeral: true
-				});
+				await interaction.deferReply({ ephemeral: true });
 
-				const embed = new Discord.MessageEmbed()
-					.setAuthor({
+				const embed: any = {
+					author: {
 						name: interaction.user.tag,
-						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-					})
-					.setTimestamp();
+						icon_url: interaction.user.displayAvatarURL()
+					},
+					color: Colors.Blue,
+					timestamp: new Date()
+				}
 
 				if (interaction.customId === "loop") {
 					const playerData = bot.music.players.get(interaction?.guild?.id);
@@ -306,10 +297,8 @@ export default (bot: any) => {
 
 					track.queue.setRepeatMode(nextLoopMode).catch((): any => { });
 
-					embed
-						.setTitle(`${bot.config.emojis.music} | Looping ${loopMode}`)
-						.setDescription(`Looping is now ${loopMode}.`)
-						.setColor(bot.config.embed.color);
+					embed.title = `${bot.config.emojis.music} | Looping ${loopMode}`;
+					embed.description = `Looping is now ${loopMode}.`;
 				} else if (interaction.customId === "TP") {
 					const playerData = bot.music.players.get(interaction?.guild?.id);
 					if (!playerData) {
@@ -320,26 +309,27 @@ export default (bot: any) => {
 					if (playerData?.paused === true) {
 						playerData?.pause(false);
 
-						embed
-							.setTitle(`${bot.config.emojis.music} | Music Resumed!`)
-							.setDescription(`Resumed ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
-							.setColor("GREEN");
+						embed.title = `${bot.config.emojis.music} | Music Resumed!`;
+						embed.description = `Resumed ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`;
+						embed.color = Colors.Green;
 
-						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle("DANGER");
+						TogglePlayingButton.setEmoji(bot.config.emojis.pause).setStyle(ButtonStyle.Danger);
 					} else {
 						playerData?.pause(true);
 
-						embed
-							.setTitle(`${bot.config.emojis.music} | Music Paused!`)
-							.setDescription(`Paused ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
-							.setColor("RED");
+						embed.title = `${bot.config.emojis.music} | Music Paused!`;
+						embed.description = `Paused ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`;
+						embed.color = Colors.Red;
 
-						TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle("SUCCESS");
+						TogglePlayingButton.setEmoji(bot.config.emojis.arrows.right).setStyle(ButtonStyle.Success);
 					}
 
 					MusicMessage.editT({
 						embeds: [mEmbed],
-						components: [new Discord.MessageActionRow().addComponents(TogglePlayingButton, StopButton, LoopButton)]
+						components: [{
+							type: 1,
+							components: [TogglePlayingButton, StopButton, LoopButton]
+						}]
 					});
 				} else if (interaction.customId === "stop") {
 					const playerData = bot.music.players.get(interaction?.guild?.id);
@@ -358,7 +348,7 @@ export default (bot: any) => {
 					embed
 						.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
 						.setDescription(lyrics.length >= 4000 ? `${lyrics.slice(0, 2000)}...\nView more lyrics by typing /lyrics.` : lyrics)
-						.setColor(bot.config.embed.color);
+						.setColor(Colors.Blue);
 				}
 
 				interaction.replyT({

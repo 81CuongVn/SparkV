@@ -1,4 +1,5 @@
 import Canvas from "canvas";
+import { ChannelType } from "discord.js";
 import path from "path";
 
 const Invitergx =
@@ -18,25 +19,6 @@ module.exports = {
 		bot = client;
 
 		Canvas.registerFont(`${path.join(__dirname, "../../")}/assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
-	},
-
-	/**
-   *
-   * @param {Object} message Message object.
-   * @param {Object} data Guild's data souced from the guild data collection using mongoose.
-   * @returns {string} Prefix.
-   */
-	getPrefix(message: any, data: any) {
-		const acceptedPrefixes = [
-			process.argv.includes("--dev") === true ? "_" : "sv!"
-		];
-
-		let prefix: any = null;
-		acceptedPrefixes.forEach(p => {
-			if (message.content.startsWith(p) || message.content.toLowerCase().startsWith(p)) prefix = p;
-		});
-
-		return prefix;
 	},
 
 	/**
@@ -60,12 +42,37 @@ module.exports = {
 		}
 	},
 
+	cleanContent(content: string, channel: any) {
+		return content.replace(/<@!?[0-9]+>/g, input => {
+			const id = input.replace(/<|!|>|@/g, "");
+			if (channel.type === ChannelType.DM) {
+				const user = channel.client.users.cache.get(id);
+				return user ? `@${user.username}`.replaceAll("@", "@\u200b") : input;
+			}
+
+			const member = channel.guild.members.cache.get(id);
+			if (member) {
+				return `@${member.displayName}`.replaceAll("@", "@\u200b");
+			} else {
+				const user = channel.client.users.cache.get(id);
+				return user ? `@${user.username}`.replaceAll("@", "@\u200b") : input;
+			}
+		}).replace(/<#[0-9]+>/g, input => {
+				const mentionedChannel = channel.client.channels.cache.get(input.replace(/<|#|>/g, ""));
+				return mentionedChannel ? `#${mentionedChannel.name}` : input;
+			}).replace(/<@&[0-9]+>/g, input => {
+				if (channel.type === ChannelType.DM) return input;
+				const role = channel.guild.roles.cache.get(input.replace(/<|@|>|&/g, ""));
+				return role ? `@${role.name}` : input;
+			});
+	},
+
 	/**
 	 * Create Card
 	 * @param {Object} options Options.
 	 * @returns {Promise<Canvas>} Canvas
 	 */
-	async createCard(options: { user: { tag: any; displayAvatarURL: (arg0: { format: string; }) => any; }; text: { desc: any; footer: any; }; }) {
+	async createCard(options: any) {
 		const canvas = Canvas.createCanvas(800, 390);
 		const context = canvas.getContext("2d");
 
@@ -85,11 +92,11 @@ module.exports = {
 
 		// Username
 		context.font = "40px Bold",
-		context.fillText(options.user.tag, (canvas.width / 2), (canvas.height / 2) + 100);
+			context.fillText(options.user.tag, (canvas.width / 2), (canvas.height / 2) + 100);
 
 		// Server
 		context.font = "30px Bold",
-		context.fillText(options.text.desc, (canvas.width / 2), (canvas.height / 2) + 150);
+			context.fillText(options.text.desc, (canvas.width / 2), (canvas.height / 2) + 150);
 
 		// Bottom Text
 		context.font = "20px Bold";
@@ -113,7 +120,7 @@ module.exports = {
 		context.clip();
 
 		/* Avatar */
-		const Avatar = await Canvas.loadImage(options.user.displayAvatarURL({ format: "png" }));
+		const Avatar = await Canvas.loadImage(options.user.displayAvatarURL({ extension: "png" }));
 		context.drawImage(Avatar, (canvas.width / 2) - 110, (canvas.height / 2) - 175, 220, 220);
 
 		// Done //
@@ -215,7 +222,7 @@ module.exports = {
 	},
 
 	/**
-   * Get's all of the bot's guilds and counts them up.
+   * Get"s all of the bot"s guilds and counts them up.
    * @returns {string} Server count
    */
 	async GetServerCount() {
@@ -226,7 +233,7 @@ module.exports = {
 	},
 
 	/**
-   * Get's all of the bot's guilds and counts the user count.
+   * Get"s all of the bot"s guilds and counts the user count.
    * @returns {string} User count
    */
 	async GetUserCount() {

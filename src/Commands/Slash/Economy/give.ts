@@ -32,19 +32,15 @@ export default new cmd(execute, {
 	aliases: ["gift"],
 	perms: [],
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 6,
-			name: "user",
-			description: "The user to give money to.",
-			required: true
-		},
-		{
-			type: 10,
-			name: "money",
-			description: "The amount of money to give.",
-			required: true
-		}
-	]
+	options: [{
+		type: 6,
+		name: "user",
+		description: "The user to give money to.",
+		required: true
+	}, {
+		type: 10,
+		name: "money",
+		description: "The amount of money to give.",
+		required: true
+	}]
 });

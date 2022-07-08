@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-const ms = require("ms");
+import ms from "ms";
 
 import cmd from "../../../structures/modCommand";
 
@@ -10,7 +10,7 @@ async function execute(bot: any, interaction: any, args: string[], command: stri
 
 	if (user.isCommunicationDisabled()) return interaction.replyT("That user is already in timeout!");
 	if (user.id === interaction.member.id) return interaction.replyT(`${bot.config.emojis.error} | You cannot timeout yourself.`);
-	if (user.user.bot) return await interaction.replyT(`You cannot timeout a bot lmfao.`);
+	if (user.user.bot) return await interaction.replyT(`You cannot timeout a bot.`);
 
 	if (!time) return interaction.replyT("The time provided was invalid.");
 
@@ -24,28 +24,23 @@ export default new cmd(execute, {
 	dirname: __dirname,
 	aliases: [],
 	usage: `(user) (optional: reason)`,
-	perms: ["MODERATE_MEMBERS"],
-	bot_perms: ["MODERATE_MEMBERS"],
+	perms: ["ModerateMembers"],
+	bot_perms: ["ModerateMembers"],
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 6,
-			name: "user",
-			description: "The user to timeout.",
-			required: true
-		},
-		{
-			type: 3,
-			name: "time",
-			description: "How long the user should be put on timeout for. (In seconds)",
-			required: true
-		},
-		{
-			type: 3,
-			name: "reason",
-			description: "The reason for putting this user on timeout.",
-			required: false
-		}
-	]
+	options: [{
+		type: 6,
+		name: "user",
+		description: "The user to timeout.",
+		required: true
+	}, {
+		type: 3,
+		name: "time",
+		description: "How long the user should be put on timeout for. (In seconds)",
+		required: true
+	}, {
+		type: 3,
+		name: "reason",
+		description: "The reason for putting this user on timeout.",
+		required: false
+	}]
 });

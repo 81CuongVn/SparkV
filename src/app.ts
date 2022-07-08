@@ -5,40 +5,34 @@
 import "./Structures/extenders";
 
 // Librarys //
-import fs from "fs";
-import path from "path";
-import Statcord from "statcord.js";
 import mongoose from "mongoose";
-import Discord, { Collection, Intents, Permissions } from "discord.js";
+import { GatewayIntentBits, Partials } from "discord.js";
 
 import Logger from "./Utils/logger";
 import Client from "./Structures/client";
 const SparkV = new Client({
 	intents: [
-		Intents.FLAGS.DIRECT_MESSAGES,
-		// Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-		// Intents.FLAGS.DIRECT_MESSAGE_TYPING
-		Intents.FLAGS.GUILDS,
-		Intents.FLAGS.GUILD_MEMBERS,
-		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-		Intents.FLAGS.GUILD_VOICE_STATES,
-		Intents.FLAGS.GUILD_BANS
-		// Intents.FLAGS.GUILD_WEBHOOKS,
-		// Intents.FLAGS.GUILD_INTEGRATIONS,
-		// Intents.FLAGS.GUILD_INVITES,
-		// Intents.FLAGS.GUILD_PRESENCES,
-		// Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-		// Intents.FLAGS.GUILD_MESSAGE_TYPING,
+		GatewayIntentBits.DirectMessages,
+		// GatewayIntentBits.DirectMessageReactions,
+		// GatewayIntentBits.DirectMessageTyping,
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildBans,
+		// GatewayIntentBits.GuildEmojisAndStickers,
+		// GatewayIntentBits.GuildIntegrations,
+		// GatewayIntentBits.GuildInvites,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.GuildVoiceStates,
+		// GatewayIntentBits.GUILD_WEBHOOKS,
+		// GatewayIntentBits.GUILD_INTEGRATIONS,
+		// GatewayIntentBits.GUILD_INVITES,
+		// GatewayIntentBits.GUILD_PRESENCES,
+		// GatewayIntentBits.GUILD_EMOJIS_AND_STICKERS,
+		// GatewayIntentBits.GUILD_MESSAGE_TYPING,
 	],
-	partials: ["MESSAGE", "REACTION"],
-	presence: {
-		activity: {
-			name: `Loading SparkV (99%)`,
-			type: "PLAYING"
-		},
-		status: "dnd"
-	}
+	partials: [ Partials.Message, Partials.Reaction ]
 });
 (global as any).bot = SparkV;
 

@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -11,13 +11,13 @@ export default {
 			const logChannel = channel?.guild?.channels?.cache?.get(data.logging?.channel);
 			if (!logChannel) return;
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setDescription(`**Channel Created ${channel}**`)
 				.setFooter({
 					text: `Channel ID: ${channel.id}`,
-					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+					iconURL: bot.user.displayAvatarURL()
 				})
-				.setColor("GREEN")
+				.setColor(Colors.Green)
 				.setTimestamp();
 
 			await logChannel.send({

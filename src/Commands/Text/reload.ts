@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../structures/command";
 
@@ -13,13 +13,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		bot.commands.delete(Command);
 		bot.commands.set(Command.toLowerCase(), CommandFile);
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.author.tag,
-				iconURL: message.author.displayAvatarURL({ dynamic: true })
+				iconURL: message.author.displayAvatarURL()
 			})
 			.setTitle(`Successfuly reloaded ${Command}.`)
-			.setColor("GREEN");
+			.setColor(Colors.Green);
 
 		return await message.replyT({
 			embeds: [embed]
@@ -27,15 +27,15 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	} catch (err: any) {
 		bot.logger(err, "error");
 
-		const ErrorEmbed = new Discord.MessageEmbed()
+		const ErrorEmbed = new Discord.EmbedBuilder()
 			.setAuthor({
 				name: message.author.tag,
-				iconURL: message.author.displayAvatarURL({ dynamic: true })
+				iconURL: message.author.displayAvatarURL()
 			})
 			.setTitle("Uh oh!")
 			.setDescription(`**An error occured while trying to refresh ${Command}!**`)
-			.addField("**Error**", `\`\`\`${err.message}\`\`\``)
-			.setColor("RED");
+			.addFields([ { name: "**Error**", value: `\`\`\`${err.message}\`\`\``, inline: true } ])
+			.setColor(Colors.Red);
 
 		return await message.replyT({
 			embeds: [ErrorEmbed]

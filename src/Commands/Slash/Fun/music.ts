@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { ButtonStyle, Colors } from "discord.js";
 import { Track } from "erela.js";
 
 import cmd from "../../../structures/command";
@@ -9,12 +9,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 	if (!message?.member?.voice?.channel) return message.replyT(`${bot.config.emojis.alert} | You must be in a voice channel to use this command.`);
 
 	const state = message.options.getSubcommand();
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			iconURL: message.user.displayAvatarURL()
 		})
-		.setColor(bot.config.embed.color)
+		.setColor(Colors.Blue)
 		.setTimestamp();
 
 	const playerData = bot.music.players.get(message?.guild?.id);
@@ -28,18 +28,14 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			if (number > 100) return message.replyT(`${bot.config.emojis.alert} | Songs cannot go louder than 100%.`);
 
 			playerData.setVolume(number);
-			return await message.replyT({
-				embeds: [embed.setDescription(`${bot.config.emojis.music} | The volume is now set to ${number}%.`).setColor("GREEN")]
-			});
+			return await message.replyT({ embeds: [embed.setDescription(`${bot.config.emojis.music} | The volume is now set to ${number}%.`).setColor(ButtonStyle.Success)] });
 		} else if (type === "forward") {
 			let forward = playerData.queue.currentTime + number;
 			if (forward < 0) forward = 0;
 			if (forward >= playerData.queue.songs[0].duration) forward = playerData.queue.songs[0].duration - 1;
 
 			await playerData.queue.seek(forward);
-			return await message.replyT({
-				embeds: [embed.setDescription(`${bot.config.emojis.music} | I forwarded the song by ${number} seconds ahead.`).setColor("GREEN")]
-			});
+			return await message.replyT({ embeds: [embed.setDescription(`${bot.config.emojis.music} | I forwarded the song by ${number} seconds ahead.`).setColor(ButtonStyle.Success)] });
 		} else if (type === "rewind") {
 			let rewind = playerData.queue.currentTime - number;7
 			if (rewind < 0) rewind = 0;
@@ -47,7 +43,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			await playerData.queue.seek(rewind);
 			return await message.replyT({
-				embeds: [embed.setDescription(`${bot.config.emojis.music} | I rewinded the song by ${number} seconds.`).setColor("GREEN")]
+				embeds: [embed.setDescription(`${bot.config.emojis.music} | I rewinded the song by ${number} seconds.`).setColor(ButtonStyle.Success)]
 			});
 		}
 	} else if (state === "play") {
@@ -82,15 +78,33 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		// If the track is the first song in the queue, don't send the message.
 		if (player?.queue?.size > 0) {
 			const playerData = bot.music.players.get(message.guild.id);
-			const SongAddedQueue = new Discord.MessageEmbed()
+			const SongAddedQueue = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.music} | Added ${track?.title} to Queue`)
 				.setURL(track?.uri)
 				.setThumbnail(track?.thumbnail)
-				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${track?.author}\`\`\``, true)
-				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`${track?.duration}\`\`\``, true)
-				.addField(`${bot.config.emojis.volume} Volume`, `\`${playerData?.volume}%\``, true)
-				.addField(`${bot.config.emojis.loop} Loop`, `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`, true)
-				.setColor(bot.config.embed.color)
+				.addFields([
+					{
+						name: `${bot.config.emojis.player} Uploader`,
+						value: `\`\`\`${track?.author}\`\`\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.clock} Duration`,
+						value: `\`\`\`${track?.duration}\`\`\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.volume} Volume`,
+						value: `\`${playerData?.volume}%\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.loop} Loop`,
+						value: `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`,
+						inline: true
+					}
+				])
+				.setColor(Colors.Blue)
 				.setTimestamp();
 
 			await bot.music.handleMusic(playerData, track, SongAddedQueue, {
@@ -134,26 +148,27 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		const msg = await message.replyT({
 			embeds: [pages[0]],
-			components: [
-				new Discord.MessageActionRow().addComponents(
-					new Discord.MessageButton()
+			components: [{
+				type: 1,
+				components: [
+					new Discord.ButtonBuilder()
 						.setEmoji("⬅️")
 						.setCustomId("quickLeft")
-						.setStyle("SECONDARY"),
-					new Discord.MessageButton()
+						.setStyle(ButtonStyle.Secondary),
+					new Discord.ButtonBuilder()
 						.setEmoji(bot.config.emojis.arrows.left)
 						.setCustomId("left")
-						.setStyle("SECONDARY"),
-					new Discord.MessageButton()
+						.setStyle(ButtonStyle.Secondary),
+					new Discord.ButtonBuilder()
 						.setEmoji(bot.config.emojis.arrows.right)
 						.setCustomId("right")
-						.setStyle("SECONDARY"),
-					new Discord.MessageButton()
+						.setStyle(ButtonStyle.Secondary),
+					new Discord.ButtonBuilder()
 						.setEmoji("➡️")
 						.setCustomId("quickRight")
-						.setStyle("SECONDARY")
-				)
-			],
+						.setStyle(ButtonStyle.Secondary)
+				]
+			}],
 			fetchReply: true
 		});
 
@@ -200,7 +215,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			embeds: [
 				embed
 					.setDescription(`**${bot.config.emojis.alert} | Skipped song!**\nSkiped to the next song in queue.`)
-					.setColor("RED")
+					.setColor(Colors.Red)
 					.setTimestamp()
 			]
 		});
@@ -224,7 +239,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				embed
 					.setDescription(`${bot.config.emojis.music} | Okay, I ${state2 === "off" ? `stopped the loop.` : `looped the ${type}.`}`)
 					.setTimestamp()
-					.setColor("RED")
+					.setColor(Colors.Red)
 			]
 		});
 	} else if (state === "manage") {
@@ -264,18 +279,18 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			if (!playerData) return message.replyT(`${bot.config.emojis.alert} | There is nothing in the queue right now!`);
 
 			const queueSongs = playerData?.queue?.songs?.map((song: Track, id: number) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10);
-			const queueEmbed = new Discord.MessageEmbed()
+			const queueEmbed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.user.tag,
-					iconURL: message.user.displayAvatarURL({ dynamic: true })
+					iconURL: message.user.displayAvatarURL()
 				})
 				.setTitle(`${bot.config.emojis.music} | ${message.guild.name}'s Music Queue`)
 				.setDescription(queueSongs.join("\n"))
-				.setColor(bot.config.embed.color)
+				.setColor(Colors.Blue)
 				.setThumbnail(message.guild.iconURL({ dynamic: true }))
 				.setFooter({
 					text: `${message.guild.name}'s Music Queue`,
-					iconURL: bot.user.displayAvatarURL({ dynamic: true })
+					iconURL: bot.user.displayAvatarURL()
 				});
 
 			return await message.replyT({
@@ -289,13 +304,35 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				.setTitle(`${bot.config.emojis.music} | Currently Playing ${track?.title}`)
 				.setURL(track?.uri)
 				.setThumbnail(track?.thumbnail)
-				.addField(`${bot.config.emojis.player} Uploader`, `\`\`\`${track?.author}\`\`\``, true)
-				.addField(`${bot.config.emojis.clock} Duration`, `\`\`\`${track?.duration}\`\`\``, true)
-				.addField(`${bot.config.emojis.music} Songs [${playerData?.queue?.totalSize}]`, `\`${playerData?.queue?.map((song: Track, id: number) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10)}\``, false)
-				.addField(`${bot.config.emojis.volume} Volume`, `\`${playerData?.volume}%\``, true)
-				.addField(`${bot.config.emojis.loop} Loop`, `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`, true)
+				.addFields([
+					{
+						name: `${bot.config.emojis.player} Uploader`,
+						value: `\`\`\`${track?.author}\`\`\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.clock} Duration`,
+						value: `\`\`\`${track?.duration}\`\`\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.music} Songs [${playerData?.queue?.totalSize}]`,
+						value: `\`${playerData?.queue?.map((song: Track, id: number) => `${Emotes[id] || (id + 1)} **${song.title}** - ${bot.music.formatDuration(song.duration)}`).slice(0, 10)}\``,
+						inline: false
+					},
+					{
+						name: `${bot.config.emojis.volume} Volume`,
+						value: `\`${playerData?.volume}%\``,
+						inline: true
+					},
+					{
+						name: `${bot.config.emojis.loop} Loop`,
+						value: `${playerData.trackRepeat ? `${bot.config.emojis.success} \`Enabled: Song\`` : playerData.queueRepeat ? `${bot.config.emojis.success} \`Enabled: Queue\`` : `${bot.config.emojis.error} \`Disabled\``}`,
+						inline: true
+					}
+				])
 				.setURL(track.uri)
-				.setColor(bot.config.embed.color)
+				.setColor(Colors.Blue)
 				.setTimestamp();
 
 			await bot.music.handleMusic(playerData, track, embed, {

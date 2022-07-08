@@ -60,7 +60,7 @@ import Logger from "./Utils/logger";
 // Functions //
 async function checkForUpdate() {
 	try {
-		const tag_name = await axios.get("https://api.github.com/repos/Ch1ll-Studio/SparkV/releases/latest").then(response => response.data.tag_name);
+		const tag_name = await axios.get("https://api.github.com/repos/Ch1ll-Studio/SparkV/releases/latest").then((response: any) => response.data.tag_name);
 
 		if (Number(tag_name.slice(1)) > Number(require("./config.json")?.version)) {
 			console.log(chalk.grey("----------------------------------------"));
@@ -105,13 +105,13 @@ async function start() {
 	process.env.MainDir = __dirname;
 
 	if (process.argv.includes("--sharding") === true) {
-		const manager = new discord.ShardingManager("./bot/app.js", {
+		const manager = new discord.ShardingManager("./app.js", {
 			token: process.env.TOKEN,
 			totalShards: "auto",
 			shardArgs: [...process.argv, ...["--sharding"]]
 		});
 
-		const StatClient = await new Statcord.ShardingClient({
+		new Statcord.ShardingClient({
 			manager,
 			key: (process.env.STATCORDAPIKEY as any),
 			postCpuStatistics: true,
@@ -121,12 +121,12 @@ async function start() {
 		});
 
 		// Shard Handlers //
-		manager.on("shardCreate", shard => {
+		manager.on("shardCreate", (shard: any) => {
 			Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DEPLOYING`);
 
 			shard.on("ready", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - READY`));
 			shard.on("disconnect", () => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - DISCONNECTED`, "error"));
-			shard.on("death", event => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
+			shard.on("death", (event: any) => Logger(`[SHARD ${shard.id}/${manager.totalShards}] - SHARD DIED! ${event.exitCode ? `Exited with code ${event.exitCode}` : "Exited due to lack of available memory."}.`));
 		});
 
 		manager.spawn();

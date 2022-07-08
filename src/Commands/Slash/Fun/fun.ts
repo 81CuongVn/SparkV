@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { ButtonStyle, Colors } from "discord.js";
 import axios from "axios";
 
 import cmd from "../../../structures/command";
@@ -19,12 +19,12 @@ function shuffle(array: string[]) {
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const type = data.options.getString("type");
-	const embed = new Discord.MessageEmbed()
+	const embed = new Discord.EmbedBuilder()
 		.setAuthor({
 			name: message.user.tag,
-			iconURL: message.user.displayAvatarURL({ dynamic: true })
+			iconURL: message.user.displayAvatarURL()
 		})
-		.setColor("GREEN")
+		.setColor(Colors.Green)
 		.setTimestamp();
 
 	switch (type) {
@@ -65,57 +65,41 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			];
 
 			const reply = replies[Math.floor(Math.random() * replies.length + 0)];
-
-			embed.setDescription(`**8Ball**\n${reply}`).setColor(goodReplies.find(r => r === reply) ? "GREEN" : "RED");
-
 			await message.replyT({
-				embeds: [embed]
+				embeds: [embed.setDescription(`**8Ball**\n${reply}`).setColor(goodReplies.find(r => r === reply) ? Colors.Green : Colors.Red)]
 			});
 
 			break;
 		} case "advice": {
 			const data = await axios.get("https://api.adviceslip.com/advice").then(res => res.data).catch((err: any) => bot.logger(`Advice failed: ${err}`, "error"));
-
-			embed
-				.setDescription(`**Here's an advice.**\n${data.slip.advice}`)
-				.setFooter({
-					text: `You got advice #${data.slip.id}`,
-					iconURL: bot.user.displayAvatarURL({ dynamic: true })
-				});
-
 			await message.replyT({
-				embeds: [embed]
+				embeds: [embed.setDescription(`**Here's an advice.**\n${data.slip.advice}`).setFooter({ text: `You got advice #${data.slip.id}`, iconURL: bot.user.displayAvatarURL() })]
 			});
 
 			break;
 		} case "uselessfact": {
 			const data = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en").then(res => res.data).catch((err: any) => bot.logger(`Useless fact failed: ${err}`, "error"));
-
-			embed
-				.setDescription(`**${bot.config.emojis.question} | Did you know?**\n${data.text}`)
-				.setFooter({
-					text: `Fun facts powered by uselessfacts.jsph.pl! • ${bot.config.embed.footer}`,
-					iconURL: bot.user.displayAvatarURL({ dynamic: true })
-				});
-
 			await message.replyT({
-				embeds: [embed]
+				embeds: [embed.setDescription(`**${bot.config.emojis.question} | Did you know?**\n${data.text}`).setFooter({ text: `Fun facts powered by uselessfacts.jsph.pl! • ${bot.config.embed.footer}`, iconURL: bot.user.displayAvatarURL() })]
 			});
 
 			break;
 		} case "truthordare": {
 			const msg = await message.replyT({
 				embeds: [embed.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\nSelect whether you want truth or dare.`)],
-				components: [new Discord.MessageActionRow().addComponents(
-					new Discord.MessageButton()
+				components: [{
+					type: 1,
+					components: [
+					new Discord.ButtonBuilder()
 						.setLabel("Truth")
-						.setStyle("SUCCESS")
+						.setStyle(ButtonStyle.Success)
 						.setCustomId("truth"),
-					new Discord.MessageButton()
+					new Discord.ButtonBuilder()
 						.setLabel("Dare")
-						.setStyle("DANGER")
+						.setStyle(ButtonStyle.Danger)
 						.setCustomId("dare")
-				)],
+					]
+				}],
 				fetchReply: true
 			});
 
@@ -124,12 +108,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				if (!interaction.deferred) interaction.deferUpdate().catch((): any => { });
 
 				const data = await axios.get(`https://api.truthordarebot.xyz/api/${interaction.customId}`).then(res => res.data).catch((err: any) => bot.logger(`Truth or dare failed: ${err}`, "error"));
-				embed
-					.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\n${data.question}`)
-					.setColor(interaction.customId === "truth" ? "GREEN" : "RED");
-
 				await msg.edit({
-					embeds: [embed],
+					embeds: [embed
+						.setDescription(`${bot.config.emojis.question} | **Truth or Dare?**\n${data.question}`)
+						.setColor(interaction.customId === "truth" ? Colors.Green : Colors.Red)],
 					components: []
 				});
 			});
@@ -152,10 +134,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			// eslint-disable-next-line no-inner-declarations
 			async function updateGame() {
-				const embed = new Discord.MessageEmbed()
+				const embed = new Discord.EmbedBuilder()
 					.setAuthor({
-						name: (message.user ? message.user : message.author).tag,
-						iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
+						name: message.user.tag,
+						iconURL: message.user.displayAvatarURL()
 					})
 					.setTitle(await message.translate("Hangman"))
 					.setDescription(`\`\`\`
@@ -167,10 +149,24 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
         |
     ---------
 			\`\`\`\n${gameOver ? `${(gameStatus === await message.translate("won") ? await message.translate("You won!") : await message.translate("You lost. Better luck next time."))} ${await message.translate("The word was")} \`${word}\`` : await message.translate("You got this!")}`)
-					.addField(await message.translate("Word"), `\`${progress}\``, false)
-					.addField(await message.translate("Guesses"), `${misses.join(", ") || "None."}`, true)
-					.addField(await message.translate("Lives"), `${"❤️".repeat(lives >= 0 ? lives : 0)}${"🖤".repeat(6 - lives)}`, true)
-					.setColor(gameOver ? (gameStatus === "won" ? "GREEN" : "RED") : "BLUE");
+					.addFields([
+						{
+							name: await message.translate("Word"),
+							value: `\`${progress}\``,
+							inline: false
+						},
+						{
+							name: await message.translate("Guesses"),
+							value: `${misses.join(", ") || "None."}`,
+							inline: true
+						},
+						{
+							name: await message.translate("Lives"),
+							value: `${"❤️".repeat(lives >= 0 ? lives : 0)}${"🖤".repeat(6 - lives)}`,
+							inline: true
+						}
+					])
+					.setColor(gameOver ? (gameStatus === "won" ? Colors.Green : Colors.Red) : Colors.Blue);
 
 				if (menuEmbed) {
 					await menuEmbed.edit({
@@ -185,11 +181,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 			await updateGame();
 
-			const collector = await menuEmbed.channel.createMessageCollector({
-				filter: (m: Discord.Message) => m.content,
-				time: 900 * 1000
-			});
-
+			const collector = await menuEmbed.channel.createMessageCollector({ time: 900 * 1000 });
 			collector.on("collect", async (m: any) => {
 				if (m.content.toLowerCase() === "cancel") await collector.stop();
 				if (!m.content.match(lettersRegExp)) return;
@@ -221,9 +213,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 				await updateGame();
 
-				if (gameStatus !== "playing") {
-					await collector.stop();
-				}
+				if (gameStatus !== "playing") await collector.stop();
 			});
 
 			collector.on("end", async (collected: any) => {
@@ -239,13 +229,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			chosenWord += `${words[Math.floor(Math.random() * words.length)]}`;
 
 			const gameCreation = Date.now();
-			const MenuEmbed = new Discord.MessageEmbed()
+			const MenuEmbed: any = new Discord.EmbedBuilder()
 				.setAuthor({
-					name: (message.user ? message.user : message.author).tag,
-					iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
+					name: message.user.tag,
+					iconURL: message.user.displayAvatarURL()
 				})
 				.setDescription(`**Spelling Game**\nYou have **1 minute** to spell the following word correctly.\n> **\`${chosenWord}\`**.`)
-				.setColor(bot.config.embed.color)
+				.setColor(Colors.Blue)
 				.setTimestamp();
 
 			const Menu = await message.replyT({
@@ -264,10 +254,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				errors: ["time"]
 			}).then(async (collected: { first: () => any; }) => {
 				const colMessage = collected.first();
-				const embed = new Discord.MessageEmbed()
+				const embed = new Discord.EmbedBuilder()
 					.setAuthor({
-						name: (message.user ? message.user : message.author).tag,
-						iconURL: (message.user ? message.user : message.author).displayAvatarURL({ dynamic: true })
+						name: message.user.tag,
+						iconURL: message.user.displayAvatarURL()
 					})
 					.setTimestamp();
 
@@ -280,25 +270,25 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 						embeds: [
 							MenuEmbed
 								.setDescription(`${MenuEmbed.description}\n\n${bot.config.emojis.success} | ${colMessage.author} ${await message.translate("has won the game in")} **${seconds} ${await message.translate("seconds")}** ${await message.translate("with a WPM of ")}**${WPM}**!`)
-								.setColor("GREEN")
+								.setColor(Colors.Green)
 						]
 					});
 
 					embed
 						.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}\`${chosenWord}\`. You got it right in **${seconds} seconds** with a WPM of **${WPM}**!`)
-						.setColor("GREEN");
+						.setColor(Colors.Green);
 				} else {
 					await Menu.edit({
 						embeds: [
 							MenuEmbed
 								.setDescription(`${MenuEmbed.description}\n\n${bot.config.emojis.error} | ${colMessage.author} ${await message.translate("spelt the word wrong, and lost the game")}.`)
-								.setColor("RED")
+								.setColor(Colors.Red)
 						]
 					});
 
 					embed
 						.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The words were ")}\`${chosenWord}\`.`)
-						.setColor("RED");
+						.setColor(Colors.Red);
 				}
 
 				await message.replyT({
@@ -313,18 +303,18 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		} case "trivia": {
 			const trivia = await message.replyT({
 				embeds: [
-					new Discord.MessageEmbed()
+					new Discord.EmbedBuilder()
 						.setAuthor({
 							name: message.user.tag,
-							iconURL: message.user.displayAvatarURL({ dynamic: true })
+							iconURL: message.user.displayAvatarURL()
 						})
 						.setTitle(await message.translate(`${bot.config.emojis.config} | Loading...`))
 						.setDescription(await message.translate(`Please wait...`))
 						.setFooter({
 							text: bot.config.embed.footer,
-							iconURL: bot.user.displayAvatarURL({ dynamic: true })
+							iconURL: bot.user.displayAvatarURL()
 						})
-						.setColor("BLUE")
+						.setColor(Colors.Blue)
 				]
 			});
 
@@ -337,36 +327,36 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			shuffle(choices);
 
 			let number = 0;
-			const triviaEmbed = new Discord.MessageEmbed()
+			const triviaEmbed = new Discord.EmbedBuilder()
 				.setAuthor({
 					name: message.user.tag,
-					iconURL: message.user.displayAvatarURL({ dynamic: true })
+					iconURL: message.user.displayAvatarURL()
 				})
 				.setDescription(`${bot.config.emojis.question} | **${await message.translate(triviaData.question.replaceAll("&quot;", "\"").replaceAll("&#039;", "\'"))}**\n${await message.translate("You only have")} **${await message.translate("1 minute")}** ${await message.translate("to guess the answer!")}\n\n${choices.map(choice => {
 					number++;
 					return `**${number}**) ${choice.replaceAll("&quot;", "\"").replaceAll("&#039", "\'")}`;
 				}).join("\n")}`)
-				.setColor(bot.config.embed.color);
+				.setColor(Colors.Blue);
 
-			const answer1B = new Discord.MessageButton()
+			const answer1B = new Discord.ButtonBuilder()
 				.setEmoji("1️⃣")
 				.setCustomId("1")
-				.setStyle("SECONDARY");
+				.setStyle(ButtonStyle.Secondary);
 
-			const answer2B = new Discord.MessageButton()
+			const answer2B = new Discord.ButtonBuilder()
 				.setEmoji(bot.config.emojis.numbers.two)
 				.setCustomId("2")
-				.setStyle("SECONDARY");
+				.setStyle(ButtonStyle.Secondary);
 
-			const answer3B = new Discord.MessageButton()
+			const answer3B = new Discord.ButtonBuilder()
 				.setEmoji("3️⃣")
 				.setCustomId("3")
-				.setStyle("SECONDARY");
+				.setStyle(ButtonStyle.Secondary);
 
-			const answer4B = new Discord.MessageButton()
+			const answer4B = new Discord.ButtonBuilder()
 				.setEmoji("4️⃣")
 				.setCustomId("4")
-				.setStyle("SECONDARY");
+				.setStyle(ButtonStyle.Secondary);
 
 			await trivia.edit({
 				embeds: [triviaEmbed],
@@ -380,13 +370,13 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 
 			const collector = trivia.createMessageComponentCollector({ time: 60 * 1000 });
-			collector.on("collect", async (interaction: { deferReply: () => any; customId: string; replyT: (arg0: { embeds: Discord.MessageEmbed[]; }) => any; }) => {
+			collector.on("collect", async (interaction: { deferReply: () => any; customId: string; replyT: (arg0: { embeds: Discord.EmbedBuilder[]; }) => any; }) => {
 				await interaction.deferReply();
 
-				const embed = new Discord.MessageEmbed()
+				const embed = new Discord.EmbedBuilder()
 					.setAuthor({
 						name: message.user.tag,
-						iconURL: message.user.displayAvatarURL({ dynamic: true })
+						iconURL: message.user.displayAvatarURL()
 					})
 					.setTimestamp();
 
@@ -394,22 +384,22 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				if ((parseInt(interaction.customId) - 1) === winningNumber) {
 					embed
 						.setDescription(`${bot.config.emojis.success} | ${await message.translate("Great job! The answer was ")}**${triviaData.correct_answer}**!`)
-						.setColor("GREEN");
+						.setColor(Colors.Green);
 				} else {
 					embed
 						.setDescription(`${bot.config.emojis.error} | ${await message.translate("That's not right... better luck next time. The answer was ")}**${triviaData.correct_answer}**.`)
-						.setColor("RED");
+						.setColor(Colors.Red);
 
-					if ((parseInt(interaction.customId) - 1) === 0) answer1B.setStyle("DANGER");
-					else if ((parseInt(interaction.customId) - 1) === 1) answer2B.setStyle("DANGER");
-					else if ((parseInt(interaction.customId) - 1) === 2) answer3B.setStyle("DANGER");
-					else if ((parseInt(interaction.customId) - 1) === 3) answer4B.setStyle("DANGER");
+					if ((parseInt(interaction.customId) - 1) === 0) answer1B.setStyle(ButtonStyle.Danger);
+					else if ((parseInt(interaction.customId) - 1) === 1) answer2B.setStyle(ButtonStyle.Danger);
+					else if ((parseInt(interaction.customId) - 1) === 2) answer3B.setStyle(ButtonStyle.Danger);
+					else if ((parseInt(interaction.customId) - 1) === 3) answer4B.setStyle(ButtonStyle.Danger);
 				}
 
-				if (winningNumber === 0) answer1B.setStyle("SUCCESS");
-				else if (winningNumber === 1) answer2B.setStyle("SUCCESS");
-				else if (winningNumber === 2) answer3B.setStyle("SUCCESS");
-				else if (winningNumber === 3) answer4B.setStyle("SUCCESS");
+				if (winningNumber === 0) answer1B.setStyle(ButtonStyle.Success);
+				else if (winningNumber === 1) answer2B.setStyle(ButtonStyle.Success);
+				else if (winningNumber === 2) answer3B.setStyle(ButtonStyle.Success);
+				else if (winningNumber === 3) answer4B.setStyle(ButtonStyle.Success);
 
 				await trivia.edit({
 					components: [

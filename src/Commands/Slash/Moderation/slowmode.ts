@@ -20,23 +20,19 @@ export default new cmd(execute, {
 	description: "Applies a slowmode to a channel.",
 	dirname: __dirname,
 	aliases: ["slow"],
-	usage: `(user) <reason>`,
-	perms: ["MANAGE_CHANNELS"],
-	bot_perms: ["MANAGE_CHANNELS"],
+	usage: `(user) (reason)`,
+	perms: ["ManageChannels"],
+	bot_perms: ["ManageChannels"],
 	slash: true,
-	slashOnly: true,
-	options: [
-		{
-			type: 7,
-			name: "channel",
-			description: "The channel to apply a slowmode too.",
-			required: true
-		},
-		{
-			type: 10,
-			name: "seconds",
-			description: "The amount of seconds to set the slowmode to.",
-			required: true
-		}
-	]
+	options: [{
+		type: 7,
+		name: "channel",
+		description: "The channel to apply a slowmode too.",
+		required: true
+	}, {
+		type: 10,
+		name: "seconds",
+		description: "The amount of seconds to set the slowmode to.",
+		required: true
+	}]
 });

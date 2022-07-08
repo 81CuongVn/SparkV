@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../../structures/command";
 
@@ -27,17 +27,17 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			});
 		}
 
-		const LeaderboardEmbed = new Discord.MessageEmbed()
-			.setTitle(`${message.guild.name}'s Level Leaderboard`)
-			.setDescription(Leaderboard.map(data => `${Emotes[data.rank - 1] || "🏅"} **Level ${data.level}** - ${data.username}#${data.discriminator}`).join("\n"))
-			.setFooter({
-				text: `${bot.user.username} • ${bot.config.embed.footer}`,
-				iconURL: bot.user.displayAvatarURL({ dynamic: true })
-			})
-			.setColor(bot.config.embed.color);
-
 		await message.replyT({
-			embeds: [LeaderboardEmbed]
+			embeds: [{
+				title: `${message.guild.name}'s Level Leaderboard`,
+				description: Leaderboard.map(data => `${Emotes[data.rank - 1] || "🏅"} **Level ${data.level}** - ${data.username}#${data.discriminator}`).join("\n"),
+				color: "BLUE",
+				timestamp: new Date(),
+				footer: {
+					text: `${bot.user.username} • ${bot.config.embed.footer}`,
+					iconURL: bot.user.displayAvatarURL()
+				}
+			}]
 		});
 	} else if (type === "money") {
 		const global = data.options.getBoolean("global") || false;
@@ -64,7 +64,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				timestamp: new Date(),
 				footer: {
 					text: `${bot.user.username} • ${bot.config.embed.footer}`,
-					icon_url: bot.user.displayAvatarURL({ dynamic: true })
+					icon_url: bot.user.displayAvatarURL()
 				}
 			}]
 		});

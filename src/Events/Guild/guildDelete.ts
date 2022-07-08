@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 export default {
 	once: false,
@@ -21,25 +21,34 @@ export default {
 		const Owner = await guild?.fetchOwner().catch((): any => null) || null;
 
 		if (Logger) {
-			const ServerRemovedEmbed = new Discord.MessageEmbed()
+			const ServerRemovedEmbed = new Discord.EmbedBuilder()
 				.setTitle(`${bot.config.emojis.arrows.down}︱Guild Removed`)
 				.setDescription(`SparkV left **${guild.name} (${guild.id})**.`)
-				.addField(`${bot.config.emojis.player} **Members**`, `${bot.functions.formatNumber(guild.memberCount)}`, true)
-				.addField("📅 **Created**", `<t:${~~(guild.createdAt / 1000)}:R>`, true)
+				.addFields([
+					{
+						name: `${bot.config.emojis.player} **Members**`,
+						value: `${bot.functions.formatNumber(guild.members.memberCount)}`,
+						inline: true
+					}, {
+						name: "📅 **Created**",
+						value: `<t:${~~(guild.createdAt / 1000)}:R>`,
+						inline: true
+					}
+				])
 				.setThumbnail(guild.iconURL())
 				.setImage(guild.bannerURL())
-				.setColor("RED");
+				.setColor(Colors.Red);
 
 			if (guild.vanityURLCode) {
 				ServerRemovedEmbed
 					.setURL(`https://discord.gg/${guild.vanityURLCode}`)
-					.addField("🔗 **Vanity URL**", `https://discord.gg/${guild.vanityURLCode}`, true);
+					.addFields([ { name: "🔗 **Vanity URL**", value: `https://discord.gg/${guild.vanityURLCode}`, inline: true } ]);
 			}
 
 			if (Owner) {
 				ServerRemovedEmbed.setAuthor({
 					name: Owner?.user?.username,
-					iconURL: Owner?.user?.displayAvatarURL({ dynamic: true })
+					iconURL: Owner?.user?.displayAvatarURL()
 				});
 			}
 
