@@ -42,14 +42,7 @@ async function Start() {
 			await mongoose.connect(process.env.MONGOOSEURL, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
-			} as {
-				bufferCommands?: boolean;
-				dbName?: string;
-				user?: string;
-				pass?: string;
-				autoIndex?: boolean;
-				autoCreate?: boolean;
-			});
+			} as mongoose.ConnectOptions);
 
 			mongoose.connection.on("error", console.error.bind(console, "Database connection error!"));
 			mongoose.connection.on("open", () => console.log("[Datebase] Connected and ready."));

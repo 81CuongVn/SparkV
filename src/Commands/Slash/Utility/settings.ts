@@ -793,7 +793,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 
 	const ExitButton = new ButtonBuilder().setLabel("Exit").setEmoji(bot.config.emojis.leave).setCustomId("exit").setStyle(ButtonStyle.Danger);
 	const BackButton = new ButtonBuilder().setLabel("Back").setEmoji(bot.config.emojis.arrows.left).setCustomId("back").setStyle(ButtonStyle.Secondary);
-	const WebsiteButton = new ButtonBuilder().setURL(`https://${process.env.BASEURL}/`).setEmoji(bot.config.emojis.globe).setLabel("Website").setStyle(ButtonStyle.Link);
+	const WebsiteButton = new ButtonBuilder().setURL(`https://www.sparkv.tk/`).setEmoji(bot.config.emojis.globe).setLabel("Website").setStyle(ButtonStyle.Link);
 	const SupportButton = new ButtonBuilder().setURL(bot.config.support).setLabel("Support").setStyle(ButtonStyle.Link);
 
 	async function createPages() {
