@@ -58,3 +58,6 @@ dist
 
 # vuepress build output
 .vuepress/dist
+
+# WIP files
+/wip

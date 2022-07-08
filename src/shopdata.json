@@ -2,10 +2,9 @@
     {
         "name": "pizza",
         "description": "Yummy, pizza!",
+        "emoji": "🍕",
         "usedMessage": "🍕 | You ate delicious pizza!",
-        "ids": [
-            "pz"
-        ],
+        "ids": [ "pz" ],
         "sale": true,
         "price": 10,
         "usable": true
@@ -13,10 +12,9 @@
     {
         "name": "apple",
         "description": "An apple a day keeps the doctor away!",
+        "emoji": "🍎",
         "usedMessage": "🍎 | You ate a delicious apple.",
-        "ids": [
-            "pz"
-        ],
+        "ids": [ "apl" ],
         "sale": true,
         "price": 5,
         "usable": true
@@ -24,9 +22,8 @@
     {
         "name": "banknote",
         "description": "A banknote. Used to expand your bank storage.",
-        "ids": [
-            "bn"
-        ],
+        "emoji": "🗒️",
+        "ids": [ "bn" ],
         "sale": false,
         "price": 0,
         "usable": true
@@ -34,9 +31,8 @@
     {
         "name": "topmedal",
         "description": "Why would you even buy this.",
-        "ids": [
-            "medal"
-        ],
+        "emoji": "🏆",
+        "ids": [ "medal" ],
         "sale": true,
         "price": 10000000,
         "usable": false
