@@ -5,7 +5,7 @@ import { Manager } from "erela.js";
 import Spotify from "erela.js-spotify";
 
 export default (bot: any) => {
-	bot.lyricsClient = new Client(process.env.GENIUS_TOKEN);
+	if (process.env?.GENIUS_TOKEN) bot.lyricsClient = new Client(process.env.GENIUS_TOKEN);
 
 	bot.music = new Manager({
 		nodes: [{
