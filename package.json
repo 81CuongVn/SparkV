@@ -9,8 +9,8 @@
     "dev": "npm run build && cd dist && doppler run -- node index --dev",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
-    "build": "tsc --build",
-    "watch": "tsc --watch",
+    "build": "npm run tsc --build",
+    "watch": "npm run tsc --watch",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },
