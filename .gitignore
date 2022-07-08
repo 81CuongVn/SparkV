@@ -54,6 +54,7 @@ node_modules/
 
 # Nuxt.js build / generate output
 .nuxt
+dist
 
 # vuepress build output
 .vuepress/dist
