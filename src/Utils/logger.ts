@@ -14,13 +14,16 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 	if (!content) return;
 
 	switch (type) {
-		case "log":
-			return console.log(`[Info] ${content}`);
-		case "warn":
-			return console.log(chalk.yellow(`[Warning] ${content}`));
-		case "debug":
-			return console.log(chalk.green(`[Debug] ${content}`));
-		case "error":
+		case "log": {
+			console.log(`[Info] ${content}`);
+			break;
+		} case "warn": {
+			console.log(chalk.yellow(`[Warning] ${content}`));
+			break;
+		} case "debug": {
+			console.log(chalk.green(`[Debug] ${content}`));
+			break;
+		} case "error": {
 			console.log(`[Error] ${chalk.red(process.argv.includes("--dev") === true ? (moreData?.data?.stack || content) : content)}`);
 
 			const bot: Discord.Client = (global as any).bot;
@@ -53,16 +56,16 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 					}
 					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\``, inline: true });
 
-					await errorChannel.send({
-						embeds: [embed]
-					});
+					await errorChannel.send({ embeds: [embed] });
 				}
 			}
-		case "bot":
-			return console.log(`[App] | ${content}`);
-		case "web":
-			return console.log(`[Web] | ${content}`);
-		default:
-			return console.log(content);
+			break;
+		} case "bot": {
+			console.log(`[App] | ${content}`);
+			break;
+		} case "web": {
+			console.log(`[Web] | ${content}`);
+			break;
+		} default: { console.log(content); }
 	}
 };
