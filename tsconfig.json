@@ -6,6 +6,7 @@
         "outDir": "./dist",
         "baseUrl": "./",
         "noImplicitAny": true,
+        "moduleResolution": "node",
         // "declaration": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
