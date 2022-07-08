@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import ms from "ms";
 
-import cmd from "../../../structures/modCommand";
+import cmd from "../../../Structures/modCommand";
 
 async function execute(bot: any, interaction: any, args: string[], command: string, data: any) {
 	const user = data.options.getMember("user");

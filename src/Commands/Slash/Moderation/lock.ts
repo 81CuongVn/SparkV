@@ -1,6 +1,6 @@
 import Discord, { Role, Colors } from "discord.js";
 
-import cmd from "../../../structures/modCommand";
+import cmd from "../../../Structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const reason = (message?.applicationId ? data.options.getString("reason") : args.join(" ")) || "No reason provided.";

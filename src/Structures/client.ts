@@ -10,7 +10,7 @@ import loadMusicSystem from "../Utils/music";
 import shopdata from "../shopdata.json";
 
 import config from "../config.json";
-import logger from "../utils/logger";
+import logger from "../Utils/logger";
 import updateDocs from "../Utils/updateDocs";
 
 export default class bot extends (Client as any) {

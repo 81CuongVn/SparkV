@@ -1,7 +1,7 @@
 import discord, { Colors } from "discord.js";
 import axios from "axios";
 
-import cmd from "../../.././structures/command";
+import cmd from "../../.././Structures/command";
 
 const subreddits = [{
     name: "meme",

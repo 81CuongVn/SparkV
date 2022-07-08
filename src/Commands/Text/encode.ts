@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-import cmd from "../.././structures/command";
+import cmd from "../.././Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const string = args.join(" ").slice(args[0].length + 1);

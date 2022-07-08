@@ -1,6 +1,6 @@
 import Discord, { ChannelType, Colors } from "discord.js";
 
-import cmd from "../../../structures/modCommand";
+import cmd from "../../../Structures/modCommand";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = data.options.getString("state");
