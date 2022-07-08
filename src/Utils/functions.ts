@@ -18,7 +18,7 @@ module.exports = {
 
 		bot = client;
 
-		Canvas.registerFont(`${path.join(__dirname, "../../")}/assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
+		Canvas.registerFont(`${path.join(__dirname, "../../")}/Assets/fonts/TheBoldFont.ttf`, { family: "Bold" });
 	},
 
 	/**
