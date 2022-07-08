@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const os_1 = __importDefault(require("os"));
 const axios_1 = __importDefault(require("axios"));
-const command_1 = __importDefault(require("../../../structures/command"));
+const command_1 = __importDefault(require("../../../Structures/command"));
 async function execute(bot, message, args, command, data) {
     const pages = [] = [];
     /* -------------------------------------------------- BUTTONS --------------------------------------------------*/

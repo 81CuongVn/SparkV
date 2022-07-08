@@ -1,7 +1,7 @@
 import Discord, { ButtonStyle, Colors } from "discord.js";
 import axios from "axios";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 import words from "../../../words.json";
 
 function shuffle(array: string[]) {

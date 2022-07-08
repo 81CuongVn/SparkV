@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	if (43200000 - (Date.now() - data.user.cooldowns.daily) > 0) {

@@ -2,7 +2,7 @@ import Discord, { Colors } from "discord.js";
 import { inspect } from "util";
 import fetch from "axios";
 
-import cmd from "../../structures/command";
+import cmd from "../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	let input = args.join(" ");

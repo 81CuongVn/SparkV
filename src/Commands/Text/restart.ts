@@ -1,7 +1,7 @@
 import Discord, { Message } from "discord.js";
 let restarting = false;
 
-import cmd from "../../structures/command";
+import cmd from "../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	if (restarting === true) return;

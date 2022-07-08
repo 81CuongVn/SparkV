@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const canvacord_1 = __importDefault(require("canvacord"));
-const command_1 = __importDefault(require("../../../structures/command"));
+const command_1 = __importDefault(require("../../../Structures/command"));
 function capFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }

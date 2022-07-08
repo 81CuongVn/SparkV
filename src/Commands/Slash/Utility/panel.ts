@@ -1,7 +1,7 @@
 import Discord, { Channel, Colors } from "discord.js";
 import canvacord from "canvacord";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = data.options.getSubcommand();

@@ -1,7 +1,7 @@
 import Discord, { Role, Colors, ButtonInteraction } from "discord.js";
 import canvacord from "canvacord";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 const cooldowns: any[] = [];
 

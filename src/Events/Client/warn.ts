@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-import logger from "../../utils/logger";
+import logger from "../../Utils/logger";
 
 export default {
 	once: false,

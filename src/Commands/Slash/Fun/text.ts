@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import figlet from "figlet";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 const chars = {
 	0: ":zero:",

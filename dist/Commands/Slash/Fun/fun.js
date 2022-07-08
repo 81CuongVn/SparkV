@@ -28,7 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = __importStar(require("discord.js"));
 const axios_1 = __importDefault(require("axios"));
-const command_1 = __importDefault(require("../../../structures/command"));
+const command_1 = __importDefault(require("../../../Structures/command"));
 const words_json_1 = __importDefault(require("../../../words.json"));
 function shuffle(array) {
     let currentIndex = array.length, randomIndex;

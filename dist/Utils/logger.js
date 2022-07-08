@@ -8,13 +8,19 @@ exports.default = async (content, type, moreData) => {
     if (!content)
         return;
     switch (type) {
-        case "log":
-            return console.log(`[Info] ${content}`);
-        case "warn":
-            return console.log(chalk_1.default.yellow(`[Warning] ${content}`));
-        case "debug":
-            return console.log(chalk_1.default.green(`[Debug] ${content}`));
-        case "error":
+        case "log": {
+            console.log(`[Info] ${content}`);
+            break;
+        }
+        case "warn": {
+            console.log(chalk_1.default.yellow(`[Warning] ${content}`));
+            break;
+        }
+        case "debug": {
+            console.log(chalk_1.default.green(`[Debug] ${content}`));
+            break;
+        }
+        case "error": {
             console.log(`[Error] ${chalk_1.default.red(process.argv.includes("--dev") === true ? (moreData?.data?.stack || content) : content)}`);
             const bot = global.bot;
             if (process.argv.includes("--dev") === false && bot?.isReady() === true) {
@@ -44,17 +50,22 @@ exports.default = async (content, type, moreData) => {
                             }]
                     };
                     moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\``, inline: true });
-                    await errorChannel.send({
-                        embeds: [embed]
-                    });
+                    await errorChannel.send({ embeds: [embed] });
                 }
             }
-        case "bot":
-            return console.log(`[App] | ${content}`);
-        case "web":
-            return console.log(`[Web] | ${content}`);
-        default:
-            return console.log(content);
+            break;
+        }
+        case "bot": {
+            console.log(`[App] | ${content}`);
+            break;
+        }
+        case "web": {
+            console.log(`[Web] | ${content}`);
+            break;
+        }
+        default: {
+            console.log(content);
+        }
     }
 };
 //# sourceMappingURL=logger.js.map

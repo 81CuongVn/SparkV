@@ -28,7 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = __importStar(require("discord.js"));
 const canvacord_1 = __importDefault(require("canvacord"));
-const command_1 = __importDefault(require("../../../structures/command"));
+const command_1 = __importDefault(require("../../../Structures/command"));
 const cooldowns = [];
 const statuses = {
     online: "<:online:948002054029340733>", idle: "<:idle:948003685118664784>",

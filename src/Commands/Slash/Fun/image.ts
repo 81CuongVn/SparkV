@@ -1,7 +1,7 @@
 import Discord, { Colors } from "discord.js";
 import canvacord from "canvacord";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 function capFirstLetter(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);

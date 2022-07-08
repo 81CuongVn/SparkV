@@ -2,7 +2,7 @@ import { ButtonBuilder, EmbedBuilder, ButtonStyle, Colors, PermissionsBitField }
 import os from "os";
 import axios from "axios";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const pages: any = [] = [];

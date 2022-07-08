@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const command_1 = __importDefault(require("../../../structures/command"));
+const command_1 = __importDefault(require("../../../Structures/command"));
 exports.default = new command_1.default(async (bot, message, args, command, data) => await message.replyT({
     embeds: [{
             title: `${bot.config.emojis.coin} **Shop**`,

@@ -2,7 +2,7 @@ import Discord from "discord.js";
 
 const Replies = ["heads", "tails"];
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const Side = data.options.getString("side");

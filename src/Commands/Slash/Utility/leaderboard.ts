@@ -1,6 +1,6 @@
 import Discord, { Colors } from "discord.js";
 
-import cmd from "../../../structures/command";
+import cmd from "../../../Structures/command";
 
 const Emotes = ["🥇", "🥈", "🥉"];
 
