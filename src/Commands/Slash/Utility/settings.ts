@@ -76,7 +76,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 										iconURL: interaction.user.displayAvatarURL()
 									},
 									description: `${bot.config.emojis.alert} | **Uh oh!**\nA critical error has occured with either with our database, or handling Discord API. Please contact support [here](https://discord.gg/PPtzT8Mu3h).\n\n${err?.message ?? err}`,
-									color: "RED"
+									color: Colors.Red
 								}]
 							});
 						} catch (err: any) { }
@@ -494,7 +494,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiScam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("GREEN");
+									.setColor(Colors.Green);
 
 								data.guild.antiScam.action = collected;
 								data.guild.markModified("antiScam.action");
@@ -596,7 +596,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 								requestMsg
 									.setTitle(`${bot.config.emojis.config} | AntiSpam Actions`)
 									.setDescription(`${bot.config.emojis.success} | Successfully set actions to ${collected}.`)
-									.setColor("GREEN");
+									.setColor(Colors.Green);
 
 								data.guild.antiSpam.action = collected;
 								data.guild.markModified("antiSpam.action");

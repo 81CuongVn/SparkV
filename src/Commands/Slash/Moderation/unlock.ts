@@ -1,4 +1,4 @@
-import Discord, { Role } from "discord.js";
+import Discord, { Colors, Role } from "discord.js";
 
 import cmd from "../../../Structures/modCommand";
 
@@ -13,7 +13,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 					iconURL: message?.user?.displayAvatarURL()
 				},
 				description: "**Unlocked**\nThis channel has been unlocked!",
-				color: "GREEN"
+				color: Colors.Green
 			}]
 		});
 	} catch (err: any) {

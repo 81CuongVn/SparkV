@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 const Replies = ["heads", "tails"];
 
@@ -22,12 +22,12 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		data.user.money.balance += (Bet * 2);
 
 		Embed.description = `Congrats, you won **⏣${await bot.functions.formatNumber(Bet * 2)}** coins!\nBecause you bet on ${Side}, you now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`;
-		Embed.color = "GREEN";
+		Embed.color = Colors.Green;
 	} else {
 		data.user.money.balance -= Bet;
 
 		Embed.description = `Aww, you bet on ${Side} however your coin landed on ${Replies[ReplyText]}. You lost **⏣${await bot.functions.formatNumber(Bet)}** coins.\nYou now have ⏣${await bot.functions.formatNumber(data.user.money.balance)} coins.`;
-		Embed.color = "RED";
+		Embed.color = Colors.Red;
 	}
 
 	data.user.markModified("money.balance");

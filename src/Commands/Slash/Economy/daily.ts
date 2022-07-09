@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { Colors } from "discord.js";
 
 import cmd from "../../../Structures/command";
 
@@ -17,7 +17,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 					value: "Get an extra ⏣25,000 by voting [here](https://top.gg/bot/884525761694933073/vote)!",
 					inline: true
 				}],
-				color: "RED",
+				color: Colors.Red,
 				timestamp: new Date()
 			}]
 		});
@@ -42,7 +42,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 				value: "Get an extra ⏣25,000 by voting [here](https://top.gg/bot/884525761694933073/vote)!",
 				inline: true
 			}],
-			color: "GREEN",
+			color: Colors.Green,
 			timestamp: new Date()
 		}]
 	});

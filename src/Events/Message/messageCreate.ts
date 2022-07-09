@@ -346,7 +346,7 @@ export default {
 					},
 					title: "Uh oh!",
 					description: `**An error occured while trying to run this command. Please contact support [here](https://discord.gg/PPtzT8Mu3h).**\n\n${err.message}`,
-					color: "RED"
+					color: Colors.Red
 				}]
 			});
 		}

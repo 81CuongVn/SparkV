@@ -60,7 +60,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 					return `${Emotes[rank - 1] || "🏅"} **⏣${bot.functions.formatNumber(data.money.balance)}** - ${user.tag}`;
 				}).join("\n"),
-				color: "GREEN",
+				color: Colors.Green,
 				timestamp: new Date(),
 				footer: {
 					text: `${bot.user.username} • ${bot.config.embed.footer}`,
