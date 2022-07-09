@@ -9,80 +9,19 @@ export default (bot: any) => {
 
 	bot.music = new Manager({
 		nodes: [{
-			host: "lavalink.kingch1ll.repl.co",
-			port: 443,
-			password: process.env.LAVALINK_PASSWORD,
-			secure: true
-		}, {
-			host: "lavalink2.kingch1ll.repl.co",
-			port: 443,
-			password: process.env.LAVALINK_PASSWORD,
-			secure: true
-		}, {
-			host: "node1.kartadharta.xyz",
-			port: 443,
-			password: "kdlavalink",
-			secure: true
-		}, {
-			host: "www.exlink.ml",
-			port: 443,
-			password: "exlava",
-			secure: true
-		}, {
-			host: "www.lavalinknodepublic.ml",
-			port: 443,
-			password: "mrextinctcodes",
-			secure: true
-		}, {
-			host: "lavalink.oops.wtf",
-			port: 2000,
-			password: "www.freelavalink.ga",
-			secure: false
-		}, {
-			host: "lavalink.gaproknetwork.xyz",
-			port: 2333,
-			password: "gaproklavalink",
-			secure: false
-		}, {
-			host: "lavalink.darrenofficial.com",
-			port: 80,
-			password: "lavalink",
-			secure: false
-		}, {
-			host: "weez-node.cf",
-			port: 2333,
-			password: "FreeLava",
-			secure: false
-		}, {
-			host: "dislavalink.gq",
-			port: 2333,
-			password: "gemzandmj",
-			secure: false
-		}, {
-			host: "usa.lavalink.mitask.tech",
-			port: 2333,
-			password: "lvs",
-			secure: false
-		}, {
-			host: "lavalink.kapes.eu",
-			port: 2222,
-			password: "lavalinkplay",
-			secure: false
-		}, {
-			host: "lv.vellerius.tk",
-			port: 2333,
-			password: "derpilava",
-			secure: false
-		}, {
-			host: "lavalink.cloudblue.ml",
-			port: 1555,
-			password: "danbotbest",
-			secure: false
-		}, {
-			host: "lavalink.rukchadisa.live",
-			port: 8080,
-			password: "youshallnotpass",
-			secure: false
+			host: "n1.lavalink.milrato.com",
+			port: 10250,
+			password: "discord.gg/milrato"
+		},
+		{
+			host: "n1.lavalink.milrato.com",
+			port: 10350,
+			password: "discord.gg/milrato"
+		},
+		{
+			host: "n1.lavalink.milrato.com",
+			port: 10250,
+			password: "discord.gg/milrato"
 		}],
 		plugins: [
 			new Spotify({
@@ -343,7 +282,7 @@ export default (bot: any) => {
 					embed
 						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
 						.setDescription(`Stopped playing ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
-						.setColor("RED");
+						.setColor(Colors.Red);
 				} else if (interaction.customId === "lyrics") {
 					embed
 						.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
