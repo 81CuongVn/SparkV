@@ -22,6 +22,36 @@ export default (bot: any) => {
 			host: "n1.lavalink.milrato.com",
 			port: 10250,
 			password: "discord.gg/milrato"
+		}, {
+			host: "node1.kartadharta.xyz",
+			port: 443,
+			password: "kdlavalink",
+			secure: true
+		}, {
+			host: "lavalink.oops.wtf",
+			port: 2000,
+			password: "www.freelavalink.ga",
+			secure: false
+		}, {
+			host: "lavalink.kapes.eu",
+			port: 2222,
+			password: "lavalinkplay",
+			secure: false
+		}, {
+			host: "lv.vellerius.tk",
+			port: 2333,
+			password: "derpilava",
+			secure: false
+		}, {
+			host: "lavalink.cloudblue.ml",
+			port: 1555,
+			password: "danbotbest",
+			secure: false
+		}, {
+			host: "lavalink.rukchadisa.live",
+			port: 8080,
+			password: "youshallnotpass",
+			secure: false
 		}],
 		plugins: [
 			new Spotify({
