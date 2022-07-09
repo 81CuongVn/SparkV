@@ -1,17 +1,15 @@
 import Discord from "discord.js";
-import dbots from "dbots";
+import { Poster } from "dbots";
 
 export default {
 	once: true,
 	async execute(bot: any) {
 		bot.user.setPresence({
 			status: "online",
-			activities: [
-				{
-					name: `/help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
-					type: "PLAYING"
-				}
-			]
+			activities: [{
+				name: `/help | ${bot.functions.formatNumber(await bot.functions.GetServerCount())} servers`,
+				type: "PLAYING"
+			}]
 		});
 
 		bot?.music?.init(bot.user.id) && bot.logger(`[App] Music System online and ready.`);
@@ -21,20 +19,15 @@ export default {
 
 		// Bot Lists //
 		if (process.argv.includes("--dev") === false) {
-			const apiKeys = {} as {
-				topgg: string,
-				voidbots: string,
-				discordlabs: string,
-				discordbotsgg: string,
-				DiscordBotlistEU: string
-			};
+			const apiKeys = {} as { topgg?: string, voidbots?: string, discordlabs?: string, discordbotsgg?: string, DiscordBotlistEU?: string };
 			if (process.env.DBLKEY) apiKeys.topgg = process.env.DBLKEY;
 			if (process.env.VBLKEY) apiKeys.voidbots = process.env.VBLKEY;
 			if (process.env.DLBLKEY) apiKeys.discordlabs = process.env.DLBLKEY;
 			if (process.env.DBGGKEY) apiKeys.discordbotsgg = process.env.DBGGKEY;
 			if (process.env.DBLEUKEY) apiKeys.DiscordBotlistEU = process.env.DBLEUKEY;
 
-			const poster = new dbots.Poster({
+			console.log(Poster)
+			const poster = new Poster({
 				client: bot,
 				apiKeys,
 				clientLibrary: "discord.js",
