@@ -12,13 +12,11 @@ export default (bot: any) => {
 			host: "n1.lavalink.milrato.com",
 			port: 10250,
 			password: "discord.gg/milrato"
-		},
-		{
+		}, {
 			host: "n1.lavalink.milrato.com",
 			port: 10350,
 			password: "discord.gg/milrato"
-		},
-		{
+		}, {
 			host: "n1.lavalink.milrato.com",
 			port: 10250,
 			password: "discord.gg/milrato"
@@ -105,14 +103,14 @@ export default (bot: any) => {
 				.setColor(Colors.Blue)
 				.setTimestamp();
 
-			const { msg } = await bot.music.handleMusic(playerData, track, NowPlayingEmbed, {
+			const data = await bot.music.handleMusic(playerData, track, NowPlayingEmbed, {
 				includePause: true,
 				includeStop: true,
 				includeLoop: true,
 				includeLyrics: true,
 				createCollector: true
 			});
-			player.set("message", msg);
+			player.set("message", data?.msg);
 
 			const updateMusic: any = setInterval(async () => {
 				if (player?.queue?.playing === false && player?.queue?.paused === false) return clearInterval(updateMusic);
@@ -146,9 +144,7 @@ export default (bot: any) => {
 				];
 
 				try {
-					await msg.edit({
-						embeds: [NowPlayingEmbed]
-					});
+					await data?.msg?.edit({ embeds: [NowPlayingEmbed] });
 				} catch (e) {
 					clearInterval(updateMusic);
 				}
@@ -159,11 +155,11 @@ export default (bot: any) => {
 			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel).catch((): any => { });
 
 			channel && await channel.send({
-				embeds: [
-					new Discord.EmbedBuilder()
-						.setDescription(`${bot.config.emojis.alert} | **Error Occured**\nAn error occurred while playing the song.`)
-						.setColor(Colors.Red)
-				]
+				embeds: [{
+					description: `${bot.config.emojis.alert} | **Error Occured**\nAn error occurred while playing the song.`,
+					color: Colors.Red,
+					timestamp: new Date()
+				}]
 			});
 		})
 		.on("queueEnd", async player => {
@@ -171,11 +167,11 @@ export default (bot: any) => {
 			const channel = guild.channels.cache.get(player.textChannel) || await guild.channels.fetch(player.textChannel);
 
 			await channel.send({
-				embeds: [
-					new Discord.EmbedBuilder()
-						.setDescription(`${bot.config.emojis.alert} | **Queue Ended**\nAdd more songs to keep playing more music.`)
-						.setColor(Colors.Red)
-				]
+				embeds: [{
+					description: `${bot.config.emojis.alert} | **Queue Ended**\nAdd more songs to keep playing more music.`,
+					color: Colors.Red,
+					timestamp: new Date()
+				}]
 			});
 			player.destroy();
 		})
@@ -192,29 +188,18 @@ export default (bot: any) => {
 
 		return duration < (3600 * 1000) ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
 	};
+
 	bot.music.handleMusic = async (playerData: any, track: any, mEmbed: Discord.EmbedBuilder, options: any) => {
-		const TogglePlayingButton = new Discord.ButtonBuilder()
-			.setEmoji(bot.config.emojis.pause)
-			.setCustomId("TP")
+		const TogglePlayingButton = new Discord.ButtonBuilder().setEmoji(bot.config.emojis.pause).setCustomId("TP")
 			.setStyle(ButtonStyle.Danger);
-
-		const LoopButton = new Discord.ButtonBuilder()
-			.setEmoji(bot.config.emojis.loop)
-			.setCustomId("loop")
+		const LoopButton = new Discord.ButtonBuilder().setEmoji(bot.config.emojis.loop).setCustomId("loop")
 			.setStyle(ButtonStyle.Secondary);
-
-		const LyricsButton = new Discord.ButtonBuilder()
-			.setEmoji(bot.config.emojis.queue)
-			.setCustomId("lyrics")
+		const LyricsButton = new Discord.ButtonBuilder().setEmoji(bot.config.emojis.queue).setCustomId("lyrics")
 			.setStyle(ButtonStyle.Secondary);
-
-		const StopButton = new Discord.ButtonBuilder()
-			.setEmoji(bot.config.emojis.music_stop)
-			.setCustomId("stop")
+		const StopButton = new Discord.ButtonBuilder().setEmoji(bot.config.emojis.music_stop).setCustomId("stop")
 			.setStyle(ButtonStyle.Danger);
 
 		const buttons = [];
-
 		if (options?.includePause === true) buttons.push(TogglePlayingButton);
 		if (options?.includeStop === true) buttons.push(StopButton);
 		if (options?.includeLoop === true) buttons.push(LoopButton);
@@ -227,12 +212,10 @@ export default (bot: any) => {
 		const channel = guild.channels.cache.get(playerData.textChannel) || await guild.channels.fetch(playerData.textChannel);
 		const MusicMessage = await channel.send({
 			embeds: [mEmbed],
-			components: buttons.length > 0 ? [
-				{
-					type: "ACTION_ROW",
-					components: buttons
-				}
-			] : null,
+			components: buttons.length > 0 ? [{
+				type: 1,
+				components: buttons
+			}] : [],
 			fetchReply: true
 		}).catch((): any => { });
 
@@ -309,21 +292,16 @@ export default (bot: any) => {
 
 					playerData?.stop();
 
-					embed
-						.setTitle(`${bot.config.emojis.error} | Music Stopped!`)
-						.setDescription(`Stopped playing ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`)
-						.setColor(Colors.Red);
+					embed.title = `${bot.config.emojis.error} | Music Stopped!`;
+					embed.description = `Stopped playing ${playerData?.queue?.current?.title} by ${playerData?.queue?.current?.author}.`;
+					embed.color = Colors.Red;
 				} else if (interaction.customId === "lyrics") {
-					embed
-						.setTitle(`${bot.config.emojis.queue} | Song Lyrics`)
-						.setDescription(lyrics.length >= 4000 ? `${lyrics.slice(0, 2000)}...\nView more lyrics by typing /lyrics.` : lyrics)
-						.setColor(Colors.Blue);
+					embed.title = `${bot.config.emojis.queue} | Song Lyrics`;
+					embed.description = lyrics.length >= 4000 ? `${lyrics.slice(0, 2000)}...\nView more lyrics by running /music lyrics.` : lyrics
+					embed.color = Colors.Blue;
 				}
 
-				interaction.replyT({
-					embeds: [embed],
-					ephemeral: true
-				});
+				interaction.replyT({ embeds: [embed], ephemeral: true });
 			});
 
 			collector.on("end", async (collected: any) => {

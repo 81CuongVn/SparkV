@@ -75,7 +75,6 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		if (!player.playing) player.play();
 
 		// If the track is the first song in the queue, don't send the message.
-		console.log(player?.queue?.size)
 		if (player?.queue?.size > 0) {
 			const playerData = bot.music.players.get(message.guild.id);
 			const SongAddedQueue = new Discord.EmbedBuilder()
