@@ -72,10 +72,10 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		player.queue.add(track);
 		await message.replyT(`${bot.config.emojis.search} | Searching for **${query}**...`);
 
-		if (!player.playing && !player.paused && !player.queue.size) player.play();
-		if (!player.playing && !player.paused && player.queue.totalSize === queryData.tracks.length) player.play();
+		if (!player.playing) player.play();
 
 		// If the track is the first song in the queue, don't send the message.
+		console.log(player?.queue?.size)
 		if (player?.queue?.size > 0) {
 			const playerData = bot.music.players.get(message.guild.id);
 			const SongAddedQueue = new Discord.EmbedBuilder()
