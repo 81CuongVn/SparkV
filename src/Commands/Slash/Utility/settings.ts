@@ -27,7 +27,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 			})
 			.setTitle(options.title)
 			.setDescription(options.description)
-			.setColor(options?.color || Colors.Blue)
+			.setColor(options?.color ? Colors[options?.color as keyof typeof Colors] : Colors.Blue)
 			.setFooter({
 				text: bot.config.embed.footer,
 				iconURL: bot.user.displayAvatarURL()
@@ -131,7 +131,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | AFK Reason Setup`,
 						description: "Please send the reason for being afk. You have 60 seconds to send a message.",
-						color: "BLUE",
+						color: "Blue",
 						time: 60,
 						handleData: async (collected: any, requestMsg?: any) => {
 							requestMsg
@@ -224,7 +224,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 							emoji: "🇷🇺",
 							value: "ru"
 						}],
-						color: "BLUE",
+						color: "Blue",
 						time: 15,
 						handleData: async (collected: any, requestMsg?: any) => {
 							requestMsg
@@ -266,7 +266,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 						await setNewData(message, {
 							title: `${bot.config.emojis.config} | Logging Channel Setup`,
 							description: "Please send a channel to setup the logging system in. You have 60 seconds to send a channel.",
-							color: "BLUE",
+							color: "Blue",
 							time: 60,
 							handleData: async (collected: any, requestMsg?: any) => {
 								if (!collected?.mentions?.channels?.first()) return requestMsg.setTitle(`${bot.config.emojis.config} | Logging Channel Setup`)
@@ -313,7 +313,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | Leveling Message Setup`,
 						description: "Please send text that will be said when a user levels up. You have 60 seconds to send some text. Default: `<a:tada:819934065414242344> Congrats {author}, you're now at level **{level}**!`\n**Placeholders**\n{author} - The user who leveled up.\n{level} - The user's new level.",
-						color: "BLUE",
+						color: "Blue",
 						time: 60,
 						filter: async (m: any) => !m.author.id === m.client.user.id,
 						handleData: async (collected: any, requestMsg?: any) => {
@@ -339,7 +339,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | Leveling Channel Setup`,
 						description: "Please send a channel to revieve level up notifications in. You have 60 seconds to send a channel.",
-						color: "BLUE",
+						color: "Blue",
 						time: 60,
 						handleData: async (collected: any, requestMsg?: any) => {
 							if (!collected?.mentions?.channels?.first()) return requestMsg.setTitle(`${bot.config.emojis.config} | Leveling Channel Setup`)
@@ -381,7 +381,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: await message.translate(`${bot.config.emojis.config} | Tickets Category Setup`),
 						description: await message.translate("Please send a category ID to setup the starboard in. **You can automaticly skip this step if you run the `/panel tickets` command. **You have 60 seconds to send a category ID."),
-						color: "BLUE",
+						color: "Blue",
 						time: 60,
 						filter: async (m: any) => {
 							if (m.author.id === m.client.user.id) return false;
@@ -422,7 +422,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: await message.translate(`${bot.config.emojis.config} | Support Roles Setup`),
 						description: await message.translate("Please mention support role(s). Support roles are roles that will grant users access to see tickets. You have 60 seconds to send a channel."),
-						color: "BLUE",
+						color: "Blue",
 						time: 60,
 						handleData: async (collected: any, requestMsg?: any) => {
 							if (!message?.mentions?.roles?.first()) {
@@ -637,7 +637,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | Starboard Channel Setup`,
 						description: "Please send a channel to setup the starboard in. You have 60 seconds to send a channel.",
-						color: "GOLD",
+						color: "Gold",
 						time: 60,
 						handleData: async (collected: any, requestMsg?: any) => {
 							if (!collected?.mentions?.channels?.first()) return requestMsg.setTitle(`${bot.config.emojis.config} | Starboard Channel Setup`)
@@ -662,7 +662,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | Changing Starboard Emoji`,
 						description: "Please send an emoji to change the default starboard emoji to a new one. Keep in mine, users will be no longer able to react with a star to put on the starboard, and will have to use this new emoji for it. You have 30 seconds to send an emoji.",
-						color: "GOLD",
+						color: "Gold",
 						time: 30,
 						filter: async (m: any) => {
 							if (m.author.id === m.client.user.id) return false;
@@ -702,7 +702,7 @@ async function execute(bot: any, message?: any, args?: string[], command?: any, 
 					await setNewData(message, {
 						title: `${bot.config.emojis.config} | Changing Starboard Minimum`,
 						description: "Please send a number to change the minimum amount of stars required to create a star message. You have 15 seconds to send a number.",
-						color: "GOLD",
+						color: "Gold",
 						time: 15,
 						filter: async (m: any) => {
 							if (m.author.id === m.client.user.id) return false;
