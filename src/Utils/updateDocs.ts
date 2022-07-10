@@ -165,7 +165,7 @@ export default {
 		bot.commands.each((cmd: any) => ++cmdCount);
 
 		let baseText: string = `# Commands\n\nSparkV's Command List! SparkV contains more than **${cmdCount} commands**!\n`;
-		let cmdTable: any = [];
+		let cmdTable: any = {};
 
 		bot.categories
 			.sort((a: any, b: any) => bot.commands.filter((c: any) => c.category === a).length > bot.commands.filter((c: any) => c.category === b).length ? -1 : 1)
@@ -197,6 +197,7 @@ export default {
 				baseText += `${markdown(info)}\n`;
 			});
 
+		console.log(cmdTable, JSON.stringify(cmdTable))
 		fs.writeFileSync(path.join(`${path.join(__dirname, "..", "..")}/docs/commands.md`), baseText);
 		fs.writeFileSync(path.join(`${path.join(__dirname, "..", "..")}/docs/commandsdata.json`), JSON.stringify(cmdTable));
 	}
