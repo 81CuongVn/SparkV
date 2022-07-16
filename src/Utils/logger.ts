@@ -55,7 +55,7 @@ export default async (content: string, type?: string, moreData?: moreData) => {
 						color: Colors.Red,
 						timestamp: new Date()
 					}
-					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack}\`\`\`` });
+					moreData?.data?.stack && embed.fields.push({ name: "**Stack**", value: `\`\`\`${moreData?.data.stack.length >= 1024 ? moreData?.data.stack.slice(0, 1024) + "..." : moreData?.data.stack}\`\`\`` });
 
 					await errorChannel.send({ embeds: [embed] });
 				}
