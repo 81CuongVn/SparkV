@@ -84,8 +84,7 @@ export default {
 		} else if (interaction.isButton()) {
 			for (const file of fs.readdirSync(`${process.env.MainDir}/Interactions/Buttons`)) {
 				if (interaction.customId.startsWith(file.split(".")[0]) || interaction.customId.includes(file.split(".")[0])) {
-					const event = require(path.resolve(`${process.env.MainDir}/Interactions/Buttons/${file}`));
-
+					const event = (await import(path.resolve(`${process.env.MainDir}/Interactions/Buttons/${file}`))).default;
 					event.execute(bot, interaction);
 				}
 			}
