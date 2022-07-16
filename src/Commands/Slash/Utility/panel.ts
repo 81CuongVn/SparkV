@@ -3,15 +3,91 @@ import canvacord from "canvacord";
 
 import cmd from "../../../Structures/command";
 
+const CColors = [{
+	name: "white",
+	value: "White"
+}, {
+	name: "aqua",
+	value: "Aqua"
+}, {
+	name: "dark_aqua",
+	value: "DarkAqua"
+}, {
+	name: "blue",
+	value: "Blue"
+}, {
+	name: "dark_blue",
+	value: "DarkBlue"
+}, {
+	name: "green",
+	value: "Green"
+}, {
+	name: "dark_green",
+	value: "DarkGreen"
+}, {
+	name: "purple",
+	value: "Purple"
+}, {
+	name: "dark_purple",
+	value: "DarkPurple"
+}, {
+	name: "yellow",
+	value: "Yellow"
+}, {
+	name: "gold",
+	value: "Gold"
+}, {
+	name: "dark_gold",
+	value: "DarkGold"
+}, {
+	name: "orange",
+	value: "Orange"
+}, {
+	name: "dark_orange",
+	value: "DarkOrange"
+}, {
+	name: "red",
+	value: "Red"
+}, {
+	name: "dark_red",
+	value: "DarkRed"
+}, {
+	name: "grey",
+	value: "Grey"
+}, {
+	name: "dark_GREY",
+	value: "DarkGrey"
+}, {
+	name: "darker_grey",
+	value: "DarkerGrey"
+}, {
+	name: "light_grey",
+	value: "LightGrey"
+}, {
+	name: "navy",
+	value: "Navy"
+}, {
+	name: "dark_navy",
+	value: "DarkNavy"
+}, {
+	name: "blurple",
+	value: "Blurple"
+}, {
+	name: "random",
+	value: "Random"
+}];
+
 async function execute(bot: any, message: any, args: string[], command: any, data: any) {
 	const state = data.options.getSubcommand();
 
 	if (state === "tickets") {
+		const color = data.options.getString("color") || "Blue";
+
 		await message.channel.send({
 			embeds: [{
 				title: data.options.getString("title") || await message.translate(`${bot.config.emojis.ticket} | Get Support`),
 				description: data.options.getString("description") || await message.translate("Need help? Click the button below to create a support ticket."),
-				color: data.options.getString("color") || Colors.Blue
+				color: color
 			}],
 			components: [{
 				type: 1,
@@ -32,6 +108,8 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created ticket panel.`);
 	} else if (state === "roles") {
+		const color = data.options.getString("color") || "Blue";
+
 		const buttons = [];
 		buttons.push({
 			type: 2,
@@ -92,28 +170,25 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 		}
 
 		await message.channel.send({
-			embeds: [
-				{
+			embeds: [{
 					title: data.options.getString("title") || `${bot.config.emojis.special} | Role Select`,
 					description: data.options.getString("description") || "Click the button(s) below to give yourself a role!",
-					color: data.options.getString("color") || Colors.Blue
-				}
-			],
-			components: [
-				{
+					color:  Colors[color as keyof typeof Colors]
+				}],
+			components: [{
 					type: 1,
 					components: buttons
-				}
-			]
+				}]
 		});
 
 		await message.replyT(`${bot.config.emojis.success} | Successfully created roles select panel.`);
 	} else if (state === "embed") {
+		const color = data.options.getString("color") || "Blue";
 		await message.channel.send({
 			embeds: [{
 				title: data.options.getString("title"),
 				description: data.options.getString("description").replaceAll("<br>", "\n"),
-				color: data.options.getString("color") || Colors.Blue,
+				color: Colors[color as keyof typeof Colors],
 				thumbnail: { url: data.options.getString("image") }
 			}]
 		});
@@ -146,79 +221,7 @@ export default new cmd(execute, {
 			type: 3,
 			name: "color",
 			description: "The color to ALL the ticket embeds.",
-			choices: [{
-				name: "white",
-				value: "WHITE"
-			}, {
-				name: "aqua",
-				value: "AQUA"
-			}, {
-				name: "dark_aqua",
-				value: "DARK_AQUA"
-			}, {
-				name: "blue",
-				value: "BLUE"
-			}, {
-				name: "dark_blue",
-				value: "DARK_BLUE"
-			}, {
-				name: "green",
-				value: "GREEN"
-			}, {
-				name: "dark_green",
-				value: "DARK_GREEN"
-			}, {
-				name: "purple",
-				value: "PURPLE"
-			}, {
-				name: "dark_purple",
-				value: "DARK_PURPLE"
-			}, {
-				name: "yellow",
-				value: "YELLOW"
-			}, {
-				name: "gold",
-				value: "GOLD"
-			}, {
-				name: "dark_gold",
-				value: "DARK_GOLD"
-			}, {
-				name: "orange",
-				value: "ORANGE"
-			}, {
-				name: "dark_orange",
-				value: "DARK_ORANGE"
-			}, {
-				name: "red",
-				value: "RED"
-			}, {
-				name: "dark_red",
-				value: "DARK_RED"
-			}, {
-				name: "grey",
-				value: "GREY"
-			}, {
-				name: "dark_GREY",
-				value: "DARK_GREY"
-			}, {
-				name: "darker_grey",
-				value: "DARKER_GREY"
-			}, {
-				name: "light_grey",
-				value: "LIGHT_GREY"
-			}, {
-				name: "navy",
-				value: "NAVY"
-			}, {
-				name: "dark_navy",
-				value: "DARK_NAVY"
-			}, {
-				name: "blurple",
-				value: "BLURPLE"
-			}, {
-				name: "random",
-				value: "RANDOM"
-			}]
+			choices: CColors
 		}]
 	}, {
 		type: 1,
@@ -298,79 +301,7 @@ export default new cmd(execute, {
 			type: 3,
 			name: "color",
 			description: "The color to ALL the ticket embeds.",
-			choices: [{
-				name: "white",
-				value: "WHITE"
-			}, {
-				name: "aqua",
-				value: "AQUA"
-			}, {
-				name: "dark_aqua",
-				value: "DARK_AQUA"
-			}, {
-				name: "blue",
-				value: "BLUE"
-			}, {
-				name: "dark_blue",
-				value: "DARK_BLUE"
-			}, {
-				name: "green",
-				value: "GREEN"
-			}, {
-				name: "dark_green",
-				value: "DARK_GREEN"
-			}, {
-				name: "purple",
-				value: "PURPLE"
-			}, {
-				name: "dark_purple",
-				value: "DARK_PURPLE"
-			}, {
-				name: "yellow",
-				value: "YELLOW"
-			}, {
-				name: "gold",
-				value: "GOLD"
-			}, {
-				name: "dark_gold",
-				value: "DARK_GOLD"
-			}, {
-				name: "orange",
-				value: "ORANGE"
-			}, {
-				name: "dark_orange",
-				value: "DARK_ORANGE"
-			}, {
-				name: "red",
-				value: "RED"
-			}, {
-				name: "dark_red",
-				value: "DARK_RED"
-			}, {
-				name: "grey",
-				value: "GREY"
-			}, {
-				name: "dark_GREY",
-				value: "DARK_GREY"
-			}, {
-				name: "darker_grey",
-				value: "DARKER_GREY"
-			}, {
-				name: "light_grey",
-				value: "LIGHT_GREY"
-			}, {
-				name: "navy",
-				value: "NAVY"
-			}, {
-				name: "dark_navy",
-				value: "DARK_NAVY"
-			}, {
-				name: "blurple",
-				value: "BLURPLE"
-			}, {
-				name: "random",
-				value: "RANDOM"
-			}]
+			choices: CColors
 		}]
 	}, {
 		type: 1,
@@ -393,82 +324,7 @@ export default new cmd(execute, {
 			type: 3,
 			name: "color",
 			description: "The color to ALL the ticket embeds.",
-			choices: [{
-				name: "white",
-				value: "WHITE"
-			}, {
-				name: "aqua",
-				value: "AQUA"
-			}, {
-				name: "dark_aqua",
-				value: "DARK_AQUA"
-			}, {
-				name: "blue",
-				value: "BLUE"
-			}, {
-				name: "dark_blue",
-				value: "DARK_BLUE"
-			}, {
-				name: "luminous_vivid_pink",
-				value: "LUMINOUS_VIVID_PINK"
-			}, {
-				name: "green",
-				value: "GREEN"
-			}, {
-				name: "dark_green",
-				value: "DARK_GREEN"
-			}, {
-				name: "purple",
-				value: "PURPLE"
-			}, {
-				name: "dark_purple",
-				value: "DARK_PURPLE"
-			}, {
-				name: "yellow",
-				value: "YELLOW"
-			}, {
-				name: "gold",
-				value: "GOLD"
-			}, {
-				name: "dark_gold",
-				value: "DARK_GOLD"
-			}, {
-				name: "orange",
-				value: "ORANGE"
-			}, {
-				name: "dark_orange",
-				value: "DARK_ORANGE"
-			}, {
-				name: "red",
-				value: "RED"
-			}, {
-				name: "dark_red",
-				value: "DARK_RED"
-			}, {
-				name: "grey",
-				value: "GREY"
-			}, {
-				name: "dark_GREY",
-				value: "DARK_GREY"
-			}, {
-				name: "darker_grey",
-				value: "DARKER_GREY"
-			}, {
-				name: "light_grey",
-				value: "LIGHT_GREY"
-			}, {
-				name: "navy",
-				value: "NAVY"
-			}, {
-				name: "dark_navy",
-				value: "DARK_NAVY"
-			}, {
-				name: "blurple",
-				value: "BLURPLE"
-			}, {
-				name: "random",
-				value: "RANDOM"
-			}]
+			choices: CColors
 		}]
 	}]
 });

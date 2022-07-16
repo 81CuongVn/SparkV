@@ -31,7 +31,7 @@ async function execute(bot: any, message: any, args: string[], command: any, dat
 			embeds: [{
 				title: `${message.guild.name}'s Level Leaderboard`,
 				description: Leaderboard.map(data => `${Emotes[data.rank - 1] || "🏅"} **Level ${data.level}** - ${data.username}#${data.discriminator}`).join("\n"),
-				color: "BLUE",
+				color: Colors.Blue,
 				timestamp: new Date(),
 				footer: {
 					text: `${bot.user.username} • ${bot.config.embed.footer}`,
